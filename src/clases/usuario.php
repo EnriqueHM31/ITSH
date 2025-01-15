@@ -49,7 +49,6 @@ class Usuario
         $resultRol = $prepareRol->get_result();
         $rol = $resultRol->fetch_assoc();
 
-
         if ($rol[Variables::CAMPO_ROL] === Usuario::ADMIN) {
             session_start();
             $_SESSION["id"] = $usuario[Variables::CAMPO_ID_USUARIO];
@@ -57,19 +56,21 @@ class Usuario
             $_SESSION["rol"] = $rol[Variables::CAMPO_ROL];
             header("location: src/layouts/Admin/Admin.php");
         }
-        if ($rol === Usuario::JEFE_DE_CARRERA) {
+        if ($rol[Variables::CAMPO_ROL] === Usuario::JEFE_DE_CARRERA) {
             session_start();
             $_SESSION["id"] = $usuario[Variables::CAMPO_ID_USUARIO];
             $_SESSION["correo"] = $usuario[Variables::CAMPO_CORREO];
             $_SESSION["rol"] = $rol[Variables::CAMPO_ROL];
             header("location: src/layouts/JefedeCarrera/JefeCarrera.php");
         }
-        if ($rol === Usuario::ESTUDIANTE) {
+        if ($rol[Variables::CAMPO_ROL] === Usuario::ESTUDIANTE) {
             session_start();
             $_SESSION["id"] = $usuario[Variables::CAMPO_ID_USUARIO];
             $_SESSION["correo"] = $usuario[Variables::CAMPO_CORREO];
             $_SESSION["rol"] = $rol[Variables::CAMPO_ROL];
             header("location: src/layouts/Alumno/alumno.php");
+        } else {
+            estructuraMensaje("Ocurrio un error con la pagina", "./src/assets/iconos/ic_error.webp", "--rojo");
         }
 
     }
@@ -137,38 +138,30 @@ class Usuario
     public function escribirDatosDelUsuario($conexion, $id, $rol, $correo)
     {
         if ($rol === Usuario::ADMIN) {
-            $sql = "SELECT * FROM " . Usuario::ADMIN . " WHERE " . Variables::CAMPO_CLAVE_EMPLEADO_ADMIN . " = ?";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bind_param("s", $id);
-            $stmt->execute();
-            $data = $stmt->get_result();
+            $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_AdMINISTRADOR, Variables::CAMPO_CLAVE_EMPLEADO_ADMIN, $id);
+
             echo "<div class='contenedor-datos'>";
-            while ($row = $data->fetch_assoc()) {
-                echo "<p><strong>Clave:</strong> " . $row[Variables::CAMPO_CLAVE_EMPLEADO_ADMIN] . "</p>";
-                echo "<p><strong>Nombre:</strong> " . $row[Variables::CAMPO_NOMBRE] . "</p>";
-                echo "<p><strong>Apellidos:</strong> " . $row[Variables::CAMPO_APELLIDOS] . "</p>";
-                echo "<p><strong>Correo:</strong> " . $correo . "</p>";
-            }
+            echo "<p><strong>Clave:</strong> " . $usuario[Variables::CAMPO_CLAVE_EMPLEADO_ADMIN] . "</p>";
+            echo "<p><strong>Nombre:</strong> " . $usuario[Variables::CAMPO_NOMBRE] . "</p>";
+            echo "<p><strong>Apellidos:</strong> " . $usuario[Variables::CAMPO_APELLIDOS] . "</p>";
+            echo "<p><strong>Correo:</strong> " . $correo . "</p>";
             echo "<button id='btn_contraseña' class='btn_vino'>Cambiar contraseña</button>";
             echo "</div>";
             return;
         }
 
         if ($rol === Usuario::JEFE_DE_CARRERA) {
-            $sql = "SELECT * FROM " . Usuario::JEFE_DE_CARRERA . " WHERE " . Variables::CAMPO_CLAVE_EMPLEADO_JEFE . " = ?";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bind_param("s", $id);
-            $stmt->execute();
-            $data = $stmt->get_result();
-            echo "<div class='contenedor-datos'>";
-            while ($row = $data->fetch_assoc()) {
-                echo "<p><strong>Identificador:</strong> " . $row[Variables::CAMPO_CLAVE_EMPLEADO_JEFE] . "</p>";
-                echo "<p><strong>Nombre:</strong> " . $row[Variables::CAMPO_NOMBRE] . "</p>";
-                echo "<p><strong>Apellidos:</strong> " . $row[Variables::CAMPO_APELLIDOS] . "</p>";
-                echo "<p><strong>Carrera:</strong> " . $row[Variables::CAMPO_CARRERA] . "</p>";
-                echo "<p><strong>Correo:</strong> " . $correo . "</p>";
 
-            }
+            $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id);
+
+            $carrera = getResultCarrera($conexion, $usuario[Variables::CAMPO_ID_CARRERA]);
+
+            echo "<div class='contenedor-datos'>";
+            echo "<p><strong>Identificador:</strong> " . $usuario[Variables::CAMPO_CLAVE_EMPLEADO_JEFE] . "</p>";
+            echo "<p><strong>Nombre:</strong> " . $usuario[Variables::CAMPO_NOMBRE] . "</p>";
+            echo "<p><strong>Apellidos:</strong> " . $usuario[Variables::CAMPO_APELLIDOS] . "</p>";
+            echo "<p><strong>Carrera:</strong> " . $carrera . "</p>";
+            echo "<p><strong>Correo:</strong> " . $correo . "</p>";
             echo "<button id='btn_contraseña' class='btn_vino'>Cambiar contraseña</button>";
             echo "</div>";
 
@@ -176,20 +169,17 @@ class Usuario
         }
 
         if ($rol === Usuario::ESTUDIANTE) {
-            $sql = "SELECT * FROM " . Usuario::ESTUDIANTE . " WHERE " . Variables::CAMPO_MATRICULA . " = ?";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bind_param("s", $id);
-            $stmt->execute();
-            $data = $stmt->get_result();
+            $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_ESTUDIANTE, Variables::CAMPO_MATRICULA, $id);
+            $carrera = getResultCarrera($conexion, $usuario[Variables::CAMPO_ID_CARRERA]);
+
+
             echo "<div class='contenedor-datos'>";
-            while ($row = $data->fetch_assoc()) {
-                echo "<p><strong>Identificador:</strong> " . $row[Variables::CAMPO_MATRICULA] . "</p>";
-                echo "<p><strong>Nombre:</strong> " . $row[Variables::CAMPO_NOMBRE] . "</p>";
-                echo "<p><strong>Apellidos:</strong> " . $row[Variables::CAMPO_APELLIDOS] . "</p>";
-                echo "<p><strong>Carrera:</strong> " . $row[Variables::CAMPO_CARRERA] . "</p>";
-                echo "<p><strong>Grupo:</strong> " . $row[Variables::CAMPO_GRUPO] . "</p>";
-                echo "<p><strong>Correo:</strong> " . $correo . "</p>";
-            }
+            echo "<p><strong>Identificador:</strong> " . $usuario[Variables::CAMPO_MATRICULA] . "</p>";
+            echo "<p><strong>Nombre:</strong> " . $usuario[Variables::CAMPO_NOMBRE] . "</p>";
+            echo "<p><strong>Apellidos:</strong> " . $usuario[Variables::CAMPO_APELLIDOS] . "</p>";
+            echo "<p><strong>Carrera:</strong> " . $carrera . "</p>";
+            echo "<p><strong>Grupo:</strong> " . $usuario[Variables::CAMPO_GRUPO] . "</p>";
+            echo "<p><strong>Correo:</strong> " . $correo . "</p>";
             echo "<button id='btn_contraseña' class='btn_vino'>Cambiar contraseña</button>";
             echo "</div>";
         }
