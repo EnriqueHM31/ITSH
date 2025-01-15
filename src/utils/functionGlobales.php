@@ -42,6 +42,16 @@ function mensajeNotificacion($mensaje, $imagen, $color)
 
 
 // CONSULTAS PARA REUTILIZAR CODIGO LLEGA HASTA $SQL->GET_RESULT()
+
+function getResultDataTabla($conexion, $tabla, $columna, $campo)
+{
+    $sql = $conexion->prepare("SELECT * FROM " . $tabla . " WHERE " . $columna . " = ?");
+    $sql->bind_param("s", $campo);
+    $sql->execute();
+    $result = $sql->get_result();
+    return $result->fetch_assoc();
+}
+
 function getResultIDUsuarioDuplicado($conexion, $id)
 {
     $sql = $conexion->prepare("SELECT * FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?");
@@ -58,12 +68,15 @@ function getResultCorreoDuplicado($conexion, $correo)
     return $sql->get_result();
 }
 
-function getResultCarrera($conexion, $carrera)
+function getResultCarrera($conexion, $id_carrera)
 {
-    $sqlIdCarrera = $conexion->prepare("SELECT " . Variables::CAMPO_ID_CARRERA . " FROM " . Variables::TABLA_BD_CARRERA . " WHERE carrera = ?");
-    $sqlIdCarrera->bind_param("s", $carrera);
+    $sqlIdCarrera = $conexion->prepare("SELECT " . Variables::CAMPO_CARRERA . " FROM " . Variables::TABLA_BD_CARRERA . " WHERE " . Variables::CAMPO_ID_CARRERA . " = ?");
+    $sqlIdCarrera->bind_param("s", $id_carrera);
     $sqlIdCarrera->execute();
-    return $sqlIdCarrera->get_result();
+    $result = $sqlIdCarrera->get_result();
+    $carrera = $result->fetch_assoc();
+
+    return $carrera[Variables::CAMPO_CARRERA];
 }
 
 function getResultCarreraDuplicada($tabla, $conexion, $id_carrera)
@@ -84,6 +97,17 @@ function obtenerIDRol($conexion, $rol)
     $response = $resultado->fetch_assoc();
 
     return $response[Variables::CAMPO_ID_ROL];
+}
+
+function obtenerRol($conexion, $id_rol)
+{
+    $sql = $conexion->prepare("SELECT " . Variables::CAMPO_ROL . " FROM " . Variables::TABLA_BD_ROL . " WHERE " . Variables::CAMPO_ID_ROL . " = ?");
+    $sql->bind_param("s", $id_rol);
+    $sql->execute();
+    $resultado = $sql->get_result();
+    $response = $resultado->fetch_assoc();
+
+    return $response[Variables::CAMPO_ROL];
 }
 
 function obtenerIDCarrera($conexion, $carrera)
@@ -124,3 +148,4 @@ function insertarJefedeCarrera($conexion, $identificador, $nombre, $apellidos, $
 
     return $jefe->execute();
 }
+
