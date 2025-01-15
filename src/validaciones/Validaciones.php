@@ -30,17 +30,17 @@ function restriccionJefedeCarrera($carrera, $cargo, $conexion)
         return true;
     }
 
-    $resultadoIdCarrera = getResultCarrera($conexion, $carrera);
+    $resultadoIdCarrera = obtenerIDCarrera($conexion, $carrera);
 
-    if ($resultadoIdCarrera->num_rows < 0) {
+    if ($resultadoIdCarrera < 0) {
         estructuraMensaje("Error: Esa carrera no existe", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
-    if ($cargo === "Jefe de Carrera") {
-        $rowCarrera = $resultadoIdCarrera->fetch_assoc();
-        $id_carrera = $rowCarrera[Variables::CAMPO_ID_CARRERA];
 
-        $resultadoDuplicado = getResultCarreraDuplicada(Variables::TABLA_BD_JEFE, $conexion, $id_carrera);
+
+    if ($cargo === "Jefe de Carrera") {
+
+        $resultadoDuplicado = getResultCarreraDuplicada(Variables::TABLA_BD_JEFE, $conexion, $resultadoIdCarrera);
 
         if ($resultadoDuplicado->num_rows > 0) {
             estructuraMensaje("Esa carrera ya tiene un jefe de carrera", "../../assets/iconos/ic_error.webp", "--rojo");

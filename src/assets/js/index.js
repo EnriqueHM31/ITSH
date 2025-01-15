@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (buttonError !== null) {
         buttonError.addEventListener("click", () => {
             overlay.remove()
-            console.log(notificacion)
         })
     }
 

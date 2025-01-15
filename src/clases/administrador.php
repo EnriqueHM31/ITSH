@@ -88,10 +88,10 @@ class administrador
 
     }
 
-    public function modificarJefedeCarrera($conexion, $id_anterior, $id, $nombre, $apellidos, $carrera, $cargo, $correo, )
+    public function modificarJefedeCarrera($conexion, $id, $nombre, $apellidos, $carrera, $cargo, $correo)
     {
 
-        if (empty($id_anterior)) {
+        if (empty($id)) {
             estructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
@@ -103,20 +103,12 @@ class administrador
             return;
         }
 
-        $sql = "UPDATE personal SET 
-        identificador = ?, nombre = ?, apellidos = ?, carrera = ?, cargo = ?, correo = ?
-        WHERE identificador = ?";
-
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param('sssssss', $id, $nombre, $apellidos, $carrera, $cargo, $correo, $id_anterior);
-
-        if ($stmt->execute()) {
+        if (modificarPersonal($conexion, $id, $nombre, $apellidos, $carrera, $cargo, $correo)) {
             estructuraMensaje("Se han modificado los datos", "../../assets/iconos/ic_correcto.webp", "--verde");
         } else {
             estructuraMensaje("Ocurrio un error en la base de datos", "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
-        $stmt->close();
     }
 
     public function eliminarRegistro($conexion, $id)

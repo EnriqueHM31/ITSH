@@ -149,3 +149,17 @@ function insertarJefedeCarrera($conexion, $identificador, $nombre, $apellidos, $
     return $jefe->execute();
 }
 
+// CONSULTAS UPDATE PARA LOS USUARIOS ADMINISTRADOR Y JEFE DE CARRERA
+
+function modificarPersonal($conexion, $id, $nombre, $apellidos, $carrera, $cargo, $correo)
+{
+    return EliminarPersonal($conexion, $id);
+}
+
+function EliminarPersonal($conexion, $id)
+{
+    $sql = "DELETE FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $id);
+    return $stmt->execute();
+}

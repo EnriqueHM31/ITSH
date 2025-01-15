@@ -47,7 +47,8 @@ $administrador = new administrador();
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
             <li class="menu-item"><a href="Admin.php?Eliminar=true" class="link">Eliminar</a></li>
-            <li class="menu-item"><a href="../conexion/cerrar_sesion.php" class="link"><img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
+            <li class="menu-item"><a href="../conexion/cerrar_sesion.php" class="link"><img
+                        src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
         </ul>
     </nav>
 
@@ -58,27 +59,31 @@ $administrador = new administrador();
 
         <div class="contenedor_main">
             <div class="contenedor">
-                <img src="../../assets/extra/encabezado.webp" width="1000px" height="164" alt="los encabezados de la pagina">
+                <img src="../../assets/extra/encabezado.webp" width="1000px" height="164"
+                    alt="los encabezados de la pagina">
 
                 <div class="contenedor_buscar">
                     <label class="contenedor_buscar">
-                        <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar" onkeyup="buscarUsuarios()">
+                        <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar"
+                            onkeyup="buscarUsuarios()">
                     </label>
                     <div id="resultados" class="result_usuarios"></div>
                 </div>
 
 
 
-                <form class="formulario" method="post">
+                <form class="formulario" method="post" id="form-modificar">
 
-                    <input type="hidden" name="clave_anterior" id="clave_anterior">
                     <label for="clave" class="contenedor_input">
-                        <input readonly pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave" placeholder=" ">
-                        <span class="nombre_input input_bloqueado"><img src="../../assets/iconos/ic_bloqueado.svg" alt="">Clave</span>
+                        <input readonly pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave"
+                            placeholder=" ">
+                        <span class="nombre_input input_bloqueado"><img src="../../assets/iconos/ic_bloqueado.svg"
+                                alt="">Clave</span>
                     </label>
 
                     <label for="nombre" class="contenedor_input">
-                        <input pattern="^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$" class="input_pagina" type="text" name="nombre" id="nombre" placeholder=" ">
+                        <input pattern="^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$" class="input_pagina" type="text" name="nombre"
+                            id="nombre" placeholder=" ">
                         <span class="nombre_input">Nombre</span>
                     </label>
 
@@ -164,7 +169,7 @@ $administrador = new administrador();
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $administrador->modificarJefedeCarrera($conexion, $_POST['clave_anterior'], $_POST['clave'], $_POST['nombre'], $_POST['apellidos'], $_POST['carrera'], $_POST['rol'], $_POST['correo']);
+    $administrador->modificarJefedeCarrera($conexion, $_POST['clave'], $_POST['nombre'], $_POST['apellidos'], $_POST['carrera'], $_POST['rol'], $_POST['correo']);
 
     notificaciones($_SESSION["mensaje"]);
 }

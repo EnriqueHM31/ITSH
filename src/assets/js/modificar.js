@@ -1,4 +1,3 @@
-
 async function buscarUsuarios() {
     var query = document.getElementById('buscar').value;
 
@@ -41,7 +40,6 @@ async function cargarUsuario(id) {
             if (data.error) {
                 new throwError("Datos invalidos")
             } else {
-                document.getElementById('clave_anterior').value = data.identificador;
                 document.getElementById('clave').value = data.identificador;
                 document.getElementById('nombre').value = data.nombre;
                 document.getElementById('apellidos').value = data.apellidos;
