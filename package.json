@@ -1,0 +1,30 @@
+{
+  "name": "itsh",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"php -S localhost:8000\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "php": "php -S localhost:8000"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "standard": "^17.1.2",
+    "vite": "^6.0.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/standard/eslintrc.json"
+    ]
+  },
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  }
+}

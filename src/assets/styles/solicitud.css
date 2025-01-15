@@ -1,0 +1,77 @@
+.contenedor_main h2 {
+    font-size: clamp(2.5rem, 4vw, 5rem);
+    background-color: var(--vino);
+    color: var(--blanco);
+    border-radius: 2rem;
+    padding: 1rem 2rem;
+    max-width: 70%;
+    margin: 4rem auto;
+}
+
+.formulario_solicitud {
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.contenedor_info-solicitud {
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    gap: 1rem;
+}
+
+.contenedor_info-solicitud p {
+    padding: 1rem;
+    background: var(--vino);
+    color: var(--blanco);
+    font-size: clamp(1.1rem, 3.5vw, 1.3rem);
+    flex: 1;
+}
+
+.contenedor_info-solicitud input,
+select {
+    width: 50%;
+    padding: .7rem;
+    background: var(--gris);
+    border: .1rem solid var(--vino);
+}
+
+.contenedor_info-solicitud input:focus,
+select:focus {
+    outline: none;
+}
+
+select,
+#fecha_de_ausencia {
+    background-color: var(--blanco);
+    color: var(--vino);
+    border: .1rem solid var(--vino);
+}
+
+
+
+.archivo {
+    display: none;
+}
+
+.btn_archivo {
+    padding: 1rem 0;
+    background: var(--vino);
+    color: var(--blanco);
+    font-size: clamp(1.3rem, 4vw, 1.3rem);
+    cursor: pointer;
+    text-align: center;
+    max-width: 47%;
+}
+
+.btn_enviar-solicitud {
+    max-width: 50%;
+    margin: 0 auto;
+    background-color: var(--vino);
+    color: var(--blanco);
+    border-radius: 2rem;
+    padding: 1rem 2rem;
+    border: none;
+}

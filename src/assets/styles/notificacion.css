@@ -1,0 +1,61 @@
+.overlay {
+    background: var(--overlay);
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 2000;
+}
+
+.notificacion {
+    background: var(--blanco);
+    border-radius: 2rem;
+    color: var(--negro);
+    padding: 4rem;
+    width: 40%;
+    height: 70dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.contenido_notificacion {
+    font-size: clamp(2.5rem, 4vw, 3rem);
+    font-weight: 900;
+    text-align: center;
+}
+
+.btn_mensaje {
+    padding: 1rem 2rem;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    border-radius: 2rem;
+    background: var(--rojo);
+    color: var(--blanco);
+    border: none;
+    cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+    .notificacion {
+        width: 50%;
+        height: 60dvh;
+    }
+
+    .notificacion img {
+        max-width: 30%;
+    }
+}
+
+@media (max-width: 500px) {
+    .notificacion {
+        width: 90%;
+        height: 65dvh;
+    }
+
+    .notificacion img {
+        max-width: 45%;
+    }
+}
