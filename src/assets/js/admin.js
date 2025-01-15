@@ -2,7 +2,7 @@ function buscarUsuarios() {
     var query = document.getElementById('buscar').value;
     if (query.length >= 0) {
         $.ajax({
-            url: '../../query/buscar.php',
+            url: '../../query/buscarPersonal.php',
             method: 'GET',
             data: {
                 q: query
@@ -95,7 +95,7 @@ function RegistroSeleccionado() {
 
 function cargarUsuario(id) {
     $.ajax({
-        url: '../../query/obtenerRegistro.php',
+        url: '../../query/getInfoPersonal.php',
         method: 'POST',
         data: {
             id: id

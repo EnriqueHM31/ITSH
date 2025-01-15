@@ -266,6 +266,7 @@ body {
     border: .1rem solid var(--vino);
     cursor: pointer;
     z-index: 90;
+    border: .1rem solid var(--blanco);
 }
 
 .container_result p {

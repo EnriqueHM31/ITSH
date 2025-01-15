@@ -114,24 +114,17 @@ class administrador
     public function eliminarRegistro($conexion, $id)
     {
         $id = trim($id) ?? "";
-        if (isset($_POST['identificador'])) {
-            $sql = "DELETE FROM personal WHERE identificador = ?";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bind_param('s', $id);
-
-
-            if ($stmt->execute()) {
-                estructuraMensaje("Registro eliminado", "../../assets/iconos/ic_correcto.webp", "--verde");
-            } else {
-                estructuraMensaje("No se puedo eliminar el registro", "../../assets/iconos/ic_error.webp", "--rojo");
-            }
-
-            $stmt->close();
-        } else {
-            estructuraMensaje("No ha seleccionado a nadien", "../../assets/iconos/ic_error.webp", "--rojo");
+        if (!isset($_POST['identificador'])) {
+            estructuraMensaje("Busque y seleccione a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
         }
 
-        $conexion->close();
+        if (EliminarPersonal($conexion, $id)) {
+            estructuraMensaje("El registro fue eliminado de forma exitosa", "../../assets/iconos/ic_correcto.webp", "--verde");
+        } else {
+            estructuraMensaje("Ocurrio un error al eliminarlo", "../../assets/iconos/ic_error.webp", "--rojo");
+        }
+
     }
 
     public function añadirPorCSV($conexion)
