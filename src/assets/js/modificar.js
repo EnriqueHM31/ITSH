@@ -1,8 +1,8 @@
 
-function buscarUsuarios() {
+async function buscarUsuarios() {
     var query = document.getElementById('buscar').value;
 
-    if (query.length >= 0) {
+    if (query.length >= 3) {
         $.ajax({
             url: '../../query/buscarPersonal.php',
             method: 'GET',
@@ -29,9 +29,9 @@ function mostrar() {
     })
 }
 
-function cargarUsuario(id) {
+async function cargarUsuario(id) {
     $.ajax({
-        url: '../../query/obtenerRegistro.php',
+        url: '../../query/getInfoPersonal.php',
         method: 'POST',
         data: {
             id: id
@@ -39,7 +39,7 @@ function cargarUsuario(id) {
         dataType: 'json',
         success: function (data) {
             if (data.error) {
-                alert(data.error);
+                new throwError("Datos invalidos")
             } else {
                 document.getElementById('clave_anterior').value = data.identificador;
                 document.getElementById('clave').value = data.identificador;
@@ -54,9 +54,10 @@ function cargarUsuario(id) {
             }
         },
         error: function () {
-            alert('Hubo un error al cargar los datos.');
+            new throwError("Fallo con los datos")
         }
     });
+
 }
 
 buscarUsuarios();
