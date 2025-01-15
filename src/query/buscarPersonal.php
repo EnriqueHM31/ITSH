@@ -4,11 +4,12 @@ include("../conexion/conexion.php");
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
 if (!empty($query)) {
-    $sql = "SELECT clave_empleado, nombre FROM Administrador WHERE clave_empleado LIKE ? OR nombre LIKE ? UNION
-    SELECT clave_empleado, nombre FROM Jefe WHERE clave_empleado LIKE ? OR nombre LIKE ?";
+    $sql = "SELECT " . Variables::CAMPO_CLAVE_EMPLEADO_ADMIN . "," . Variables::CAMPO_NOMBRE . " FROM " . Variables::TABLA_BD_AdMINISTRADOR . " 
+    WHERE " . Variables::CAMPO_CLAVE_EMPLEADO_ADMIN . " LIKE ? OR " . Variables::CAMPO_NOMBRE . " LIKE ? UNION
+    SELECT " . Variables::CAMPO_CLAVE_EMPLEADO_JEFE . "," . Variables::CAMPO_NOMBRE . " FROM " . Variables::TABLA_BD_JEFE . " 
+    WHERE " . Variables::CAMPO_CLAVE_EMPLEADO_JEFE . " LIKE ? OR " . Variables::CAMPO_NOMBRE . " LIKE ?";
     ;
     $stmt = $conexion->prepare($sql);
-
     $param = "%$query%";
     $stmt->bind_param('ssss', $param, $param, $param, $param);
 
