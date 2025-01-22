@@ -117,16 +117,17 @@ function obtenerIDCarrera($conexion, $carrera)
     $sql->execute();
     $resultado = $sql->get_result();
     $response = $resultado->fetch_assoc();
+
     return $response[Variables::CAMPO_ID_CARRERA];
 }
 
 //CONSULTAS PARA INSERTAR DATOS 
-function insertarUsuario($conexion, $cargo, $identificador, $contraseña, $correo)
+function insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $cargo)
 {
     $rol = obtenerIDRol($conexion, $cargo);
     $usuario = $conexion->prepare("INSERT INTO " . Variables::TABLA_BD_USUARIO . " (" . Variables::CAMPO_ID_USUARIO . "," . Variables::CAMPO_CONTRASEÑA . "," . Variables::CAMPO_CORREO . "," . Variables::CAMPO_ID_ROL . ") VALUES (?, ?, ?, ?)");
 
-    $usuario->bind_param("sssi", $identificador, $contraseña, $correo, $rol);
+    $usuario->bind_param("sssi", $clave_empleado, $contraseña, $correo, $rol);
 
     return $usuario->execute();
 }
