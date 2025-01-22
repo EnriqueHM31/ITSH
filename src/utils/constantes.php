@@ -36,6 +36,8 @@ class Variables
 
     public const CAMPO_MATRICULA = "matricula";
     public const CAMPO_GRUPO = "grupo";
+    public const CAMPO_MODALIDAD = "id_modalidad";
+
 
     public const CAMPO_ID_CARRERA = "id_carrera";
 
