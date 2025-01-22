@@ -27,8 +27,12 @@ $correo = $_SESSION["correo"];
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/Admin.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/jefeCarrera.js" defer></script>
+    <script src="../../assets/js/funciones.js" defer></script>
 </head>
 
 <body>
@@ -48,7 +52,7 @@ $correo = $_SESSION["correo"];
             <li class="menu-item"><a href="JefeCarrera.php" class="link">Inicio</a></li>
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
-            <li class="menu-item"><a href="Admin.php?Eliminar=true" class="link">Eliminar</a></li>
+            <li class="menu-item"><a href="JefeCarrera.php?Eliminar=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link">
                     <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
                 </a></li>
@@ -136,7 +140,7 @@ $correo = $_SESSION["correo"];
 
                 <input type="submit" name="formulario" class="btn-submit btn_login" value="Cambiar">
 
-                <img class="close" id="cerrar" src="../img/iconos/ic_close.png"
+                <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
                     alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
             </form>
         </div>
@@ -152,7 +156,7 @@ $correo = $_SESSION["correo"];
 
                 </label>
                 <div id="resultados"></div>
-                <img class="close" src="../img/iconos/ic_close.png"
+                <img class="close" src="../../assets/iconos/ic_close.webp"
                     alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
 
                 <button type="button" class="btn_eliminar" id="eliminar_registro">Eliminar</button>
@@ -174,7 +178,7 @@ $correo = $_SESSION["correo"];
                 <p class="info_usuario_eliminar">Cargo: <span id="cargo_info"></span></p>
                 <input type="hidden" name="identificador" value="" id="identificador">
 
-                <img class="close close_eliminar" src="../img/iconos/ic_close.png"
+                <img class="close close_eliminar" src="../../assets/iconos/ic_close.webp"
                     alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
 
                 <input type="submit" name="formulario" value="Eliminar" class="btn_eliminar btn_ventana-eliminar">
