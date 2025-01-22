@@ -1,6 +1,8 @@
 <?php
-include("../conexion/conexion.php");
-include("../clases/usuario.php");
+include "../../utils/constantes.php";
+include "../../conexion/conexion.php";
+include "../../clases/usuario.php";
+include "../../utils/functionGlobales.php";
 
 $usuario = new usuario();
 ?>
@@ -13,15 +15,15 @@ $usuario = new usuario();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Pagina de modificar del administrador">
-    <link rel="shortcut icon" href="../img/logo_ITSH.png" type="image/x-icon">
-    <link rel="stylesheet" href="../Tipografia/fonts.css">
-    <link rel="stylesheet" href="../styles/plantilla.css">
-    <link rel="stylesheet" href="../styles/notificacion.css">
-    <link rel="stylesheet" href="../styles/Añadir.css">
-    <link rel="stylesheet" href="../styles/Modificar.css">
+    <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
+    <link rel="stylesheet" href="../../assets/styles/plantilla.css">
+    <link rel="stylesheet" href="../../assets/styles/notificacion.css">
+    <link rel="stylesheet" href="../../assets/styles/Añadir.css">
+    <link rel="stylesheet" href="../../assets/styles/Modificar.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-    <script src="../js/index.js" defer></script>
-    <script src="../js/modificar.js" defer></script>
+    <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/modificar.js" defer></script>
 </head>
 
 <body>
@@ -29,7 +31,7 @@ $usuario = new usuario();
     <nav class="navegacion">
 
         <div class="gobierno">
-            <img src="../img/iconos/ic_gobierno.png" alt="icono del gobierno de Mexico">
+            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
 
             <div class="texto_gobierno">
                 <h3>Gobierno de</h3>
@@ -42,22 +44,25 @@ $usuario = new usuario();
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
             <li class="menu-item"><a href="Admin.php?Eliminar=true" class="link">Eliminar</a></li>
-            <li class="menu-item"><a href="../conexion/cerrar_sesion.php" class="link"><img src="../img/iconos/ic_cerrar_sesion.png" alt="icono de cerrar sesion"></a></li>
+            <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
+                        src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
         </ul>
     </nav>
 
     <main class="main">
         <div class="contenedor_logo">
-            <img src="../img/logo_ITSH.png" alt="logo del ITSH">
+            <img src="../../assets/extra/logo.svg" alt="logo del ITSH">
         </div>
 
         <div class="contenedor_main">
             <div class="contenedor">
-                <img src="../img/encabezado.png" alt="los encabezados de la pagina">
+                <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
+                    height="164">
 
                 <div class="contenedor_buscar">
                     <label class="contenedor_buscar">
-                        <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar" onkeyup="buscarUsuarios()">
+                        <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar"
+                            onkeyup="buscarUsuarios()">
                     </label>
                     <div id="resultados" class="result_usuarios"></div>
                 </div>
@@ -68,12 +73,14 @@ $usuario = new usuario();
 
                     <input type="hidden" name="clave_anterior" id="clave_anterior">
                     <label for="clave" class="contenedor_input">
-                        <input readonly pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave" placeholder=" ">
+                        <input readonly pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave"
+                            placeholder=" ">
                         <span class="nombre_input">Clave</span>
                     </label>
 
                     <label for="nombre" class="contenedor_input">
-                        <input pattern="^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$" class="input_pagina" type="text" name="nombre" id="nombre" placeholder=" ">
+                        <input pattern="^[A-Za-záéíóúÁÉÍÓÚñÑ ]+$" class="input_pagina" type="text" name="nombre"
+                            id="nombre" placeholder=" ">
                         <span class="nombre_input">Nombre</span>
                     </label>
 
@@ -123,8 +130,10 @@ $usuario = new usuario();
             <div class="siguenos">
                 <p>Siguenos en</p>
                 <div class="redes">
-                    <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank"><img src="../img/iconos/ic_facebbok.png" alt="icono de facebook"></a>
-                    <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank"><img src="../img/iconos/ic_instagram.png" alt="icono de instagram"></a>
+                    <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank"><img
+                            src="../../assets/iconos/ic_facebook.webp" alt="icono de facebook"></a>
+                    <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank"><img
+                            src="../../assets/iconos/ic_instagram.webp" alt="icono de instagram"></a>
                 </div>
             </div>
 
@@ -139,7 +148,7 @@ $usuario = new usuario();
         </div>
 
         <div class="footer_gobierno">
-            <img src="../img/iconos/ic_gobierno.png" alt="icono del gobierno de Mexico">
+            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
 
             <div class="texto_gobierno">
                 <p>Gobierno de Mexico</p>
