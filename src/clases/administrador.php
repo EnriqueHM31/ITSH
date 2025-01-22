@@ -129,21 +129,35 @@ class administrador
 
     public function añadirPorCSV($conexion)
     {
+        mysqli_begin_transaction($conexion);
+
         $archivo = $_FILES["archivo_csv"]["tmp_name"];
 
         if (($handle = fopen($archivo, "r")) !== FALSE) {
             fgetcsv($handle);
 
-            $stmt = $conexion->prepare("INSERT INTO personal 
-                (identificador, nombre, apellidos, cargo, correo, carrera) VALUES (?, ?, ?, ?, ?, ?)");
+            $sqlUsuario = $conexion->prepare("INSERT INTO Usuario
+                (id_usuario, contraseña, correo, id_rol)  VALUES (?, ?, ?, ?)");
+            $sqlAdministrador = $conexion->prepare("INSERT INTO Administrador 
+                (clave_empleado, nombre, apellidos) VALUES (?, ?, ?)");
+            $sqlJefe = $conexion->prepare("INSERT INTO jefe 
+                (clave_empleado, nombre, apellidos, id_carrera) VALUES (?, ?, ?, ?)");
 
             while (($datos = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $identificador = trim($datos[0]);
+
+                $clave_empleado = trim($datos[0]);
                 $nombre = trim($datos[1]);
                 $apellidos = trim($datos[2]);
                 $cargo = trim($datos[3]);
-                $correo = trim($datos[4]);
-                $carrera = trim($datos[5]);
+                $carrera = trim($datos[4]);
+                $correo = trim($datos[5]);
+                $contraseña = "Aa12345%";
+
+                if (empty($clave_empleado) || empty($nombre) || empty($apellidos) || empty($correo) || empty($carrera)) {
+                    estructuraMensaje("Faltan datos obligatorios en la fila del CSV", "../../src/assets/iconos/ic_error.webp", "var(--rojo)");
+                    return;
+                }
+
 
                 if (revisionCorreo($correo)) {
                     return;
@@ -154,41 +168,43 @@ class administrador
                 if (revisionNombreCompleto($nombre, $apellidos)) {
                     return;
                 }
-                if (revisionIdentificadorPersonal($identificador)) {
+                if (revisionIdentificadorPersonal($clave_empleado)) {
                     return;
                 }
-                if (revisionDeCarreras($carrera)) {
-                    return;
+                if (!empty($carrera) && $carrera !== 'null') {
+                    echo $carrera . "171";
+                    if (revisionDeCarreras($carrera) || RestriccionJefedeCarrera($carrera, $cargo, $conexion)) {
+                        return;
+                    }
                 }
-                if (restriccionKeyDuplicada($identificador, $correo, $conexion)) {
+                if (restriccionKeyDuplicada($clave_empleado, $correo, $conexion)) {
                     return;
                 }
                 if (RestriccionAdministrador($carrera, $cargo)) {
                     return;
                 }
-                if (RestriccionJefedeCarrera($carrera, $cargo, $conexion)) {
-                    return;
+
+                $id_rol = obtenerIDRol($conexion, $cargo);
+                $id_carrera = obtenerIDCarrera($conexion, $carrera);
+
+                $sqlUsuario->bind_param("sssi", $clave_empleado, $contraseña, $correo, $id_rol);
+                $sqlUsuario->execute();
+
+                if ($id_rol === 1) {
+                    $sqlAdministrador->bind_param("sss", $clave_empleado, $nombre, $apellidos);
+                    $sqlAdministrador->execute();
+
+                } else if ($id_rol === 2) {
+                    $sqlJefe->bind_param("sssi", $clave_empleado, $nombre, $apellidos, $id_carrera);
+                    $sqlJefe->execute();
+
                 }
             }
 
-            rewind($handle);
-            fgetcsv($handle);
-
-            while (($datos = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $identificador = trim($datos[0]);
-                $nombre = trim($datos[1]);
-                $apellidos = trim($datos[2]);
-                $cargo = trim($datos[3]);
-                $correo = trim($datos[4]);
-                $carrera = trim($datos[5]);
-
-                $stmt->bind_param("ssssss", $identificador, $nombre, $apellidos, $cargo, $correo, $carrera);
-                $stmt->execute();
-            }
 
             fclose($handle);
+            mysqli_commit($conexion);
             estructuraMensaje("Datos insertados correctamente", "../../assets/iconos/ic_correcto.webp", "--verde");
-
             return;
         } else {
             estructuraMensaje("Error al abrir el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
