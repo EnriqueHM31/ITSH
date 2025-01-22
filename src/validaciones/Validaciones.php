@@ -30,6 +30,7 @@ function restriccionJefedeCarrera($carrera, $cargo, $conexion)
         return true;
     }
 
+
     $resultadoIdCarrera = obtenerIDCarrera($conexion, $carrera);
 
     if ($resultadoIdCarrera < 0) {
