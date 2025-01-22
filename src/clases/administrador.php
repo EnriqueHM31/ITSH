@@ -47,18 +47,18 @@ class administrador
         $this->consultaAñadirPorAdministrador($id, $nombre, $apellidos, $cargo, $carrera, $correo, $contraseña, $conexion);
     }
 
-    public function consultaAñadirPorAdministrador($identificador, $nombre, $apellidos, $cargo, $carrera, $correo, $contraseña, $conexion)
+    public function consultaAñadirPorAdministrador($clave_empleado, $nombre, $apellidos, $cargo, $carrera, $correo, $contraseña, $conexion)
     {
 
         mysqli_begin_transaction($conexion);
 
         try {
 
-            if (insertarUsuario($conexion, $cargo, $identificador, $contraseña, $correo)) {
+            if (insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $cargo)) {
 
                 if ($cargo === administrador::ADMIN) {
 
-                    if (!insertarAdministrador($conexion, $identificador, $nombre, $apellidos)) {
+                    if (!insertarAdministrador($conexion, $clave_empleado, $nombre, $apellidos)) {
                         estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
                     mysqli_commit($conexion);
@@ -70,7 +70,7 @@ class administrador
                 if ($cargo === administrador::JEFE_DE_CARRERA) {
 
 
-                    if (!insertarJefedeCarrera($conexion, $identificador, $nombre, $apellidos, $carrera)) {
+                    if (!insertarJefedeCarrera($conexion, $clave_empleado, $nombre, $apellidos, $carrera)) {
                         estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
                     mysqli_commit($conexion);
@@ -136,13 +136,6 @@ class administrador
         if (($handle = fopen($archivo, "r")) !== FALSE) {
             fgetcsv($handle);
 
-            $sqlUsuario = $conexion->prepare("INSERT INTO Usuario
-                (id_usuario, contraseña, correo, id_rol)  VALUES (?, ?, ?, ?)");
-            $sqlAdministrador = $conexion->prepare("INSERT INTO Administrador 
-                (clave_empleado, nombre, apellidos) VALUES (?, ?, ?)");
-            $sqlJefe = $conexion->prepare("INSERT INTO jefe 
-                (clave_empleado, nombre, apellidos, id_carrera) VALUES (?, ?, ?, ?)");
-
             while (($datos = fgetcsv($handle, 1000, ",")) !== FALSE) {
 
                 $clave_empleado = trim($datos[0]);
@@ -153,54 +146,22 @@ class administrador
                 $correo = trim($datos[5]);
                 $contraseña = "Aa12345%";
 
-                if (empty($clave_empleado) || empty($nombre) || empty($apellidos) || empty($correo) || empty($carrera)) {
-                    estructuraMensaje("Faltan datos obligatorios en la fila del CSV", "../../src/assets/iconos/ic_error.webp", "var(--rojo)");
+                if ($this->validarRowsCSV($conexion, $clave_empleado, $nombre, $apellidos, $correo, $carrera, $cargo)) {
                     return;
                 }
 
+                insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $cargo);
 
-                if (revisionCorreo($correo)) {
-                    return;
-                }
-                if (revisionCargo($cargo)) {
-                    return;
-                }
-                if (revisionNombreCompleto($nombre, $apellidos)) {
-                    return;
-                }
-                if (revisionIdentificadorPersonal($clave_empleado)) {
-                    return;
-                }
-                if (!empty($carrera) && $carrera !== 'null') {
-                    echo $carrera . "171";
+                if ($cargo === Usuario::ADMIN) {
+                    insertarAdministrador($conexion, $clave_empleado, $nombre, $apellidos);
+
+                } else if ($cargo === Usuario::JEFE_DE_CARRERA) {
                     if (revisionDeCarreras($carrera) || RestriccionJefedeCarrera($carrera, $cargo, $conexion)) {
                         return;
                     }
-                }
-                if (restriccionKeyDuplicada($clave_empleado, $correo, $conexion)) {
-                    return;
-                }
-                if (RestriccionAdministrador($carrera, $cargo)) {
-                    return;
-                }
-
-                $id_rol = obtenerIDRol($conexion, $cargo);
-                $id_carrera = obtenerIDCarrera($conexion, $carrera);
-
-                $sqlUsuario->bind_param("sssi", $clave_empleado, $contraseña, $correo, $id_rol);
-                $sqlUsuario->execute();
-
-                if ($id_rol === 1) {
-                    $sqlAdministrador->bind_param("sss", $clave_empleado, $nombre, $apellidos);
-                    $sqlAdministrador->execute();
-
-                } else if ($id_rol === 2) {
-                    $sqlJefe->bind_param("sssi", $clave_empleado, $nombre, $apellidos, $id_carrera);
-                    $sqlJefe->execute();
-
+                    insertarJefedeCarrera($conexion, $clave_empleado, $nombre, $apellidos, $carrera);
                 }
             }
-
 
             fclose($handle);
             mysqli_commit($conexion);
@@ -211,5 +172,30 @@ class administrador
         }
     }
 
+    public function validarRowsCSV($conexion, $clave_empleado, $nombre, $apellidos, $correo, $carrera, $cargo)
+    {
+        if (empty($clave_empleado) || empty($nombre) || empty($apellidos) || empty($correo) || empty($carrera)) {
+            estructuraMensaje("Faltan datos obligatorios en la fila del CSV", "../../assets/iconos/ic_error.webp", "var(--rojo)");
+            return true;
+        }
+        if (revisionCorreo($correo)) {
+            return true;
+        }
+        if (revisionCargo($cargo)) {
+            return true;
+        }
+        if (revisionNombreCompleto($nombre, $apellidos)) {
+            return true;
+        }
+        if (revisionIdentificadorPersonal($clave_empleado)) {
+            return true;
+        }
+        if (restriccionKeyDuplicada($clave_empleado, $correo, $conexion)) {
+            return true;
+        }
+        if (RestriccionAdministrador($carrera, $cargo)) {
+            return true;
+        }
+    }
 
 }
