@@ -33,6 +33,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets//js/eliminar.js" defer></script>
     <script src="../../assets/js/admin.js" defer></script>
 </head>
 

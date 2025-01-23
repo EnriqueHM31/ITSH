@@ -26,8 +26,7 @@ $carreraJefe = $data[Variables::CAMPO_ID_CARRERA];
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
-    <script src="../../aseets/js/index.js" defer></script>
-    <script src="../../aseets/js/añadir_admin.js" defer></script>
+    <script src="../../assets//js/index.js"></script>
 </head>
 
 <body>
@@ -82,7 +81,7 @@ $carreraJefe = $data[Variables::CAMPO_ID_CARRERA];
                     <span class="nombre_input">Apellidos</span>
                 </label>
 
-                <label for="carrera" class="contenedor_input">
+                <label for="modalidad" class="contenedor_input">
                     <select class="input_pagina select_info" id="modalidad" name="modalidad">
                         <option class="opcion_select" value="Escolarizado">
                             Escolarizado
@@ -94,9 +93,9 @@ $carreraJefe = $data[Variables::CAMPO_ID_CARRERA];
                     <span class="nombre_input">Modalidad</span>
                 </label>
 
-                <label for="rol" class="contenedor_input">
+                <label for="grupo" class="contenedor_input">
                     <select class="input_pagina select_info" id="grupo" name="grupo">
-
+                        <option value="si">si</option>
                     </select>
                     <span class="nombre_input">Grupos</span>
                 </label>
