@@ -20,15 +20,8 @@ class Jefe
         }
     }
 
-    public function realizarOperacionFormAñadirEstudiantes($conexion)
+    public function realizarOperacionFormAñadirEstudiantes($conexion, $matricula, $contraseña, $id_rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera)
     {
-        $id = trim($_POST["clave"] ?? "");
-        $nombre = trim($_POST["nombre"] ?? "");
-        $apellidos = trim($_POST["apellidos"] ?? "");
-        $correo = trim($_POST["correo"] ?? "");
-        $cargo = trim($_POST['correo']);
-        $id_modalidad = trim($_POST['modalidad']);
-        $contraseña = 'Aa12345%';
 
         $archivo_cargado = isset($_FILES['archivo_csv']) && $_FILES['archivo_csv']['error'] === UPLOAD_ERR_OK;
         $archivo_tiene_contenido = $archivo_cargado && $_FILES['archivo_csv']['size'] > 0;
