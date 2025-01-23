@@ -162,7 +162,16 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $administrador->realizarOperacionFormAñadir($conexion);
+    $matricula = trim($_POST["clave"]);
+    $nombre = trim($_POST["nombre"]);
+    $apellidos = trim($_POST["apellidos"]);
+    $id_modalidad = trim(obtenerIdModalidad($conexion, $_POST["modalidad"]));
+    $correo = trim($_POST["correo"]);
+    $id_rol = 3;
+    $id_carrera = obtenerIDCarrera($conexion, $carreraJefe);
+    $contraseña = 'Aa12345%';
+
+    $jefe->realizarOperacionFormAñadirEstudiantes($conexion, $matricula, $contraseña, $id_rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera);
     notificaciones($_SESSION["mensaje"]);
 
     $conexion->close();
