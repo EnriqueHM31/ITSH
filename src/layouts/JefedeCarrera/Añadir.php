@@ -4,13 +4,14 @@ session_start();
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
-include "../../clases/administrador.php";
+include "../../clases/jefe.php";
 include "../../utils/functionGlobales.php";
 
 $usuario = new usuario();
-$administrador = new administrador();
+$jefe = new jefe();
 $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
-$carreraJefe = $data[Variables::CAMPO_ID_CARRERA];
+$id_carrera = $data[Variables::CAMPO_ID_CARRERA];
+$carreraJefe = getResultCarrera($conexion, $id_carrera);
 ?>
 
 <!DOCTYPE html>
@@ -94,9 +95,12 @@ $carreraJefe = $data[Variables::CAMPO_ID_CARRERA];
                 </label>
 
                 <label for="grupo" class="contenedor_input">
-                    <select class="input_pagina select_info" id="grupo" name="grupo">
-                        <option value="si">si</option>
+                    <select class="input_pagina select_info" name="grupo" id="grupo">
+                        <?php
+                        $jefe->ponerGruposJefeCarrera($carreraJefe);
+                        ?>
                     </select>
+
                     <span class="nombre_input">Grupos</span>
                 </label>
 
