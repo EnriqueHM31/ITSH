@@ -41,8 +41,8 @@ function mensajeNotificacion($mensaje, $imagen, $color)
 }
 
 
-// CONSULTAS PARA REUTILIZAR CODIGO LLEGA HASTA $SQL->GET_RESULT()
 
+// CONSULTA PARA OBTENER LA FILA COMPLETA UN ARRAY CLAVE VALOR*/
 function getResultDataTabla($conexion, $tabla, $columna, $campo)
 {
     $sql = $conexion->prepare("SELECT * FROM " . $tabla . " WHERE " . $columna . " = ?");
@@ -51,7 +51,7 @@ function getResultDataTabla($conexion, $tabla, $columna, $campo)
     $result = $sql->get_result();
     return $result->fetch_assoc();
 }
-
+// CONSULTA PARA OBTENER EL RESULTADO DE LA CONSULTA ID DUPLICADA
 function getResultIDUsuarioDuplicado($conexion, $id)
 {
     $sql = $conexion->prepare("SELECT * FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?");
@@ -59,7 +59,7 @@ function getResultIDUsuarioDuplicado($conexion, $id)
     $sql->execute();
     return $sql->get_result();
 }
-
+// CONSULTA PARA OBTENER EL RESULTADO DE LA CONSULTA CORREO DUPLICADO   
 function getResultCorreoDuplicado($conexion, $correo)
 {
     $sql = $conexion->prepare("SELECT * FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_CORREO . " = ?");
@@ -67,7 +67,7 @@ function getResultCorreoDuplicado($conexion, $correo)
     $sql->execute();
     return $sql->get_result();
 }
-
+// CONSULTA PARA OBTENER EL NOMBRE DE ÑA CARRERA DE LA TABLA CARRERA
 function getResultCarrera($conexion, $id_carrera)
 {
     $sqlIdCarrera = $conexion->prepare("SELECT " . Variables::CAMPO_CARRERA . " FROM " . Variables::TABLA_BD_CARRERA . " WHERE " . Variables::CAMPO_ID_CARRERA . " = ?");
@@ -78,7 +78,7 @@ function getResultCarrera($conexion, $id_carrera)
 
     return $carrera[Variables::CAMPO_CARRERA];
 }
-
+// CONSULTA PARA OBTENER EL RESULTADO SI HAY UNA CARRERA DUPLICADA
 function getResultCarreraDuplicada($tabla, $conexion, $id_carrera)
 {
     $sqlCarreraDuplicada = $conexion->prepare("SELECT * FROM " . $tabla . " WHERE " . Variables::CAMPO_ID_CARRERA . " = ?");
@@ -87,7 +87,7 @@ function getResultCarreraDuplicada($tabla, $conexion, $id_carrera)
     return $sqlCarreraDuplicada->get_result();
 }
 
-// CONSULTAS OARA OBTENER UN VALOR
+// CONSULTA PARA OBTENER EL ID DE ROL
 function obtenerIDRol($conexion, $rol)
 {
     $sql = $conexion->prepare("SELECT " . Variables::CAMPO_ID_ROL . " FROM " . Variables::TABLA_BD_ROL . " WHERE " . Variables::CAMPO_ROL . " = ?");
@@ -98,7 +98,7 @@ function obtenerIDRol($conexion, $rol)
 
     return $response[Variables::CAMPO_ID_ROL];
 }
-
+// CONSULTA PARA OBTENER EL ROL
 function obtenerRol($conexion, $id_rol)
 {
     $sql = $conexion->prepare("SELECT " . Variables::CAMPO_ROL . " FROM " . Variables::TABLA_BD_ROL . " WHERE " . Variables::CAMPO_ID_ROL . " = ?");
@@ -109,7 +109,7 @@ function obtenerRol($conexion, $id_rol)
 
     return $response[Variables::CAMPO_ROL];
 }
-
+// CONSULTA PARA OBTENER EL ID DE CARRERA
 function obtenerIDCarrera($conexion, $carrera)
 {
     $sql = $conexion->prepare("SELECT " . Variables::CAMPO_ID_CARRERA . " FROM " . Variables::TABLA_BD_CARRERA . " WHERE " . Variables::CAMPO_CARRERA . " = ?");
@@ -121,7 +121,7 @@ function obtenerIDCarrera($conexion, $carrera)
     return $response[Variables::CAMPO_ID_CARRERA];
 }
 
-//CONSULTAS PARA INSERTAR DATOS 
+//CONSULTAS PARA INSERTAR DATOS EN LA TABLA USUARIO
 function insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $cargo)
 {
     $rol = obtenerIDRol($conexion, $cargo);
@@ -131,7 +131,7 @@ function insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $car
 
     return $usuario->execute();
 }
-
+//CONSULTA PARA INSERTAR DATOS EN LA TABLA ADMINISTRADOR
 function insertarAdministrador($conexion, $identificador, $nombre, $apellidos)
 {
     $admin = $conexion->prepare("INSERT INTO " . Variables::TABLA_BD_AdMINISTRADOR . " (" . Variables::CAMPO_CLAVE_EMPLEADO_ADMIN . "," . Variables::CAMPO_NOMBRE . "," . Variables::CAMPO_APELLIDOS . ") VALUES (?, ?, ?)");
@@ -139,7 +139,7 @@ function insertarAdministrador($conexion, $identificador, $nombre, $apellidos)
     $admin->bind_param("sss", $identificador, $nombre, $apellidos);
     return $admin->execute();
 }
-
+// CONSULTA PARA INSERTAR DATOS EN LA TABLA JEFE
 function insertarJefedeCarrera($conexion, $identificador, $nombre, $apellidos, $carrera)
 {
     $IDCarrera = obtenerIDCarrera($conexion, $carrera);
@@ -149,18 +149,27 @@ function insertarJefedeCarrera($conexion, $identificador, $nombre, $apellidos, $
 
     return $jefe->execute();
 }
-
 // CONSULTAS UPDATE PARA LOS USUARIOS ADMINISTRADOR Y JEFE DE CARRERA
-
 function modificarPersonal($conexion, $id, $nombre, $apellidos, $carrera, $cargo, $correo)
 {
     return EliminarPersonal($conexion, $id);
 }
-
+// CONSULTA PARA ELIMINAR DATOS DE LA TABLA USUARIO
 function EliminarPersonal($conexion, $id)
 {
     $sql = "DELETE FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $id);
     return $stmt->execute();
+}
+
+//CONSULTA PARA OBTENER LA ID DE LA MODALIDAD 
+function obtenerIdModalidad($conexion, $modalidad)
+{
+    $sql = $conexion->prepare("SELECT " . Variables::CAMPO_ID_MODALIDAD . " FROM " . Variables::tABLA_BD_MODALIDAD . " WHERE " . Variables::CAMPO_MODALIDAD . " = ?");
+    $resultIDModalidad = $sql->bind_param("s", $modalidad);
+    $resultIDModalidad->execute();
+    $result = $resultIDModalidad->get_result()->fetch_assoc();
+
+    return $result[Variables::CAMPO_ID_MODALIDAD];
 }
