@@ -6,6 +6,7 @@ include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 include "../../clases/jefe.php";
 include "../../utils/functionGlobales.php";
+include "../../validaciones/Validaciones.php";
 
 $usuario = new usuario();
 $jefe = new jefe();
@@ -167,11 +168,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $apellidos = trim($_POST["apellidos"]);
     $id_modalidad = trim(obtenerIdModalidad($conexion, $_POST["modalidad"]));
     $correo = trim($_POST["correo"]);
-    $id_rol = 3;
+    $rol = Variables::MENU_DE_ROLES[2];
     $id_carrera = obtenerIDCarrera($conexion, $carreraJefe);
+    $grupo = trim($_POST["grupo"]);
     $contraseña = 'Aa12345%';
 
-    $jefe->realizarOperacionFormAñadirEstudiantes($conexion, $matricula, $contraseña, $id_rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera);
+    echo $grupo;
+
+    $jefe->realizarOperacionFormAñadirEstudiantes($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo);
     notificaciones($_SESSION["mensaje"]);
 
     $conexion->close();
