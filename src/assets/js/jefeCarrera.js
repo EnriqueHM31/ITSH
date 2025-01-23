@@ -39,34 +39,3 @@ function cargarUsuario(id) {
 		},
 	});
 }
-
-function mostrarDatosParaEliminar(data) {
-	console.log(data);
-	if (data.identificador === undefined) {
-		const modalTemplate = document.getElementById(
-			'plantilla_usuario-seleccionado-error',
-		);
-		const modalContainer = document.querySelector('body');
-		const modalClone = modalTemplate.content.cloneNode(true);
-
-		modalClone.getElementById('detalles_eliminar_error').innerText =
-			'Se necesita que busque un registro primero';
-
-		modalContainer.appendChild(modalClone);
-	} else {
-		const modalTemplate = document.getElementById(
-			'plantilla_usuario-seleccionado',
-		);
-		const modalContainer = document.querySelector('body');
-		const modalClone = modalTemplate.content.cloneNode(true);
-
-		modalClone.getElementById('clave_info').innerText = data.identificador;
-		modalClone.getElementById('nombre_info').innerText = data.nombre;
-		modalClone.getElementById('apellidos_info').innerText = data.apellidos;
-		modalClone.getElementById('carrera_info').innerText = data.carrera;
-		modalClone.getElementById('cargo_info').innerText = data.cargo;
-		modalClone.getElementById('identificador').value = data.identificador;
-
-		modalContainer.appendChild(modalClone);
-	}
-}

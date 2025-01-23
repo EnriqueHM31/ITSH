@@ -47,7 +47,7 @@ $carreraJefe = $data[Variables::CAMPO_ID_CARRERA];
             <li class="menu-item"><a href="JefeCarrera.php" class="link">Inicio</a></li>
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
-            <li class="menu-item"><a href="#" class="link">Eliminar</a></li>
+            <li class="menu-item"><a href="JefeCarrera.php?Eliminar=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
                         src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
         </ul>

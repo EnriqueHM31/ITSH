@@ -32,7 +32,7 @@ $correo = $_SESSION["correo"];
 
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
-    <script src="../../assets/js/funciones.js" defer></script>
+    <script src="../../assets/js/eliminar.js" defer></script>
 </head>
 
 <body>
