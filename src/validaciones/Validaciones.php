@@ -9,7 +9,7 @@ function validacionCamposYArchivoCSV($campos_completos, $archivo_tiene_contenido
 
         return 'Archivo';
     } elseif ($campos_completos && $archivo_tiene_contenido) {
-        return estructuraMensaje("No puedes poner un archivo si hay campos llenos", "../../assets/iconos/ic_error.webp", "--rojo");
+        return estructuraMensaje("No puedes poner un archivo si hay campos llenos" . $campos_completos, "../../assets/iconos/ic_error.webp", "--rojo");
     } elseif (!$campos_completos && !$archivo_tiene_contenido) {
         return estructuraMensaje("Llena los campos o carga un archivo", "../../assets/iconos/ic_error.webp", "--rojo");
     }
@@ -69,6 +69,22 @@ function restriccionKeyDuplicada($identificador, $correo, $conexion)
     }
 }
 
+function restriccionKeyDuplicadaEstudiante($matricula, $correo, $conexion)
+{
+    $resultado = getResultIDUsuarioDuplicado($conexion, $matricula);
+
+    if ($resultado->num_rows > 0) {
+        estructuraMensaje("La matricula ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+        return true;
+    }
+
+    $resultado = getResultCorreoDuplicado($conexion, $correo);
+
+    if ($resultado->num_rows > 0) {
+        estructuraMensaje("Ese correo ya esta vinculado a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+        return true;
+    }
+}
 function restriccionKey($identificador, $conexion)
 {
     $sql = $conexion->prepare("SELECT * FROM personal WHERE identificador = ?");
