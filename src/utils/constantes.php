@@ -31,17 +31,28 @@ class Variables
     // CAMPOS DE LA TABLA ADMINISTRADOR
     public const CAMPO_CLAVE_EMPLEADO_ADMIN = "clave_empleado";
 
+    // CAMPOS DE LA TABLA JEFE
     public const CAMPO_CLAVE_EMPLEADO_JEFE = "clave_empleado";
     public const CAMPO_CARRERA = "carrera";
+    public const CAMPO_ID_CARRERA = "id_carrera";
 
+    // CAMPOS DE LA TABLA ESTUDIANTE
     public const CAMPO_MATRICULA = "matricula";
     public const CAMPO_GRUPO = "grupo";
     public const CAMPO_MODALIDAD = "id_modalidad";
 
-
-    public const CAMPO_ID_CARRERA = "id_carrera";
-
     public const CAMPO_NOMBRE = "nombre";
     public const CAMPO_APELLIDOS = "apellidos";
     public const CAMPO_CORREO = "correo";
+
+    public const GRUPOS_DISPONIBLES = [
+        "Industrial" => ["numero" => 1, "cantidad" => 8],
+        "Insdustrias Alimentarias" => ["numero" => 2, "cantidad" => 7],
+        "Electromecanica" => ["numero" => 3, "cantidad" => 9],
+        "Sistemas Computacionales" => ["numero" => 4, "cantidad" => 9],
+        "Gestion Empresarial" => ["numero" => 5, "cantidad" => 9],
+        "Contador Publico" => ["numero" => 6, "cantidad" => 9],
+        "Quimica" => ["numero" => 7, "cantidad" => 8],
+        "Ambiental" => ["numero" => 1, "cantidad" => 7],
+    ];
 }
