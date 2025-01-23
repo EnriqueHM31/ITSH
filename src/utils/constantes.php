@@ -14,6 +14,8 @@ class Variables
     public const TABLA_BD_AdMINISTRADOR = "Administrador";
     public const TABLA_BD_JEFE = "Jefe";
     public const TABLA_BD_ESTUDIANTE = "Estudiante";
+    public const tABLA_BD_MODALIDAD = "Modalidad";
+
 
     // CAMPOS DE LA TABLA USUARIO
     public const CAMPO_ID_USUARIO = "id_usuario";
@@ -39,7 +41,8 @@ class Variables
     // CAMPOS DE LA TABLA ESTUDIANTE
     public const CAMPO_MATRICULA = "matricula";
     public const CAMPO_GRUPO = "grupo";
-    public const CAMPO_MODALIDAD = "id_modalidad";
+    public const CAMPO_ID_MODALIDAD = "id_modalidad";
+    public const CAMPO_MODALIDAD = "modalidad";
 
     public const CAMPO_NOMBRE = "nombre";
     public const CAMPO_APELLIDOS = "apellidos";
