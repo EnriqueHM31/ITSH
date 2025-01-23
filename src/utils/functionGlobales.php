@@ -122,12 +122,12 @@ function obtenerIDCarrera($conexion, $carrera)
 }
 
 //CONSULTAS PARA INSERTAR DATOS EN LA TABLA USUARIO
-function insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $cargo)
+function insertarUsuario($conexion, $id_usuario, $contraseña, $correo, $cargo)
 {
     $rol = obtenerIDRol($conexion, $cargo);
     $usuario = $conexion->prepare("INSERT INTO " . Variables::TABLA_BD_USUARIO . " (" . Variables::CAMPO_ID_USUARIO . "," . Variables::CAMPO_CONTRASEÑA . "," . Variables::CAMPO_CORREO . "," . Variables::CAMPO_ID_ROL . ") VALUES (?, ?, ?, ?)");
 
-    $usuario->bind_param("sssi", $clave_empleado, $contraseña, $correo, $rol);
+    $usuario->bind_param("sssi", $id_usuario, $contraseña, $correo, $rol);
 
     return $usuario->execute();
 }
@@ -149,6 +149,16 @@ function insertarJefedeCarrera($conexion, $identificador, $nombre, $apellidos, $
 
     return $jefe->execute();
 }
+//CONSULTA PARA INSERTAR DATOS EN LA TABLA ESTUDIANTE
+function insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)
+{
+    $sql = $conexion->prepare("INSERT INTO " . Variables::TABLA_BD_ESTUDIANTE . " 
+    (" . Variables::CAMPO_MATRICULA . ", " . Variables::CAMPO_NOMBRE . ", " . Variables::CAMPO_APELLIDOS . ", " . Variables::CAMPO_GRUPO . ", 
+    " . Variables::CAMPO_ID_CARRERA . ", " . Variables::CAMPO_ID_MODALIDAD . ") VALUES (?, ?, ?, ?, ?, ?)");
+    $sql->bind_param("ssssss", $matricula, $nombre, $apellidos, $grupo, $id_carrera, $id_modalidad);
+    return $sql->execute();
+
+}
 // CONSULTAS UPDATE PARA LOS USUARIOS ADMINISTRADOR Y JEFE DE CARRERA
 function modificarPersonal($conexion, $id, $nombre, $apellidos, $carrera, $cargo, $correo)
 {
@@ -167,9 +177,10 @@ function EliminarPersonal($conexion, $id)
 function obtenerIdModalidad($conexion, $modalidad)
 {
     $sql = $conexion->prepare("SELECT " . Variables::CAMPO_ID_MODALIDAD . " FROM " . Variables::tABLA_BD_MODALIDAD . " WHERE " . Variables::CAMPO_MODALIDAD . " = ?");
-    $resultIDModalidad = $sql->bind_param("s", $modalidad);
-    $resultIDModalidad->execute();
-    $result = $resultIDModalidad->get_result()->fetch_assoc();
+    $sql->bind_param("s", $modalidad);
+    $sql->execute();
+    $result = $sql->get_result();
+    $response = $result->fetch_assoc();
 
-    return $result[Variables::CAMPO_ID_MODALIDAD];
+    return $response[Variables::CAMPO_ID_MODALIDAD];
 }
