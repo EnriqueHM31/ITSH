@@ -10,6 +10,7 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
+$mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'true';
 
 
 ?>
@@ -31,8 +32,8 @@ $correo = $_SESSION["correo"];
 
 
     <script src="../../assets/js/index.js" defer></script>
-    <script src="../../assets/js/jefeCarrera.js" defer></script>
     <script src="../../assets/js/eliminar.js" defer></script>
+    <script src="../../assets/js/jefeCarrera.js" defer></script>
 </head>
 
 <body>
@@ -171,11 +172,15 @@ $correo = $_SESSION["correo"];
 
                 <h2 class="titulo_eliminar">Estas seguro de eliminar a: </h2>
 
-                <p class="info_usuario_eliminar">Clave: <span id="clave_info"></span></p>
-                <p class="info_usuario_eliminar">Nombre: <span id="nombre_info"></span></p>
-                <p class="info_usuario_eliminar">Apellidos: <span id="apellidos_info"></span></p>
-                <p class="info_usuario_eliminar">Carrera: <span id="carrera_info"></span></p>
-                <p class="info_usuario_eliminar">Cargo: <span id="cargo_info"></span></p>
+                <p class="info_usuario_eliminar">Clave: <span id="matricula-info"></span></p>
+                <p class="info_usuario_eliminar">Nombre: <span id="nombre-info"></span></p>
+                <p class="info_usuario_eliminar">Apellidos: <span id="apellidos-info"></span></p>
+                <p class="info_usuario_eliminar">Grupo: <span id="grupo-info"></span></p>
+                <p class="info_usuario_eliminar">Carrera: <span id="carrera-info"></span></p>
+                <p class="info_usuario_eliminar">Modalidad: <span id="id_modalidad-info"></span></p>
+                <p class="info_usuario_eliminar">Rol: <span id="rol-info"></span></p>
+                <p class="info_usuario_eliminar">Correo: <span id="correo-info"></span></p>
+
                 <input type="hidden" name="identificador" value="" id="identificador">
 
                 <img class="close close_eliminar" src="../../assets/iconos/ic_close.webp"
