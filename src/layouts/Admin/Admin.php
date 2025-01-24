@@ -165,23 +165,46 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
         </div>
     </template>
 
-    <template id="plantilla_usuario-seleccionado">
+    <template id="plantilla_usuario-seleccionado-administrador">
         <div class=" overlay overlay_eliminar overlay_ventana">
             <form id="formulario_eliminar" class="formulario form_eliminar form_verificar_eliminar" method="post">
 
-                <h2 class="titulo_eliminar">Estas seguro de eliminar a: </h2>
-
-                <p class="info_usuario_eliminar">Clave: <span id="clave_info"></span></p>
-                <p class="info_usuario_eliminar">Nombre: <span id="nombre_info"></span></p>
-                <p class="info_usuario_eliminar">Apellidos: <span id="apellidos_info"></span></p>
-                <p class="info_usuario_eliminar">Carrera: <span id="carrera_info"></span></p>
-                <p class="info_usuario_eliminar">Cargo: <span id="cargo_info"></span></p>
-                <input type="hidden" name="identificador" value="" id="identificador">
+                <div class="informacion-usuario-eliminar">
+                    <h2 class="titulo_eliminar-modal">Estas seguro de eliminar a: </h2>
+                    <p class="info_usuario_eliminar">Clave: <span id="clave-info"></span></p>
+                    <p class="info_usuario_eliminar">Nombre: <span id="nombre-info"></span></p>
+                    <p class="info_usuario_eliminar">Apellidos: <span id="apellidos-info"></span></p>
+                    <p class="info_usuario_eliminar">Rol: <span id="rol-info"></span></p>
+                    <p class="info_usuario_eliminar">Correo: <span id="correo-info"></span></p>
+                    <input type="hidden" name="identificador" value="" id="identificador">
+                    <input type="submit" name="formulario" value="Eliminar" class="btn_eliminar btn_ventana-eliminar">
+                </div>
 
                 <img class="close close_eliminar" src="../../assets/iconos/ic_close.webp"
                     alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
 
-                <input type="submit" name="formulario" value="Eliminar" class="btn_eliminar btn_ventana-eliminar">
+            </form>
+
+        </div>
+    </template>
+
+    <template id="plantilla_usuario-seleccionado-jefe">
+        <div class=" overlay overlay_eliminar overlay_ventana">
+            <form id="formulario_eliminar" class="formulario form_eliminar form_verificar_eliminar" method="post">
+                <div class="informacion-usuario-eliminar">
+                    <h2 class="titulo_eliminar-modal">Estas seguro de eliminar a: </h2>
+                    <p class="info_usuario_eliminar">Clave: <span id="clave-info"></span></p>
+                    <p class="info_usuario_eliminar">Nombre: <span id="nombre-info"></span></p>
+                    <p class="info_usuario_eliminar">Apellidos: <span id="apellidos-info"></span></p>
+                    <p class="info_usuario_eliminar">Carrera: <span id="carrera-info"></span></p>
+                    <p class="info_usuario_eliminar">Rol: <span id="rol-info"></span></p>
+                    <p class="info_usuario_eliminar">Correo: <span id="correo-info"></span></p>
+                    <input type="hidden" name="identificador" value="" id="identificador">
+                    <input type="submit" name="formulario" value="Eliminar" class="btn_eliminar btn_ventana-eliminar">
+                </div>
+                <img class="close close_eliminar" src="../../assets/iconos/ic_close.webp"
+                    alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
+
             </form>
 
         </div>
