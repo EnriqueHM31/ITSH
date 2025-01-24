@@ -120,7 +120,17 @@ function obtenerIDCarrera($conexion, $carrera)
 
     return $response[Variables::CAMPO_ID_CARRERA];
 }
+//CONSULTA PARA OBTENER LA ID DE LA MODALIDAD 
+function obtenerIdModalidad($conexion, $modalidad)
+{
+    $sql = $conexion->prepare("SELECT " . Variables::CAMPO_ID_MODALIDAD . " FROM " . Variables::tABLA_BD_MODALIDAD . " WHERE " . Variables::CAMPO_MODALIDAD . " = ?");
+    $sql->bind_param("s", $modalidad);
+    $sql->execute();
+    $result = $sql->get_result();
+    $response = $result->fetch_assoc();
 
+    return $response[Variables::CAMPO_ID_MODALIDAD];
+}
 //CONSULTAS PARA INSERTAR DATOS EN LA TABLA USUARIO
 function insertarUsuario($conexion, $id_usuario, $contraseña, $correo, $cargo)
 {
@@ -171,16 +181,4 @@ function EliminarPersonal($conexion, $id)
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $id);
     return $stmt->execute();
-}
-
-//CONSULTA PARA OBTENER LA ID DE LA MODALIDAD 
-function obtenerIdModalidad($conexion, $modalidad)
-{
-    $sql = $conexion->prepare("SELECT " . Variables::CAMPO_ID_MODALIDAD . " FROM " . Variables::tABLA_BD_MODALIDAD . " WHERE " . Variables::CAMPO_MODALIDAD . " = ?");
-    $sql->bind_param("s", $modalidad);
-    $sql->execute();
-    $result = $sql->get_result();
-    $response = $result->fetch_assoc();
-
-    return $response[Variables::CAMPO_ID_MODALIDAD];
 }
