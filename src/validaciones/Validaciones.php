@@ -9,7 +9,7 @@ function validacionCamposYArchivoCSV($campos_completos, $archivo_tiene_contenido
 
         return 'Archivo';
     } elseif ($campos_completos && $archivo_tiene_contenido) {
-        return estructuraMensaje("No puedes poner un archivo si hay campos llenos" . $campos_completos, "../../assets/iconos/ic_error.webp", "--rojo");
+        return estructuraMensaje("No puedes poner un archivo si hay campos llenos", "../../assets/iconos/ic_error.webp", "--rojo");
     } elseif (!$campos_completos && !$archivo_tiene_contenido) {
         return estructuraMensaje("Llena los campos o carga un archivo", "../../assets/iconos/ic_error.webp", "--rojo");
     }
