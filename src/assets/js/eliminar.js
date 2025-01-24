@@ -77,20 +77,26 @@ function cerrarVentanaEliminar() {
 }
 
 function mostrarDatosParaEliminar(data) {
-	const modalTemplate = document.getElementById(
-		'plantilla_usuario-seleccionado',
-	);
-	const modalContainer = document.querySelector('body');
-	const modalClone = modalTemplate.content.cloneNode(true);
-
-	if (data.rol === 'Adminstrador') {
+	if (data.rol === 'Administrador') {
+		const modalTemplate = document.getElementById(
+			'plantilla_usuario-seleccionado-administrador',
+		);
+		const modalContainer = document.querySelector('body');
+		const modalClone = modalTemplate.content.cloneNode(true);
 		modalClone.getElementById('clave-info').innerText = data.clave_empleado;
 		modalClone.getElementById('nombre-info').innerText = data.nombre;
 		modalClone.getElementById('apellidos-info').innerText = data.apellidos;
 		modalClone.getElementById('rol-info').innerText = data.rol;
 		modalClone.getElementById('correo-info').innerText = data.correo;
 		modalClone.getElementById('identificador').value = data.clave_empleado;
+		modalContainer.appendChild(modalClone);
+		return;
 	} else if (data.rol === 'Jefe de Carrera') {
+		const modalTemplate = document.getElementById(
+			'plantilla_usuario-seleccionado-jefe',
+		);
+		const modalContainer = document.querySelector('body');
+		const modalClone = modalTemplate.content.cloneNode(true);
 		modalClone.getElementById('clave-info').innerText = data.clave_empleado;
 		modalClone.getElementById('nombre-info').innerText = data.nombre;
 		modalClone.getElementById('apellidos-info').innerText = data.apellidos;
@@ -98,7 +104,13 @@ function mostrarDatosParaEliminar(data) {
 		modalClone.getElementById('rol-info').innerText = data.rol;
 		modalClone.getElementById('correo-info').innerText = data.correo;
 		modalClone.getElementById('identificador').value = data.clave_empleado;
+		modalContainer.appendChild(modalClone);
 	} else if (data.rol === 'Estudiante') {
+		const modalTemplate = document.getElementById(
+			'plantilla_usuario-seleccionado-estudiante',
+		);
+		const modalContainer = document.querySelector('body');
+		const modalClone = modalTemplate.content.cloneNode(true);
 		modalClone.getElementById('matricula-info').innerText = data.matricula;
 		modalClone.getElementById('nombre-info').innerText = data.nombre;
 		modalClone.getElementById('apellidos-info').innerText = data.apellidos;
@@ -109,8 +121,8 @@ function mostrarDatosParaEliminar(data) {
 		modalClone.getElementById('rol-info').innerText = data.rol;
 		modalClone.getElementById('correo-info').innerText = data.correo;
 		modalClone.getElementById('identificador').value = data.matricula;
+		modalContainer.appendChild(modalClone);
 	}
-	modalContainer.appendChild(modalClone);
 }
 
 function modalError() {
