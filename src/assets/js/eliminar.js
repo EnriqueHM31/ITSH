@@ -83,7 +83,22 @@ function mostrarDatosParaEliminar(data) {
 	const modalContainer = document.querySelector('body');
 	const modalClone = modalTemplate.content.cloneNode(true);
 
-	if (data.rol === 'Estudiante') {
+	if (data.rol === 'Adminstrador') {
+		modalClone.getElementById('clave-info').innerText = data.clave_empleado;
+		modalClone.getElementById('nombre-info').innerText = data.nombre;
+		modalClone.getElementById('apellidos-info').innerText = data.apellidos;
+		modalClone.getElementById('rol-info').innerText = data.rol;
+		modalClone.getElementById('correo-info').innerText = data.correo;
+		modalClone.getElementById('identificador').value = data.clave_empleado;
+	} else if (data.rol === 'Jefe de Carrera') {
+		modalClone.getElementById('clave-info').innerText = data.clave_empleado;
+		modalClone.getElementById('nombre-info').innerText = data.nombre;
+		modalClone.getElementById('apellidos-info').innerText = data.apellidos;
+		modalClone.getElementById('carrera-info').innerText = data.carrera;
+		modalClone.getElementById('rol-info').innerText = data.rol;
+		modalClone.getElementById('correo-info').innerText = data.correo;
+		modalClone.getElementById('identificador').value = data.clave_empleado;
+	} else if (data.rol === 'Estudiante') {
 		modalClone.getElementById('matricula-info').innerText = data.matricula;
 		modalClone.getElementById('nombre-info').innerText = data.nombre;
 		modalClone.getElementById('apellidos-info').innerText = data.apellidos;
@@ -95,7 +110,6 @@ function mostrarDatosParaEliminar(data) {
 		modalClone.getElementById('correo-info').innerText = data.correo;
 		modalClone.getElementById('identificador').value = data.matricula;
 	}
-
 	modalContainer.appendChild(modalClone);
 }
 
