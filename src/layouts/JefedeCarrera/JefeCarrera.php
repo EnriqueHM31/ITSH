@@ -191,3 +191,22 @@ $correo = $_SESSION["correo"];
 </body>
 
 </html>
+
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST['formulario'])) {
+
+        if ($_POST['formulario'] === 'Cambiar') {
+            $contraseña_actual = trim($_POST['contraseña_actual']);
+            $contraseña_nueva = trim($_POST['contraseña_nueva']);
+
+            $usuario->cambiarContraseña($conexion, $contraseña_actual, $contraseña_nueva, $id);
+        } elseif ($_POST['formulario'] === 'Eliminar') {
+            $id = $_POST['identificador'];
+
+            $administrador->eliminarRegistro($conexion, $id);
+        }
+        notificaciones($_SESSION["mensaje"]);
+    }
+}
