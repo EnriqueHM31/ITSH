@@ -291,11 +291,24 @@ body {
 /*PLANTILLA PARA ELIMINAR UN REGISTRO*/
 .form_verificar_eliminar {
     background: var(--blanco);
-    min-width: 50%;
-    border-radius: 5rem;
+    width: fit-content;
+    min-height: 75dvh;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    padding-right: 15rem;
 }
 
-.titulo_eliminar {
+.informacion-usuario-eliminar {
+    padding: 0 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.titulo_eliminar-modal {
     font-size: clamp(1.4rem, 4vw, 2.2rem);
     color: var(--blanco);
     background: var(--vino);
@@ -304,21 +317,24 @@ body {
     font-weight: bold;
 }
 
+
 .info_usuario_eliminar {
     font-size: clamp(1.4rem, 4vw, 2.4rem);
     color: var(--vino);
     font-weight: bold;
     display: flex;
     align-items: center;
-    width: 70%;
-    margin-bottom: 1rem;
-    gap: 3rem;
+    width: 100%;
+    gap: 1rem;
 }
 
 .btn_ventana-eliminar {
     background: var(--vino);
     color: var(--blanco);
     font-weight: 900;
+    position: absolute;
+    bottom: 2rem;
+    right: 3rem;
 }
 
 .close_eliminar {
