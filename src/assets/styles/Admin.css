@@ -288,59 +288,6 @@ body {
 
 }
 
-/*PLANTILLA PARA ELIMINAR UN REGISTRO*/
-.form_verificar_eliminar {
-    background: var(--blanco);
-    width: fit-content;
-    min-height: 75dvh;
-    border-radius: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0;
-    padding-right: 15rem;
-}
-
-.informacion-usuario-eliminar {
-    padding: 0 4rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.titulo_eliminar-modal {
-    font-size: clamp(1.4rem, 4vw, 2.2rem);
-    color: var(--blanco);
-    background: var(--vino);
-    padding: 1rem 3.5rem;
-    border-radius: 3rem;
-    font-weight: bold;
-}
-
-
-.info_usuario_eliminar {
-    font-size: clamp(1.4rem, 4vw, 2.4rem);
-    color: var(--vino);
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    gap: 1rem;
-}
-
-.btn_ventana-eliminar {
-    background: var(--vino);
-    color: var(--blanco);
-    font-weight: 900;
-    position: absolute;
-    bottom: 2rem;
-    right: 3rem;
-}
-
-.close_eliminar {
-    mix-blend-mode: difference;
-    right: 5rem;
-}
 
 
 @media (max-width: 1000px) {
