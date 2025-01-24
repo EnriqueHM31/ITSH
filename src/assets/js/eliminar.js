@@ -77,31 +77,37 @@ function cerrarVentanaEliminar() {
 }
 
 function mostrarDatosParaEliminar(data) {
-	if (data.identificador === undefined) {
-		const modalTemplate = document.getElementById(
-			'plantilla_usuario-seleccionado-error',
-		);
-		const modalContainer = document.querySelector('body');
-		const modalClone = modalTemplate.content.cloneNode(true);
+	const modalTemplate = document.getElementById(
+		'plantilla_usuario-seleccionado',
+	);
+	const modalContainer = document.querySelector('body');
+	const modalClone = modalTemplate.content.cloneNode(true);
 
-		modalClone.getElementById('detalles_eliminar_error').innerText =
-			'Se necesita que busque un registro primero';
-
-		modalContainer.appendChild(modalClone);
-	} else {
-		const modalTemplate = document.getElementById(
-			'plantilla_usuario-seleccionado',
-		);
-		const modalContainer = document.querySelector('body');
-		const modalClone = modalTemplate.content.cloneNode(true);
-
-		modalClone.getElementById('clave_info').innerText = data.identificador;
-		modalClone.getElementById('nombre_info').innerText = data.nombre;
-		modalClone.getElementById('apellidos_info').innerText = data.apellidos;
-		modalClone.getElementById('carrera_info').innerText = data.carrera;
-		modalClone.getElementById('cargo_info').innerText = data.cargo;
-		modalClone.getElementById('identificador').value = data.identificador;
-
-		modalContainer.appendChild(modalClone);
+	if (data.rol === 'Estudiante') {
+		modalClone.getElementById('matricula-info').innerText = data.matricula;
+		modalClone.getElementById('nombre-info').innerText = data.nombre;
+		modalClone.getElementById('apellidos-info').innerText = data.apellidos;
+		modalClone.getElementById('grupo-info').innerText = data.grupo;
+		modalClone.getElementById('carrera-info').innerText = data.carrera;
+		modalClone.getElementById('id_modalidad-info').innerText =
+			data.id_modalidad;
+		modalClone.getElementById('rol-info').innerText = data.rol;
+		modalClone.getElementById('correo-info').innerText = data.correo;
+		modalClone.getElementById('identificador').value = data.matricula;
 	}
+
+	modalContainer.appendChild(modalClone);
+}
+
+function modalError() {
+	const modalTemplate = document.getElementById(
+		'plantilla_usuario-seleccionado-error',
+	);
+	const modalContainer = document.querySelector('body');
+	const modalClone = modalTemplate.content.cloneNode(true);
+
+	modalClone.getElementById('detalles_eliminar_error').innerText =
+		'Se necesita que busque un registro primero';
+
+	modalContainer.appendChild(modalClone);
 }
