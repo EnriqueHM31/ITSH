@@ -131,6 +131,16 @@ function obtenerIdModalidad($conexion, $modalidad)
 
     return $response[Variables::CAMPO_ID_MODALIDAD];
 }
+//cONSULTA PARA OBTENER LA CONTRASEÑA ACTUAL DESDE LA BD A PARTIR DE UNA ID
+function obtenerContraseñaActualBD($conexion, $id)
+{
+    $sqlComprobacionContraseña = "SELECT " . Variables::CAMPO_CONTRASEÑA . " FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
+    $stmt = $conexion->prepare($sqlComprobacionContraseña);
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    $resultContraseña = $stmt->get_result()->fetch_assoc();
+    return $resultContraseña['contraseña'];
+}
 //CONSULTAS PARA INSERTAR DATOS EN LA TABLA USUARIO
 function insertarUsuario($conexion, $id_usuario, $contraseña, $correo, $cargo)
 {
@@ -174,6 +184,15 @@ function modificarPersonal($conexion, $id, $nombre, $apellidos, $carrera, $cargo
 {
     return EliminarPersonal($conexion, $id);
 }
+
+// CONSULTA OARA MODIFICAR LA CONTRASEÑA ACTUAL DESDE LA PAGINA INICIO (DENTRO DEL SISTEMA)
+function modificarLaContraseñaActualPaginaInicio($conexion, $id, $contraseña_nueva)
+{
+    $sqlUpdateContraseña = "UPDATE " . Variables::TABLA_BD_USUARIO . " SET " . Variables::CAMPO_CONTRASEÑA . " = ? WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
+    $stmtUpdate = $conexion->prepare($sqlUpdateContraseña);
+    $stmtUpdate->bind_param("ss", $contraseña_nueva, $id);
+    return $stmtUpdate->execute();
+}
 // CONSULTA PARA ELIMINAR DATOS DE LA TABLA USUARIO
 function EliminarPersonal($conexion, $id)
 {
@@ -182,3 +201,4 @@ function EliminarPersonal($conexion, $id)
     $stmt->bind_param("s", $id);
     return $stmt->execute();
 }
+
