@@ -131,6 +131,17 @@ function obtenerIdModalidad($conexion, $modalidad)
 
     return $response[Variables::CAMPO_ID_MODALIDAD];
 }
+//CONSULTA PARA OBTENER LA MODALIDAD
+function obtenerModalidad($conexion, $id_modalidad)
+{
+    $sql = $conexion->prepare("SELECT " . Variables::CAMPO_MODALIDAD . " FROM " . Variables::tABLA_BD_MODALIDAD . " WHERE " . Variables::CAMPO_ID_MODALIDAD . " = ?");
+    $sql->bind_param("s", $id_modalidad);
+    $sql->execute();
+    $result = $sql->get_result();
+    $response = $result->fetch_assoc();
+
+    return $response[Variables::CAMPO_MODALIDAD];
+}
 //cONSULTA PARA OBTENER LA CONTRASEÑA ACTUAL DESDE LA BD A PARTIR DE UNA ID
 function obtenerContraseñaActualBD($conexion, $id)
 {
