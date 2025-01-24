@@ -28,7 +28,8 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
-    <script src="../../assets//js/index.js"></script>
+    <script src="../../assets/js/index.js" defer></script>
+
 </head>
 
 <body>
@@ -172,8 +173,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_carrera = obtenerIDCarrera($conexion, $carreraJefe);
     $grupo = trim($_POST["grupo"]);
     $contraseña = 'Aa12345%';
-
-    echo $grupo;
 
     $jefe->realizarOperacionFormAñadirEstudiantes($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo);
     notificaciones($_SESSION["mensaje"]);
