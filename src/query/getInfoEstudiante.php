@@ -12,22 +12,33 @@ if (isset($_POST['id'])) {
     $dataUser = getResultDataTabla($conexion, Variables::TABLA_BD_USUARIO, Variables::CAMPO_ID_USUARIO, $id);
     $idUser = $dataUser[Variables::CAMPO_ID_USUARIO];
     $correo = $dataUser[Variables::CAMPO_CORREO];
+    $rol = obtenerRol($conexion, $dataUser[Variables::CAMPO_ID_ROL]);
 
     $estudiante = getResultDataTabla($conexion, Variables::TABLA_BD_ESTUDIANTE, Variables::CAMPO_MATRICULA, $id);
     $nombre = $estudiante[Variables::CAMPO_NOMBRE];
     $apellidos = $estudiante[Variables::CAMPO_APELLIDOS];
-    $modalidad = $estudiante[Variables::CAMPO_MODALIDAD];
+    $modalidad = obtenerModalidad($conexion, $estudiante[Variables::CAMPO_ID_MODALIDAD]);
+    $grupo = $estudiante[Variables::CAMPO_GRUPO];
     $carrera = getResultCarrera($conexion, $estudiante[Variables::CAMPO_ID_CARRERA]);
 
+
+
+    echo json_encode(crearDataInformacionJefe($idUser, $nombre, $apellidos, $grupo, $carrera, $modalidad, $rol, $correo));
+}
+
+
+function crearDataInformacionJefe($idUser, $nombre, $apellidos, $grupo, $carrera, $modalidad, $rol, $correo)
+{
     $data = [
-        "identificador" => $idUser,
+        "matricula" => $idUser,
         "nombre" => $nombre,
         "apellidos" => $apellidos,
+        "grupo" => $grupo,
         "carrera" => $carrera,
-        "cargo" => $modalidad,
+        "id_modalidad" => $modalidad,
+        "rol" => $rol,
         "correo" => $correo
     ];
 
-    echo json_encode($data);
+    return $data;
 }
-
