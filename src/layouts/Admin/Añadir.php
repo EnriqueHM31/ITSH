@@ -24,7 +24,6 @@ $administrador = new administrador();
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
     <script src="../../assets/js/index.js" defer></script>
-    <script src="../../assets/js/añadir_admin.js" defer></script>
 </head>
 
 <body>
