@@ -88,24 +88,14 @@ class Usuario
             return;
         }
 
-        $sqlComprobacionContraseña = "SELECT " . Variables::CAMPO_CONTRASEÑA . " FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
-        $stmt = $conexion->prepare($sqlComprobacionContraseña);
-        $stmt->bind_param("s", $id);
-        $stmt->execute();
-        $resultContraseña = $stmt->get_result()->fetch_assoc();
-        $contraseña = $resultContraseña['contraseña'];
-
+        $contraseña = obtenerContraseñaActualBD($conexion, $id);
 
         if ($contraseña_actual !== $contraseña) {
             estructuraMensaje("La contraseña actual no es la correcta", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $sqlUpdateContraseña = "UPDATE " . Variables::TABLA_BD_USUARIO . " SET " . Variables::CAMPO_CONTRASEÑA . " = " . $contraseña_nueva . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
-        $stmtUpdate = $conexion->prepare($sqlUpdateContraseña);
-        $stmtUpdate->bind_param("s", $id);
-
-        if ($stmtUpdate->execute()) {
+        if (modificarLaContraseñaActualPaginaInicio($conexion, $id, $contraseña_nueva)) {
             estructuraMensaje("Se cambio la contraseña", "../../assets/iconos/ic_correcto.webp", "--verde");
         } else {
             estructuraMensaje("Error al actualizar la contraseña", "../../assets/iconos/ic_error.webp", "--rojo");
