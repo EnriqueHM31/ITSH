@@ -133,6 +133,11 @@ main {
     display: none;
 }
 
+.encabezado {
+    aspect-ratio: 6/1;
+    object-fit: cover;
+    width: 100%;
+}
 
 .contenedor_main {
     background: var(--blanco);
