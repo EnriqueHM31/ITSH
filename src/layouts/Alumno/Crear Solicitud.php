@@ -1,9 +1,11 @@
 <?php
 session_start();
-include("../conexion/conexion.php");
-include("../clases/usuario.php");
-include("../clases/alumno.php");
-
+include "../../utils/constantes.php";
+include "../../conexion/conexion.php";
+include "../../clases/usuario.php";
+include "../../clases/alumno.php";
+include "../../validaciones/Validaciones.php";
+include "../../utils/functionGlobales.php";
 $usuario = new usuario();
 $alumno = new alumno();
 $id = $_SESSION["id"];
@@ -18,12 +20,12 @@ $id = $_SESSION["id"];
     <meta charset="UTF-8">
     <meta name="description" content="Pagina principal del administrador">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../img/logo_ITSH.png" type="image/x-icon">
-    <link rel="stylesheet" href="../Tipografia/fonts.css">
-    <link rel="stylesheet" href="../styles/plantilla.css">
-    <link rel="stylesheet" href="../styles/notificacion.css">
-    <link rel="stylesheet" href="../styles/solicitud.css">
-    <script src="../js/index.js" defer></script>
+    <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
+    <link rel="stylesheet" href="../../assets/styles/plantilla.css">
+    <link rel="stylesheet" href="../../assets/styles/notificacion.css">
+    <link rel="stylesheet" href="../../assets/styles/solicitud.css">
+    <script src="../../assets/js/index.js" defer></script>
 </head>
 
 <body>
@@ -31,7 +33,7 @@ $id = $_SESSION["id"];
     <nav class="navegacion">
 
         <div class="gobierno">
-            <img src="../img/iconos/ic_gobierno.png" alt="icono del gobierno de Mexico">
+            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
 
             <div class="texto_gobierno">
                 <h3>Gobierno de</h3>
@@ -43,11 +45,12 @@ $id = $_SESSION["id"];
             <li class="menu-item"><a href="alumno.php" class="link">Inicio</a></li>
             <li class="menu-item"><a href="Crear Solicitud.php" class="link">Crear Solicitud</a></li>
             <li class="menu-item"><a href="Historial Alumno.php" class="link">Historial</a></li>
-            <li class="menu-item"><a href="../conexion/cerrar_sesion.php" class="link">Cerrar Sesion</a></li>
-            <li class="menu-item close_contenedor"><img class="close_menu" src="../img/iconos/ic_close.png" alt="Imagen para cerrar el menu movil"></li>
+            <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link">Cerrar Sesion</a></li>
+            <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
+                    alt="Imagen para cerrar el menu movil"></li>
         </ul>
 
-        <img src="../img/iconos/ic_menu_movil.png" alt="icono para el menu en movil" class="icono_menu">
+        <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
     </nav>
 
     <main class="main">
@@ -56,60 +59,61 @@ $id = $_SESSION["id"];
             <h2>Crear Solicitud</h2>
 
             <?php
-            $sql = "SELECT * FROM personal WHERE identificador = '$id'";
+            $sql = "SELECT * FROM estudiante WHERE matricula = '$id'";
             $result = $conexion->query($sql);
 
             if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) :
-            ?>
-                    <form class="formulario_solicitud" method="POST" enctype="multipart/form-data">
+                $row = $result->fetch_assoc()
+                    ?>
+                <form class="formulario_solicitud" method="POST" enctype="multipart/form-data">
 
-                        <div class="contenedor_info-solicitud">
-                            <p>Matricula:</p>
-                            <input type="text" id="id" name="identificador" value="<?php echo $row['identificador']; ?>" readonly>
+                    <div class="contenedor_info-solicitud">
+                        <p>Matricula:</p>
+                        <input type="text" id="id" name="identificador" value="<?php echo $row['matricula']; ?>" readonly>
 
-                            <input type="text" id="grupo" name="grupo" value="<?php echo $row['identificador']; ?>" readonly>
-                        </div>
+                        <input type="text" id="grupo" name="grupo" value="<?php echo $row['grupo']; ?>" readonly>
+                    </div>
 
-                        <div class="contenedor_info-solicitud">
-                            <p>Nombre:</p>
-                            <input type="text" id="nombre" name="nombre" value="<?php echo $row['nombre']; ?>" readonly>
-                        </div>
+                    <div class="contenedor_info-solicitud">
+                        <p>Nombre:</p>
+                        <input type="text" id="nombre" name="nombre" value="<?php echo $row['nombre']; ?>" readonly>
+                    </div>
 
-                        <div class="contenedor_info-solicitud">
-                            <p>Apellidos:</p>
-                            <input type="text" id="apellidos" name="apellidos" value="<?php echo $row['apellidos']; ?>" readonly>
-                        </div>
+                    <div class="contenedor_info-solicitud">
+                        <p>Apellidos:</p>
+                        <input type="text" id="apellidos" name="apellidos" value="<?php echo $row['apellidos']; ?>"
+                            readonly>
+                    </div>
 
-                        <div class="contenedor_info-solicitud">
-                            <p for="email">Carrera:</p>
-                            <input type="text" id="carrera" name="carrera" value="<?php echo $row['carrera']; ?>" readonly>
-                        </div>
+                    <div class="contenedor_info-solicitud">
+                        <p for="email">Carrera:</p>
+                        <input type="text" id="carrera" name="carrera"
+                            value="<?php echo getResultCarrera($conexion, $row['id_carrera']); ?>" readonly>
+                    </div>
 
-                        <div class="contenedor_info-solicitud">
-                            <p>Motivo:</p>
-                            <select name="motivo" id="motivo">
-                                <option value="Personal">Personal</option>
-                                <option value="Laboral">Laboral</option>
-                                <option value="Salud">Salud</option>
-                            </select>
-                        </div>
+                    <div class="contenedor_info-solicitud">
+                        <p>Motivo:</p>
+                        <select name="motivo" id="motivo">
+                            <option value="Personal">Personal</option>
+                            <option value="Laboral">Laboral</option>
+                            <option value="Salud">Salud</option>
+                        </select>
+                    </div>
 
-                        <div class="contenedor_info-solicitud">
-                            <p>Fecha de Ausencia: </p>
-                            <input class="fecha_ausencia" type="date" name="fecha_ausencia" id="fecha_de_ausencia">
-                        </div>
+                    <div class="contenedor_info-solicitud">
+                        <p>Fecha de Ausencia: </p>
+                        <input class="fecha_ausencia" type="date" name="fecha_ausencia" id="fecha_de_ausencia">
+                    </div>
 
-                        <label for="archivo" class="btn_archivo">
-                            <input type="file" name="archivo_evidencia" id="archivo" class="archivo" accept="application/pdf">
+                    <label for="archivo" class="btn_archivo">
+                        <input type="file" name="archivo_evidencia" id="archivo" class="archivo" accept="application/pdf">
 
-                            <span id="nombreArchivo">Cargar evidencia</span>
-                        </label>
+                        <span id="nombreArchivo">Cargar evidencia</span>
+                    </label>
 
-                        <input type="submit" value="Enviar Solicitud" class="btn_enviar-solicitud">
-                    </form>
-            <?php
-                endwhile;
+                    <input type="submit" value="Enviar Solicitud" class="btn_enviar-solicitud">
+                </form>
+                <?php
             }
             ?>
 
@@ -123,8 +127,10 @@ $id = $_SESSION["id"];
             <div class="siguenos">
                 <p>Siguenos en</p>
                 <div class="redes">
-                    <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank"><img src="../img/iconos/ic_facebbok.png" alt="icono de facebook"></a>
-                    <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank"><img src="../img/iconos/ic_instagram.png" alt="icono de facebook"></a>
+                    <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank"><img
+                            src="../../assets//iconos/ic_facebook.webp" alt="icono de facebook"></a>
+                    <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank"><img
+                            src="../../assets/iconos/ic_instagram.webp" alt="icono de facebook"></a>
                 </div>
             </div>
 
@@ -139,7 +145,7 @@ $id = $_SESSION["id"];
         </div>
 
         <div class="footer_gobierno">
-            <img src="../img/iconos/ic_gobierno.png" alt="icono del gobierno de Mexico">
+            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
 
             <div class="texto_gobierno">
                 <p>Gobierno de Mexico</p>
@@ -157,6 +163,6 @@ $id = $_SESSION["id"];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $alumno->enviarSolicitud($conexion);
-    $usuario->notificaciones($_SESSION["mensaje"]);
+    notificaciones($_SESSION["mensaje"]);
 }
 ?>
