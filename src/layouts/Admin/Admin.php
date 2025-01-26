@@ -28,13 +28,16 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
-    <link rel="stylesheet" href="../../assets/styles/Admin.css">
+    <link rel="stylesheet" href="../../assets/styles/Inicio.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
+    <link rel="stylesheet" href="../../assets/styles/templates.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets//js/eliminar.js" defer></script>
     <script src="../../assets/js/admin.js" defer></script>
+    <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
+
 </head>
 
 <body>
@@ -151,11 +154,13 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
         <div class=" overlay overlay_eliminar">
             <form class="formulario form_eliminar" method="post">
                 <h2 class="titulo titulo_eliminar">Eliminar Registro</h2>
-                <label for="buscar" class="contenedor_input">
-                    <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar"
-                        onkeyup="buscarUsuarios()">
-                </label>
-                <div id="resultados"></div>
+                <div class="buscador-usuarios">
+                    <label for="buscar" class="contenedor_input">
+                        <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar"
+                            onkeyup="buscarUsuarios()">
+                    </label>
+                    <div id="resultados"></div>
+                </div>
                 <img class="close" src="../../assets/iconos/ic_close.webp"
                     alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
 

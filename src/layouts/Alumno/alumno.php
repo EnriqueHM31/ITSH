@@ -23,12 +23,13 @@ $correo = $_SESSION["correo"];
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
-    <link rel="stylesheet" href="../../assets/styles/Admin.css">
+    <link rel="stylesheet" href="../../assets/styles/Inicio.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
+    <link rel="stylesheet" href="../../assets/styles/templates.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script src="../../assets/js/index.js" defer></script>
-    <script src="../../assets/js/admin.js" defer></script>
+    <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
 </head>
 
 <body>
@@ -58,9 +59,8 @@ $correo = $_SESSION["correo"];
 
     <main class="main">
         <div class="contenedor_main">
-            <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
-                height="164">
-            <h2>Bienvenido</h2>
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
+            <h2>Bienvenido Estudiante</h2>
             <div class="informacion_usuario">
 
 
@@ -133,7 +133,7 @@ $correo = $_SESSION["correo"];
 
                 <input type="submit" name="formulario" class="btn-submit btn_login" value="Cambiar">
 
-                <img class="close" id="cerrar" src="../img/iconos/ic_close.png"
+                <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
                     alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
             </form>
         </div>
