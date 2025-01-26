@@ -86,10 +86,14 @@ a {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #a7c2f4d5 inset;
-    -webkit-background-clip: transparent;
+    -webkit-box-shadow: 0 0 0px 1000px var(--vino) inset,
+        0 0 0 1000px var(--vino) inset;
+    -webkit-text-fill-color: var(--blanco);
 }
 
+input:focus {
+    outline: .1rem solid var(--vino);
+}
 
 .nombre_input {
     position: absolute;
@@ -111,6 +115,23 @@ input:-webkit-autofill:focus {
     padding: 2rem;
     min-width: 80%;
     color: var(--blanco);
+}
+
+.img-ver {
+    position: absolute;
+    top: 40%;
+    right: 2rem;
+    cursor: pointer;
+    z-index: 50;
+    aspect-ratio: 1 /1;
+    min-width: 2rem;
+    transform: scale3d(1, 1, 1);
+    transition: transform .5s;
+}
+
+
+.img-ver:hover {
+    transform: scale3d(1.2, 1.2, 1.2);
 }
 
 
