@@ -17,3 +17,9 @@ Este sistema permitirá a los alumnos enviar solicitudes y tener<br>sus justific
 ![](https://github-readme-stats.vercel.app/api/top-langs/?username=ITSH&theme=neon&hide_border=true&include_all_commits=false&count_private=false&layout=compact)
 
 <!-- Proudly created with GPRM ( https://gprm.itsvg.in ) -->
+
+<ul>
+<li>Validar los grupos</li>
+<li>Seccion Modificar en administrador y jefe de carrera</li>
+<li>Refactorizar codigo de las funciones globales y de las validaciones</li>
+</ul>
