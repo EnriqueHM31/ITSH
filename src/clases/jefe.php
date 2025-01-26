@@ -69,4 +69,20 @@ class Jefe
     public function añadirPorCSVEstudiantes($conexion)
     {
     }
+
+    public function eliminarRegistroEstudiante($conexion, $id)
+    {
+        $id = trim($id);
+        if (!isset($_POST['identificador'])) {
+            estructuraMensaje("Busque y seleccione a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+        if (EliminarUsuario($conexion, $id)) {
+            estructuraMensaje("El registro fue eliminado de forma exitosa", "../../assets/iconos/ic_correcto.webp", "--verde");
+        } else {
+            estructuraMensaje("Ocurrio un error al eliminarlo", "../../assets/iconos/ic_error.webp", "--rojo");
+        }
+
+    }
 }
