@@ -43,6 +43,18 @@
     height: fit-content;
 }
 
+.img-ver {
+    position: absolute;
+    top: 40%;
+    right: 2rem;
+    cursor: pointer;
+    z-index: 50;
+    aspect-ratio: 1 /1;
+    min-width: 2rem;
+    transform: scale3d(1, 1, 1);
+    transition: transform .5s;
+}
+
 .nombre_input {
     position: absolute;
     top: 2rem;
