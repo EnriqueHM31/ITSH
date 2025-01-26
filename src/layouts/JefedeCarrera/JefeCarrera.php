@@ -4,13 +4,17 @@ include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 include "../../utils/functionGlobales.php";
+include "../../clases/jefe.php";
 
 $usuario = new usuario();
+$jefe = new Jefe();
+
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
 $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'true';
+
 
 
 ?>
@@ -210,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } elseif ($_POST['formulario'] === 'Eliminar') {
             $id = $_POST['identificador'];
 
-            $administrador->eliminarRegistro($conexion, $id);
+            $jefe->eliminarRegistroEstudiante($conexion, $id);
         }
         notificaciones($_SESSION["mensaje"]);
     }
