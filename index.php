@@ -28,18 +28,20 @@ $usuario = new usuario();
         <img src="src/assets/extra/logo.svg" alt="Logo de la escuela ITSH">
     </div>
 
-    <form autocomplete="on" action="/submit" class="formulario" method="post">
+    <form autocomplete="off" action="/submit" class="formulario" method="post" autocomplete="off">
 
         <h2 class="titulo">Bienvenido</h2>
 
         <label for="id" class="contenedor_input">
-            <input class="input_login" type="text" name="identificador" id="id" placeholder=" ">
+            <input autocomplete="username" class="input_login" type="text" name="identificador" id="id" placeholder=" ">
             <span class="nombre_input">Identificador</span>
         </label>
 
         <label for="contraseña" class="contenedor_input">
-            <input class="input_login" type="password" name="contraseña" id="contraseña" placeholder=" ">
+            <input autocomplete="new-password" class="input_login contraseña" type="password" name="contraseña"
+                id="contraseña" placeholder=" ">
             <span class=" nombre_input">Contraseña</span>
+            <img class="img-ver" src="./src/assets/extra/invisible.webp" alt="Icono para hacer invisible la contraseña">
         </label>
 
         <a href="src/layouts/CambiarContraseña/Cambiar Contraseña.php" class="enlaces">Has olvidado la contraseña</a>
