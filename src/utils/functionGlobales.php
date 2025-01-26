@@ -193,7 +193,6 @@ function insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carr
 // CONSULTAS UPDATE PARA LOS USUARIOS ADMINISTRADOR Y JEFE DE CARRERA
 function modificarPersonal($conexion, $id, $nombre, $apellidos, $carrera, $cargo, $correo)
 {
-    return EliminarPersonal($conexion, $id);
 }
 
 // CONSULTA OARA MODIFICAR LA CONTRASEÑA ACTUAL DESDE LA PAGINA INICIO (DENTRO DEL SISTEMA)
@@ -205,7 +204,7 @@ function modificarLaContraseñaActualPaginaInicio($conexion, $id, $contraseña_n
     return $stmtUpdate->execute();
 }
 // CONSULTA PARA ELIMINAR DATOS DE LA TABLA USUARIO
-function EliminarPersonal($conexion, $id)
+function EliminarUsuario($conexion, $id)
 {
     $sql = "DELETE FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
     $stmt = $conexion->prepare($sql);
