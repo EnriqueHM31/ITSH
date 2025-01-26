@@ -58,9 +58,12 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
             <li class="menu-item"><a href="JefeCarrera.php?Eliminar=true" class="link">Eliminar</a></li>
-            <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link">
+            <li class="menu-item"><a href="Solicitudes.php" class="link">Solicitudes</a></li>
+            <li class="menu-item">
+                <a href="../../conexion/cerrar_sesion.php" class="link">
                     <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
-                </a></li>
+                </a>
+            </li>
             <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
                     alt="Imagen para cerrar el menu movil"></li>
         </ul>
