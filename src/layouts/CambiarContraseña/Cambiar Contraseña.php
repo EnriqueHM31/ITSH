@@ -1,19 +1,25 @@
 <?php
-include("../../utils/constantes.php");
-include("../../conexion/conexion.php");
-include("../../clases/usuario.php");
+include "../../utils/functionGlobales.php";
+include "../../utils/constantes.php";
+include "../../conexion/conexion.php";
+include "../../clases/usuario.php";
 
 $usuario = new usuario();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $correo = trim($_POST['correo']);
-    $identificador = trim($_POST['matricula']);
-    $nuevaContraseña = trim($_POST['nuevaContraseña']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $correo = trim($_POST['user_email']);
+    $id_usuario = trim($_POST['Matricula']);
+    $nuevaContraseña = trim($_POST['password']);
 
-    $result = $usuario->verificarIdentidadCorreoIdentificador($identificador, $correo, $conexion);
+    echo $correo;
+    echo $id_usuario;
 
-    if ($result && mysqli_num_rows($result) > 0) {
-        $resultadoModificar = $usuario->cambiarContraseñaEnBD($nuevaContraseña, $correo, $conexion);
+    $result = $usuario->verificarIdentidadCorreoIdentificador($id_usuario, $correo, $conexion);
+
+    if (mysqli_num_rows($result) > 0) {
+
+        $resultadoModificar = $usuario->cambiarContraseñaEnBD($conexion, $id_usuario, $nuevaContraseña);
+
         if ($resultadoModificar) {
             echo json_encode(['valido' => true]);
         } else {
