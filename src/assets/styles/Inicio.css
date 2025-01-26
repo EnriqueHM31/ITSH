@@ -1,0 +1,122 @@
+/*administrador principal*/
+body {
+    background: var(--gris);
+}
+
+.informacion_usuario {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    padding: 5rem 0;
+}
+
+.contenido_informacion {
+    min-height: 50dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+}
+
+.contenedor_ITSH {
+    width: 30rem;
+    height: 30rem;
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    align-self: flex-start;
+    border-radius: 50%;
+    float: right;
+    shape-outside: circle();
+}
+
+.contenedor_ITSH img {
+    min-width: 30rem;
+}
+
+.contenedor-datos {
+    color: var(--negro);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5rem;
+    width: 100%;
+}
+
+.contenedor-datos p {
+    font-size: clamp(1.1rem, 4vw, 2.4rem);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.contenedor-datos strong {
+    color: var(--vino);
+    font-weight: 600;
+    width: 20rem;
+}
+
+.contenedor-datos:last-child {
+    gap: 5rem;
+}
+
+.btn_vino {
+    background: var(--vino);
+    color: var(--blanco);
+    font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+    border: none;
+    padding: 1.5rem 2.5rem;
+    border-radius: 1.5rem;
+    max-width: 50%;
+    margin-top: 3rem;
+    cursor: pointer;
+}
+
+
+@media (max-width: 1000px) {
+    .contenedor_ITSH {
+        max-width: 5rem;
+        position: absolute;
+        display: grid;
+        place-content: center;
+    }
+
+    .contenedor_ITSH img {
+        min-width: 25rem;
+        pointer-events: none;
+        user-select: none;
+        opacity: .3;
+    }
+
+    .contenido_informacion {
+        width: 100%;
+        padding: 1rem 0;
+        padding: 1rem;
+        padding: 0 1.5rem;
+    }
+
+    .contenedor-datos {
+        overflow-x: auto;
+        scrollbar-width: 0;
+        width: 100%;
+    }
+
+    .contenedor-datos p {
+        width: 100%;
+    }
+
+    .contenedor-datos strong {
+        flex: none;
+        width: 30%;
+    }
+
+    .btn_vino {
+        max-width: 70%;
+    }
+
+    .informacion_usuario {
+        padding: 0;
+    }
+}
