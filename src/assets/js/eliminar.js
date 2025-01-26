@@ -13,15 +13,6 @@ function seleccionar() {
 	})
 }
 
-const btnContraseña = document.getElementById('btn_contraseña')
-const template = document.getElementById('plantilla_cambiar-contraseña')
-
-btnContraseña.addEventListener('click', () => {
-	const content = template.content.cloneNode(true)
-	document.querySelector('body').appendChild(content)
-	cerrarVentana('.close')
-})
-
 const params = new URLSearchParams(window.location.search)
 if (params.get('Eliminar') === 'true') {
 	const { modalClone, modalContainer } = obtenerTemplate(
