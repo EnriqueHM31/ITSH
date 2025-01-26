@@ -31,7 +31,7 @@ class Jefe
         $opcion = validacionCamposYArchivoCSV($campos_completos, $archivo_tiene_contenido);
 
         $opcion === 'Campos' ? $this->operacionInsertarEstudiante($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo) : '';
-        $opcion === "Archivo" ? $this->añadirPorCSVEstudiantes($conexion) : '';
+        $opcion === "Archivo" ? $this->añadirPorCSVEstudiantes($conexion, $rol, $id_carrera) : '';
     }
 
     public function operacionInsertarEstudiante($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo)
@@ -66,8 +66,61 @@ class Jefe
 
     }
 
-    public function añadirPorCSVEstudiantes($conexion)
+    public function añadirPorCSVEstudiantes($conexion, $rol, $id_carrera)
     {
+        mysqli_begin_transaction($conexion);
+
+        $archivo = $_FILES["archivo_csv"]["tmp_name"];
+
+        if (($handle = fopen($archivo, "r")) !== FALSE) {
+            fgetcsv($handle);
+
+            while (($datos = fgetcsv($handle, 1000, ",")) !== FALSE) {
+
+                $matricula = trim($datos[0]);
+                $nombre = trim($datos[1]);
+                $apellidos = trim($datos[2]);
+                $grupo = trim($datos[3]);
+                $id_modalidad = obtenerIdModalidad($conexion, trim($datos[4]));
+                $correo = trim($datos[5]);
+                $contraseña = "Aa12345%";
+
+                if ($this->validarRowsCSV($conexion, $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera)) {
+                    return;
+                }
+
+                insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol);
+
+                insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo);
+            }
+
+            mysqli_commit($conexion);
+            estructuraMensaje("Datos insertados correctamente", "../../assets/iconos/ic_correcto.webp", "--verde");
+            return;
+        } else {
+            estructuraMensaje("Error al abrir el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
+        }
+    }
+
+    public function validarRowsCSV($conexion, $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera)
+    {
+        if (empty($matricula) || empty($nombre) || empty($apellidos) || empty($grupo) || empty($id_modalidad) || empty($rol) || empty($correo) || empty($id_carrera)) {
+            estructuraMensaje("Faltan datos obligatorios en la fila del CSV", "../../assets/iconos/ic_error.webp", "var(--rojo)");
+            return true;
+        }
+        if (revisionCorreoEstudiante($correo)) {
+            return true;
+        }
+        if (revisionNombreCompleto($nombre, $apellidos)) {
+            return true;
+        }
+        if (revisionIdentificadorEstudiante($matricula)) {
+            return true;
+        }
+        if (restriccionKeyDuplicada($matricula, $correo, $conexion)) {
+            return true;
+        }
+
     }
 
     public function eliminarRegistroEstudiante($conexion, $id)
