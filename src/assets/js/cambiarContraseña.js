@@ -1,7 +1,9 @@
 const btn = document.getElementById('button')
+const formulario = document.getElementById('form')
 var emailjs
 
-document.getElementById('form').addEventListener('submit', function (event) {
+formulario.addEventListener('submit', function (event) {
+	event.preventDefault()
 	const Matricula = document.getElementById('Matricula').value.trim()
 	const user_email = document.getElementById('user_email').value.trim()
 
@@ -23,32 +25,21 @@ document.getElementById('form').addEventListener('submit', function (event) {
 
 	this.appendChild(Inputcontraseña)
 
-	fetch('', {
+	$.ajax({
+		url: '../../utils/CambioContraseña.php',
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: new URLSearchParams({
+		data: {
 			Matricula: Matricula,
 			user_email: user_email,
 			password: password,
-		}),
-	})
-		.then(response => {
-			response.json()
-		})
-		.then(data => {
+		},
+		dataType: 'json',
+		success: function (data) {
 			if (data.valido) {
-				const templateParams = {
-					user_email: user_email,
-					Matricula: Matricula,
-					password: password,
-				}
-
 				const serviceID = 'default_service'
 				const templateID = 'template_d151xen'
 
-				emailjs.sendForm(serviceID, templateID, templateParams).then(
+				emailjs.sendForm(serviceID, templateID, formulario).then(
 					() => {
 						btn.value = 'Enviar'
 						mostrarTemplate(
@@ -56,41 +47,33 @@ document.getElementById('form').addEventListener('submit', function (event) {
 							'../../assets/iconos/ic_correcto.webp',
 							'var(--verde)',
 						)
-						this.querySelector('.password').remove()
-						this.reset()
+						formulario.querySelector('.password').remove()
+						formulario.reset()
 					},
 					() => {
 						btn.value = 'Enviar'
 						mostrarTemplate(
-							'Ocurrio un error al enviarte tu contraseña',
-							'../../assets/iconos/ic_error.webp',
+							'Ocurrio un error al enviarte tu contraseña' +
+								'../../assets/iconos/ic_error.webp',
 							'var(--rojo)',
 						)
-						this.querySelector('.password').remove()
-						this.reset()
+						formulario.querySelector('.password').remove()
+						formulario.reset()
 					},
 				)
-			} else {
-				btn.value = 'Enviar'
-				mostrarTemplate(
-					'Datos incorrectos',
-					'../../assets/iconos/ic_error.webp',
-					'var(--rojo)',
-				)
-				this.querySelector('.password').remove()
-				this.reset()
 			}
-		})
-		.catch(() => {
+		},
+		error: function () {
 			btn.value = 'Enviar'
 			mostrarTemplate(
-				`Error: En la base de datos`,
-				'../../assets/iconos/ic_error.webp',
+				'Ocurrio un error con el servicio' +
+					'../../assets/iconos/ic_error.webp',
 				'var(--rojo)',
 			)
-			this.querySelector('.password').remove()
-			this.reset()
-		})
+			formulario.querySelector('.password').remove()
+			formulario.reset()
+		},
+	})
 })
 
 function generarContraseña() {
