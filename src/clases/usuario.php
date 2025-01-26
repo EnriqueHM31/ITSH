@@ -104,23 +104,21 @@ class Usuario
         $conexion->close();
     }
 
-    public function verificarIdentidadCorreoIdentificador($matriculaDB, $correoDB, $conexion)
+    public function verificarIdentidadCorreoIdentificador($id_usuario, $correoDB, $conexion)
     {
-        $correo = $correoDB;
-        $identificador = $matriculaDB;
 
         $sql = "SELECT * FROM " . Variables::TABLA_BD_USUARIO .
-            " WHERE " . Variables::CAMPO_CORREO . " = '$correo' AND " .
-            Variables::CAMPO_ID_USUARIO . " = '" . $identificador . "'";
+            " WHERE " . Variables::CAMPO_CORREO . " = '$correoDB' AND " .
+            Variables::CAMPO_ID_USUARIO . " = '" . $id_usuario . "'";
 
         return mysqli_query($conexion, $sql);
     }
 
-    public function cambiarContraseñaEnBD($nuevaContraseña, $correo, $conexion)
+    public function cambiarContraseñaEnBD($conexion, $id_usuario, $nuevaContraseña)
     {
         $sql = "UPDATE " . Variables::TABLA_BD_USUARIO . " SET "
-            . Variables::CAMPO_CONTRASEÑA . " = '$nuevaContraseña' AND " .
-            Variables::CAMPO_CORREO . " = '" . $correo . "'";
+            . Variables::CAMPO_CONTRASEÑA . " = '$nuevaContraseña' WHERE " .
+            Variables::CAMPO_ID_USUARIO . " = '" . $id_usuario . "'";
 
         return mysqli_query($conexion, $sql);
     }
