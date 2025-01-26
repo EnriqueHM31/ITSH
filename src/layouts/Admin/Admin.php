@@ -136,6 +136,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
                         <input class="input_login" type="text" name="contraseña_actual" id="contraseña_actual"
                             placeholder=" " autocomplete="current-password">
                         <span class="nombre_input">Contraseña actual</span>
+
                     </label>
 
                     <label for="contraseña_nueva" class="contenedor_input">
