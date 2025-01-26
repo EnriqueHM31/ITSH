@@ -130,19 +130,23 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
         <div class="overlay_cambiar-contraseña overlay_ventana">
             <form class="formulario" method="post">
                 <h2 class="titulo">Cambiar Contraseña</h2>
-                <label for="contraseña_actual" class="contenedor_input">
-                    <input class="input_login" type="text" name="contraseña_actual" id="contraseña_actual"
-                        placeholder=" " autocomplete="current-password">
-                    <span class="nombre_input">Contraseña actual</span>
-                </label>
+                <div class="inputs-cambio-contraseña">
 
-                <label for="contraseña_nueva" class="contenedor_input">
-                    <input class="input_login" type="password" name="contraseña_nueva" id="contraseña_nueva"
-                        placeholder=" " autocomplete="new-password">
-                    <span class="nombre_input">Contraseña nueva</span>
-                </label>
+                    <label for="contraseña_actual" class="contenedor_input">
+                        <input class="input_login" type="text" name="contraseña_actual" id="contraseña_actual"
+                            placeholder=" " autocomplete="current-password">
+                        <span class="nombre_input">Contraseña actual</span>
+                    </label>
 
+                    <label for="contraseña_nueva" class="contenedor_input">
+                        <input class="input_login" type="password" name="contraseña_nueva" id="contraseña_nueva"
+                            placeholder=" " autocomplete="new-password">
+                        <span class="nombre_input">Contraseña nueva</span>
+                    </label>
+
+                </div>
                 <input type="submit" name="formulario" class="btn-submit btn_login" value="Cambiar">
+
 
                 <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
                     alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
