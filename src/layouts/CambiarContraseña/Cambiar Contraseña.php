@@ -5,35 +5,6 @@ include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 
 $usuario = new usuario();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $correo = trim($_POST['user_email']);
-    $id_usuario = trim($_POST['Matricula']);
-    $nuevaContraseña = trim($_POST['password']);
-
-    echo $correo;
-    echo $id_usuario;
-
-    $result = $usuario->verificarIdentidadCorreoIdentificador($id_usuario, $correo, $conexion);
-
-    if (mysqli_num_rows($result) > 0) {
-
-        $resultadoModificar = $usuario->cambiarContraseñaEnBD($conexion, $id_usuario, $nuevaContraseña);
-
-        if ($resultadoModificar) {
-            echo json_encode(['valido' => true]);
-        } else {
-            echo json_encode(['valido' => false]);
-        }
-    } else {
-        echo json_encode(['valido' => false]);
-        exit();
-    }
-    $conexion->close();
-    exit();
-}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -49,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" rel="preload" href="../../assets/styles/index.css">
     <link rel="stylesheet" rel="preload" href="../../assets/styles/notificacion.css">
     <script src="../../assets/js/index.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
     <script type="text/javascript">
         emailjs.init('h-GFfAEPfkpyGuQjm')
     </script>
