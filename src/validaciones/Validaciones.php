@@ -57,7 +57,7 @@ function restriccionKeyDuplicada($identificador, $correo, $conexion)
     $resultado = getResultIDUsuarioDuplicado($conexion, $identificador);
 
     if ($resultado->num_rows > 0) {
-        estructuraMensaje("La clave del empleado ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+        estructuraMensaje("La clave ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 
@@ -85,6 +85,7 @@ function restriccionKeyDuplicadaEstudiante($matricula, $correo, $conexion)
         return true;
     }
 }
+
 function restriccionKey($identificador, $conexion)
 {
     $sql = $conexion->prepare("SELECT * FROM personal WHERE identificador = ?");
@@ -130,6 +131,16 @@ function revisionIdentificadorPersonal($identificador)
     }
 }
 
+function revisionIdentificadorEstudiante($identificador)
+{
+    $patron = '/^\d{3}Z\d{4}$/';
+
+    if (!(preg_match($patron, $identificador))) {
+        estructuraMensaje("El identificador no es valido <p style='color:var(--rojo)'>" . $identificador . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
+        return true;
+    }
+}
+
 function revisionNombreCompleto($nombre, $apellidos)
 {
     $nombreCompleto = $nombre . " " . $apellidos;
@@ -157,6 +168,16 @@ function revisionCargo($cargo)
 function revisionCorreo($correo)
 {
     $patron = '/^[a-zA-Z]+@huatusco\.tecnm\.mx$/';
+
+    if (!(preg_match($patron, $correo))) {
+        estructuraMensaje("Este correo no es valido <p style='color:var(--rojo)'>" . $correo . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
+        return true;
+    }
+}
+
+function revisionCorreoEstudiante($correo)
+{
+    $patron = '/^\d{3}z\d{4}+@alum.huatusco\.tecnm\.mx$/';
 
     if (!(preg_match($patron, $correo))) {
         estructuraMensaje("Este correo no es valido <p style='color:var(--rojo)'>" . $correo . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
