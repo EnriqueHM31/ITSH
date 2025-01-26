@@ -1,0 +1,214 @@
+/*CAMBIAR CONTRASEÑA TEMPLATE */
+.overlay_cambiar-contraseña {
+    background: var(--overlay);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: grid;
+    place-content: center;
+}
+
+.titulo {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    color: var(--blanco);
+}
+
+.formulario {
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    height: max(50rem, 30rem);
+    width: fit-content;
+    padding: 4rem;
+    background: var(--vino);
+    position: relative;
+}
+
+.contenedor_input {
+    position: relative;
+    margin: 0 auto;
+    height: fit-content;
+}
+
+.nombre_input {
+    position: absolute;
+    top: 2rem;
+    left: 3rem;
+    font-size: clamp(1.3rem, 4vw, 2.2rem);
+    color: var(--blanco);
+    padding: .5rem 2rem;
+    border-radius: 2rem;
+    transition: top .5s, left .5s, scale .5s;
+}
+
+.input_login {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    border-radius: 4rem;
+    background: transparent;
+    border: .2rem solid var(--blanco);
+    padding: 2rem;
+    min-width: 80%;
+    color: var(--blanco);
+}
+
+.btn_login {
+    padding: 1rem 3rem;
+    background: var(--blanco);
+    border-radius: 3rem;
+    border: none;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    cursor: pointer;
+}
+
+.input_login:focus:placeholder-shown~.nombre_input,
+.input_login:not(:placeholder-shown)~.nombre_input {
+    top: -1.5rem;
+    scale: .7;
+    background: var(--blanco);
+    color: var(--vino);
+}
+
+.close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    max-width: 4rem;
+    cursor: pointer;
+}
+
+
+
+/*MODIFICACIONES DE LA PLANTILLA CAMBIAR CONTRASEÑA PARA ELIMINAR REGISTRO*/
+
+.btn_eliminar {
+    background: var(--blanco);
+    color: var(--negro);
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    border: none;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    cursor: pointer;
+    position: absolute;
+    bottom: max(6rem, 3rem);
+    font-weight: 900;
+}
+
+
+/*ESTILOS DEL BUSCADOR DE REGISTROS DE ELIMINAR*/
+
+#buscar::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    display: none;
+}
+
+#resultados {
+    width: 100%;
+    background: var(--vino);
+    overflow-y: auto;
+    max-height: max(22rem, 20rem);
+}
+
+.buscador-usuarios {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    background: aqua;
+}
+
+.result p,
+.sin_resultados {
+    background: var(--blanco);
+    color: var(--vino);
+    font-family: Manrope;
+    align-content: center;
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 1rem;
+    width: 100%;
+    cursor: pointer;
+    z-index: 90;
+    border: .1rem solid var(--blanco);
+}
+
+.container_result p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 .5rem;
+    width: 100%;
+    height: 100%;
+}
+
+.input_buscar {
+    width: 100%;
+    background: var(--blanco);
+    color: var(--vino);
+    border: none;
+    padding: 1rem 2rem;
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    cursor: text;
+}
+
+
+
+
+/* PLANTILLA PARA LA VERIFICACION DEL USUARIO A ELIMINIAR */
+.form_verificar_eliminar {
+    background: var(--blanco);
+    width: fit-content;
+    height: auto;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    padding: 4rem 0;
+    padding-right: 15rem;
+}
+
+.informacion-usuario-eliminar {
+    padding: 0 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.titulo_eliminar-modal {
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: var(--blanco);
+    background: var(--vino);
+    padding: 1rem 3.5rem;
+    border-radius: 3rem;
+    font-weight: bold;
+}
+
+
+.info_usuario_eliminar {
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    color: var(--vino);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.btn_ventana-eliminar {
+    background: var(--vino);
+    color: var(--blanco);
+    font-weight: 900;
+    position: absolute;
+    bottom: 2rem;
+    right: 3rem;
+}
+
+.close_eliminar {
+    mix-blend-mode: difference;
+    right: 5rem;
+}
