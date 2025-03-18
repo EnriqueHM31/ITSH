@@ -153,13 +153,13 @@ class Jefe
             }
             echo "
             <tr>
-            <td> {$fila['solicitud']}</td>;
-            <td> {$fila['matricula']}</td>;
-            <td> {$fila['nombre']}</td>;
-            <td> {$fila['apellidos']}</td>;
-            <td> {$fila['grupo']}</td>;
-            <td> {$fila['motivo']}</td>;
-            <td> {$fila['fecha_ausencia']}</td>;
+            <td> {$fila['solicitud']}</td>
+            <td> {$fila['matricula']}</td>
+            <td> {$fila['nombre']}</td>
+            <td> {$fila['apellidos']}</td>
+            <td> {$fila['grupo']}</td>
+            <td> {$fila['motivo']}</td>
+            <td> {$fila['fecha_ausencia']}</td>
             <td>
                 <a href='../Alumno/evidencias/{$fila['evidencia']}' target='_blank' class='link_evidencia'>
                     {$fila['evidencia']}
@@ -168,7 +168,7 @@ class Jefe
             <td class='{$clase}'></td>
             <td>
                 <div class='opciones'>
-                    <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
+                    <button class='btn_opciones_solicitudes' onclick=''>
                         <img src='../../assets/iconos/ic_correcto.webp' alt='icono para aceptar la solicitud para el justificante'>
                     </button>
 

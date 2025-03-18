@@ -68,8 +68,8 @@ async function eliminarSolicitud(id, nombreArchivo) {
 				mostrarTemplate("Se ha eliminado la solicitud", '../../assets/iconos/ic_correcto.webp', 'var(--verde)');
 			}
 		},
-		error: function (data) {
-			mostrarTemplate("Ocurrio un error al eliminar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+		error: function (e) {
+			mostrarTemplate("Ocurrio un error con la evidencia de la solicitud" + e.responseText, '../../assets/iconos/ic_error.webp', 'var(--rojo)');
 		},
 	});
 }
@@ -94,6 +94,9 @@ function cerrarTemplate(opcion) {
 	if (dialogContainer) {
 		notificacionIMG.remove()
 		dialogContainer.remove()
+		if (opcion == "cargar") {
+			location.reload()
+		}
 	}
 }
 
@@ -102,6 +105,19 @@ function rechazarSolicitud(objeto) {
 	let fila = objeto.closest("tr");
 	id = fila.querySelectorAll("td")[0].innerText
 	nombreArchivo = fila.querySelectorAll("td")[7].innerText
+	estado = fila.querySelectorAll("td")[8].className
+	opciones = fila.querySelectorAll("td")[9].querySelector("div").querySelectorAll("button")
+
+	console.log(estado)
+	if (estado == "aceptada") {
+		mostrarTemplate("La solicitud ya ha sido aceptada", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+		return
+	}
+
+	if (estado == "rechazada") {
+		mostrarTemplate("La solicitud ya ha sido rechazada", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+		return
+	}
 
 	$.ajax({
 		url: '../../query/rechazarSolicitud.php',
@@ -114,7 +130,10 @@ function rechazarSolicitud(objeto) {
 		success: function (data) {
 			if (data["sin_error"] === "True") {
 				mostrarTemplate("Se ha rechazado la solicitud", '../../assets/iconos/ic_correcto.webp', 'var(--verde)');
-				cerrarTemplate(true);
+				console.log(opciones)
+				opciones.forEach(element => {
+					element.remove()
+				});
 
 			} else {
 				console.log("ocurrio un error")

@@ -27,7 +27,11 @@ if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
         if (file_exists($ruta_origen)) {
             if (rename($ruta_origen, $ruta_destino)) {
                 echo json_encode(["sin_error" => "True"]);
+            } else {
+                return;
             }
+        } else {
+            return;
         }
     } else {
         echo json_encode(["error" => "False"]);
