@@ -72,8 +72,13 @@ $smtm = $conexion->prepare($sql);
 $smtm->bind_param("i", $id); // Aquí "d" significa que esperas un parámetro tipo decimal o flotante
 $smtm->execute();
 
+$data_jefe = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id_jefe);
+
+$carrera = getResultCarrera($conexion, $data_jefe[Variables::CAMPO_ID_CARRERA]);
+
 
 $sql = "INSERT INTO " . Variables::TABLA_BD_JUSTIFICANTES . "("
+    . Variables::CAMPO_J_ID_SOLICITUD . ", "
     . Variables::CAMPO_J_MATRICULA . ", "
     . Variables::CAMPO_J_NOMBRE . ", "
     . Variables::CAMPO_J_APELLIDOS . ", "
@@ -81,10 +86,10 @@ $sql = "INSERT INTO " . Variables::TABLA_BD_JUSTIFICANTES . "("
     . Variables::CAMPO_J_GRUPO . ", "
     . Variables::CAMPO_J_CARRERA . ", "
     . Variables::CAMPO_J_NOMBRE_JEFE . ", "
-    . Variables::CAMPO_J_JUSTIFICANTE . ") VALUES (?,?,?,?,?,?,?,?)";
+    . Variables::CAMPO_J_JUSTIFICANTE . ") VALUES (?,?,?,?,?,?,?,?,?)";
 
 $smtm = $conexion->prepare($sql);
-$smtm->bind_param('ssssssss', $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $id_jefe_, $nombreArchivo);
+$smtm->bind_param('sssssssss', $id, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $data_jefe[Variables::CAMPO_NOMBRE], $nombreArchivo);
 $smtm->execute();
 
 

@@ -16,7 +16,7 @@ class Variables
     public const TABLA_BD_ESTUDIANTE = "Estudiante";
     public const tABLA_BD_MODALIDAD = "Modalidad";
     public const TABLA_SOLICITUDES = "solicitudes";
-    public const TABLA_BD_JUSTIFICANTES = "justificantes";
+    public const TABLA_BD_JUSTIFICANTES = "justificante";
 
 
     // CAMPOS DE LA TABLA USUARIO
@@ -66,6 +66,7 @@ class Variables
 
 
     public const CAMPO_J_ID = "id";
+    public const CAMPO_J_ID_SOLICITUD = "id_solicitud";
     public const CAMPO_J_MATRICULA = "matricula_alumno";
     public const CAMPO_J_NOMBRE = "nombre_alumno";
     public const CAMPO_J_APELLIDOS = "apellidos_alumno";

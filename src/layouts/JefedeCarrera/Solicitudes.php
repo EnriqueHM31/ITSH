@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";

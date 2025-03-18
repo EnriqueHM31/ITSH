@@ -129,7 +129,9 @@ function rechazarSolicitud(objeto) {
 	})
 }
 
-function aceptarSolicitud(objeto, id_jefe) {
+function aceptarSolicitud(objeto) {
+
+	let id_jefe = objeto.getAttribute("data-id")
 
 	let fila = objeto.closest("tr");
 	id = fila.querySelectorAll("td")[0].innerText

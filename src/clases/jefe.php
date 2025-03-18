@@ -47,9 +47,6 @@ class Jefe
 
             if (insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol)) {
 
-
-
-
                 if (!insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)) {
                     estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                 }
@@ -141,7 +138,6 @@ class Jefe
 
     public function TablaSolicitudesRegistros($conexion, $id)
     {
-        echo $id;
         $sql = "SELECT * FROM solicitudes";
         $resultado = mysqli_query($conexion, $sql);
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -169,7 +165,7 @@ class Jefe
             <td class='{$clase}'></td>
             <td>
                 <div class='opciones'>
-                    <button class='btn_opciones_solicitudes' onclick='aceptarSolicitud(this,)'>
+                    <button class='btn_opciones_solicitudes' data-id='$id' onclick='aceptarSolicitud(this)'>
                         <img src='../../assets/iconos/ic_correcto.webp' alt='icono para aceptar la solicitud para el justificante'>
                     </button>
 
