@@ -3,8 +3,10 @@ include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 include "../../utils/functionGlobales.php";
+include "../../clases/jefe.php";
 
 $usuario = new usuario();
+$jefeCarrera = new Jefe();
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +26,7 @@ $usuario = new usuario();
     <link rel="stylesheet" href="../../assets/styles/tablaSolicitudes.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/jefeCarrera.js" defer></script>
 </head>
 
 <body>
@@ -80,46 +83,7 @@ $usuario = new usuario();
                         <th>Opciones</th>
                     </tr>
                     <?php
-                    $sql = "SELECT * FROM solicitudes";
-                    $resultado = mysqli_query($conexion, $sql);
-                    while ($fila = mysqli_fetch_array($resultado)) {
-                        echo "<tr>";
-                        echo "<td>" . $fila['solicitud'] . "</td>";
-                        echo "<td>" . $fila['matricula'] . "</td>";
-                        echo "<td>" . $fila['nombre'] . "</td>";
-                        echo "<td>" . $fila['apellidos'] . "</td>";
-                        echo "<td>" . $fila['grupo'] . "</td>";
-                        echo "<td>" . $fila['motivo'] . "</td>";
-                        echo "<td>" . $fila['fecha_ausencia'] . "</td>";
-                        echo "<td>" .
-                            "<a href='../Alumno/evidencias/" . $fila['evidencia'] . "' target='_blank' class='link_evidencia'>" .
-                            $fila['evidencia'] .
-                            "</a>" .
-                            "</td>";
-                        if ($fila['estado'] == 1) {
-                            echo "<td class='aceptada'></td>";
-                        } else if ($fila['estado'] == 2) {
-                            echo "<td class='pendiente'></td>";
-                        } else {
-                            echo "<td class='rechazada'></td>";
-                        }
-                        echo "<td>";
-                        echo "<div class='opciones'>";
-                        echo "
-                        <img src='../../assets/iconos/ic_correcto.webp' alt='icono de verificar'>
-                        ";
-                        echo "<img src='../../assets/iconos/ic_error.webp' alt='icono de verificar'>";
-                        echo "
-                        <button onclick='eliminarFila(this)'>
-                        <img src='../../assets/iconos/ic_eliminar.webp' alt='icono de verificar'>
-                        </button>"
-                        ;
-
-
-                        echo "</div>";
-                        echo "</td>";
-                        echo "</tr>";
-                    }
+                    $jefeCarrera->TablaSolicitudesRegistros($conexion);
                     ?>
                 </table>
             </div>
@@ -160,31 +124,20 @@ $usuario = new usuario();
         </div>
 
     </footer>
+
+    <template id="miTemplate">
+
+        <div class="overlay" id="overlay">
+            <div class="notificacion">
+                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
+                <div class="contenido_notificacion ">
+                    <p id="mensaje"></p>
+                </div>
+                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
+            </div>
+        </div>
+
+    </template>
 </body>
 
 </html>
-
-
-<script>
-    async function eliminarSolicitud(id) {
-        $.ajax({
-            url: '../../query/eliminarSolicitud.php',
-            method: 'POST',
-            data: {
-                id: id
-            },
-        });
-    }
-
-    function eliminarFila(objeto) {
-        let fila = objeto.closest("tr");
-        id = fila.querySelectorAll("td")[0].innerText
-        fila.remove()
-        eliminarSolicitud(id)
-    }
-
-
-</script>
-
-<?php
-notificaciones($_SESSION["mensaje"]);

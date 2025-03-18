@@ -138,4 +138,53 @@ class Jefe
         }
 
     }
+
+    public function TablaSolicitudesRegistros($conexion)
+    {
+        $sql = "SELECT * FROM solicitudes";
+        $resultado = mysqli_query($conexion, $sql);
+        while ($fila = mysqli_fetch_array($resultado)) {
+            if ($fila['estado'] == "Aceptada") {
+                $clase = "aceptada";
+            } else if ($fila['estado'] == "Pendiente") {
+                $clase = "pendiente";
+            } else {
+                $clase = "rechazada";
+            }
+            echo "
+            <tr>
+            <td> {$fila['solicitud']}</td>;
+            <td> {$fila['matricula']}</td>;
+            <td> {$fila['nombre']}</td>;
+            <td> {$fila['apellidos']}</td>;
+            <td> {$fila['grupo']}</td>;
+            <td> {$fila['motivo']}</td>;
+            <td> {$fila['fecha_ausencia']}</td>;
+            <td>
+                <a href='../Alumno/evidencias/{$fila['evidencia']}' target='_blank' class='link_evidencia'>
+                    {$fila['evidencia']}
+                </a> 
+            </td>
+            <td class='{$clase}'></td>
+            <td>
+                <div class='opciones'>
+                    <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
+                        <img src='../../assets/iconos/ic_correcto.webp' alt='icono para aceptar la solicitud para el justificante'>
+                    </button>
+
+                    <button class='btn_opciones_solicitudes' onclick='rechazarSolicitud(this)'>
+                        <img src='../../assets/iconos/ic_error.webp' alt='icono para rechazar la solicitud para el justificante'>
+                    </button>
+
+                    <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
+                        <img src='../../assets/iconos/ic_eliminar.webp' alt='icono para eliminar la solicitud para el justificante'>
+                    </button>
+                </div>
+            </td>
+            </tr>
+            ";
+        }
+    }
+
+
 }

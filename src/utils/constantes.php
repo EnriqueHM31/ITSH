@@ -61,4 +61,5 @@ class Variables
     ];
 
     public const ID_SOLICITUD = "solicitud";
+    public const ESTADO = "estado";
 }

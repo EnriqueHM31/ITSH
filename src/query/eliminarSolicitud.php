@@ -10,20 +10,27 @@ include "../utils/functionGlobales.php";
 
 header('Content-Type: application/json');
 
-if (isset($_POST['id'])) {
+if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
     $id = $_POST['id'];
+    $nombreArchivo = $_POST['nombreArchivo'];
+
+    $carpeta_origen = "../layouts/Alumno/evidencias/";
+    $carpeta_destino = "../layouts/Alumno/papelera/";
 
     $consulta = "DELETE FROM " . Variables::TABLA_SOLICITUDES . " WHERE " . Variables::ID_SOLICITUD . " = ?";
 
     $sql = $conexion->prepare($consulta);
     $sql->bind_param("s", $id);
     if ($sql->execute()) {
-        $_SESSION["mensaje"] = "Se ha eliminado la solicitud";
-        $_SESSION["icono"] = "../../assets/iconos/ic_correcto.webp";
-        $_SESSION["color_mensaje"] = "var(--verde)";
+        $ruta_origen = $carpeta_origen . $nombreArchivo;
+        $ruta_destino = $carpeta_destino . $nombreArchivo;
+        if (file_exists($ruta_origen)) {
+            if (rename($ruta_origen, $ruta_destino)) {
+                echo json_encode(["sin_error" => "True"]);
+            }
+        }
     } else {
-        $_SESSION["mensaje"] = "Ocurrio un error al eliminar la solicitud";
-        $_SESSION["icono"] = "../../assets/iconos/ic_error.webp";
-        $_SESSION["color_mensaje"] = "var(--rojo)";
+        echo json_encode(["error" => "False"]);
+
     }
 }

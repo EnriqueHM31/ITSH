@@ -9,7 +9,6 @@
     z-index: 1;
 }
 
-
 .btn_historial {
     background: var(--vino);
     color: var(--blanco);
@@ -18,6 +17,11 @@
     padding: 1rem 3rem;
     cursor: pointer;
     align-self: flex-end;
+}
+
+.btn_opciones_solicitudes {
+    background-color: none;
+    border: none;
 }
 
 .link_evidencia {
