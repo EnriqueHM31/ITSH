@@ -1,9 +1,9 @@
-async function buscarUsuarios() {
+async function buscarUsuarios(nombre) {
     var query = document.getElementById('buscar').value;
 
     if (query.length >= 3) {
         $.ajax({
-            url: '../../query/buscarPersonal.php',
+            url: `../../query/${nombre}`,
             method: 'GET',
             data: {
                 q: query
@@ -40,11 +40,16 @@ async function cargarUsuario(id) {
             if (data.error) {
                 new throwError("Datos invalidos")
             } else {
-                document.getElementById('clave').value = data.identificador;
+                document.getElementById('clave').value = data.clave_empleado;
                 document.getElementById('nombre').value = data.nombre;
                 document.getElementById('apellidos').value = data.apellidos;
-                document.getElementById('carrera').value = data.carrera;
-                document.getElementById('rol').value = data.cargo;
+                if (data.rol == "Administrador") {
+                    document.getElementById('carrera').value = "null";
+                } else {
+                    document.getElementById('carrera').value = data.carrera;
+
+                }
+                document.getElementById('rol').value = data.rol;
                 document.getElementById('correo').value = data.correo;
 
                 document.getElementById("buscar").value = ""

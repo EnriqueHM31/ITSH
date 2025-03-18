@@ -1,0 +1,79 @@
+.contenido_solicitudes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 90%;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+
+.btn_historial {
+    background: var(--vino);
+    color: var(--blanco);
+    border-radius: 2rem;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    padding: 1rem 3rem;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.link_evidencia {
+    text-decoration: none;
+    color: var(--negro);
+}
+
+.link_evidencia:hover {
+    text-decoration: underline;
+    color: var(--vino);
+}
+
+table {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    font-family: Manrope;
+    border: .1rem solid var(--negro);
+    border-collapse: collapse;
+    z-index: 10;
+}
+
+th {
+    font-size: clamp(1.2rem, 4vw, 1.4rem);
+    background: var(--vino);
+    color: var(--blanco);
+    padding: 1rem;
+    border: .1rem solid var(--negro);
+}
+
+td {
+    padding: 1rem 1.2rem;
+    font-size: clamp(1rem, 4vw, 1.1rem);
+    border: .1rem solid var(--negro);
+}
+
+.pendiente {
+    background: var(--naranja);
+}
+
+.aceptada {
+    background: var(--verde);
+}
+
+.rechazada {
+    background: var(--rojo);
+}
+
+.opciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.opciones img {
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+}

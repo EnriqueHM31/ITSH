@@ -44,6 +44,8 @@ $usuario = new usuario();
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
             <li class="menu-item"><a href="JefeCarrera.php?Eliminar=true" class="link">Eliminar</a></li>
+            <li class="menu-item"><a href="Solicitudes.php" class="link">Solicitudes</a></li>
+
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
                         src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
         </ul>
@@ -62,7 +64,7 @@ $usuario = new usuario();
                 <div class="contenedor_buscar">
                     <label class="contenedor_buscar">
                         <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar"
-                            onkeyup="buscarUsuarios()">
+                            onkeyup="buscarUsuarios('buscarEstudiante.php')">
                     </label>
                     <div id="resultados" class="result_usuarios"></div>
                 </div>

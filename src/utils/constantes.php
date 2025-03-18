@@ -15,6 +15,7 @@ class Variables
     public const TABLA_BD_JEFE = "Jefe";
     public const TABLA_BD_ESTUDIANTE = "Estudiante";
     public const tABLA_BD_MODALIDAD = "Modalidad";
+    public const TABLA_SOLICITUDES = "solicitudes";
 
 
     // CAMPOS DE LA TABLA USUARIO
@@ -58,4 +59,6 @@ class Variables
         "Quimica" => ["numero" => 7, "cantidad" => 8],
         "Ambiental" => ["numero" => 1, "cantidad" => 7],
     ];
+
+    public const ID_SOLICITUD = "solicitud";
 }

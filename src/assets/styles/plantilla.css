@@ -5,6 +5,8 @@
     --verde: rgb(3, 209, 3);
     --overlay: linear-gradient(#0009, #000a);
     --gris: #ddd;
+    --negro: #000;
+    --naranja: #ff5100;
 }
 
 * {
@@ -145,6 +147,7 @@ main {
     min-height: 110dvh;
     margin-top: 6rem;
     padding-bottom: 5rem;
+    position: relative;
 }
 
 .contenedor_main h2 {
@@ -158,10 +161,6 @@ main {
     margin: 0 auto;
 }
 
-.contenedor {
-    z-index: 15;
-    background-color: transparent;
-}
 
 .contenedor_logo img {
     min-width: 50rem;
