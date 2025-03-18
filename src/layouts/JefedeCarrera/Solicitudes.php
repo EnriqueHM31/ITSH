@@ -132,7 +132,7 @@ $jefeCarrera = new Jefe();
                 <div class="contenido_notificacion ">
                     <p id="mensaje"></p>
                 </div>
-                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate('cargar')">Cerrar</button>
+                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
             </div>
         </div>
 

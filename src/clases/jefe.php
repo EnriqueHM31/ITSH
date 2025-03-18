@@ -168,7 +168,7 @@ class Jefe
             <td class='{$clase}'></td>
             <td>
                 <div class='opciones'>
-                    <button class='btn_opciones_solicitudes' onclick=''>
+                    <button class='btn_opciones_solicitudes' onclick='aceptarSolicitud(this)'>
                         <img src='../../assets/iconos/ic_correcto.webp' alt='icono para aceptar la solicitud para el justificante'>
                     </button>
 

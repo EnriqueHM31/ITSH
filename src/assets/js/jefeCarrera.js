@@ -77,7 +77,6 @@ async function eliminarSolicitud(id, nombreArchivo) {
 
 function mostrarTemplate(mensaje, urlImagen, color) {
 
-
 	const template = document.getElementById('miTemplate')
 	const clone = document.importNode(template.content, true)
 
@@ -143,6 +142,61 @@ function rechazarSolicitud(objeto) {
 		},
 		error: function (data) {
 			mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+		}
+	})
+}
+
+function aceptarSolicitud(objeto) {
+
+	let fila = objeto.closest("tr");
+	id = fila.querySelectorAll("td")[0].innerText
+	matricula = fila.querySelectorAll("td")[1].innerText
+	nombre = fila.querySelectorAll("td")[2].innerText
+	apellidos = fila.querySelectorAll("td")[3].innerText
+	grupo = fila.querySelectorAll("td")[4].innerText
+	motivo = fila.querySelectorAll("td")[5].innerText
+	fecha = fila.querySelectorAll("td")[6].innerText
+	estado = fila.querySelectorAll("td")[8].className
+	opciones = fila.querySelectorAll("td")[9].querySelector("div").querySelectorAll("button")
+
+	console.log(estado)
+	if (estado == "aceptada") {
+		mostrarTemplate("La solicitud ya ha sido aceptada", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+		return
+	}
+
+	if (estado == "rechazada") {
+		mostrarTemplate("La solicitud ya ha sido rechazada", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+		return
+	}
+
+	$.ajax({
+		url: '../../utils/creacionJustificantes.php',
+		method: 'POST',
+		data: {
+			id: id,
+			matricula: matricula,
+			nombre: nombre,
+			apellidos: apellidos,
+			grupo: grupo,
+			motivo: motivo,
+			fecha: fecha
+		},
+		dataType: 'json',
+		success: function (data) {
+			console.log(data)
+			if (data["sin_error"] !== "True") {
+				mostrarTemplate("Se ha creado y enviado el justificante", '../../assets/iconos/ic_correcto.webp', 'var(--verde)');
+				opciones.forEach(element => {
+					element.remove()
+				});
+
+			} else {
+				mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+			}
+		},
+		error: function (data) {
+			mostrarTemplate("Ocurrio un error", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
 		}
 	})
 }
