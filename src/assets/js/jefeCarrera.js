@@ -48,7 +48,6 @@ function eliminarFila(objeto) {
 	nombreArchivo = fila.querySelectorAll("td")[7].innerText
 	eliminarSolicitud(id, nombreArchivo)
 	fila.remove()
-
 }
 
 
@@ -63,27 +62,24 @@ async function eliminarSolicitud(id, nombreArchivo) {
 		dataType: 'json',
 		success: function (data) {
 			if (data["error"] === "False") {
-				mostrarTemplate("Ocurrio un error al eliminar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+				mostrarTemplate("Ocurrio un error al eliminar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)', "miTemplate");
 			} else {
-				mostrarTemplate("Se ha eliminado la solicitud", '../../assets/iconos/ic_correcto.webp', 'var(--verde)');
+				mostrarTemplate("Se ha eliminado la solicitud", '../../assets/iconos/ic_correcto.webp', 'var(--verde)', "miTemplate");
 			}
 		},
 		error: function (e) {
-			mostrarTemplate("Ocurrio un error con la evidencia de la solicitud" + e.responseText, '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+			mostrarTemplate("Ocurrio un error con la evidencia de la solicitud" + e.responseText, '../../assets/iconos/ic_error.webp', 'var(--rojo)', "miTemplate");
 		},
 	});
 }
 
 
-function mostrarTemplate(mensaje, urlImagen, color) {
-
-	const template = document.getElementById('miTemplate')
+function mostrarTemplate(mensaje, urlImagen, color, nombre) {
+	const template = document.getElementById(nombre)
 	const clone = document.importNode(template.content, true)
-
 	clone.getElementById('mensaje').innerText = mensaje
 	clone.getElementById('imagen').src = urlImagen
 	clone.getElementById('btn_mensaje').style.backgroundColor = color
-
 	document.body.appendChild(clone)
 }
 
@@ -107,14 +103,7 @@ function rechazarSolicitud(objeto) {
 	estado = fila.querySelectorAll("td")[8].className
 	opciones = fila.querySelectorAll("td")[9].querySelector("div").querySelectorAll("button")
 
-	console.log(estado)
-	if (estado == "aceptada") {
-		mostrarTemplate("La solicitud ya ha sido aceptada", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
-		return
-	}
-
-	if (estado == "rechazada") {
-		mostrarTemplate("La solicitud ya ha sido rechazada", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+	if (verificarOpciones(estado)) {
 		return
 	}
 
@@ -128,25 +117,19 @@ function rechazarSolicitud(objeto) {
 		dataType: 'json',
 		success: function (data) {
 			if (data["sin_error"] === "True") {
-				mostrarTemplate("Se ha rechazado la solicitud", '../../assets/iconos/ic_correcto.webp', 'var(--verde)');
-				console.log(opciones)
-				opciones.forEach(element => {
-					element.remove()
-				});
+				mostrarTemplate("Se ha rechazado la solicitud", '../../assets/iconos/ic_correcto.webp', 'var(--verde)', 'miTemplate_cargar');
 
 			} else {
-				console.log("ocurrio un error")
-				console.log(data["sin_error"])
-				mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+				mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
 			}
 		},
 		error: function (data) {
-			mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+			mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
 		}
 	})
 }
 
-function aceptarSolicitud(objeto) {
+function aceptarSolicitud(objeto, id_jefe) {
 
 	let fila = objeto.closest("tr");
 	id = fila.querySelectorAll("td")[0].innerText
@@ -159,14 +142,7 @@ function aceptarSolicitud(objeto) {
 	estado = fila.querySelectorAll("td")[8].className
 	opciones = fila.querySelectorAll("td")[9].querySelector("div").querySelectorAll("button")
 
-	console.log(estado)
-	if (estado == "aceptada") {
-		mostrarTemplate("La solicitud ya ha sido aceptada", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
-		return
-	}
-
-	if (estado == "rechazada") {
-		mostrarTemplate("La solicitud ya ha sido rechazada", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+	if (verificarOpciones(estado)) {
 		return
 	}
 
@@ -174,6 +150,7 @@ function aceptarSolicitud(objeto) {
 		url: '../../utils/creacionJustificantes.php',
 		method: 'POST',
 		data: {
+			id_jefe: id_jefe,
 			id: id,
 			matricula: matricula,
 			nombre: nombre,
@@ -186,17 +163,27 @@ function aceptarSolicitud(objeto) {
 		success: function (data) {
 			console.log(data)
 			if (data["sin_error"] !== "True") {
-				mostrarTemplate("Se ha creado y enviado el justificante", '../../assets/iconos/ic_correcto.webp', 'var(--verde)');
-				opciones.forEach(element => {
-					element.remove()
-				});
+				mostrarTemplate("Se ha creado y enviado el justificante", '../../assets/iconos/ic_correcto.webp', 'var(--verde)', 'miTemplate_cargar');
 
 			} else {
-				mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+				mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
 			}
 		},
 		error: function (data) {
-			mostrarTemplate("Ocurrio un error", '../../assets/iconos/ic_error.webp', 'var(--rojo)');
+			mostrarTemplate("Ocurrio un error", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
 		}
 	})
+}
+
+
+function verificarOpciones(estado) {
+	if (estado == "aceptada") {
+		mostrarTemplate("La solicitud ya ha sido aceptada", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
+		return true
+	}
+
+	if (estado == "rechazada") {
+		mostrarTemplate("La solicitud ya ha sido rechazada", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
+		return true
+	}
 }

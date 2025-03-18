@@ -139,8 +139,9 @@ class Jefe
 
     }
 
-    public function TablaSolicitudesRegistros($conexion)
+    public function TablaSolicitudesRegistros($conexion, $id)
     {
+        echo $id;
         $sql = "SELECT * FROM solicitudes";
         $resultado = mysqli_query($conexion, $sql);
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -168,7 +169,7 @@ class Jefe
             <td class='{$clase}'></td>
             <td>
                 <div class='opciones'>
-                    <button class='btn_opciones_solicitudes' onclick='aceptarSolicitud(this)'>
+                    <button class='btn_opciones_solicitudes' onclick='aceptarSolicitud(this,)'>
                         <img src='../../assets/iconos/ic_correcto.webp' alt='icono para aceptar la solicitud para el justificante'>
                     </button>
 

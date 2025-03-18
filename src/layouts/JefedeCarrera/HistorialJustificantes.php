@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
@@ -6,8 +7,15 @@ include "../../utils/functionGlobales.php";
 include "../../clases/jefe.php";
 
 $usuario = new usuario();
-$jefeCarrera = new Jefe();
+$jefe = new Jefe();
+
 $id = $_SESSION["id"];
+$rol = $_SESSION["rol"];
+$correo = $_SESSION["correo"];
+
+$mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'true';
+
+
 
 ?>
 
@@ -17,18 +25,22 @@ $id = $_SESSION["id"];
 <head>
     <title>Sistema de Justificantes ITSH</title>
     <meta charset="UTF-8">
+    <meta name="description" content="Pagina principal del Jefe de carrera">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pagina de modificar del administrador">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
+    <link rel="stylesheet" href="../../assets/styles/Inicio.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
-    <link rel="stylesheet" href="../../assets/styles/Añadir.css">
-    <link rel="stylesheet" href="../../assets/styles/Modificar.css">
-    <link rel="stylesheet" href="../../assets/styles/tablaSolicitudes.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <link rel="stylesheet" href="../../assets/styles/templates.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/eliminar.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
+    <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
 </head>
 
 <body>
@@ -50,48 +62,29 @@ $id = $_SESSION["id"];
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
             <li class="menu-item"><a href="JefeCarrera.php?Eliminar=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="Solicitudes.php" class="link">Solicitudes</a></li>
-
-            <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
-                        src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
+            <li class="menu-item">
+                <a href="../../conexion/cerrar_sesion.php" class="link">
+                    <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
+                </a>
+            </li>
+            <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
+                    alt="Imagen para cerrar el menu movil"></li>
         </ul>
+
+        <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
     </nav>
 
     <main class="main">
-        <div class="contenedor_logo">
-            <img src="../../assets/extra/logo.svg" alt="logo del ITSH">
-        </div>
-
         <div class="contenedor_main">
-            <div class="contenedor">
-                <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
-                    height="164">
-            </div>
-            <div class="contenido_solicitudes">
-                <a href="./HistorialJustificantes.php" class="btn_historial">
-                    Justificantes
-                </a>
-                <table>
-                    <tr>
-                        <th>Solicitud</th>
-                        <th>Matricula</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Grupo</th>
-                        <th>Motivo</th>
-                        <th>Fecha</th>
-                        <th>Evidencia</th>
-                        <th>Estado</th>
-                        <th>Opciones</th>
-                    </tr>
-                    <?php
-                    $jefeCarrera->TablaSolicitudesRegistros($conexion, $id);
-                    ?>
-                </table>
-            </div>
-        </div>
+            <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
+                height="164">
+
+
+
+
+
 
     </main>
-
 
     <footer class="footer">
         <div class="contenido_footer">
@@ -101,7 +94,7 @@ $id = $_SESSION["id"];
                     <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank"><img
                             src="../../assets/iconos/ic_facebook.webp" alt="icono de facebook"></a>
                     <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank"><img
-                            src="../../assets/iconos/ic_instagram.webp" alt="icono de instagram"></a>
+                            src="../../assets/iconos/ic_instagram.webp" alt="icono de facebook"></a>
                 </div>
             </div>
 
@@ -126,33 +119,7 @@ $id = $_SESSION["id"];
 
     </footer>
 
-    <template id="miTemplate">
 
-        <div class="overlay" id="overlay">
-            <div class="notificacion">
-                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
-                <div class="contenido_notificacion ">
-                    <p id="mensaje"></p>
-                </div>
-                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
-            </div>
-        </div>
-
-    </template>
-
-    <template id="miTemplate_cargar">
-
-        <div class="overlay" id="overlay">
-            <div class="notificacion">
-                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
-                <div class="contenido_notificacion ">
-                    <p id="mensaje"></p>
-                </div>
-                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate('cargar')">Cerrar</button>
-            </div>
-        </div>
-
-    </template>
 </body>
 
 </html>

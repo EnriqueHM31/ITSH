@@ -16,6 +16,7 @@ class Variables
     public const TABLA_BD_ESTUDIANTE = "Estudiante";
     public const tABLA_BD_MODALIDAD = "Modalidad";
     public const TABLA_SOLICITUDES = "solicitudes";
+    public const TABLA_BD_JUSTIFICANTES = "justificantes";
 
 
     // CAMPOS DE LA TABLA USUARIO
@@ -62,4 +63,19 @@ class Variables
 
     public const ID_SOLICITUD = "solicitud";
     public const ESTADO = "estado";
+
+
+    public const CAMPO_J_ID = "id";
+    public const CAMPO_J_MATRICULA = "matricula_alumno";
+    public const CAMPO_J_NOMBRE = "nombre_alumno";
+    public const CAMPO_J_APELLIDOS = "apellidos_alumno";
+    public const CAMPO_J_MOTIVO = "motivo";
+    public const CAMPO_J_GRUPO = "grupo";
+    public const CAMPO_J_CARRERA = "carrera";
+    public const CAMPO_J_NOMBRE_JEFE = "nombre_jefe";
+    public const CAMPO_J_FECHA = "fecha_creacion";
+    public const CAMPO_J_JUSTIFICANTE = "justificante_pdf";
+
+
 }
+

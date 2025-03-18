@@ -3,14 +3,16 @@ include("../utils/constantes.php");
 include("../conexion/conexion.php");
 include("../utils/functionGlobales.php");
 
-if (isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
+if (isset($_POST["id"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
     // Asignar variables recibidas
+    $id = $_POST['id'];
     $matricula = $_POST['matricula'];
     $nombre = $_POST['nombre'];
     $apellidos = $_POST['apellidos'];
     $grupo = $_POST['grupo'];
     $motivo = $_POST['motivo'];
     $fecha = $_POST['fecha'];
+    $id_jefe = $_POST['id_jefe'];
 
     // Capturar el HTML en un buffer
     ob_start();
@@ -25,6 +27,7 @@ if (isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['gr
 
 <body>
     <h2 style="text-align: center;">Justificante</h2>
+    <p><strong>Matricula:</strong> <?php echo $id; ?></p>
     <p><strong>Matrícula:</strong> <?php echo $matricula; ?></p>
     <p><strong>Nombre:</strong> <?php echo $nombre; ?></p>
     <p><strong>Apellidos:</strong> <?php echo $apellidos; ?></p>
@@ -36,6 +39,8 @@ if (isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['gr
 </html>
 
 <?php
+
+
 $html = ob_get_clean(); // Captura el contenido y limpia el buffer
 
 // Cargar DOMPDF
@@ -62,6 +67,26 @@ $rutaArchivo = $rutaGuardado . $nombreArchivo;
 
 // Guardar el PDF en la carpeta especificada
 file_put_contents($rutaArchivo, $pdf->output());
+$sql = "UPDATE " . Variables::TABLA_SOLICITUDES . " SET " . Variables::ESTADO . " = 'Aceptada' WHERE " . Variables::ID_SOLICITUD . " = ?";
+$smtm = $conexion->prepare($sql);
+$smtm->bind_param("i", $id); // Aquí "d" significa que esperas un parámetro tipo decimal o flotante
+$smtm->execute();
+
+
+$sql = "INSERT INTO " . Variables::TABLA_BD_JUSTIFICANTES . "("
+    . Variables::CAMPO_J_MATRICULA . ", "
+    . Variables::CAMPO_J_NOMBRE . ", "
+    . Variables::CAMPO_J_APELLIDOS . ", "
+    . Variables::CAMPO_J_MOTIVO . ", "
+    . Variables::CAMPO_J_GRUPO . ", "
+    . Variables::CAMPO_J_CARRERA . ", "
+    . Variables::CAMPO_J_NOMBRE_JEFE . ", "
+    . Variables::CAMPO_J_JUSTIFICANTE . ") VALUES (?,?,?,?,?,?,?,?)";
+
+$smtm = $conexion->prepare($sql);
+$smtm->bind_param('ssssssss', $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $id_jefe_, $nombreArchivo);
+$smtm->execute();
+
 
 echo json_encode(["sin_error" => True]);
 
