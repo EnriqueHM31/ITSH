@@ -74,24 +74,6 @@ async function eliminarSolicitud(id, nombreArchivo) {
 }
 
 
-function mostrarTemplate(mensaje, urlImagen, color, nombre) {
-	const template = document.getElementById(nombre)
-	const clone = document.importNode(template.content, true)
-	clone.getElementById('mensaje').innerText = mensaje
-	clone.getElementById('imagen').src = urlImagen
-	clone.getElementById('btn_mensaje').style.backgroundColor = color
-	document.body.appendChild(clone)
-}
-
-function cerrarTemplate(opcion) {
-	const dialogContainer = document.getElementById('overlay')
-	if (dialogContainer) {
-		dialogContainer.remove()
-		if (opcion == "cargar") {
-			location.reload()
-		}
-	}
-}
 
 function rechazarSolicitud(objeto) {
 
@@ -189,7 +171,7 @@ function verificarOpciones(estado) {
 }
 
 
-
+//BUSCAR JUSTIFICANTES EN EL HISTORIAL
 $(document).ready(function () {
 	let timer;
 
@@ -208,9 +190,34 @@ $(document).ready(function () {
 					$("#historial").html(response);
 				}
 			});
-		}, 300); // Espera 300ms después de la última tecla presionada
+		}, 300);
 	});
 });
+
+
+function reiniciarFolio() {
+	$.ajax({
+		url: '../../query/justificantes.php',
+		method: 'POST',
+		data: {
+			reiniciar: "Si"
+		},
+		dataType: 'json',
+		success: function (data) {
+			mostrarTemplate(data.mensaje, '../../assets/iconos/ic_correcto.webp', 'var(--verde)', "miTemplate_cargar", "miTemplate_cargar");
+		},
+		error: function (data) {
+			mostrarTemplate(data.mensaje, '../../assets/iconos/ic_correcto.webp', 'var(--verde)', "miTemplate_cargar", "miTemplate_cargar");
+		}
+	})
+}
+
+function mostrarModal() {
+	const template = document.getElementById("modal_seguridad")
+	const clone = document.importNode(template.content, true)
+
+	document.body.appendChild(clone)
+}
 
 function mostrarTemplate(mensaje, urlImagen, color, nombre) {
 	const template = document.getElementById(nombre)
@@ -221,9 +228,12 @@ function mostrarTemplate(mensaje, urlImagen, color, nombre) {
 	document.body.appendChild(clone)
 }
 
-function mostrarModal() {
-	const template = document.getElementById("modal_seguridad")
-	const clone = document.importNode(template.content, true)
-
-	document.body.appendChild(clone)
+function cerrarTemplate(opcion) {
+	const dialogContainer = document.getElementById('overlay')
+	if (dialogContainer) {
+		dialogContainer.remove()
+		if (opcion == "cargar") {
+			location.reload()
+		}
+	}
 }

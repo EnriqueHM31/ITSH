@@ -206,5 +206,22 @@ class Jefe
     }
 
 
+    public function reiniciarFolio($conexion)
+    {
+        try {
+            $sql = "TRUNCATE TABLE " . Variables::TABLA_BD_JUSTIFICANTES;
+            $stmt = $conexion->prepare($sql);
+
+            if ($stmt->execute()) {
+                estructuraMensaje("Se ha reiniciado el folio", "../../assets/iconos/ic_correcto.webp", "--verde");
+            } else {
+                estructuraMensaje("Ocurrió un error al reiniciar el folio", "../../assets/iconos/ic_error.webp", "--rojo");
+            }
+
+            $stmt->close(); // Cerrar el statement
+        } catch (Exception $e) {
+            estructuraMensaje("Error: " . $e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
+        }
+    }
 
 }

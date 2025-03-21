@@ -132,7 +132,7 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
                 <p>Se borraran todos los justificantes creados hasta el momento</p>
 
                 <div class="opciones_decision">
-                    <button class="btn_opcion">Si</button>
+                    <button class="btn_opcion" onclick="reiniciarFolio()">Si</button>
                     <button class="btn_opcion" onclick="cerrarTemplate()">No</button>
                 </div>
 
@@ -143,6 +143,20 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
             </div>
 
         </div>
+    </template>
+
+    <template id="miTemplate_cargar">
+
+        <div class="overlay" id="overlay">
+            <div class="notificacion">
+                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
+                <div class="contenido_notificacion ">
+                    <p id="mensaje"></p>
+                </div>
+                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate('cargar')">Cerrar</button>
+            </div>
+        </div>
+
     </template>
 </body>
 
