@@ -136,10 +136,16 @@ class Jefe
 
     }
 
-    public function TablaSolicitudesRegistros($conexion, $id)
+    public function TablaSolicitudesRegistros($conexion)
     {
         $sql = "SELECT * FROM solicitudes";
         $resultado = mysqli_query($conexion, $sql);
+
+        return $resultado;
+    }
+
+    public function MostrarSolicitudes($resultado, $id)
+    {
         while ($fila = mysqli_fetch_array($resultado)) {
             if ($fila['estado'] == "Aceptada") {
                 $clase = "aceptada";
@@ -194,12 +200,15 @@ class Jefe
             echo "<p class='sin_justificantes'>No hay justificantes disponibles</p>";
         }
         while ($fila = mysqli_fetch_array($resultado)) {
+
+            $tiempo = explode(" ", $fila['fecha_creacion']);
             echo "
             <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
                 <h2> Folio {$fila['id']} </h2>
                 <p> {$fila['matricula_alumno']} </p>
                 <p> {$fila['nombre_alumno']} </p>
-                <span> {$fila['fecha_creacion']} </span>
+                <span>Hora: {$tiempo[1]} </span>
+                <span>Fecha: {$tiempo[0]} </span>
             </a>
             ";
         }

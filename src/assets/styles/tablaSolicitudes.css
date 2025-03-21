@@ -9,6 +9,13 @@
     z-index: 1;
 }
 
+.sin_solicitudes {
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    color: var(--vino);
+    text-align: center;
+    font-weight: bold;
+}
+
 .btn_historial {
     background: var(--vino);
     color: var(--blanco);

@@ -44,11 +44,25 @@
 
 .contenido_historial {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 2rem;
     max-width: 90%;
     margin: 0 auto;
+    justify-content: center;
 }
+
+.contenido_historial:has(:nth-child(5)) {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.contenido_historial:has(:nth-child(1)),
+.contenido_historial:has(:nth-child(2)),
+
+.contenido_historial:has(:nth-child(3)),
+.contenido_historial:has(:nth-child(4)) {
+
+    grid-template-columns: repeat(auto-fit, minmax(150px, 220px));
+}
+
 
 .archivo {
     background-color: var(--vino);
@@ -60,6 +74,7 @@
     flex-direction: column;
     border-radius: 1.5rem;
     border: .2rem solid var(--vino);
+    padding-bottom: 1.5rem;
 }
 
 .archivo h2 {

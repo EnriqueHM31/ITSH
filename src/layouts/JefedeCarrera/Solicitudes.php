@@ -72,22 +72,32 @@ $id = $_SESSION["id"];
                 <a href="./HistorialJustificantes.php" class="btn_historial">
                     Justificantes
                 </a>
-                <table>
-                    <tr>
-                        <th>Solicitud</th>
-                        <th>Matricula</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Grupo</th>
-                        <th>Motivo</th>
-                        <th>Fecha</th>
-                        <th>Evidencia</th>
-                        <th>Estado</th>
-                        <th>Opciones</th>
-                    </tr>
-                    <?php
-                    $jefeCarrera->TablaSolicitudesRegistros($conexion, $id);
+
+                <?php
+                $data = $jefeCarrera->TablaSolicitudesRegistros($conexion);
+                if ($data->num_rows < 1) {
                     ?>
+
+                    <table>
+                        <tr>
+                            <th>Solicitud</th>
+                            <th>Matricula</th>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Grupo</th>
+                            <th>Motivo</th>
+                            <th>Fecha</th>
+                            <th>Evidencia</th>
+                            <th>Estado</th>
+                            <th>Opciones</th>
+                        </tr>
+                        <?php
+                        $jefeCarrera->MostrarSolicitudes($data, $id);
+
+                } else {
+                    echo "<p class='sin_solicitudes'>No hay solicitudes</p>";
+                }
+                ?>
                 </table>
             </div>
         </div>

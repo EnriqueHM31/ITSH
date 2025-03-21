@@ -24,7 +24,8 @@ $salida = ""; // Inicializar variable para almacenar el HTML
 
 if ($result->num_rows == 0) {
     $salida = "<p class='sin_justificantes'>No se encontraron justificantes</p>";
-    return $salida;
+    echo $salida;
+    return;
 }
 
 while ($fila = $result->fetch_assoc()) {
