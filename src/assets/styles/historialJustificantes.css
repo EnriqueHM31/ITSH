@@ -81,3 +81,63 @@
     font-size: clamp(0.8rem, 4vw, 1.3rem);
     margin-bottom: 0.5rem;
 }
+
+/*ESTILOS DE LA MODAL*/
+
+.modal {
+    background-color: var(--vino);
+    color: var(--blanco);
+    width: clamp(35rem, 10%, 50rem);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.modal h2 {
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-bottom: 1rem;
+}
+
+.modal p {
+    font-size: clamp(1rem, 4vw, 1.6rem);
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.opciones_decision {
+
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.opciones_decision .btn_opcion {
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    font-size: clamp(1rem, 4vw, 1.8rem);
+    color: var(--blanco);
+    border: none;
+    width: clamp(8rem, 30%, 20rem);
+}
+
+.btn_opcion:first-child {
+    background-color: var(--verde);
+}
+
+.btn_opcion:last-child {
+    background-color: var(--rojo);
+}
+
+.btn_opcion:hover {
+    cursor: pointer;
+}
+
+.modal span {
+    font-size: clamp(0.8rem, 4vw, 1.3rem);
+}

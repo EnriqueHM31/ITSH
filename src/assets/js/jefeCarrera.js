@@ -85,9 +85,7 @@ function mostrarTemplate(mensaje, urlImagen, color, nombre) {
 
 function cerrarTemplate(opcion) {
 	const dialogContainer = document.getElementById('overlay')
-	const notificacionIMG = document.querySelector('.img_notificacion')
 	if (dialogContainer) {
-		notificacionIMG.remove()
 		dialogContainer.remove()
 		if (opcion == "cargar") {
 			location.reload()
@@ -213,3 +211,19 @@ $(document).ready(function () {
 		}, 300); // Espera 300ms después de la última tecla presionada
 	});
 });
+
+function mostrarTemplate(mensaje, urlImagen, color, nombre) {
+	const template = document.getElementById(nombre)
+	const clone = document.importNode(template.content, true)
+	clone.getElementById('mensaje').innerText = mensaje
+	clone.getElementById('imagen').src = urlImagen
+	clone.getElementById('btn_mensaje').style.backgroundColor = color
+	document.body.appendChild(clone)
+}
+
+function mostrarModal() {
+	const template = document.getElementById("modal_seguridad")
+	const clone = document.importNode(template.content, true)
+
+	document.body.appendChild(clone)
+}

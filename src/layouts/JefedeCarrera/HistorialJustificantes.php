@@ -76,7 +76,7 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
                 height="164">
 
             <div class="contenido_opciones">
-                <button class="btn_reiniciar">Reiniciar Folio</button>
+                <button class="btn_reiniciar" onclick="mostrarModal()">Reiniciar Folio</button>
                 <input type="search" name="buscar_folio" id="search-justificantes">
             </div>
 
@@ -124,6 +124,26 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
     </footer>
 
 
+    <template id="modal_seguridad">
+        <div class=" overlay overlay_eliminar overlay_ventana" id="overlay">
+
+            <div class="modal">
+                <h2>¿Esta seguro de reiniciar el Folio</h2>
+                <p>Se borraran todos los justificantes creados hasta el momento</p>
+
+                <div class="opciones_decision">
+                    <button class="btn_opcion">Si</button>
+                    <button class="btn_opcion" onclick="cerrarTemplate()">No</button>
+                </div>
+
+                <span>
+                    Se aguardan en el respaldo por si se requieren<br>
+                    Se recomienda hacerlo cada inicio de semestre
+                </span>
+            </div>
+
+        </div>
+    </template>
 </body>
 
 </html>
