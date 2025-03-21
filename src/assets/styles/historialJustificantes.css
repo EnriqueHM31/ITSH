@@ -1,0 +1,83 @@
+.contenido_opciones {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    width: 90%;
+    margin: 0 auto;
+    margin-bottom: 3rem;
+}
+
+.sin_justificantes {
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    color: var(--vino);
+    text-align: center;
+    font-weight: bold;
+    margin-top: 2.5rem;
+}
+
+.contenido_opciones button {
+    background-color: var(--vino);
+    color: var(--blanco);
+    border: none;
+    border-radius: 1.5rem;
+    padding: 1rem 2rem;
+    font-size: clamp(1rem, 4vw, 1.8rem);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.contenido_opciones input {
+    background-color: var(--vino);
+    color: var(--blanco);
+    padding: 1rem 2rem;
+    font-size: clamp(1rem, 4vw, 1.8rem);
+    cursor: pointer;
+    width: clamp(200px, 30%, 300px);
+}
+
+.contenido_opciones input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    display: none;
+}
+
+.contenido_historial {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.archivo {
+    background-color: var(--vino);
+    color: var(--blanco);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    border: .2rem solid var(--vino);
+}
+
+.archivo h2 {
+    font-size: clamp(1.2rem, 4vw, 1.7rem);
+    padding: 1rem 0;
+    background: var(--blanco);
+    color: var(--vino);
+    width: 100%;
+    border-radius: 1.5rem 1.5rem 0 0;
+    margin-bottom: .5rem;
+}
+
+.archivo p {
+    font-size: clamp(1rem, 4vw, 1.6rem);
+    margin-bottom: 0.5rem;
+}
+
+.archivo span {
+    font-size: clamp(0.8rem, 4vw, 1.3rem);
+    margin-bottom: 0.5rem;
+}

@@ -195,12 +195,12 @@ class Dompdf
     private $quirksmode = false;
 
     /**
-    * Local file extension whitelist
-    *
-    * File extensions supported by dompdf for local files.
-    *
-    * @var array
-    */
+     * Local file extension whitelist
+     *
+     * File extensions supported by dompdf for local files.
+     *
+     * @var array
+     */
     private $allowedLocalFileExtensions = ["htm", "html"];
 
     /**
@@ -225,10 +225,20 @@ class Dompdf
      * @deprecated
      */
     public static $native_fonts = [
-        "courier", "courier-bold", "courier-oblique", "courier-boldoblique",
-        "helvetica", "helvetica-bold", "helvetica-oblique", "helvetica-boldoblique",
-        "times-roman", "times-bold", "times-italic", "times-bolditalic",
-        "symbol", "zapfdinbats"
+        "courier",
+        "courier-bold",
+        "courier-oblique",
+        "courier-boldoblique",
+        "helvetica",
+        "helvetica-bold",
+        "helvetica-oblique",
+        "helvetica-boldoblique",
+        "times-roman",
+        "times-bold",
+        "times-italic",
+        "times-bolditalic",
+        "symbol",
+        "zapfdinbats"
     ];
 
     /**
@@ -237,10 +247,20 @@ class Dompdf
      * @var array
      */
     public static $nativeFonts = [
-        "courier", "courier-bold", "courier-oblique", "courier-boldoblique",
-        "helvetica", "helvetica-bold", "helvetica-oblique", "helvetica-boldoblique",
-        "times-roman", "times-bold", "times-italic", "times-bolditalic",
-        "symbol", "zapfdinbats"
+        "courier",
+        "courier-bold",
+        "courier-oblique",
+        "courier-boldoblique",
+        "helvetica",
+        "helvetica-bold",
+        "helvetica-oblique",
+        "helvetica-boldoblique",
+        "times-roman",
+        "times-bold",
+        "times-italic",
+        "times-bolditalic",
+        "symbol",
+        "zapfdinbats"
     ];
 
     /**
@@ -360,7 +380,7 @@ class Dompdf
             }
         }
 
-        foreach ($allowed_protocols[$protocol]["rules"] as $rule) {
+        foreach ( $allowed_protocols[$protocol]["rules"] as $rule ) {
             [$result, $message] = $rule($uri);
             if (!$result) {
                 throw new Exception("Error loading $file: $message");
@@ -373,13 +393,15 @@ class Dompdf
         }
 
         // See http://the-stickman.com/web-development/php/getting-http-response-headers-when-using-file_get_contents/
-        if (isset($http_response_header)) {
-            foreach ($http_response_header as $_header) {
+        if (!empty($http_response_header) && is_array($http_response_header)) {
+            foreach ( $http_response_header as $_header ) {
                 if (preg_match("@Content-Type:\s*[\w/]+;\s*?charset=([^\s]+)@i", $_header, $matches)) {
                     $encoding = strtoupper($matches[1]);
                     break;
                 }
             }
+        } else {
+            echo "Error: \$http_response_header no es un array.";
         }
 
         $this->restorePhpConfig();
@@ -405,10 +427,10 @@ class Dompdf
     {
         // Remove #text children nodes in nodes that shouldn't have
         $tag_names = ["html", "head", "table", "tbody", "thead", "tfoot", "tr"];
-        foreach ($tag_names as $tag_name) {
+        foreach ( $tag_names as $tag_name ) {
             $nodes = $doc->getElementsByTagName($tag_name);
 
-            foreach ($nodes as $node) {
+            foreach ( $nodes as $node ) {
                 self::removeTextNodes($node);
             }
         }
@@ -468,7 +490,7 @@ class Dompdf
             "/<meta \s[^>]* charset\s*=\s* ([\"']?)\s* $charset \s*\g1 [^>]*>/isx",           // <meta charset="UTF-8">
         ];
 
-        foreach ($metaTags as $pattern) {
+        foreach ( $metaTags as $pattern ) {
             if (preg_match($pattern, $str, $matches, PREG_OFFSET_CAPTURE)) {
                 [$documentEncoding, $offset] = $matches["charset"];
                 break;
@@ -548,7 +570,7 @@ class Dompdf
             }
         }
 
-        foreach ($children as $child) {
+        foreach ( $children as $child ) {
             $node->removeChild($child);
         }
     }
@@ -584,13 +606,13 @@ class Dompdf
         $stylesheets = $xpath->query("//*[name() = 'link' or name() = 'style']");
 
         /** @var \DOMElement $tag */
-        foreach ($stylesheets as $tag) {
+        foreach ( $stylesheets as $tag ) {
             switch (strtolower($tag->nodeName)) {
                 // load <link rel="STYLESHEET" ... /> tags
                 case "link":
                     if (
                         (stripos($tag->getAttribute("rel"), "stylesheet") !== false // may be "appendix stylesheet"
-                        || mb_strtolower($tag->getAttribute("type")) === "text/css")
+                            || mb_strtolower($tag->getAttribute("type")) === "text/css")
                         && stripos($tag->getAttribute("rel"), "alternate") === false // don't load "alternate stylesheet"
                     ) {
                         //Check if the css file is for an accepted media type
@@ -598,7 +620,7 @@ class Dompdf
                         $formedialist = preg_split("/[\s\n,]/", $tag->getAttribute("media"), -1, PREG_SPLIT_NO_EMPTY);
                         if (count($formedialist) > 0) {
                             $accept = false;
-                            foreach ($formedialist as $type) {
+                            foreach ( $formedialist as $type ) {
                                 if (in_array(mb_strtolower(trim($type)), $acceptedmedia)) {
                                     $accept = true;
                                     break;
@@ -627,7 +649,8 @@ class Dompdf
                     // HTML 4.0 spec:
                     // http://www.w3.org/TR/REC-html40/present/styles.html#adef-media
                     // which states that the default media type is 'screen'
-                    if ($tag->hasAttributes() &&
+                    if (
+                        $tag->hasAttributes() &&
                         ($media = $tag->getAttribute("media")) &&
                         !in_array($media, $acceptedmedia)
                     ) {
@@ -737,7 +760,7 @@ class Dompdf
         $basePageStyle = $pageStyles["base"];
         unset($pageStyles["base"]);
 
-        foreach ($pageStyles as $pageStyle) {
+        foreach ( $pageStyles as $pageStyle ) {
             $pageStyle->inherit($basePageStyle);
         }
 
@@ -767,7 +790,7 @@ class Dompdf
 
         $root_frame = $this->tree->get_root();
         $root = Factory::decorate_root($root_frame, $this);
-        foreach ($this->tree as $frame) {
+        foreach ( $this->tree as $frame ) {
             if ($frame === $root_frame) {
                 continue;
             }
@@ -787,7 +810,7 @@ class Dompdf
             "description" => "Subject",
         ];
         /** @var \DOMElement $meta */
-        foreach ($metas as $meta) {
+        foreach ( $metas as $meta ) {
             $name = mb_strtolower($meta->getAttribute("name"));
             $value = trim($meta->getAttribute("content"));
 
@@ -810,7 +833,7 @@ class Dompdf
         if (isset($this->callbacks["end_document"])) {
             $fs = $this->callbacks["end_document"];
 
-            foreach ($fs as $f) {
+            foreach ( $fs as $f ) {
                 $canvas->page_script($f);
             }
         }
@@ -823,7 +846,7 @@ class Dompdf
         global $_dompdf_warnings, $_dompdf_show_warnings;
         if ($_dompdf_show_warnings && isset($_dompdf_warnings)) {
             echo '<b>Dompdf Warnings</b><br><pre>';
-            foreach ($_dompdf_warnings as $msg) {
+            foreach ( $_dompdf_warnings as $msg ) {
                 echo $msg . "\n";
             }
 
@@ -860,7 +883,11 @@ class Dompdf
             "<span style='color: #900' title='Time'>%10.2f ms</span>" .
             "<span  title='Quirksmode'>  " .
             ($this->quirksmode ? "<span style='color: #d00'> ON</span>" : "<span style='color: #0d0'>OFF</span>") .
-            "</span><br />", $frames, $memory, $time);
+            "</span><br />",
+            $frames,
+            $memory,
+            $time
+        );
 
         $out .= ob_get_contents();
         ob_clean();
@@ -1440,7 +1467,7 @@ class Dompdf
     {
         $this->callbacks = [];
 
-        foreach ($callbacks as $c) {
+        foreach ( $callbacks as $c ) {
             if (is_array($c) && isset($c["event"]) && isset($c["f"])) {
                 $event = $c["event"];
                 $f = $c["f"];

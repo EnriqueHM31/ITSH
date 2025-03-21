@@ -189,3 +189,27 @@ function verificarOpciones(estado) {
 		return true
 	}
 }
+
+
+
+$(document).ready(function () {
+	let timer;
+
+	$("#search-justificantes").on("keyup", function () {
+		clearTimeout(timer); // Limpia el temporizador anterior
+
+		let query = $(this).val().trim();
+
+
+		timer = setTimeout(function () {
+			$.ajax({
+				url: "../../query/buscarJustificante.php",
+				method: "GET",
+				data: { q: query },
+				success: function (response) {
+					$("#historial").html(response);
+				}
+			});
+		}, 300); // Espera 300ms después de la última tecla presionada
+	});
+});

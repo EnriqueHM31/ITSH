@@ -6,18 +6,18 @@ include "../../clases/usuario.php";
 include "../../utils/functionGlobales.php";
 include "../../clases/jefe.php";
 
-$usuario = new usuario();
 $jefe = new Jefe();
 
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
-$correo = $_SESSION["correo"];
 
-$mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'true';
+$id_carrera = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id);
+
+$carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
 
 
 
-?>
+    ?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -33,14 +33,10 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
     <link rel="stylesheet" href="../../assets/styles/Inicio.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/templates.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-
+    <link rel="stylesheet" href="../../assets/styles/historialJustificantes.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="../../assets/js/index.js" defer></script>
-    <script src="../../assets/js/eliminar.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
-    <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
 </head>
 
 <body>
@@ -79,8 +75,16 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
             <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
                 height="164">
 
+            <div class="contenido_opciones">
+                <button class="btn_reiniciar">Reiniciar Folio</button>
+                <input type="search" name="buscar_folio" id="search-justificantes">
+            </div>
 
-
+            <div class="contenido_historial" id="historial">
+                <?php
+                $jefe->HistorialJustificantes($conexion, $carrera);
+                ?>
+            </div>
 
 
 

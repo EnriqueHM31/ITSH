@@ -183,5 +183,28 @@ class Jefe
         }
     }
 
+    public function HistorialJustificantes($conexion, $carrera)
+    {
+        $sql = "SELECT * FROM " . Variables::TABLA_BD_JUSTIFICANTES . " 
+        WHERE " . Variables::CAMPO_J_CARRERA . " = '$carrera'";
+
+
+        $resultado = mysqli_query($conexion, $sql);
+        if (mysqli_num_rows($resultado) == 0) {
+            echo "<p class='sin_justificantes'>No hay justificantes disponibles</p>";
+        }
+        while ($fila = mysqli_fetch_array($resultado)) {
+            echo "
+            <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
+                <h2> Folio {$fila['id']} </h2>
+                <p> {$fila['matricula_alumno']} </p>
+                <p> {$fila['nombre_alumno']} </p>
+                <span> {$fila['fecha_creacion']} </span>
+            </a>
+            ";
+        }
+    }
+
+
 
 }
