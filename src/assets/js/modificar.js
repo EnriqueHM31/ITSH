@@ -1,4 +1,4 @@
-async function buscarUsuarios(nombre) {
+async function buscarUsuarios(nombre, carrera) {
     var query = document.getElementById('buscar').value;
 
     if (query.length >= 3) {
@@ -6,31 +6,38 @@ async function buscarUsuarios(nombre) {
             url: `../../query/${nombre}`,
             method: 'GET',
             data: {
-                q: query
+                q: query,
+                carrera: carrera
             },
             success: function (data) {
                 document.getElementById('resultados').innerHTML = data;
-                mostrar()
-            }
+                if (nombre === 'buscarPersonal.php') {
+                    mostrar("getInfoPersonal.php")
+                }
+                else if (nombre === 'buscarEstudiante.php') {
+                    mostrar("getInfoEstudiante.php")
+                }
+            } // Elimina la coma aquí
         });
     } else {
         document.getElementById('resultados').innerHTML = '';
     }
 }
 
-function mostrar() {
+
+function mostrar(tableData) {
     document.querySelectorAll('.result').forEach(element => {
         element.addEventListener("click", () => {
             const id = element.querySelector("p").dataset.id;
-            cargarUsuario(id);
+            cargarUsuario(id, tableData);
 
         });
     })
 }
 
-async function cargarUsuario(id) {
+async function cargarUsuario(id, nombre) {
     $.ajax({
-        url: '../../query/getInfoPersonal.php',
+        url: `../../query/${nombre}`,
         method: 'POST',
         data: {
             id: id
@@ -38,22 +45,33 @@ async function cargarUsuario(id) {
         dataType: 'json',
         success: function (data) {
             if (data.error) {
-                new throwError("Datos invalidos")
+                console.log(data.error)
             } else {
-                document.getElementById('clave').value = data.clave_empleado;
                 document.getElementById('nombre').value = data.nombre;
                 document.getElementById('apellidos').value = data.apellidos;
-                if (data.rol == "Administrador") {
-                    document.getElementById('carrera').value = "null";
-                } else {
-                    document.getElementById('carrera').value = data.carrera;
-
-                }
-                document.getElementById('rol').value = data.rol;
                 document.getElementById('correo').value = data.correo;
 
-                document.getElementById("buscar").value = ""
+                if (nombre === 'getInfoPersonal.php') {
+
+                    document.getElementById('clave').value = data.clave_empleado;
+                    if (data.rol == "Administrador") {
+                        document.getElementById('carrera').value = "null";
+                    } else {
+                        document.getElementById('carrera').value = data.carrera;
+
+                    }
+                    document.getElementById('rol').value = data.rol;
+                }
+                if (nombre === 'getInfoEstudiante.php') {
+                    document.getElementById('clave').value = data.matricula;
+                    document.getElementById('modalidad').value = data.id_modalidad;
+                    actualizarGrupos();
+                    document.getElementById('grupo').value = data.grupo;
+
+                }
+
                 document.getElementById("resultados").innerHTML = ""
+                document.getElementById("buscar").value = ""
             }
         },
         error: function () {

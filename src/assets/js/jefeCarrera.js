@@ -30,6 +30,7 @@ function cargarUsuario(id) {
 			if (data['False']) {
 				alert(data.error);
 			} else {
+				console.log(data)
 				mostrarDatosParaEliminar(data);
 				cerrarVentana('.close_eliminar');
 			}
@@ -237,3 +238,4 @@ function cerrarTemplate(opcion) {
 		}
 	}
 }
+

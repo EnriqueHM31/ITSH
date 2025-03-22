@@ -3,8 +3,15 @@ include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 include "../../utils/functionGlobales.php";
+include "../../clases/jefe.php";
+
+session_start();
 
 $usuario = new usuario();
+$jefe = new jefe();
+$data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
+$id_carrera = $data[Variables::CAMPO_ID_CARRERA];
+$carreraJefe = getResultCarrera($conexion, $id_carrera);
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +31,7 @@ $usuario = new usuario();
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/modificar.js" defer></script>
+    <script src="../../assets/js/grupos.js" defer></script>
 </head>
 
 <body>
@@ -64,7 +72,7 @@ $usuario = new usuario();
                 <div class="contenedor_buscar">
                     <label class="contenedor_buscar">
                         <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar"
-                            onkeyup="buscarUsuarios('buscarEstudiante.php')">
+                            onkeyup="buscarUsuarios('buscarEstudiante.php', '<?php echo $carreraJefe ?>')">
                     </label>
                     <div id="resultados" class="result_usuarios"></div>
                 </div>
@@ -91,27 +99,22 @@ $usuario = new usuario();
                         <span class="nombre_input">Apellidos</span>
                     </label>
 
-                    <label for="carrera" class="contenedor_input">
-                        <select class="input_pagina select_info" id="carrera" name="carrera">
-                            <option class="opcion_select" value="Sistemas Computacionales">Sistemas</option>
-                            <option class="opcion_select" value="Quimica">Quimica</option>
-                            <option class="opcion_select" value="Ambiental">Ambiental</option>
-                            <option class="opcion_select" value="Gestion Empresarial">Gestion</option>
-                            <option class="opcion_select" value="Contaduria">Contaduria</option>
-                            <option class="opcion_select" value="Industrial">Industrial</option>
-                            <option class="opcion_select" value="Alimentarias">Alimentarias</option>
-                            <option class="opcion_select" value="Electromecanica">Electromecanica</option>
-                            <option class="opcion_select" value="null">Null</option>
+                    <label for="modalidad" class="contenedor_input">
+                        <select class="input_pagina select_info" id="modalidad" name="modalidad">
+                            <option class="opcion_select" value="Escolarizada">Escolarizada</option>
+                            <option class="opcion_select" value="Flexible">Flexible</option>
+
                         </select>
-                        <span class="nombre_input">Carrera</span>
+                        <span class="nombre_input">Modalidad</span>
                     </label>
 
-                    <label for="rol" class="contenedor_input">
-                        <select class="input_pagina select_info" id="rol" name="rol">
-                            <option class="opcion_select" value="Jefe de Carrera">Jefe de Carrera</option>
-                            <option class="opcion_select" value="Administrador">Administrador</option>
+                    <label for="grupo" class="contenedor_input">
+                        <select class="input_pagina select_info" name="grupo" id="grupo"
+                            data-carrera='<?php echo $carreraJefe ?>'>
+
                         </select>
-                        <span class="nombre_input">Cargo</span>
+
+                        <span class="nombre_input">Grupos</span>
                     </label>
 
                     <label for="correo" class="contenedor_input">

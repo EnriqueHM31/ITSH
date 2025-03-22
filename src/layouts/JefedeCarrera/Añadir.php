@@ -29,7 +29,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
     <script src="../../assets/js/index.js" defer></script>
-
+    <script src="../../assets/js/grupos.js" defer></script>
 </head>
 
 <body>
@@ -88,7 +88,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
                 <label for="modalidad" class="contenedor_input">
                     <select class="input_pagina select_info" id="modalidad" name="modalidad">
-                        <option class="opcion_select" value="Escolarizado">
+                        <option class="opcion_select" value="Escolarizada">
                             Escolarizado
                         </option>
                         <option class="opcion_select" value="Flexible">
@@ -99,10 +99,9 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
                 </label>
 
                 <label for="grupo" class="contenedor_input">
-                    <select class="input_pagina select_info" name="grupo" id="grupo">
-                        <?php
-                        $jefe->ponerGruposJefeCarrera($carreraJefe);
-                        ?>
+                    <select class="input_pagina select_info" name="grupo" id="grupo"
+                        data-carrera="<?php echo $carreraJefe ?>">
+
                     </select>
 
                     <span class="nombre_input">Grupos</span>
@@ -175,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_carrera = obtenerIDCarrera($conexion, $carreraJefe);
     $grupo = trim($_POST["grupo"]);
     $contraseña = 'Aa12345%';
-
+    echo $id_modalidad;
     $jefe->realizarOperacionFormAñadirEstudiantes($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo);
     notificaciones($_SESSION["mensaje"]);
 

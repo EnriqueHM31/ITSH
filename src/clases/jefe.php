@@ -8,18 +8,6 @@ class Jefe
     {
     }
 
-    public function ponerGruposJefeCarrera($carrera)
-    {
-        $carreraGrupos = Variables::GRUPOS_DISPONIBLES[$carrera];
-        $indiceGrupo = $carreraGrupos["numero"];
-
-        for ($i = 1; $i <= $carreraGrupos["cantidad"]; $i++) {
-
-            $grupo = $indiceGrupo . '0' . $i;
-            echo "<option value='$grupo'>  $grupo </option>";
-        }
-    }
-
     public function realizarOperacionFormAñadirEstudiantes($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo)
     {
 
