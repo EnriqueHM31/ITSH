@@ -88,7 +88,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
                 <label for="modalidad" class="contenedor_input">
                     <select class="input_pagina select_info" id="modalidad" name="modalidad">
-                        <option class="opcion_select" value="Escolarizada">
+                        <option class="opcion_select" value="Escolarizado">
                             Escolarizado
                         </option>
                         <option class="opcion_select" value="Flexible">
@@ -168,7 +168,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $matricula = trim($_POST["clave"]);
     $nombre = trim($_POST["nombre"]);
     $apellidos = trim($_POST["apellidos"]);
+    echo $_POST['modalidad'];
     $id_modalidad = trim(obtenerIdModalidad($conexion, $_POST["modalidad"]));
+    echo $id_modalidad;
     $correo = trim($_POST["correo"]);
     $rol = Variables::MENU_DE_ROLES[2];
     $id_carrera = obtenerIDCarrera($conexion, $carreraJefe);

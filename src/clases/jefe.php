@@ -124,9 +124,9 @@ class Jefe
 
     }
 
-    public function TablaSolicitudesRegistros($conexion)
+    public function TablaSolicitudesRegistros($conexion, $carrera)
     {
-        $sql = "SELECT * FROM solicitudes";
+        $sql = "SELECT * FROM solicitudes WHERE carrera = '$carrera'";
         $resultado = mysqli_query($conexion, $sql);
 
         return $resultado;

@@ -10,6 +10,9 @@ include "../../clases/jefe.php";
 $usuario = new usuario();
 $jefeCarrera = new Jefe();
 $id = $_SESSION["id"];
+$data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
+$id_carrera = $data[Variables::CAMPO_ID_CARRERA];
+$carreraJefe = getResultCarrera($conexion, $id_carrera);
 
 ?>
 
@@ -74,8 +77,8 @@ $id = $_SESSION["id"];
                 </a>
 
                 <?php
-                $data = $jefeCarrera->TablaSolicitudesRegistros($conexion);
-                if ($data->num_rows < 1) {
+                $data = $jefeCarrera->TablaSolicitudesRegistros($conexion, $carreraJefe);
+                if ($data->num_rows > 0) {
                     ?>
 
                     <table>

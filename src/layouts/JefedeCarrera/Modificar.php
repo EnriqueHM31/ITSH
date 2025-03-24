@@ -101,7 +101,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
                     <label for="modalidad" class="contenedor_input">
                         <select class="input_pagina select_info" id="modalidad" name="modalidad">
-                            <option class="opcion_select" value="Escolarizada">Escolarizada</option>
+                            <option class="opcion_select" value="Escolarizado">Escolarizado</option>
                             <option class="opcion_select" value="Flexible">Flexible</option>
 
                         </select>

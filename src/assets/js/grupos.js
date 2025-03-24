@@ -27,7 +27,7 @@ function actualizarGrupos() {
 
     // Según la modalidad, definir los grupos
     opciones = []
-    if (modalidad === 'Escolarizada') {
+    if (modalidad === 'Escolarizado') {
         for (let i = 1; i <= 9; i++) {
             opciones.push(i + '0' + numeroGrupo + 'A');
         }

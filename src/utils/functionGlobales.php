@@ -128,9 +128,9 @@ function obtenerIdModalidad($conexion, $modalidad)
     $sql->execute();
     $result = $sql->get_result();
     $response = $result->fetch_assoc();
-
     return $response[Variables::CAMPO_ID_MODALIDAD];
 }
+
 //CONSULTA PARA OBTENER LA MODALIDAD
 function obtenerModalidad($conexion, $id_modalidad)
 {
