@@ -78,5 +78,32 @@ class Variables
     public const CAMPO_J_JUSTIFICANTE = "justificante_pdf";
 
 
+    public const MESES = [
+        "enero",
+        "febrero",
+        "marzo",
+        "abril",
+        "mayo",
+        "junio",
+        "julio",
+        "agosto",
+        "septiembre",
+        "octubre",
+        "noviembre",
+        "diciembre"
+    ];
+
+    public const TIPO_CARRERA = [
+        "Industrial" => "Ingenieria",
+        "Insdustrias Alimentarias" => "Ingenieria",
+        "Electromecanica" => "Ingenieria",
+        "Sistemas Computacionales" => "Ingenieria",
+        "Gestion Empresarial" => "Ingenieria",
+        "Contador Publico" => "Liceciatura",
+        "Quimica" => "Ingenieria",
+        "Ambiental" => "Ingenieria",
+    ];
+
+
 }
 

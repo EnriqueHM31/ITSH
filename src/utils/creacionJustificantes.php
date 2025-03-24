@@ -2,65 +2,45 @@
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
+include "./creacionQR.php";
 
-if (isset($_POST["id"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
-    // Asignar variables recibidas
-    $id = $_POST['id'];
-    $id = strlen($id) == 1 ? '0' . $id : $id;
-    $matricula = $_POST['matricula'];
-    $nombre = $_POST['nombre'];
-    $apellidos = $_POST['apellidos'];
-    $grupo = $_POST['grupo'];
-    $motivo = $_POST['motivo'];
-    $fecha = $_POST['fecha'];
-    $id_jefe = $_POST['id_jefe'];
-    $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id_jefe);
+if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
+    try {
+        mysqli_begin_transaction($conexion);
 
-    $nombre_jefe = $data[Variables::CAMPO_NOMBRE];
-    $apellidos_jefe = $data[Variables::CAMPO_APELLIDOS];
-    $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
-    $carrera = getResultCarrera($conexion, $id_carrera);
-
-    $meses = [
-        "enero",
-        "febrero",
-        "marzo",
-        "abril",
-        "mayo",
-        "junio",
-        "julio",
-        "agosto",
-        "septiembre",
-        "octubre",
-        "noviembre",
-        "diciembre"
-    ];
-
-    $date = new DateTime(); // Obtiene la fecha actual
-    $dia = $date->format('d'); // Día en dos dígitos
-    $mes = $meses[$date->format('n') - 1]; // Obtiene el nombre del mes
-    $año = $date->format('Y'); // Año en cuatro dígitos
-
-    $fecha_actual = "$dia de $mes de $año";
-    $ruta_logos = $_SERVER['DOCUMENT_ROOT'] . "/src/assets/justificantes/logos.jpg";
-    $imagen_base64 = base64_encode(file_get_contents($ruta_logos));
-    $src = 'data:image/jpeg;base64,' . $imagen_base64;
+        $id_folio = obtenerNumeroFolio($conexion);
 
 
-    $tipo_carrera = [
-        "Industrial" => "Ingenieria",
-        "Insdustrias Alimentarias" => "Ingenieria",
-        "Electromecanica" => "Ingenieria",
-        "Sistemas Computacionales" => "Ingenieria",
-        "Gestion Empresarial" => "Ingenieria",
-        "Contador Publico" => "Liceciatura",
-        "Quimica" => "Ingenieria",
-        "Ambiental" => "Ingenieria",
-    ];
+        $id_solicitud = $_POST["id_solicitud"];
+        $nombre = $_POST['nombre'];
+        $fecha = $_POST['fecha'];
+        $matricula = $_POST['matricula'];
+        $apellidos = $_POST['apellidos'];
+        $grupo = $_POST['grupo'];
+        $motivo = $_POST['motivo'];
+        $id_jefe = $_POST['id_jefe'];
+
+        $id_unico = generarCodigo($conexion, $id_folio, $nombre, $fecha);
+
+        $datos_jefe = ObtenerDatosJustificanteJefe($conexion, $id_jefe);
+        $nombre_jefe = $datos_jefe[0];
+        $apellidos_jefe = $datos_jefe[1];
+        $carrera = $datos_jefe[2];
+
+        $fecha_actual = obtenerFechaActual();
+
+        $src = obtenerIMGLogos();
+        $src_qr = obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha);
+
+        $fecha = estructurarFechaAusencia($fecha);
+
+    } catch (Exception $e) {
+        return json_encode(["sin_error" => $e->getMessage()]);
+    }
+
     // Capturar el HTML en un buffer
     ob_start();
 } else {
-    header('Content-Type: application/json');
     echo json_encode(["error" => "Faltan parámetros requeridos."]);
 }
 
@@ -199,14 +179,22 @@ if (isset($_POST["id"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['
 
         <div class="escuela_detalle">
             <p class="escuela">Instituto Tecnologico Superior de Huatusco</p>
-            <p class="carrera"> <?php echo $tipo_carrera[$carrera] . " " . $carrera ?></p>
+            <p class="carrera"> <?php echo Variables::TIPO_CARRERA[$carrera] . " " . $carrera ?></p>
         </div>
 
 
 
         <h2>JUSTIFICANTE DE INASISTENCIA DE CLASES</h2>
 
-        <p class="folio"><strong>Folio: </strong><span>ISC/<?php echo $id ?>/2025</span></p>
+        <p class="folio"><strong>Folio: </strong>
+            <span>
+                ISC/
+                <?php
+                $id_folio = $id_folio + 1;
+                echo (strlen($id_folio) == 1) ? "0" . $id_folio : $id_folio; ?>
+                /2025
+            </span>
+        </p>
 
         <div class="detalles">
             <p>Huatusco de Chicuellar, Ver a <?php echo $fecha_actual ?></p>
@@ -257,12 +245,16 @@ if (isset($_POST["id"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['
             <p>Sin mas por el momento, reciba un cordial saludo</p>
         </div>
 
+
+        <div style="text-align: center;">
+            <img src='<?php echo $src_qr ?>' alt="Código QR" style="margin: 0 auto;">
+        </div>
         <div class="datos_jefe">
             <p>ATENTAMENTE</p>
 
             <p>MRT(A). <?php echo $nombre_jefe . " " . $apellidos_jefe ?></p>
 
-            <p>JEFE(A) DE LA DIVISION DE <?php echo $tipo_carrera[$carrera] . " en " . $carrera ?></p>
+            <p>JEFE(A) DE LA DIVISION DE <?php echo Variables::TIPO_CARRERA[$carrera] . " en " . $carrera ?></p>
 
         </div>
 
@@ -279,60 +271,174 @@ if (isset($_POST["id"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['
 
 <?php
 
-
-$html = ob_get_clean(); // Captura el contenido y limpia el buffer
-
-// Cargar DOMPDF
 require_once "./dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
+try {
+    $html = ob_get_clean(); // Captura el contenido y limpia el buffer
 
-$pdf = new Dompdf();
-$options = $pdf->getOptions();
-$options->set("isRemoteEnabled", true);  // <-- ¡Sin array!
-$pdf->setOptions($options);
+    // Cargar DOMPDF
 
-$pdf->loadHtml($html); // Cargar el HTML generado
-$pdf->setPaper("letter", "portrait");
-$pdf->set_option('log_output_file', './dompdf.log');
-$pdf->set_option('enable_remote', true);
-$pdf->render();
+    $pdf = new Dompdf();
+    $options = $pdf->getOptions();
+    $options->set("isRemoteEnabled", true);  // <-- ¡Sin array!
+    $pdf->setOptions($options);
 
-// Ruta donde se guardará el archivo
-$rutaGuardado = "../layouts/Alumno/justificantes/";
-if (!file_exists($rutaGuardado)) {
-    mkdir($rutaGuardado, 0777, true); // Crea la carpeta si no existe
+    $pdf->loadHtml($html); // Cargar el HTML generado
+    $pdf->setPaper("letter", "portrait");
+    $pdf->render();
+
+    $data = $pdf->output();
+
+    $nombreArchivo = guardarArchivoPDF($data, $id_solicitud, $matricula);
+
+    ModificarEstadoSolicitud($conexion, $id_solicitud);
+
+
+    InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo);
+
+} catch (Exception $e) {
+    // Rollback en caso de error
+    $conexion->rollback();
+
+    // Eliminar archivos generados
+    if (isset($ruta_imagen) && file_exists($ruta_imagen)) {
+        unlink($ruta_imagen);
+    }
+
+    if (isset($rutaArchivo) && file_exists($rutaArchivo)) {
+        unlink($rutaArchivo);
+    }
+
+    // Respuesta de error
+    echo json_encode([
+        "sin_error" => "Error al crear el PDF: " . $e->getMessage(),
+    ]);
+    exit();
 }
 
-$nombreArchivo = "justificante_" . $matricula . "_" . date("Ymd_His") . ".pdf";
-$rutaArchivo = $rutaGuardado . $nombreArchivo;
 
-// Guardar el PDF en la carpeta especificada
-file_put_contents($rutaArchivo, $pdf->output());
-$sql = "UPDATE " . Variables::TABLA_SOLICITUDES . " SET " . Variables::ESTADO . " = 'Aceptada' WHERE " . Variables::ID_SOLICITUD . " = ?";
-$smtm = $conexion->prepare($sql);
-$smtm->bind_param("i", $id); // Aquí "d" significa que esperas un parámetro tipo decimal o flotante
-$smtm->execute();
+function obtenerNumeroFolio($conexion)
+{
+    $sql = "SELECT COUNT(*) AS total FROM justificante";
+    $result = $conexion->query($sql);
+    $row = $result->fetch_assoc();
+    return $row["total"];
+}
 
-$data_jefe = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id_jefe);
+function ObtenerDatosJustificanteJefe($conexion, $id_jefe)
+{
+    try {
 
-$carrera = getResultCarrera($conexion, $data_jefe[Variables::CAMPO_ID_CARRERA]);
+        $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id_jefe);
 
+        $nombre_jefe = $data[Variables::CAMPO_NOMBRE];
+        $apellidos_jefe = $data[Variables::CAMPO_APELLIDOS];
+        $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
+        $carrera = getResultCarrera($conexion, $id_carrera);
 
-$sql = "INSERT INTO " . Variables::TABLA_BD_JUSTIFICANTES . "("
-    . Variables::CAMPO_J_ID_SOLICITUD . ", "
-    . Variables::CAMPO_J_MATRICULA . ", "
-    . Variables::CAMPO_J_NOMBRE . ", "
-    . Variables::CAMPO_J_APELLIDOS . ", "
-    . Variables::CAMPO_J_MOTIVO . ", "
-    . Variables::CAMPO_J_GRUPO . ", "
-    . Variables::CAMPO_J_CARRERA . ", "
-    . Variables::CAMPO_J_NOMBRE_JEFE . ", "
-    . Variables::CAMPO_J_JUSTIFICANTE . ") VALUES (?,?,?,?,?,?,?,?,?)";
+        return [$nombre_jefe, $apellidos_jefe, $carrera];
+    } catch (Exception $e) {
+        echo json_encode([
+            "sin_error" => "Error en la obtencionde datos del jefe(a) de carrera"
+        ]);
+        exit();
+    }
+}
 
-$smtm = $conexion->prepare($sql);
-$smtm->bind_param('sssssssss', $id, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $data_jefe[Variables::CAMPO_NOMBRE], $nombreArchivo);
-$smtm->execute();
+function obtenerFechaActual()
+{
+    $date = new DateTime(); // Obtiene la fecha actual
+    $dia = $date->format('d'); // Día en dos dígitos
+    $mes = Variables::MESES[$date->format('n') - 1]; // Obtiene el nombre del mes
+    $año = $date->format('Y'); // Año en cuatro dígitos
+    return "$dia de $mes de $año";
+}
 
-echo json_encode(["sin_error" => True]);
+function obtenerIMGLogos()
+{
+    // LOGOS DE LA ESCUELA
+    $ruta_logos = $_SERVER['DOCUMENT_ROOT'] . "/src/assets/justificantes/logos.jpg";
+    // Verificar si existe el logo
+    if (!file_exists($ruta_logos)) {
+        throw new Exception("Archivo de logos no encontrado: $ruta_logos");
+    }
+    $imagen_base64 = base64_encode(file_get_contents($ruta_logos));
+    return 'data:image/jpeg;base64,' . $imagen_base64;
+}
 
+function obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha)
+{
+    // IMAGEN DEL QR
+    $qr_text = $id_folio . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha);
+    $filename = $id_unico . "_" . $qr_text . '.png';
+    $ruta_imagen = $_SERVER['DOCUMENT_ROOT'] . "/src/layouts/Alumno/justificantes/codigos_qr/$filename";
 
+    // Verificar si existe el QR antes de leerlo
+    if (!file_exists($ruta_imagen)) {
+        throw new Exception("Archivo QR no generado");
+    }
+
+    $imagen_contenido = file_get_contents($ruta_imagen);
+    if ($imagen_contenido === false) {
+        throw new Exception("Error al leer el archivo QR");
+    }
+
+    $imagen_base64 = base64_encode($imagen_contenido);
+    return 'data:image/png;base64,' . $imagen_base64;
+}
+
+function guardarArchivoPDF($data, $id_solicitud, $matricula)
+{
+    // Ruta donde se guardará el archivo
+    $rutaGuardado = "../layouts/Alumno/justificantes/";
+    if (!file_exists($rutaGuardado)) {
+        mkdir($rutaGuardado, 0777, true);
+    }
+
+    $nombreArchivo = "justificante_" . $id_solicitud . "_" . $matricula . "_" . date("Ymd_His") . ".pdf";
+    $rutaArchivo = $rutaGuardado . $nombreArchivo;
+
+    // Guardar el PDF en la carpeta especificada
+    file_put_contents($rutaArchivo, $data);
+
+    return $rutaArchivo;
+}
+
+function estructurarFechaAusencia($fecha)
+{
+    $array = explode("-", $fecha);
+    return $array[2] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[0];
+}
+
+function ModificarEstadoSolicitud($conexion, $id_solicitud)
+{
+    $sql = "UPDATE " . Variables::TABLA_SOLICITUDES . " SET " . Variables::ESTADO . " = 'Aceptada' WHERE " . Variables::ID_SOLICITUD . " = ?";
+
+    $smtm = $conexion->prepare($sql);
+    $smtm->bind_param("i", $id_solicitud);
+    $smtm->execute();
+}
+
+function InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo)
+{
+    $sql = "INSERT INTO " . Variables::TABLA_BD_JUSTIFICANTES . "("
+        . Variables::CAMPO_J_ID_SOLICITUD . ", "
+        . Variables::CAMPO_J_MATRICULA . ", "
+        . Variables::CAMPO_J_NOMBRE . ", "
+        . Variables::CAMPO_J_APELLIDOS . ", "
+        . Variables::CAMPO_J_MOTIVO . ", "
+        . Variables::CAMPO_J_GRUPO . ", "
+        . Variables::CAMPO_J_CARRERA . ", "
+        . Variables::CAMPO_J_NOMBRE_JEFE . ", "
+        . Variables::CAMPO_J_JUSTIFICANTE . ") VALUES (?,?,?,?,?,?,?,?,?)";
+
+    $nombre_jefe_completo = $nombre_jefe . " " . $apellidos_jefe;
+
+    $smtm = $conexion->prepare($sql);
+    $smtm->bind_param('sssssssss', $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe_completo, $nombreArchivo);
+
+    if ($smtm->execute()) {
+        mysqli_commit($conexion);
+        echo json_encode(["sin_error" => True]);
+    }
+}

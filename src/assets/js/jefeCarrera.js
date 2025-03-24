@@ -104,8 +104,26 @@ function rechazarSolicitud(objeto) {
 				mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
 			}
 		},
-		error: function (data) {
-			mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
+		error: function (xhr) {
+			console.log(xhr);
+
+			let mensajeError = "Error desconocido";
+
+			try {
+				// Intentar convertir el responseText en JSON
+				let jsonStart = xhr.responseText.indexOf("{");
+				if (jsonStart !== -1) {
+					let jsonString = xhr.responseText.substring(jsonStart);
+					let jsonData = JSON.parse(jsonString);
+					mensajeError = jsonData["sin_error"] || "Error en el servidor";
+				} else {
+					mensajeError = xhr.responseText; // En caso de que no sea JSON válido
+				}
+			} catch (e) {
+				console.error("Error al procesar la respuesta del servidor:", e);
+			}
+
+			mostrarTemplate(mensajeError, '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
 		}
 	})
 }
@@ -134,7 +152,7 @@ function aceptarSolicitud(objeto) {
 		method: 'POST',
 		data: {
 			id_jefe: id_jefe,
-			id: id,
+			id_solicitud: id,
 			matricula: matricula,
 			nombre: nombre,
 			apellidos: apellidos,
@@ -144,18 +162,36 @@ function aceptarSolicitud(objeto) {
 		},
 		dataType: 'json',
 		success: function (data) {
-			console.log(data)
-			if (data["sin_error"] !== "True") {
+			console.log(data);
+			if (data["sin_error"]) {
 				mostrarTemplate("Se ha creado y enviado el justificante", '../../assets/iconos/ic_correcto.webp', 'var(--verde)', 'miTemplate_cargar');
-
 			} else {
-				mostrarTemplate("Ocurrio un error al rechazar la solicitud", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
+				mostrarTemplate(data["sin_error"], '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
 			}
 		},
-		error: function (data) {
-			mostrarTemplate("Ocurrio un error", '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
+		error: function (xhr) {
+			console.log(xhr);
+
+			let mensajeError = "Error desconocido";
+
+			try {
+				// Intentar convertir el responseText en JSON
+				let jsonStart = xhr.responseText.indexOf("{");
+				if (jsonStart !== -1) {
+					let jsonString = xhr.responseText.substring(jsonStart);
+					let jsonData = JSON.parse(jsonString);
+					mensajeError = jsonData["sin_error"] || "Error en el servidor";
+				} else {
+					mensajeError = xhr.responseText; // En caso de que no sea JSON válido
+				}
+			} catch (e) {
+				console.error("Error al procesar la respuesta del servidor:", e);
+			}
+
+			mostrarTemplate(mensajeError, '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');
 		}
-	})
+	});
+
 }
 
 

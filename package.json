@@ -4,10 +4,10 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "concurrently \"vite\" \"php -S localhost:8000\"",
+		"dev": "concurrently \"vite\" \"php -S 192.168.1.104:8000\"",
 		"build": "vite build",
 		"preview": "vite preview",
-		"php": "php -S localhost:8000"
+		"php": "php -S 192.168.1.104:8000"
 	},
 	"devDependencies": {
 		"concurrently": "^9.1.2",
