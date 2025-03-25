@@ -1,3 +1,4 @@
+
 function seleccionar() {
 	const elements = document.querySelectorAll('.result p')
 

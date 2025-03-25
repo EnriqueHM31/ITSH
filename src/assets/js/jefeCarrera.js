@@ -1,5 +1,5 @@
 
-function buscarUsuarios() {
+function buscarUsuarios(carrera) {
 	var query = document.getElementById('buscar').value;
 	if (query.length >= 0) {
 		$.ajax({
@@ -7,6 +7,7 @@ function buscarUsuarios() {
 			method: 'GET',
 			data: {
 				q: query,
+				carrera: carrera
 			},
 			success: function (data) {
 				document.getElementById('resultados').innerHTML = data;

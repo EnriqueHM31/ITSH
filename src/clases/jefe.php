@@ -105,7 +105,84 @@ class Jefe
         if (restriccionKeyDuplicada($matricula, $correo, $conexion)) {
             return true;
         }
+    }
 
+    function actualizarUsuario($conexion, $matricula, $nuevosDatos)
+    {
+        mysqli_begin_transaction($conexion);
+
+        // Obtener datos actuales del usuario (incluyendo 'matricula')
+        $stmt = $conexion->prepare("SELECT id_usuario, correo FROM usuario WHERE id_usuario = ?");
+        $stmt->bind_param("s", $matricula); // $matricula = ID actual del usuario
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $usuarioActual = $result->fetch_assoc();
+
+        if (!$usuarioActual) {
+            estructuraMensaje("Usuario no está en el sistema", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+        // Validar email (correcto)
+        if (isset($nuevosDatos['correo']) && $nuevosDatos['correo'] !== $usuarioActual['correo']) {
+            $sql = "SELECT id_usuario FROM usuario WHERE correo = ? AND id_usuario != ?";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bind_param("ss", $nuevosDatos['correo'], $matricula);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                estructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
+        }
+
+        // Validar matrícula (corregido: verifica el ID)
+        if (isset($nuevosDatos['clave']) && $nuevosDatos['clave'] !== $usuarioActual['id_usuario']) {
+            // Buscar si la nueva matrícula ya existe como ID en otro usuario
+            $stmt = $conexion->prepare("SELECT id_usuario FROM usuario WHERE id_usuario = ?");
+            $stmt->bind_param("s", $nuevosDatos['clave']); // Nueva matrícula = futuro ID
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                estructuraMensaje("Esta matrícula ya está registrada", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
+        }
+
+        $id_usuario = $nuevosDatos['clave'];
+        $nombre = $nuevosDatos['nombre'];
+        $apellidos = $nuevosDatos['apellidos'];
+        $correo = $nuevosDatos['correo'];
+        $modalidad = $nuevosDatos['modalidad'];
+        $grupo = $nuevosDatos['grupo'];
+
+
+        $sql_usuario = "UPDATE usuario SET id_usuario = ?, correo = ? WHERE id_usuario = ?";
+        $sql_estudiante = "UPDATE estudiante SET nombre = ?, apellidos = ?, grupo = ?, id_modalidad = ? WHERE matricula = ?";
+
+        $stmt = $conexion->prepare($sql_usuario);
+        $stmt->bind_param("sss", $id_usuario, $correo, $matricula);
+
+
+        if (!$stmt->execute()) {
+            estructuraMensaje("Ocurrio un problema con los datos de usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+        $modalidad = $modalidad == "Escolarizado" ? 1 : 2;
+
+        $stmt = $conexion->prepare($sql_estudiante);
+        $stmt->bind_param("sssis", $nombre, $apellidos, $grupo, $modalidad, $matricula);
+
+        if (!$stmt->execute()) {
+            estructuraMensaje("Ocurrio un problema con los datos personales", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+        mysqli_commit($conexion);
+        estructuraMensaje("Se ha modificado los datos en la base de datos", "../../assets/iconos/ic_correcto.webp", "--verde");
     }
 
     public function eliminarRegistroEstudiante($conexion, $id)

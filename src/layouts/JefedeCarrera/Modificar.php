@@ -83,8 +83,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
                     <input type="hidden" name="clave_anterior" id="clave_anterior">
                     <label for="clave" class="contenedor_input">
-                        <input readonly pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave"
-                            placeholder=" ">
+                        <input class="input_pagina" type="text" name="clave" id="clave" placeholder=" ">
                         <span class="nombre_input">Clave</span>
                     </label>
 
@@ -165,3 +164,10 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 </body>
 
 </html>
+
+<?php
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $jefe->actualizarUsuario($conexion, $_POST["clave_anterior"], $_POST);
+    notificaciones($_SESSION["mensaje"]);
+}

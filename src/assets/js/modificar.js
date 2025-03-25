@@ -54,6 +54,7 @@ async function cargarUsuario(id, nombre) {
                 if (nombre === 'getInfoPersonal.php') {
 
                     document.getElementById('clave').value = data.clave_empleado;
+                    document.getElementById('clave_anterior').value = data.clave_empleado;
                     if (data.rol == "Administrador") {
                         document.getElementById('carrera').value = "null";
                     } else {
@@ -64,6 +65,7 @@ async function cargarUsuario(id, nombre) {
                 }
                 if (nombre === 'getInfoEstudiante.php') {
                     document.getElementById('clave').value = data.matricula;
+                    document.getElementById('clave_anterior').value = data.matricula;
                     document.getElementById('modalidad').value = data.id_modalidad;
                     actualizarGrupos();
                     document.getElementById('grupo').value = data.grupo;
