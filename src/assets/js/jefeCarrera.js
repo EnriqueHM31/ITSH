@@ -164,7 +164,7 @@ function aceptarSolicitud(objeto) {
 		dataType: 'json',
 		success: function (data) {
 			console.log(data);
-			if (data["sin_error"]) {
+			if (data["sin_error"] === true) {
 				mostrarTemplate("Se ha creado y enviado el justificante", '../../assets/iconos/ic_correcto.webp', 'var(--verde)', 'miTemplate_cargar');
 			} else {
 				mostrarTemplate(data["sin_error"], '../../assets/iconos/ic_error.webp', 'var(--rojo)', 'miTemplate');

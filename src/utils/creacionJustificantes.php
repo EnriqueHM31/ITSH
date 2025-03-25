@@ -293,7 +293,6 @@ try {
 
     ModificarEstadoSolicitud($conexion, $id_solicitud);
 
-
     InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo);
 
 } catch (Exception $e) {
@@ -401,7 +400,7 @@ function guardarArchivoPDF($data, $id_solicitud, $matricula)
     // Guardar el PDF en la carpeta especificada
     file_put_contents($rutaArchivo, $data);
 
-    return $rutaArchivo;
+    return $nombreArchivo;
 }
 
 function estructurarFechaAusencia($fecha)

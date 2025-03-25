@@ -267,13 +267,15 @@ class Jefe
         while ($fila = mysqli_fetch_array($resultado)) {
 
             $tiempo = explode(" ", $fila['fecha_creacion']);
+
+            $tiempo_fecha = explode("-", $tiempo[0]);
             echo "
             <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
                 <h2> Folio {$fila['id']} </h2>
                 <p> {$fila['matricula_alumno']} </p>
                 <p> {$fila['nombre_alumno']} </p>
                 <span>Hora: {$tiempo[1]} </span>
-                <span>Fecha: {$tiempo[0]} </span>
+                <span>Fecha: {$tiempo_fecha[2]} de " . Variables::MESES[$tiempo_fecha[1][1] - 1] . " de " . $tiempo_fecha[0] . " </span>
             </a>
             ";
         }
