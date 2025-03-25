@@ -16,7 +16,7 @@ $correo = $_SESSION["correo"];
 $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
 $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
-
+$seccion = "Eliminar";
 
 
 $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'true';
@@ -41,8 +41,6 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
     <link rel="stylesheet" href="../../assets/styles/templates.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/eliminar.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
@@ -50,7 +48,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
     <script src="../../assets/js/buscador.js" defer></script>
 </head>
 
-<body>
+<body data-carrera="<?php echo $carreraJefe ?>" data-modo="<?php echo $seccion ?>">
 
     <nav class="navegacion">
 
@@ -74,8 +72,9 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
                     <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
                 </a>
             </li>
-            <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
-                    alt="Imagen para cerrar el menu movil"></li>
+            <li class="menu-item close_contenedor">
+                <img class="close_menu" src="../../assets/iconos/ic_close.webp" alt="Imagen para cerrar el menu movil">
+            </li>
         </ul>
 
         <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
@@ -173,10 +172,10 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
                 <h2 class="titulo titulo_eliminar">Eliminar Registro</h2>
                 <div class="buscador-usuarios">
                     <label for="buscar" class="contenedor_input">
-                        <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar"
-                            onkeyup="buscarUsuarios('buscarEstudiante.php','<?php echo $carreraJefe ?>')">
+                        <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar">
                     </label>
-                    <div id="resultados"></div>
+                    <div id="resultados">
+                    </div>
                 </div>
 
                 <img class="close" src="../../assets/iconos/ic_close.webp"

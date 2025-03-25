@@ -12,6 +12,7 @@ $jefe = new jefe();
 $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
 $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
+$seccion = "Modificar";
 ?>
 
 <!DOCTYPE html>
@@ -30,11 +31,12 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
     <link rel="stylesheet" href="../../assets/styles/Modificar.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/buscador.js"></script>
     <script src="../../assets/js/modificar.js" defer></script>
     <script src="../../assets/js/grupos.js" defer></script>
 </head>
 
-<body>
+<body data-carrera="<?php echo $carreraJefe ?>" data-modo="<?php echo $seccion ?>">
 
     <nav class="navegacion">
 
@@ -71,8 +73,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
                 <div class="contenedor_buscar">
                     <label class="contenedor_buscar">
-                        <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar"
-                            onkeyup="buscarUsuarios('buscarEstudiante.php', '<?php echo $carreraJefe ?>')">
+                        <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar">
                     </label>
                     <div id="resultados" class="result_usuarios"></div>
                 </div>

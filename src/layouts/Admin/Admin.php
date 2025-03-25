@@ -40,7 +40,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
 
 </head>
 
-<body>
+<body data-modo="Eliminar" data-carrera="">
 
     <nav class="navegacion">
 
@@ -161,8 +161,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
                 <h2 class="titulo titulo_eliminar">Eliminar Registro</h2>
                 <div class="buscador-usuarios">
                     <label for="buscar" class="contenedor_input">
-                        <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar"
-                            onkeyup="buscarUsuarios('buscarPersonal.php')">
+                        <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar">
                     </label>
                     <div id="resultados"></div>
                 </div>

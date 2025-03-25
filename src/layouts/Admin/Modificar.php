@@ -26,10 +26,11 @@ $administrador = new administrador();
     <link rel="stylesheet" href="../../assets/styles/Modificar.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/buscador.js" defer></script>
     <script src="../../assets/js/modificar.js" defer></script>
 </head>
 
-<body>
+<body data-modo="Modificar" data-carrera="">
 
     <nav class="navegacion">
 
@@ -64,8 +65,7 @@ $administrador = new administrador();
 
                 <div class="contenedor_buscar">
                     <label class="contenedor_buscar">
-                        <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar"
-                            onkeyup="buscarUsuarios('buscarPersonal.php')">
+                        <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar">
                     </label>
                     <div id="resultados" class="result_usuarios"></div>
                 </div>

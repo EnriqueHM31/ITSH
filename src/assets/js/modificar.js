@@ -1,41 +1,4 @@
-async function buscarUsuarios(nombre, carrera) {
-    var query = document.getElementById('buscar').value;
-
-    if (query.length >= 3) {
-        $.ajax({
-            url: `../../query/${nombre}`,
-            method: 'GET',
-            data: {
-                q: query,
-                carrera: carrera
-            },
-            success: function (data) {
-                document.getElementById('resultados').innerHTML = data;
-                if (nombre === 'buscarPersonal.php') {
-                    mostrar("getInfoPersonal.php")
-                }
-                else if (nombre === 'buscarEstudiante.php') {
-                    mostrar("getInfoEstudiante.php")
-                }
-            } // Elimina la coma aquí
-        });
-    } else {
-        document.getElementById('resultados').innerHTML = '';
-    }
-}
-
-
-function mostrar(tableData) {
-    document.querySelectorAll('.result').forEach(element => {
-        element.addEventListener("click", () => {
-            const id = element.querySelector("p").dataset.id;
-            cargarUsuario(id, tableData);
-
-        });
-    })
-}
-
-async function cargarUsuario(id, nombre) {
+async function cargarUsuarioModificar(id, nombre) {
     $.ajax({
         url: `../../query/${nombre}`,
         method: 'POST',
@@ -82,5 +45,3 @@ async function cargarUsuario(id, nombre) {
     });
 
 }
-
-buscarUsuarios();

@@ -5,7 +5,7 @@ function mostrarPanelEliminacion(nombreTemplate, nombreArchivo, nombreGET) {
 	const botonEliminar = document.getElementById('eliminar_registro')
 	botonEliminar.addEventListener('click', () => {
 		const seleccion = RegistroSeleccionado()
-		cargarUsuario(seleccion, nombreArchivo)
+		cargarUsuarioEliminar(seleccion, nombreArchivo)
 		cerrarVentanaEliminar(nombreGET)
 	})
 

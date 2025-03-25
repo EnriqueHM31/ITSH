@@ -183,6 +183,7 @@ class Jefe
 
         mysqli_commit($conexion);
         estructuraMensaje("Se ha modificado los datos en la base de datos", "../../assets/iconos/ic_correcto.webp", "--verde");
+
     }
 
     public function eliminarRegistroEstudiante($conexion, $id)
