@@ -51,7 +51,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
             <li class="menu-item"><a href="JefeCarrera.php" class="link">Inicio</a></li>
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
-            <li class="menu-item"><a href="JefeCarrera.php?Eliminar=true" class="link">Eliminar</a></li>
+            <li class="menu-item"><a href="JefeCarrera.php?EliminarEstudiante=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="Solicitudes.php" class="link">Solicitudes</a></li>
 
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img

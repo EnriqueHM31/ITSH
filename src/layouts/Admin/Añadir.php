@@ -43,7 +43,7 @@ $administrador = new administrador();
             <li class="menu-item"><a href="Admin.php" class="link">Inicio</a></li>
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
-            <li class="menu-item"><a href="Admin.php?Eliminar=true" class="link">Eliminar</a></li>
+            <li class="menu-item"><a href="Admin.php?EliminarPersonal=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
                         src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
         </ul>

@@ -47,6 +47,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
     <script src="../../assets/js/eliminar.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
     <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
+    <script src="../../assets/js/buscador.js" defer></script>
 </head>
 
 <body>
@@ -66,7 +67,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
             <li class="menu-item"><a href="JefeCarrera.php" class="link">Inicio</a></li>
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
-            <li class="menu-item"><a href="JefeCarrera.php?Eliminar=true" class="link">Eliminar</a></li>
+            <li class="menu-item"><a href="JefeCarrera.php?EliminarEstudiante=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="Solicitudes.php" class="link">Solicitudes</a></li>
             <li class="menu-item">
                 <a href="../../conexion/cerrar_sesion.php" class="link">
@@ -166,14 +167,14 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
         </div>
     </template>
 
-    <template id="plantilla_eliminar-personal">
+    <template id="plantilla_eliminar-estudiante">
         <div class=" overlay overlay_eliminar">
             <form class="formulario form_eliminar" method="post">
                 <h2 class="titulo titulo_eliminar">Eliminar Registro</h2>
                 <div class="buscador-usuarios">
                     <label for="buscar" class="contenedor_input">
                         <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar"
-                            onkeyup="buscarUsuarios('<?php echo $carreraJefe ?>')">
+                            onkeyup="buscarUsuarios('buscarEstudiante.php','<?php echo $carreraJefe ?>')">
                     </label>
                     <div id="resultados"></div>
                 </div>
@@ -230,7 +231,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $usuario->cambiarContraseña($conexion, $contraseña_actual, $contraseña_nueva, $id);
         } elseif ($_POST['formulario'] === 'Eliminar') {
             $id = $_POST['identificador'];
-
             $jefe->eliminarRegistroEstudiante($conexion, $id);
         }
         notificaciones($_SESSION["mensaje"]);

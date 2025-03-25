@@ -35,7 +35,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
 
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets//js/eliminar.js" defer></script>
-    <script src="../../assets/js/admin.js" defer></script>
+    <script src="../../assets/js/buscador.js" defer></script>
     <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
 
 </head>
@@ -57,7 +57,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
             <li class="menu-item"><a href="Admin.php" class="link">Inicio</a></li>
             <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
-            <li class="menu-item"><a href="Admin.php?Eliminar=true" class="link">Eliminar</a></li>
+            <li class="menu-item"><a href="Admin.php?EliminarPersonal=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
                         src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
             <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
@@ -162,7 +162,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
                 <div class="buscador-usuarios">
                     <label for="buscar" class="contenedor_input">
                         <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar"
-                            onkeyup="buscarUsuarios()">
+                            onkeyup="buscarUsuarios('buscarPersonal.php')">
                     </label>
                     <div id="resultados"></div>
                 </div>

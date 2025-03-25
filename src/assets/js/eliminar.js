@@ -1,51 +1,31 @@
-
-function seleccionar() {
-	const elements = document.querySelectorAll('.result p')
-
-	elements.forEach(element => {
-		element.addEventListener('click', () => {
-			elements.forEach(e => {
-				e.style.backgroundColor = 'var(--blanco)'
-				e.style.color = 'var(--vino)'
-			})
-			element.style.backgroundColor = 'var(--vino)'
-			element.style.color = 'var(--blanco)'
-		})
-	})
-}
-
-const params = new URLSearchParams(window.location.search)
-if (params.get('Eliminar') === 'true') {
-	const { modalClone, modalContainer } = obtenerTemplate(
-		'plantilla_eliminar-personal',
-	)
+function mostrarPanelEliminacion(nombreTemplate, nombreArchivo, nombreGET) {
+	const { modalClone, modalContainer } = obtenerTemplate(nombreTemplate)
 	modalContainer.appendChild(modalClone)
 
 	const botonEliminar = document.getElementById('eliminar_registro')
 	botonEliminar.addEventListener('click', () => {
 		const seleccion = RegistroSeleccionado()
-		cargarUsuario(seleccion)
-		cerrarVentanaEliminar()
+		cargarUsuario(seleccion, nombreArchivo)
+		cerrarVentanaEliminar(nombreGET)
 	})
 
 	const plantilla = document.querySelector('.overlay .formulario')
 	const btnClose = plantilla.querySelector('.close')
 	btnClose.addEventListener('click', () => {
 		document.querySelector('.overlay').remove()
-		cerrarVentanaEliminar()
+		cerrarVentanaEliminar(nombreGET)
 	})
 }
 
-function cerrarVentana(boton) {
-	const btnClose = document.querySelector(boton)
-
-	if (btnClose !== null) {
-		const overlayVentana = document.querySelector('.overlay_ventana')
-		btnClose.addEventListener('click', () => {
-			overlayVentana.remove()
-		})
-	}
+const params = new URLSearchParams(window.location.search)
+if (params.get('EliminarPersonal') === 'true') {
+	mostrarPanelEliminacion('plantilla_eliminar-personal', 'getInfoPersonal.php', "EliminarPersonal")
 }
+
+if (params.get('EliminarEstudiante') === 'true') {
+	mostrarPanelEliminacion('plantilla_eliminar-estudiante', 'getInfoEstudiante.php', "EliminarEstudiante")
+}
+
 
 function RegistroSeleccionado() {
 	const elements = document.querySelectorAll('.result p')
@@ -62,9 +42,9 @@ function RegistroSeleccionado() {
 	}
 }
 
-function cerrarVentanaEliminar() {
+function cerrarVentanaEliminar(nombre) {
 	const currentUrl = new URL(window.location.href)
-	currentUrl.searchParams.delete('Eliminar')
+	currentUrl.searchParams.delete(nombre)
 	window.history.replaceState({}, '', currentUrl)
 }
 
@@ -113,13 +93,8 @@ function mostrarDatosParaEliminar(data) {
 }
 
 function modalError() {
-	const { modalClone, modalContainer } = obtenerTemplate(
-		'plantilla_usuario-seleccionado-error',
-	)
-
-	modalClone.getElementById('detalles_eliminar_error').innerText =
-		'Se necesita que busque un registro primero'
-
+	const { modalClone, modalContainer } = obtenerTemplate('plantilla_usuario-seleccionado-error')
+	modalClone.getElementById('detalles_eliminar_error').innerText = 'Se necesita que busque un registro primero'
 	modalContainer.appendChild(modalClone)
 }
 
