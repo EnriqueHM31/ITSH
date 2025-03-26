@@ -19,10 +19,11 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 <html lang="es">
 
 <head>
-    <title>Sistema de Justificantes ITSH</title>
+    <title>Anadir Usuarios Jefe De Carrera</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pagina añadir del jefe de carrera">
+    <meta name="description"
+        content="Pagina para que el jefe de carrera pueda añadir usuarios de tipo estudiante y que solo sean de su carrera">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">

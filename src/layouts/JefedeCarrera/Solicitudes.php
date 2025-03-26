@@ -20,10 +20,11 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 <html lang="es">
 
 <head>
-    <title>Sistema de Justificantes ITSH</title>
+    <title>Solicitudes De Los Alumnos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pagina de modificar del administrador">
+    <meta name="description"
+        content="Pagina donde el jefe de carrera puede ver las solicitudes para justificantes de los estudiantes">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">

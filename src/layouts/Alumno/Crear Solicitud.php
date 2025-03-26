@@ -16,9 +16,9 @@ $id = $_SESSION["id"];
 <html lang="es">
 
 <head>
-    <title>Sistema de Justificantes ITSH</title>
+    <title>Crear Solicitud</title>
     <meta charset="UTF-8">
-    <meta name="description" content="Pagina principal del administrador">
+    <meta name="description" content="Pagina para crear las solicitudes para los justificantes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">

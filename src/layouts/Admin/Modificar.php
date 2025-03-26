@@ -14,10 +14,11 @@ $administrador = new administrador();
 <html lang="es">
 
 <head>
-    <title>Sistema de Justificantes ITSH</title>
+    <title>Modificar Usuarios Administrador</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pagina de modificar del administrador">
+    <meta name="description"
+        content="Pagina para que el administrador modifique usuarios que sean administradores o jefes de carrera">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">

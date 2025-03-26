@@ -29,7 +29,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
 <html lang="es">
 
 <head>
-    <title>Sistema de Justificantes ITSH</title>
+    <title>Pagina Principal Jefe De Carrera</title>
     <meta charset="UTF-8">
     <meta name="description" content="Pagina principal del Jefe de carrera">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
