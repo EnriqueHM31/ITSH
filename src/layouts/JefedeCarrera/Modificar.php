@@ -29,7 +29,7 @@ $seccion = "Modificar";
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
     <link rel="stylesheet" href="../../assets/styles/Modificar.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/buscador.js"></script>
     <script src="../../assets/js/modificar.js" defer></script>
@@ -56,8 +56,11 @@ $seccion = "Modificar";
             <li class="menu-item"><a href="JefeCarrera.php?EliminarEstudiante=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="Solicitudes.php" class="link">Solicitudes</a></li>
 
-            <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
-                        src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
+            <li class="menu-item">
+                <a href="../../conexion/cerrar_sesion.php" class="link">
+                    <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
+                </a>
+            </li>
         </ul>
     </nav>
 

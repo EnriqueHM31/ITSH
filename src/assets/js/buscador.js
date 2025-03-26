@@ -1,10 +1,7 @@
+
 $(document).ready(function () {
     // Obtener carrera desde el atributo data del body
-    const carrera = document.body.dataset.carrera === null ? "" : document.body.dataset.carrera;
-    const modo = document.body.dataset.modo;
-
-    console.log(carrera)
-    console.log(modo)
+    const carrera = $("body").data("carrera");
     if (carrera === "") {
         buscarUsuarios("buscarPersonal.php");
     } else {
@@ -17,8 +14,6 @@ function buscarUsuarios(nombre) {
     let timer;
     let carrera = document.body.dataset.carrera;
     let modo = document.body.dataset.modo;
-    console.log(carrera)
-    console.log(modo)
 
     $("#buscar").on("keyup", function () {
         clearTimeout(timer);
