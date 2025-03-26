@@ -7,6 +7,16 @@ class alumno
     {
     }
 
+    public function ponerDatosFormulario($conexion, $id)
+    {
+        $sql = "SELECT * FROM estudiante WHERE matricula = '$id'";
+        $result = $conexion->query($sql);
+
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+    }
+
     public function enviarSolicitud($conexion)
     {
 
@@ -37,28 +47,18 @@ class alumno
                         VALUES (null, '$identificador', '$nombre', '$apellidos', '$grupo', '$carrera', '$motivo', '$fecha', '$identificador_archivo', '$estado')";
 
                     if ($conexion->query($sql) === TRUE) {
-                        $_SESSION["mensaje"] = "Se ha enviado la solicitud a tu jefe de carrera";
-                        $_SESSION["icono"] = "../../assets/iconos/ic_correcto.webp";
-                        $_SESSION["color_mensaje"] = "var(--verde)";
+                        estructuraMensaje("Se ha enviado la solicitud a tu jefe de carrera", "../../assets/iconos/ic_correcto.webp", "--verde");
                     } else {
-                        $_SESSION["mensaje"] = "Ocurrio un error con el envio de la solicitud";
-                        $_SESSION["icono"] = "../../assets/iconos/ic_error.webp";
-                        $_SESSION["color_mensaje"] = "var(--rojo)";
+                        estructuraMensaje("Ocurrio un error con el envio de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
                 } else {
-                    $_SESSION["mensaje"] = "Ocurrio un error con el archivo";
-                    $_SESSION["icono"] = "../../assets/iconos/ic_error.webp";
-                    $_SESSION["color_mensaje"] = "var(--rojo)";
+                    estructuraMensaje("Ocurrio un error con el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
                 }
             } else {
-                $_SESSION["mensaje"] = "Tu evidencia debe estar en formato PDF";
-                $_SESSION["icono"] = "../../assets/iconos/ic_error.webp";
-                $_SESSION["color_mensaje"] = "var(--rojo)";
+                estructuraMensaje("Tu evidencia debe estar en formato PDF", "../../assets/iconos/ic_error.webp", "--rojo");
             }
         } else {
-            $_SESSION["mensaje"] = "Sube tu evidencia";
-            $_SESSION["icono"] = "../../assets/iconos/ic_error.webp";
-            $_SESSION["color_mensaje"] = "var(--rojo)";
+            estructuraMensaje("Sube tu evidencia", "../../assets/iconos/ic_error.webp", "--rojo");
         }
     }
 
@@ -68,17 +68,15 @@ class alumno
         if ($_FILES["archivo_evidencia"]["size"] > 0) {
             foreach ( $_POST as $value ) {
                 if (empty($value)) {
-                    $_SESSION["mensaje"] = "Rellene todos los campos para registrar";
-                    $_SESSION["icono"] = "../img/iconos/ic_error.png";
-                    $_SESSION["color_mensaje"] = "var(--rojo)";
+                    estructuraMensaje("Rellene todos los campos para registrar", "../../assets/iconos/ic_error.webp", "--rojo");
                     return true;
                 }
             }
         } else {
-            $_SESSION["mensaje"] = "Rellene todos los campos para registrar";
-            $_SESSION["icono"] = "../img/iconos/ic_error.png";
-            $_SESSION["color_mensaje"] = "var(--rojo)";
+            estructuraMensaje("Rellene todos los campos para registrar", "../../assets/iconos/ic_error.webp", "--rojo");
             return true;
         }
     }
+
+
 }

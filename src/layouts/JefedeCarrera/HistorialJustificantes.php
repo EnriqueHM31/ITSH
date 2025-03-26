@@ -10,13 +10,8 @@ $jefe = new Jefe();
 
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
-
 $id_carrera = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id);
-
 $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
-
-
-
     ?>
 
 <!DOCTYPE html>
@@ -37,6 +32,7 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
+    <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 
 <body>

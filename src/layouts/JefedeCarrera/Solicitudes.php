@@ -35,6 +35,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
+    <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 
 <body>
@@ -157,7 +158,6 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
     </template>
 
     <template id="miTemplate_cargar">
-
         <div class="overlay" id="overlay">
             <div class="notificacion">
                 <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
@@ -167,7 +167,6 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
                 <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate('cargar')">Cerrar</button>
             </div>
         </div>
-
     </template>
 </body>
 

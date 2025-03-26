@@ -111,6 +111,11 @@ class Jefe
     {
         mysqli_begin_transaction($conexion);
 
+        if (empty($matricula)) {
+            estructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
         // Obtener datos actuales del usuario (incluyendo 'matricula')
         $stmt = $conexion->prepare("SELECT id_usuario, correo FROM usuario WHERE id_usuario = ?");
         $stmt->bind_param("s", $matricula); // $matricula = ID actual del usuario
@@ -281,7 +286,6 @@ class Jefe
             ";
         }
     }
-
 
     public function reiniciarFolio($conexion)
     {

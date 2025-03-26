@@ -1,4 +1,13 @@
 async function cargarUsuarioModificar(id, nombre) {
+    console.log(id)
+    if (id == null) {
+        mostrarTemplate(
+            'Busca y seleccione a un usuario',
+            '../../assets/iconos/ic_error.webp',
+            'var(--rojo)',
+            'miTemplate'
+        )
+    }
     $.ajax({
         url: `../../query/${nombre}`,
         method: 'POST',
@@ -18,11 +27,11 @@ async function cargarUsuarioModificar(id, nombre) {
 
                     document.getElementById('clave').value = data.clave_empleado;
                     document.getElementById('clave_anterior').value = data.clave_empleado;
+
                     if (data.rol == "Administrador") {
                         document.getElementById('carrera').value = "null";
                     } else {
                         document.getElementById('carrera').value = data.carrera;
-
                     }
                     document.getElementById('rol').value = data.rol;
                 }

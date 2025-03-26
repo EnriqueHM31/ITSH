@@ -103,24 +103,21 @@ class administrador
             return;
         }
 
-        if (modificarPersonal($conexion, $id, $nombre, $apellidos, $carrera, $cargo, $correo)) {
-            estructuraMensaje("Se han modificado los datos", "../../assets/iconos/ic_correcto.webp", "--verde");
-        } else {
-            estructuraMensaje("Ocurrio un error en la base de datos", "../../assets/iconos/ic_error.webp", "--rojo");
-        }
+
 
     }
 
     public function eliminarRegistro($conexion, $id)
     {
-        $id = trim($id);
-        if (!isset($_POST['identificador'])) {
+        $id = trim($id) == null ? "" : $id;
+        if ($id == "") {
             estructuraMensaje("Busque y seleccione a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
         if (EliminarUsuario($conexion, $id)) {
             estructuraMensaje("El registro fue eliminado de forma exitosa", "../../assets/iconos/ic_correcto.webp", "--verde");
+
         } else {
             estructuraMensaje("Ocurrio un error al eliminarlo", "../../assets/iconos/ic_error.webp", "--rojo");
         }

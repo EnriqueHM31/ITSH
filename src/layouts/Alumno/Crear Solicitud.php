@@ -9,7 +9,7 @@ include "../../utils/functionGlobales.php";
 $usuario = new usuario();
 $alumno = new alumno();
 $id = $_SESSION["id"];
-
+$row = $alumno->ponerDatosFormulario($conexion, $id);
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +26,7 @@ $id = $_SESSION["id"];
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/solicitud.css">
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 
 <body>
@@ -58,64 +59,54 @@ $id = $_SESSION["id"];
 
             <h2>Crear Solicitud</h2>
 
-            <?php
-            $sql = "SELECT * FROM estudiante WHERE matricula = '$id'";
-            $result = $conexion->query($sql);
+            <form class="formulario_solicitud" method="POST" enctype="multipart/form-data">
 
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc()
-                    ?>
-                <form class="formulario_solicitud" method="POST" enctype="multipart/form-data">
+                <div class="contenedor_info-solicitud">
+                    <p>Matricula:</p>
+                    <input type="text" id="id" name="identificador" value="<?php echo $row['matricula']; ?>" readonly>
 
-                    <div class="contenedor_info-solicitud">
-                        <p>Matricula:</p>
-                        <input type="text" id="id" name="identificador" value="<?php echo $row['matricula']; ?>" readonly>
+                    <input type="text" id="grupo" name="grupo" value="<?php echo $row['grupo']; ?>" readonly>
+                </div>
 
-                        <input type="text" id="grupo" name="grupo" value="<?php echo $row['grupo']; ?>" readonly>
-                    </div>
+                <div class="contenedor_info-solicitud">
+                    <p>Nombre:</p>
+                    <input type="text" id="nombre" name="nombre" value="<?php echo $row['nombre']; ?>" readonly>
+                </div>
 
-                    <div class="contenedor_info-solicitud">
-                        <p>Nombre:</p>
-                        <input type="text" id="nombre" name="nombre" value="<?php echo $row['nombre']; ?>" readonly>
-                    </div>
+                <div class="contenedor_info-solicitud">
+                    <p>Apellidos:</p>
+                    <input type="text" id="apellidos" name="apellidos" value="<?php echo $row['apellidos']; ?>"
+                        readonly>
+                </div>
 
-                    <div class="contenedor_info-solicitud">
-                        <p>Apellidos:</p>
-                        <input type="text" id="apellidos" name="apellidos" value="<?php echo $row['apellidos']; ?>"
-                            readonly>
-                    </div>
+                <div class="contenedor_info-solicitud">
+                    <p for="email">Carrera:</p>
+                    <input type="text" id="carrera" name="carrera"
+                        value="<?php echo getResultCarrera($conexion, $row['id_carrera']); ?>" readonly>
+                </div>
 
-                    <div class="contenedor_info-solicitud">
-                        <p for="email">Carrera:</p>
-                        <input type="text" id="carrera" name="carrera"
-                            value="<?php echo getResultCarrera($conexion, $row['id_carrera']); ?>" readonly>
-                    </div>
+                <div class="contenedor_info-solicitud">
+                    <p>Motivo:</p>
+                    <select name="motivo" id="motivo">
+                        <option value="Personal">Personal</option>
+                        <option value="Laboral">Laboral</option>
+                        <option value="Salud">Salud</option>
+                    </select>
+                </div>
 
-                    <div class="contenedor_info-solicitud">
-                        <p>Motivo:</p>
-                        <select name="motivo" id="motivo">
-                            <option value="Personal">Personal</option>
-                            <option value="Laboral">Laboral</option>
-                            <option value="Salud">Salud</option>
-                        </select>
-                    </div>
+                <div class="contenedor_info-solicitud">
+                    <p>Fecha de Ausencia: </p>
+                    <input class="fecha_ausencia" type="date" name="fecha_ausencia" id="fecha_de_ausencia">
+                </div>
 
-                    <div class="contenedor_info-solicitud">
-                        <p>Fecha de Ausencia: </p>
-                        <input class="fecha_ausencia" type="date" name="fecha_ausencia" id="fecha_de_ausencia">
-                    </div>
+                <label for="archivo" class="btn_archivo">
+                    <input type="file" name="archivo_evidencia" id="archivo" class="archivo" accept="application/pdf">
 
-                    <label for="archivo" class="btn_archivo">
-                        <input type="file" name="archivo_evidencia" id="archivo" class="archivo" accept="application/pdf">
+                    <span id="nombreArchivo">Cargar evidencia</span>
+                </label>
 
-                        <span id="nombreArchivo">Cargar evidencia</span>
-                    </label>
-
-                    <input type="submit" value="Enviar Solicitud" class="btn_enviar-solicitud">
-                </form>
-                <?php
-            }
-            ?>
+                <input type="submit" value="Enviar Solicitud" class="btn_enviar-solicitud">
+            </form>
 
         </div>
 

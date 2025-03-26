@@ -26,6 +26,7 @@ $usuario = new usuario();
         emailjs.init('h-GFfAEPfkpyGuQjm')
     </script>
     <script src="../../assets/js/cambiarContraseña.js" defer></script>
+    <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 
 <body>

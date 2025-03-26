@@ -20,6 +20,7 @@ $usuario = new usuario();
     <link rel="stylesheet" href="src/assets/styles/index.css">
     <link rel="stylesheet" href="src/assets/styles/notificacion.css">
     <script src="src/assets/js/index.js" defer></script>
+    <script src="src/assets/js/mostrarTemplate.js" defer></script>
 </head>
 
 <body>
@@ -61,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contraseña = trim($_POST["contraseña"]);
 
     $usuario->Verificacion($conexion, $id, $contraseña);
+
     notificaciones($_SESSION["mensaje"]);
 }
 

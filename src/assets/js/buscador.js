@@ -1,15 +1,14 @@
-
+// Carga la funcion para buscar usuarios
 $(document).ready(function () {
-    // Obtener carrera desde el atributo data del body
     const carrera = $("body").data("carrera");
     if (carrera === "") {
         buscarUsuarios("buscarPersonal.php");
     } else {
-        console.log(carrera)
         buscarUsuarios("buscarEstudiante.php");
     }
 });
 
+// Funcion paa buscar usuarios y que realiza una accion dependiendo en que modo esta Modificar o Eliminar
 function buscarUsuarios(nombre) {
     let timer;
     let carrera = document.body.dataset.carrera;
@@ -32,12 +31,8 @@ function buscarUsuarios(nombre) {
                     },
 
                     success: function (data) {
-                        console.log(data)
-                        console.log(nombre)
-                        console.log(modo)
-
-
                         document.getElementById('resultados').innerHTML = data;
+
                         if (modo === "Eliminar") {
                             seleccionar();
                             return;
@@ -58,7 +53,17 @@ function buscarUsuarios(nombre) {
         }
     });
 }
+// Funcion para traer los datos del usuario a eliminar 
 function cargarUsuarioEliminar(id, nombre) {
+    if (id === "") {
+        mostrarTemplate(
+            'Busca y seleccione a un usuario',
+            '../../assets/iconos/ic_error.webp',
+            'var(--rojo)',
+            'miTemplate'
+        )
+        return
+    }
     $.ajax({
         url: `../../query/${nombre}`,
         method: 'POST',
@@ -75,8 +80,12 @@ function cargarUsuarioEliminar(id, nombre) {
             }
         },
         error: function (data) {
-            mostrarDatosParaEliminar(data);
-            cerrarVentana('.close_eliminar');
+            mostrarTemplate(
+                'Ocurrio un error con la peticion',
+                '../../assets/iconos/ic_error.webp',
+                'var(--rojo)',
+                'miTemplate'
+            )
         },
     });
 }
@@ -101,6 +110,7 @@ function mostrar(tableData) {
         element.addEventListener("click", () => {
             const id = element.querySelector("p").dataset.id;
             cargarUsuarioModificar(id, tableData);
+
         });
     })
 }

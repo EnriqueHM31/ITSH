@@ -13,6 +13,7 @@ formulario.addEventListener('submit', function (event) {
 			'Llena los datos del formulario',
 			'../../assets/iconos/ic_error.webp',
 			'var(--rojo)',
+			'miTemplate'
 		)
 		return
 	}
@@ -46,6 +47,7 @@ formulario.addEventListener('submit', function (event) {
 							'Tu contraseña fue enviada a tu correo',
 							'../../assets/iconos/ic_correcto.webp',
 							'var(--verde)',
+							'miTemplate'
 						)
 						formulario.querySelector('.password').remove()
 						formulario.reset()
@@ -54,8 +56,9 @@ formulario.addEventListener('submit', function (event) {
 						btn.value = 'Enviar'
 						mostrarTemplate(
 							'Ocurrio un error al enviarte tu contraseña' +
-								'../../assets/iconos/ic_error.webp',
+							'../../assets/iconos/ic_error.webp',
 							'var(--rojo)',
+							'miTemplate'
 						)
 						formulario.querySelector('.password').remove()
 						formulario.reset()
@@ -67,8 +70,9 @@ formulario.addEventListener('submit', function (event) {
 			btn.value = 'Enviar'
 			mostrarTemplate(
 				'Ocurrio un error con el servicio' +
-					'../../assets/iconos/ic_error.webp',
+				'../../assets/iconos/ic_error.webp',
 				'var(--rojo)',
+				'miTemplate'
 			)
 			formulario.querySelector('.password').remove()
 			formulario.reset()
@@ -87,25 +91,6 @@ function generarContraseña() {
 	return contraseña
 }
 
-function mostrarTemplate(mensaje, urlImagen, color) {
-	const template = document.getElementById('miTemplate')
-	const clone = document.importNode(template.content, true)
-
-	clone.getElementById('mensaje').innerText = mensaje
-	clone.getElementById('imagen').src = urlImagen
-	clone.getElementById('btn_mensaje').style.backgroundColor = color
-
-	document.body.appendChild(clone)
-}
-
-function cerrarTemplate() {
-	const dialogContainer = document.getElementById('overlay')
-	const notificacionIMG = document.querySelector('.img_notificacion')
-	if (dialogContainer) {
-		notificacionIMG.remove()
-		dialogContainer.remove()
-	}
-}
 
 function crearContraseñaInput(nuevaContraseña) {
 	const contraseñaInput = document.createElement('input')

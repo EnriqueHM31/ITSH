@@ -5,7 +5,6 @@ include("../../clases/usuario.php");
 include("../../clases/administrador.php");
 include("../../validaciones/Validaciones.php");
 include("../../utils/functionGlobales.php");
-
 $usuario = new usuario();
 $administrador = new administrador();
 ?>
@@ -29,6 +28,8 @@ $administrador = new administrador();
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/buscador.js" defer></script>
     <script src="../../assets/js/modificar.js" defer></script>
+    <script src="../../assets/js/mostrarTemplate.js" defer></script>
+
 </head>
 
 <body data-modo="Modificar" data-carrera="">
@@ -80,8 +81,7 @@ $administrador = new administrador();
                     <label for="clave" class="contenedor_input">
                         <input readonly pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave"
                             placeholder=" ">
-                        <span class="nombre_input input_bloqueado"><img src="../../assets/iconos/ic_bloqueado.svg"
-                                alt="">Clave</span>
+                        <span class="nombre_input input_bloqueado">Clave<span />
                     </label>
 
                     <label for="nombre" class="contenedor_input">

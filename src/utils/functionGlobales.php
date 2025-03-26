@@ -30,7 +30,7 @@ function mensajeNotificacion($mensaje, $imagen, $color)
                         ' . $_SESSION["mensaje"] . '
                     </p>
                     </div>
-                <button style="background-color: ' . $_SESSION["color_mensaje"] . '" class="btn_mensaje">Cerrar</button>
+                <button style="background-color: ' . $_SESSION["color_mensaje"] . '" class="btn_mensaje_php btn_mensaje">Cerrar</button>
             </div>
         </div>    
             ';
@@ -190,10 +190,6 @@ function insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carr
     return $sql->execute();
 
 }
-// CONSULTAS UPDATE PARA LOS USUARIOS ADMINISTRADOR Y JEFE DE CARRERA
-function modificarPersonal($conexion, $id, $nombre, $apellidos, $carrera, $cargo, $correo)
-{
-}
 
 // CONSULTA OARA MODIFICAR LA CONTRASEÑA ACTUAL DESDE LA PAGINA INICIO (DENTRO DEL SISTEMA)
 function modificarLaContraseñaActualPaginaInicio($conexion, $id, $contraseña_nueva)
@@ -203,12 +199,18 @@ function modificarLaContraseñaActualPaginaInicio($conexion, $id, $contraseña_n
     $stmtUpdate->bind_param("ss", $contraseña_nueva, $id);
     return $stmtUpdate->execute();
 }
+
 // CONSULTA PARA ELIMINAR DATOS DE LA TABLA USUARIO
 function EliminarUsuario($conexion, $id)
 {
-    $sql = "DELETE FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("s", $id);
-    return $stmt->execute();
+    if ($id) {
+        $sql = "DELETE FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("s", $id);
+        return $stmt->execute();
+    } else {
+        return false;
+    }
+
 }
 

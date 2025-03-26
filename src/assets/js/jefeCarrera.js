@@ -204,29 +204,5 @@ function reiniciarFolio() {
 	})
 }
 
-function mostrarModal() {
-	const template = document.getElementById("modal_seguridad")
-	const clone = document.importNode(template.content, true)
 
-	document.body.appendChild(clone)
-}
-
-function mostrarTemplate(mensaje, urlImagen, color, nombre) {
-	const template = document.getElementById(nombre)
-	const clone = document.importNode(template.content, true)
-	clone.getElementById('mensaje').innerText = mensaje
-	clone.getElementById('imagen').src = urlImagen
-	clone.getElementById('btn_mensaje').style.backgroundColor = color
-	document.body.appendChild(clone)
-}
-
-function cerrarTemplate(opcion) {
-	const dialogContainer = document.getElementById('overlay')
-	if (dialogContainer) {
-		dialogContainer.remove()
-		if (opcion == "cargar") {
-			location.reload()
-		}
-	}
-}
 

@@ -37,9 +37,15 @@ function RegistroSeleccionado() {
 		if (seleccionado[0] === undefined) return ''
 		return seleccionado[0].dataset.id
 	} else {
-		modalError()
+		modalErrorEliminar()
 		return
 	}
+}
+
+function modalErrorEliminar() {
+	const { modalClone, modalContainer } = obtenerTemplate('plantilla_usuario-seleccionado-error')
+	modalClone.getElementById('detalles_eliminar_error').innerText = 'Se necesita que busque un registro primero'
+	modalContainer.appendChild(modalClone)
 }
 
 function cerrarVentanaEliminar(nombre) {
@@ -92,16 +98,3 @@ function mostrarDatosParaEliminar(data) {
 	}
 }
 
-function modalError() {
-	const { modalClone, modalContainer } = obtenerTemplate('plantilla_usuario-seleccionado-error')
-	modalClone.getElementById('detalles_eliminar_error').innerText = 'Se necesita que busque un registro primero'
-	modalContainer.appendChild(modalClone)
-}
-
-function obtenerTemplate(templateID) {
-	const modalTemplate = document.getElementById(templateID)
-	const modalContainer = document.querySelector('body')
-	const modalClone = modalTemplate.content.cloneNode(true)
-
-	return { modalClone, modalContainer }
-}

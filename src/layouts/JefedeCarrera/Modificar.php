@@ -35,6 +35,7 @@ $seccion = "Modificar";
     <script src="../../assets/js/buscador.js"></script>
     <script src="../../assets/js/modificar.js" defer></script>
     <script src="../../assets/js/grupos.js" defer></script>
+    <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 
 <body data-carrera="<?php echo $carreraJefe ?>" data-modo="<?php echo $seccion ?>">
@@ -166,6 +167,19 @@ $seccion = "Modificar";
         </div>
 
     </footer>
+
+    <template id="miTemplate">
+        <div class="overlay" id="overlay">
+            <div class="notificacion">
+                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
+                <div class="contenido_notificacion ">
+                    <p id="mensaje"></p>
+                </div>
+                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
+            </div>
+        </div>
+    </template>
+
 </body>
 
 </html>

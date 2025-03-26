@@ -12,7 +12,6 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
-$mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'true';
 
 
 ?>
@@ -34,9 +33,11 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/mostrarTemplate.js" defer></script>
     <script src="../../assets//js/eliminar.js" defer></script>
     <script src="../../assets/js/buscador.js" defer></script>
     <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
+
 
 </head>
 
@@ -170,7 +171,6 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
 
                 <button type="button" class="btn_eliminar" id="eliminar_registro">Eliminar</button>
             </form>
-
         </div>
     </template>
 
@@ -219,17 +219,15 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
         </div>
     </template>
 
-    <template id="plantilla_usuario-seleccionado-error">
-        <div class=" overlay overlay_eliminar overlay_ventana">
-            <div id="formulario_eliminar" class="formulario form_eliminar form_verificar_eliminar">
-
-                <img src="../../assets/iconos/ic_error.webp" alt="icono de error" class="icono-error">
-
-                <span id="detalles_eliminar_error"></span>
-                <button id="close_eliminar_error" class=" close_eliminar ">Cerrar</button>
-
+    <template id="miTemplate">
+        <div class="overlay" id="overlay">
+            <div class="notificacion">
+                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
+                <div class="contenido_notificacion ">
+                    <p id="mensaje"></p>
+                </div>
+                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
             </div>
-
         </div>
     </template>
 
@@ -248,13 +246,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $contraseña_nueva = trim($_POST['contraseña_nueva']);
 
             $usuario->cambiarContraseña($conexion, $contraseña_actual, $contraseña_nueva, $id);
+
         } elseif ($_POST['formulario'] === 'Eliminar') {
             $id = $_POST['identificador'];
 
             $administrador->eliminarRegistro($conexion, $id);
         }
-        notificaciones($_SESSION["mensaje"]);
     }
+    notificaciones($_SESSION["mensaje"]);
 }
 
 ?>

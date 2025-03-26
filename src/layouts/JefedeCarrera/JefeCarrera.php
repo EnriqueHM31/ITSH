@@ -42,6 +42,7 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../../assets/js/index.js" defer></script>
+    <script src="../../assets/js/mostrarTemplate.js" defer></script>
     <script src="../../assets/js/eliminar.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
     <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
@@ -210,6 +211,18 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
                 <input type="submit" name="formulario" value="Eliminar" class="btn_eliminar btn_ventana-eliminar">
             </form>
 
+        </div>
+    </template>
+
+    <template id="miTemplate">
+        <div class="overlay" id="overlay">
+            <div class="notificacion">
+                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
+                <div class="contenido_notificacion ">
+                    <p id="mensaje"></p>
+                </div>
+                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
+            </div>
         </div>
     </template>
 
