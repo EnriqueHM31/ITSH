@@ -78,5 +78,28 @@ class alumno
         }
     }
 
+    public function HistorialJustificantes($conexion, $id)
+    {
+        $sql = "SELECT * FROM " . Variables::TABLA_SOLICITUDES . " 
+        WHERE " . Variables::CAMPO_MATRICULA . " = '$id'";
 
+
+        $resultado = mysqli_query($conexion, $sql);
+        if (mysqli_num_rows($resultado) == 0) {
+            echo "<p class='sin_justificantes'>No hay justificantes disponibles</p>";
+        }
+        $datos = mysqli_fetch_all($resultado, MYSQLI_ASSOC); // Obtener todos los datos como array asociativo
+
+        for ($i = 0; $i < count($datos); $i++) {
+            $fila = $datos[$i];
+            $tiempo_fecha = explode("-", $fila["fecha_ausencia"]);
+            echo "
+                <div class='archivo' data-id='$fila[solicitud]'>
+                    <h2> Solicitud " . ($i + 1) . " </h2>
+                    <p> {$fila['matricula']} </p>
+                    <p> {$fila['estado']} </p>
+                    <span> {$tiempo_fecha[2]} / {$tiempo_fecha[1]} / {$tiempo_fecha[0]} </span>
+                </div>";
+        }
+    }
 }

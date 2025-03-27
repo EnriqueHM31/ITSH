@@ -8,6 +8,11 @@
     margin-bottom: 3rem;
 }
 
+.contenedor_logo,
+.contenedor_logo img {
+    z-index: 1;
+}
+
 .sin_justificantes {
     font-size: clamp(1.5rem, 4vw, 2.4rem);
     color: var(--vino);
@@ -48,6 +53,7 @@
     max-width: 95%;
     margin: 0 auto;
     justify-content: center;
+    z-index: 1000;
 }
 
 .contenido_historial:has(:nth-child(5)) {
@@ -75,6 +81,8 @@
     border-radius: 1.5rem;
     border: .2rem solid var(--vino);
     padding-bottom: 1.5rem;
+    z-index: 10;
+
 }
 
 .archivo h2 {
@@ -155,4 +163,54 @@
 
 .modal span {
     font-size: clamp(0.8rem, 4vw, 1.3rem);
+}
+
+/*ESTILOS DE LA MODAL DE LA SOLICITUD EN LOS ALUMNOS*/
+.datos_solicitud {
+    background: var(--vino);
+    color: var(--blanco);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2rem;
+    width: clamp(200px, 30%, 300px);
+    border-radius: 1.5rem;
+    height: max(50%, 300px);
+    position: relative;
+}
+
+.datos_solicitud h2 {
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    text-align: center;
+    margin-bottom: 1.8rem;
+}
+
+.datos_solicitud p {
+    font-size: clamp(1rem, 4vw, 1.6rem);
+    margin-bottom: .8rem;
+}
+
+.datos_solicitud a {
+    color: var(--blanco);
+    font-size: clamp(1rem, 4vw, 1.7rem);
+    margin-top: 1rem;
+    text-decoration: underline;
+    padding: 1rem 2rem;
+    background-color: var(--vino);
+    transition: background-color .5s, color .5s;
+    border-radius: 1.5rem;
+}
+
+.datos_solicitud a:hover {
+    background-color: var(--blanco);
+    color: var(--vino);
+}
+
+.datos_solicitud .close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    max-width: 4rem;
 }

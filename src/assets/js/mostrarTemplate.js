@@ -47,3 +47,13 @@ if (btnClose !== null) {
         overlayVentana.remove()
     })
 }
+
+
+const btnCloseModal = document.querySelector('.close')
+if (btnCloseModal !== null) {
+    const modal = document.querySelector('.overlay')
+    btnCloseModal.addEventListener('click', () => {
+        console.log("cierra modal")
+        modal.remove()
+    })
+}

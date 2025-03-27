@@ -63,6 +63,8 @@ class Variables
 
     public const ID_SOLICITUD = "solicitud";
     public const ESTADO = "estado";
+    public const FECHA_AUSENCIA = "fecha_ausencia";
+    public const MOTIVO = "motivo";
 
 
     public const CAMPO_J_ID = "id";
