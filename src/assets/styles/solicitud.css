@@ -8,6 +8,12 @@
     margin: 4rem auto;
 }
 
+.contenedor_logo,
+.contenedor_logo img {
+    z-index: 1;
+}
+
+
 .formulario_solicitud {
     padding: 0 2rem;
     display: flex;
@@ -28,6 +34,7 @@
     color: var(--blanco);
     font-size: clamp(1.1rem, 3.5vw, 1.3rem);
     flex: 1;
+    z-index: 10;
 }
 
 .contenedor_info-solicitud input,
@@ -36,6 +43,8 @@ select {
     padding: .7rem;
     background: var(--gris);
     border: .1rem solid var(--vino);
+    z-index: 10;
+
 }
 
 .contenedor_info-solicitud input:focus,
@@ -54,6 +63,8 @@ select,
 
 .archivo {
     display: none;
+    z-index: 10;
+
 }
 
 .btn_archivo {
@@ -64,6 +75,8 @@ select,
     cursor: pointer;
     text-align: center;
     max-width: 47%;
+    z-index: 10;
+
 }
 
 .btn_enviar-solicitud {
@@ -74,4 +87,6 @@ select,
     border-radius: 2rem;
     padding: 1rem 2rem;
     border: none;
+    z-index: 10;
+
 }

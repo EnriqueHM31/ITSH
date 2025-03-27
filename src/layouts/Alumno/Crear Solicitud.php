@@ -56,6 +56,9 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
 
     <main class="main">
         <div class="contenedor_main">
+            <div class="contenedor_logo">
+                <img src="../../assets/extra/logo.svg" alt="logo del ITSH">
+            </div>
 
             <h2>Crear Solicitud</h2>
 

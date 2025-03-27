@@ -190,6 +190,7 @@ main {
     justify-content: center;
     gap: 2rem;
     grid-area: "footer";
+    z-index: 10;
 }
 
 .contenido_footer {
