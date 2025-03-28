@@ -4,6 +4,7 @@ include "../../utils/constantes.php";
 include "../../utils/functionGlobales.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
+include "../../conexion/verificar acceso.php";
 
 $usuario = new usuario();
 $id = $_SESSION["id"];

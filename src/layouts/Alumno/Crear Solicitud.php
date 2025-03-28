@@ -6,6 +6,8 @@ include "../../clases/usuario.php";
 include "../../clases/alumno.php";
 include "../../validaciones/Validaciones.php";
 include "../../utils/functionGlobales.php";
+include "../../conexion/verificar acceso.php";
+
 $usuario = new usuario();
 $alumno = new alumno();
 $id = $_SESSION["id"];

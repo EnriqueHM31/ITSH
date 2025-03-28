@@ -5,6 +5,7 @@ include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 include "../../utils/functionGlobales.php";
 include "../../clases/jefe.php";
+include "../../conexion/verificar acceso.php";
 
 $usuario = new usuario();
 $jefe = new Jefe();

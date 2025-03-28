@@ -1,11 +1,13 @@
 <?php
 session_start();
 include "../../utils/constantes.php";
-include("../../conexion/conexion.php");
-include("../../clases/usuario.php");
-include("../../clases/administrador.php");
-include("../../validaciones/Validaciones.php");
+include "../../conexion/conexion.php";
+include "../../clases/usuario.php";
+include "../../clases/administrador.php";
+include "../../validaciones/Validaciones.php";
 include "../../utils/functionGlobales.php";
+include "../../conexion/verificar acceso.php";
+
 $usuario = new usuario();
 $administrador = new administrador();
 ?>

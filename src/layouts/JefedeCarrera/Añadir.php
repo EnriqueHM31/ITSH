@@ -7,6 +7,7 @@ include "../../clases/usuario.php";
 include "../../clases/jefe.php";
 include "../../utils/functionGlobales.php";
 include "../../validaciones/Validaciones.php";
+include "../../conexion/verificar acceso.php";
 
 $usuario = new usuario();
 $jefe = new jefe();
