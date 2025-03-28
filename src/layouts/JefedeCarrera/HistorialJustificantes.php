@@ -71,6 +71,9 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
 
     <main class="main">
         <div class="contenedor_main">
+            <div class="contenedor_logo">
+                <img src="../../assets/extra/logo.svg" alt="logo del ITSH">
+            </div>
             <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
                 height="164">
 

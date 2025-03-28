@@ -8,11 +8,11 @@ header('Content-Type: application/json');
 
 if (isset($_POST['id'])) {
     $id = $_POST['id'];
-    $data = getResultDataTabla($conexion, Variables::TABLA_SOLICITUDES, Variables::ID_SOLICITUD, $id);
+    $data = getResultDataTabla($conexion, Variables::TABLA_BD_SOLICITUDES, Variables::CAMPO_S_ID_SOLICITUD, $id);
 
-    $motivo = $data[Variables::MOTIVO];
-    $fecha_ausencia = $data[Variables::FECHA_AUSENCIA];
-    $estado = $data[Variables::ESTADO];
+    $motivo = $data[Variables::CAMPO_S_MOTIVO];
+    $fecha_ausencia = $data[Variables::CAMPO_S_FECHA_AUSENCIA];
+    $estado = $data[Variables::CAMPO_S_ESTADO];
 
     if ($estado == "Aceptada") {
         $dataJustificante = getResultDataTabla($conexion, Variables::TABLA_BD_JUSTIFICANTES, Variables::CAMPO_J_ID_SOLICITUD, $id);

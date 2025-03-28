@@ -3,7 +3,6 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 include "./creacionQR.php";
-include "../conexion/verificar acceso.php";
 
 
 if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
@@ -22,7 +21,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
         $motivo = $_POST['motivo'];
         $id_jefe = $_POST['id_jefe'];
 
-        $id_unico = generarCodigo($conexion, $id_folio, $nombre, $fecha);
+        $id_unico = generarCodigo($conexion, $id_folio, $nombre, $fecha, true);
 
         $datos_jefe = ObtenerDatosJustificanteJefe($conexion, $id_jefe);
         $nombre_jefe = $datos_jefe[0];

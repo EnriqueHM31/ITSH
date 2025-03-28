@@ -1,5 +1,4 @@
 <?php
-include "../utils/constantes.php";
 
 class alumno
 {
