@@ -1,4 +1,5 @@
 <?php
+
 class Variables
 {
     // VARIABLES PARA LA CONEXION
@@ -15,8 +16,9 @@ class Variables
     public const TABLA_BD_JEFE = "Jefe";
     public const TABLA_BD_ESTUDIANTE = "Estudiante";
     public const tABLA_BD_MODALIDAD = "Modalidad";
-    public const TABLA_SOLICITUDES = "solicitudes";
+    public const TABLA_BD_SOLICITUDES = "solicitudes";
     public const TABLA_BD_JUSTIFICANTES = "justificante";
+    public const TABLA_BD_CODIGOS_QR = "codigos_qr";
 
 
     // CAMPOS DE LA TABLA USUARIO
@@ -61,10 +63,16 @@ class Variables
         "Ambiental" => ["numero" => 1, "cantidad" => 7],
     ];
 
-    public const ID_SOLICITUD = "solicitud";
-    public const ESTADO = "estado";
-    public const FECHA_AUSENCIA = "fecha_ausencia";
-    public const MOTIVO = "motivo";
+    public const CAMPO_S_ID_SOLICITUD = "solicitud";
+    public const CAMPO_S_MATRICULA = "matricula";
+    public const CAMPO_S_NOMBRE = "nombre";
+    public const CAMPO_S_APELLIDOS = "apellidos";
+    public const CAMPO_S_GRUPO = "grupo";
+    public const CAMPO_S_CARRERA = "carrera";
+    public const CAMPO_S_MOTIVO = "motivo";
+    public const CAMPO_S_FECHA_AUSENCIA = "fecha_ausencia";
+    public const CAMPO_S_EVIDENCIA = "evidencia";
+    public const CAMPO_S_ESTADO = "estado";
 
 
     public const CAMPO_J_ID = "id";
@@ -78,6 +86,14 @@ class Variables
     public const CAMPO_J_NOMBRE_JEFE = "nombre_jefe";
     public const CAMPO_J_FECHA = "fecha_creacion";
     public const CAMPO_J_JUSTIFICANTE = "justificante_pdf";
+
+
+    public const CAMPO_Q_FOLIO_JUSTIFICANTE = "folio_justificante";
+    public const CAMPO_Q_TEXTO = "texto";
+    public const CAMPO_Q_VALIDO = "valido";
+    public const CAMPO_Q_URL_VERIFICACION = "url_verificacion";
+
+
 
 
     public const MESES = [

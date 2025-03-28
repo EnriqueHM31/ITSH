@@ -117,7 +117,7 @@ class Jefe
         }
 
         // Obtener datos actuales del usuario (incluyendo 'matricula')
-        $stmt = $conexion->prepare("SELECT id_usuario, correo FROM usuario WHERE id_usuario = ?");
+        $stmt = $conexion->prepare("SELECT " . Variables::CAMPO_ID_USUARIO . ",  " . Variables::CAMPO_CORREO . " FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?");
         $stmt->bind_param("s", $matricula); // $matricula = ID actual del usuario
         $stmt->execute();
         $result = $stmt->get_result();
@@ -130,7 +130,7 @@ class Jefe
 
         // Validar email (correcto)
         if (isset($nuevosDatos['correo']) && $nuevosDatos['correo'] !== $usuarioActual['correo']) {
-            $sql = "SELECT id_usuario FROM usuario WHERE correo = ? AND id_usuario != ?";
+            $sql = "SELECT " . Variables::CAMPO_ID_USUARIO . " FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_CORREO . " = ? AND " . Variables::CAMPO_ID_USUARIO . " != ?";
             $stmt = $conexion->prepare($sql);
             $stmt->bind_param("ss", $nuevosDatos['correo'], $matricula);
             $stmt->execute();
@@ -142,10 +142,10 @@ class Jefe
             }
         }
 
-        // Validar matrícula (corregido: verifica el ID)
+        // Validar matrícula
         if (isset($nuevosDatos['clave']) && $nuevosDatos['clave'] !== $usuarioActual['id_usuario']) {
             // Buscar si la nueva matrícula ya existe como ID en otro usuario
-            $stmt = $conexion->prepare("SELECT id_usuario FROM usuario WHERE id_usuario = ?");
+            $stmt = $conexion->prepare("SELECT  " . Variables::CAMPO_ID_USUARIO . " FROM " . Variables::TABLA_BD_USUARIO . " WHERE  " . Variables::CAMPO_ID_USUARIO . " = ?");
             $stmt->bind_param("s", $nuevosDatos['clave']); // Nueva matrícula = futuro ID
             $stmt->execute();
             $stmt->store_result();
@@ -164,8 +164,9 @@ class Jefe
         $grupo = $nuevosDatos['grupo'];
 
 
-        $sql_usuario = "UPDATE usuario SET id_usuario = ?, correo = ? WHERE id_usuario = ?";
-        $sql_estudiante = "UPDATE estudiante SET nombre = ?, apellidos = ?, grupo = ?, id_modalidad = ? WHERE matricula = ?";
+        $sql_usuario = "UPDATE " . Variables::TABLA_BD_USUARIO . " SET " . Variables::CAMPO_ID_USUARIO . " = ?, " . Variables::CAMPO_CORREO . " = ? WHERE " . variables::CAMPO_ID_USUARIO . " = ?";
+
+        $sql_estudiante = "UPDATE " . Variables::TABLA_BD_ESTUDIANTE . " SET " . Variables::CAMPO_NOMBRE . " = ?, " . variables::CAMPO_APELLIDOS . " = ?, " . Variables::CAMPO_GRUPO . " = ?, " . Variables::CAMPO_ID_MODALIDAD . " = ? WHERE " . Variables::CAMPO_MATRICULA . " = ?";
 
         $stmt = $conexion->prepare($sql_usuario);
         $stmt->bind_param("sss", $id_usuario, $correo, $matricula);
@@ -209,7 +210,7 @@ class Jefe
 
     public function TablaSolicitudesRegistros($conexion, $carrera)
     {
-        $sql = "SELECT * FROM solicitudes WHERE carrera = '$carrera'";
+        $sql = "SELECT * FROM " . Variables::TABLA_BD_SOLICITUDES . " WHERE " . Variables::CAMPO_S_CARRERA . " = '$carrera'";
         $resultado = mysqli_query($conexion, $sql);
 
         return $resultado;

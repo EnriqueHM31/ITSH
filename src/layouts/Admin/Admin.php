@@ -13,9 +13,6 @@ $administrador = new administrador();
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
-
-
-
 ?>
 
 <!DOCTYPE html>

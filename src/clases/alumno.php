@@ -1,5 +1,5 @@
 <?php
-
+include "../utils/constantes.php";
 
 class alumno
 {
@@ -9,7 +9,7 @@ class alumno
 
     public function ponerDatosFormulario($conexion, $id)
     {
-        $sql = "SELECT * FROM estudiante WHERE matricula = '$id'";
+        $sql = "SELECT * FROM " . Variables::TABLA_BD_ESTUDIANTE . " WHERE " . Variables::CAMPO_MATRICULA . " = '$id'";
         $result = $conexion->query($sql);
 
         if ($result->num_rows > 0) {
@@ -43,7 +43,7 @@ class alumno
                 $archivo_destino = 'evidencias/' . $identificador_archivo;
 
                 if (move_uploaded_file($archivo_tmp, $archivo_destino)) {
-                    $sql = "INSERT INTO solicitudes (solicitud, matricula, nombre, apellidos, grupo, carrera, motivo, fecha_ausencia, evidencia, estado) 
+                    $sql = "INSERT INTO " . Variables::TABLA_BD_SOLICITUDES . " (" . Variables::CAMPO_S_ID_SOLICITUD . ", " . Variables::CAMPO_S_MATRICULA . ", " . Variables::CAMPO_S_NOMBRE . ", " . Variables::CAMPO_S_APELLIDOS . ", " . Variables::CAMPO_S_GRUPO . ", " . Variables::CAMPO_S_CARRERA . ", " . Variables::CAMPO_S_MOTIVO . ", " . Variables::CAMPO_S_FECHA_AUSENCIA . ", " . Variables::CAMPO_S_EVIDENCIA . ", " . Variables::CAMPO_S_ESTADO . ") 
                         VALUES (null, '$identificador', '$nombre', '$apellidos', '$grupo', '$carrera', '$motivo', '$fecha', '$identificador_archivo', '$estado')";
 
                     if ($conexion->query($sql) === TRUE) {
@@ -80,8 +80,8 @@ class alumno
 
     public function HistorialJustificantes($conexion, $id)
     {
-        $sql = "SELECT * FROM " . Variables::TABLA_SOLICITUDES . " 
-        WHERE " . Variables::CAMPO_MATRICULA . " = '$id'";
+        $sql = "SELECT * FROM " . Variables::TABLA_BD_SOLICITUDES . " 
+        WHERE " . Variables::CAMPO_S_MATRICULA . " = '$id'";
 
 
         $resultado = mysqli_query($conexion, $sql);

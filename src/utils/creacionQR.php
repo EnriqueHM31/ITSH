@@ -1,5 +1,7 @@
 <?php
 include('phpqrcode/qrlib.php');
+include "../conexion/verificar acceso.php";
+
 
 function generarCodigo($conexion, $id, $nombre, $fecha)
 {
@@ -32,10 +34,11 @@ function generarCodigo($conexion, $id, $nombre, $fecha)
         // Conexión a la base de datos y almacenamiento
 
         // Inserción en la base de datos
-        $sql = "INSERT INTO codigos_qr (folio_justificante, texto, valido, url_verificacion) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO " . Variables::TABLA_BD_CODIGOS_QR . " (" . Variables::CAMPO_Q_FOLIO_JUSTIFICANTE . ", " . Variables::CAMPO_Q_TEXTO . ", " . Variables::CAMPO_Q_VALIDO . ", " . Variables::CAMPO_Q_URL_VERIFICACION . ") VALUES (?, ?, ?, ?)";
+
         $smtm = $conexion->prepare($sql);
         $valido = 1;
-        $smtm->bind_param("isss", $id, $qr_text, $valido, $url_verificacion); // "issi" => string, string, integer, string
+        $smtm->bind_param("isss", $id, $qr_text, $valido, $url_verificacion);
 
         if ($smtm->execute()) {
             return $id_unico;

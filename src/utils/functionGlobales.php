@@ -1,5 +1,6 @@
 <?php
 
+
 function estructuraMensaje($mensaje, $icono, $color)
 {
     $_SESSION["mensaje"] = $mensaje;

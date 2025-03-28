@@ -3,6 +3,8 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 include "./creacionQR.php";
+include "../conexion/verificar acceso.php";
+
 
 if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
     try {
@@ -411,7 +413,7 @@ function estructurarFechaAusencia($fecha)
 
 function ModificarEstadoSolicitud($conexion, $id_solicitud)
 {
-    $sql = "UPDATE " . Variables::TABLA_SOLICITUDES . " SET " . Variables::ESTADO . " = 'Aceptada' WHERE " . Variables::ID_SOLICITUD . " = ?";
+    $sql = "UPDATE " . Variables::TABLA_BD_SOLICITUDES . " SET " . Variables::CAMPO_S_ESTADO . " = 'Aceptada' WHERE " . Variables::CAMPO_S_ID_SOLICITUD . " = ?";
 
     $smtm = $conexion->prepare($sql);
     $smtm->bind_param("i", $id_solicitud);
