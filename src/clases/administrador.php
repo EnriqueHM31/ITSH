@@ -69,7 +69,6 @@ class administrador
 
                 if ($cargo === administrador::JEFE_DE_CARRERA) {
 
-
                     if (!insertarJefedeCarrera($conexion, $clave_empleado, $nombre, $apellidos, $carrera)) {
                         estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }

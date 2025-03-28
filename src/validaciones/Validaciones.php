@@ -17,7 +17,7 @@ function validacionCamposYArchivoCSV($campos_completos, $archivo_tiene_contenido
 
 function restriccionAdministrador($carrera, $cargo)
 {
-    if ($carrera !== "null" && $cargo === "Administrador") {
+    if ($carrera !== 'Null' && $cargo === "Administrador") {
         estructuraMensaje("Un administrador no puede tener una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
@@ -25,11 +25,26 @@ function restriccionAdministrador($carrera, $cargo)
 
 function restriccionJefedeCarrera($carrera, $cargo, $conexion)
 {
-    if ($carrera === "null" && $cargo === "Jefe de Carrera") {
-        estructuraMensaje("Un jefe de carrera debe tener un carrera vinculada", "../../assets/iconos/ic_error.webp", "--rojo");
-        return true;
+
+    if ($cargo == "Administrador") {
+        return false;
     }
 
+    $carrerasvalidas = [
+        "Gestion Empresarial",
+        "Contaduria",
+        "Industrial",
+        "Sistemas Computacionales",
+        "Electromecanica",
+        "Alimentarias",
+        "Quimica",
+        "Ambiental",
+    ];
+
+    if (!in_array($carrera, $carrerasvalidas, false) && $cargo === "Jefe de Carrera") {
+        estructuraMensaje("Un jefe de carrera debe tener una carrera vinculada", "../../assets/iconos/ic_error.webp", "--rojo");
+        return true;
+    }
 
     $resultadoIdCarrera = obtenerIDCarrera($conexion, $carrera);
 
