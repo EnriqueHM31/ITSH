@@ -30,6 +30,7 @@ $administrador = new administrador();
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
+    <script src="../../assets/js/opcionesSelect.js" defer></script>
 </head>
 
 <body>
@@ -87,15 +88,6 @@ $administrador = new administrador();
 
                 <label for="carrera" class="contenedor_input">
                     <select class="input_pagina select_info" id="carrera" name="carrera">
-                        <option class="opcion_select" value="Sistemas Computacionales">Sistemas</option>
-                        <option class="opcion_select" value="Quimica">Quimica</option>
-                        <option class="opcion_select" value="Ambiental">Ambiental</option>
-                        <option class="opcion_select" value="Gestion Empresarial">Gestion</option>
-                        <option class="opcion_select" value="Contaduria">Contaduria</option>
-                        <option class="opcion_select" value="Industrial">Industrial</option>
-                        <option class="opcion_select" value="Alimentarias">Alimentarias</option>
-                        <option class="opcion_select" value="Electromecanica">Electromecanica</option>
-                        <option class="opcion_select" value="null">Null</option>
                     </select>
                     <span class="nombre_input">Carrera</span>
                 </label>

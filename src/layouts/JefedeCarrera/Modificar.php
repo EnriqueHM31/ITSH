@@ -36,7 +36,7 @@ $seccion = "Modificar";
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/buscador.js"></script>
     <script src="../../assets/js/modificar.js" defer></script>
-    <script src="../../assets/js/grupos.js" defer></script>
+    <script src="../../assets/js/opcionesSelect.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 

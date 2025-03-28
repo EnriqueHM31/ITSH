@@ -1,5 +1,4 @@
 async function cargarUsuarioModificar(id, nombre) {
-    console.log(id)
     if (id == null) {
         mostrarTemplate(
             'Busca y seleccione a un usuario',
@@ -27,13 +26,15 @@ async function cargarUsuarioModificar(id, nombre) {
 
                     document.getElementById('clave').value = data.clave_empleado;
                     document.getElementById('clave_anterior').value = data.clave_empleado;
+                    document.getElementById('rol').value = data.rol;
 
-                    if (data.rol == "Administrador") {
-                        document.getElementById('carrera').value = "null";
+                    if (data.rol === "Administrador") {
+                        actualizarCargo();
                     } else {
+                        actualizarCargo();
                         document.getElementById('carrera').value = data.carrera;
                     }
-                    document.getElementById('rol').value = data.rol;
+
                 }
                 if (nombre === 'getInfoEstudiante.php') {
                     document.getElementById('clave').value = data.matricula;

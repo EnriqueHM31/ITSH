@@ -32,7 +32,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
     <script src="../../assets/js/index.js" defer></script>
-    <script src="../../assets/js/grupos.js" defer></script>
+    <script src="../../assets/js/opcionesSelect.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 
