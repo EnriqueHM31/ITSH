@@ -1,0 +1,22 @@
+body {
+    flex-direction: column;
+    gap: 2rem;
+    color: var(--blanco);
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 8rem);
+}
+
+p {
+    font-size: clamp(1rem, 5vw, 6rem);
+}
+
+
+a {
+    background-color: var(--blanco);
+    color: var(--vino);
+    font-size: clamp(1rem, 5vw, 3rem);
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+}

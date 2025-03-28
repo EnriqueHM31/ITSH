@@ -1,12 +1,13 @@
 <?php
-include("../utils/constantes.php");
-include("../conexion/conexion.php");
+include "../utils/constantes.php";
+include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
+include "../conexion/verificar acceso.php";
 
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 $carrera = isset($_GET['carrera']) ? $_GET['carrera'] : '';
 
-if (!empty($query) && !empty($_GET['carrera'])) {
+if (!empty($query) && !empty($carrera)) {
 
     $id_carrera = obtenerIDCarrera($conexion, $carrera);
 
@@ -35,6 +36,9 @@ if (!empty($query) && !empty($_GET['carrera'])) {
     }
 
     $stmt->close();
+    $conexion->close();
+} else {
+    header("location: ../layouts/Errores/404.php");
+    exit;
 }
 
-$conexion->close();

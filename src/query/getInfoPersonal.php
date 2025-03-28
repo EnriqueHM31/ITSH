@@ -1,7 +1,8 @@
 <?php
-include("../utils/constantes.php");
-include("../conexion/conexion.php");
-include("../utils/functionGlobales.php");
+include "../utils/constantes.php";
+include "../conexion/conexion.php";
+include "../utils/functionGlobales.php";
+include "../conexion/verificar acceso.php";
 
 header('Content-Type: application/json');
 
@@ -35,6 +36,9 @@ if (isset($_POST['id'])) {
     } else {
         echo json_encode(["sin_error" => false]);
     }
+} else {
+    header("location: ../layouts/Errores/404.php");
+    exit;
 }
 
 

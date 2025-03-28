@@ -1,7 +1,9 @@
 <?php
 
-include("../utils/constantes.php");
-include("../conexion/conexion.php");
+include "../utils/constantes.php";
+include "../conexion/conexion.php";
+include "../conexion/verificar acceso.php";
+
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['reiniciar'])) {
     try {
@@ -18,6 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['reiniciar'])) {
     } catch (Exception $e) {
         echo json_encode(["mensaje" => "Error: " . $e->getMessage()]);
     }
+} else {
+    header("location: ../layouts/Errores/404.php");
+    exit;
 }
 
 

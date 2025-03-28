@@ -1,6 +1,8 @@
 <?php
-include("../utils/constantes.php");
-include("../conexion/conexion.php");
+include "../utils/constantes.php";
+include "../conexion/conexion.php";
+include "../conexion/verificar acceso.php";
+
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
 if (!empty($query)) {
@@ -31,6 +33,9 @@ if (!empty($query)) {
     }
 
     $stmt->close();
+    $conexion->close();
+} else {
+    header("location: ../layouts/Errores/404.php");
+    exit;
 }
 
-$conexion->close();

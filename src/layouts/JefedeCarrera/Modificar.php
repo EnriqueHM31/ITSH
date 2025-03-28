@@ -5,8 +5,9 @@ include "../../clases/usuario.php";
 include "../../utils/functionGlobales.php";
 include "../../clases/jefe.php";
 include "../../conexion/verificar acceso.php";
+include "../../conexion/verificar_rol_jefe.php";
 
-session_start();
+
 
 $usuario = new usuario();
 $jefe = new jefe();

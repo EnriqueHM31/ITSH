@@ -6,6 +6,7 @@ include "../clases/usuario.php";
 include "../clases/alumno.php";
 include "../validaciones/Validaciones.php";
 include "../utils/functionGlobales.php";
+include "../conexion/verificar acceso.php";
 
 
 header('Content-Type: application/json');
@@ -37,4 +38,7 @@ if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
         echo json_encode(["error" => "False"]);
 
     }
+} else {
+    header("location: ../layouts/Errores/404.php");
+    exit;
 }

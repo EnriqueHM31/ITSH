@@ -8,6 +8,7 @@ include "../../clases/jefe.php";
 include "../../utils/functionGlobales.php";
 include "../../validaciones/Validaciones.php";
 include "../../conexion/verificar acceso.php";
+include "../../conexion/verificar_rol_jefe.php";
 
 $usuario = new usuario();
 $jefe = new jefe();

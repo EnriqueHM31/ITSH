@@ -1,6 +1,7 @@
 <?php
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
+include "../conexion/verificar acceso.php";
 
 
 if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
@@ -16,5 +17,7 @@ if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
     } else {
         echo json_encode(["error" => "False"]);
     }
-
+} else {
+    header("location: ../layouts/Errores/404.php");
+    exit;
 }

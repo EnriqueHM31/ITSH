@@ -6,6 +6,7 @@ include "../../clases/usuario.php";
 include "../../clases/administrador.php";
 include "../../utils/functionGlobales.php";
 include "../../conexion/verificar acceso.php";
+include "../../conexion/verificar_rol_admin.php";
 
 $usuario = new usuario();
 $administrador = new administrador();
