@@ -2,6 +2,12 @@
 include('phpqrcode/qrlib.php');
 include "../conexion/verificar acceso.php";
 
+session_start();
+if (isset($_SESSION["id"])) {
+    header("location: ../layouts/Errores/404.php");
+    exit;
+}
+
 
 function generarCodigo($conexion, $id, $nombre, $fecha)
 {
@@ -49,7 +55,6 @@ function generarCodigo($conexion, $id, $nombre, $fecha)
     } catch (Exception $e) {
         echo json_encode(["sin_error" => $e->getMessage()]);
     }
-
 
 }
 ?>

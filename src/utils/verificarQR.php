@@ -47,8 +47,8 @@ if (isset($_GET['qr_text'])) {
     }
     $stmt->close();
 } else {
-    $src = "../assets/iconos/ic_error.webp";
-    $codigo_valido = "No se proporcionó información del código QR";
+    header("location: ../layouts/Errores/404.php");
+    exit;
 }
 
 // Cierra la conexión

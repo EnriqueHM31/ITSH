@@ -43,7 +43,8 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
     // Capturar el HTML en un buffer
     ob_start();
 } else {
-    echo json_encode(["error" => "Faltan parámetros requeridos."]);
+    header("location: ../layouts/Errores/404.php");
+    exit;
 }
 
 // ?>
