@@ -60,11 +60,8 @@ $id = $_SESSION["id"];
 
     <main class="main">
         <div class="contenedor_main">
-            <img src="../../assets/extra/encabezado.webp" width="1000px" height="164"
-                alt="los encabezados de la pagina">
-            <div class="contenedor_logo">
-                <img src="../../assets/extra/logo.svg" alt="logo del ITSH">
-            </div>
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
+
             <h2>Historial de tus justificantes</h2>
 
             <div class="contenido_historial" id="historial">
@@ -72,7 +69,9 @@ $id = $_SESSION["id"];
                 $alumno->HistorialJustificantes($conexion, $id);
                 ?>
             </div>
-
+            <div class="contenedor_ITSH">
+                <img src="../../assets/extra//logo.svg" alt="Logo del ITSH">
+            </div>
         </div>
 
 

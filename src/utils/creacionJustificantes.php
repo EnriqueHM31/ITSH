@@ -8,7 +8,6 @@ include "./creacionQR.php";
 
 if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
     try {
-       
         mysqli_begin_transaction($conexion);
 
         $id_folio = obtenerNumeroFolio($conexion);
@@ -34,7 +33,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
         $src_qr = obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha);
 
         $fecha = estructurarFechaAusencia($fecha);
-        
+
 
     } catch (Exception $e) {
         return json_encode(["sin_error" => $e->getMessage()]);
@@ -47,7 +46,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
     exit;
 }
 
-// ?>
+?>
 
 <html>
 
@@ -277,7 +276,6 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 require_once "./dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 try {
-    echo "hola";
     $html = ob_get_clean(); // Captura el contenido y limpia el buffer
 
     // Cargar DOMPDF

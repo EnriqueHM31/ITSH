@@ -8,9 +8,20 @@
     margin-bottom: 3rem;
 }
 
-.contenedor_logo,
-.contenedor_logo img {
-    z-index: 1;
+.contenedor_main {
+    position: relative;
+}
+
+.contenedor_ITSH {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: .5;
+}
+
+.contenedor_ITSH img {
+    width: clamp(20rem, 40vw, 50rem);
 }
 
 .sin_justificantes {
@@ -213,4 +224,24 @@
     top: 2rem;
     right: 2rem;
     max-width: 4rem;
+}
+
+@media screen and (max-width: 1000px) {
+    .contenedor_ITSH {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+    .contenido_historial:has(:nth-child(5)) {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    }
+
+    .contenido_historial:has(:nth-child(1)),
+    .contenido_historial:has(:nth-child(2)),
+    .contenido_historial:has(:nth-child(3)),
+    .contenido_historial:has(:nth-child(4)) {
+
+        grid-template-columns: repeat(auto-fit, minmax(100px, 140px));
+    }
 }
