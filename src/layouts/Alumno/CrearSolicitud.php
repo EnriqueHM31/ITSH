@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 session_start();
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
@@ -46,8 +48,8 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
 
         <ul class="menu">
             <li class="menu-item"><a href="alumno.php" class="link">Inicio</a></li>
-            <li class="menu-item"><a href="Crear Solicitud.php" class="link">Crear Solicitud</a></li>
-            <li class="menu-item"><a href="Historial Alumno.php" class="link">Historial</a></li>
+            <li class="menu-item"><a href="CrearSolicitud.php" class="link">Crear Solicitud</a></li>
+            <li class="menu-item"><a href="HistorialAlumno.php" class="link">Historial</a></li>
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link">Cerrar Sesion</a></li>
             <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
                     alt="Imagen para cerrar el menu movil"></li>
@@ -57,10 +59,10 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
     </nav>
 
     <main class="main">
+
         <div class="contenedor_main">
-            <div class="contenedor_logo">
-                <img src="../../assets/extra/logo.svg" alt="logo del ITSH">
-            </div>
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
+
 
             <h2>Crear Solicitud</h2>
 
@@ -113,6 +115,9 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
                 <input type="submit" value="Enviar Solicitud" class="btn_enviar-solicitud">
             </form>
 
+            <div class="contenedor_ITSH">
+                <img src="../../assets/extra//logo.svg" alt="Logo del ITSH">
+            </div>
         </div>
 
 

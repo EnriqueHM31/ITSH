@@ -54,7 +54,8 @@ class Usuario
             $_SESSION["id"] = $usuario[Variables::CAMPO_ID_USUARIO];
             $_SESSION["correo"] = $usuario[Variables::CAMPO_CORREO];
             $_SESSION["rol"] = $rol[Variables::CAMPO_ROL];
-            header("location: src/layouts/Admin/Admin.php");
+            header("Location: src/layouts/Admin/Admin.php");
+
         }
         if ($rol[Variables::CAMPO_ROL] === Usuario::JEFE_DE_CARRERA) {
             session_start();

@@ -5,7 +5,6 @@ include "../conexion/verificar acceso.php";
 
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
-if (!empty($query) && !empty($carrera)) {
 
     if (strlen($query) > 0) {
         $sql = "SELECT * FROM " . Variables::TABLA_BD_JUSTIFICANTES . " 
@@ -32,21 +31,22 @@ if (!empty($query) && !empty($carrera)) {
     }
 
     while ($fila = $result->fetch_assoc()) {
-        $salida .= "
-        <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
-            <h2> Folio {$fila['id']} </h2>
-            <p> {$fila['matricula_alumno']} </p>
-            <p> {$fila['nombre_alumno']} </p>
-            <span> {$fila['fecha_creacion']} </span>
-        </a>
-    ";
+       $tiempo = explode(" ", $fila['fecha_creacion']);
+
+        $tiempo_fecha = explode("-", $tiempo[0]);
+        echo "
+            <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
+                <h2> Folio {$fila['id']} </h2>
+                <p> {$fila['matricula_alumno']} </p>
+                <p> {$fila['nombre_alumno']} </p>
+                <span>Hora: {$tiempo[1]} </span>
+                <span>Fecha: {$tiempo_fecha[2]} de " . Variables::MESES[$tiempo_fecha[1][1] - 1] . " de " . $tiempo_fecha[0] . " </span>
+            </a>
+        ";
     }
+    echo $salida;
 
     $stmt->close();
 
-    $conexion->close();
-} else {
-    header("location: ../layouts/Errores/404.php");
-    exit;
-}
+
 

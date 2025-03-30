@@ -1,4 +1,5 @@
 <?php
+
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
@@ -7,11 +8,10 @@ include "./creacionQR.php";
 
 if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
     try {
+       
         mysqli_begin_transaction($conexion);
 
         $id_folio = obtenerNumeroFolio($conexion);
-
-
         $id_solicitud = $_POST["id_solicitud"];
         $nombre = $_POST['nombre'];
         $fecha = $_POST['fecha'];
@@ -34,6 +34,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
         $src_qr = obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha);
 
         $fecha = estructurarFechaAusencia($fecha);
+        
 
     } catch (Exception $e) {
         return json_encode(["sin_error" => $e->getMessage()]);
@@ -276,6 +277,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 require_once "./dompdf/autoload.inc.php";
 use Dompdf\Dompdf;
 try {
+    echo "hola";
     $html = ob_get_clean(); // Captura el contenido y limpia el buffer
 
     // Cargar DOMPDF
@@ -320,7 +322,7 @@ try {
 
 function obtenerNumeroFolio($conexion)
 {
-    $sql = "SELECT COUNT(*) AS total FROM justificante";
+    $sql = "SELECT COUNT(*) AS total FROM Justificante";
     $result = $conexion->query($sql);
     $row = $result->fetch_assoc();
     return $row["total"];
@@ -340,7 +342,7 @@ function ObtenerDatosJustificanteJefe($conexion, $id_jefe)
         return [$nombre_jefe, $apellidos_jefe, $carrera];
     } catch (Exception $e) {
         echo json_encode([
-            "sin_error" => "Error en la obtencionde datos del jefe(a) de carrera"
+            "sin_error" => "Error en la obtencion de datos del jefe(a) de carrera"
         ]);
         exit();
     }

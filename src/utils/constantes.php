@@ -9,16 +9,16 @@ class Variables
     public const DATABASE = "itsh";
 
     // TABLAS DE LAS BASES DE DATOS
-    public const TABLA_BD_USUARIO = "usuario";
-    public const TABLA_BD_ROL = "rol";
-    public const TABLA_BD_CARRERA = "carrera";
+    public const TABLA_BD_USUARIO = "Usuario";
+    public const TABLA_BD_ROL = "Rol";
+    public const TABLA_BD_CARRERA = "Carrera";
     public const TABLA_BD_AdMINISTRADOR = "Administrador";
     public const TABLA_BD_JEFE = "Jefe";
     public const TABLA_BD_ESTUDIANTE = "Estudiante";
     public const tABLA_BD_MODALIDAD = "Modalidad";
-    public const TABLA_BD_SOLICITUDES = "solicitudes";
-    public const TABLA_BD_JUSTIFICANTES = "justificante";
-    public const TABLA_BD_CODIGOS_QR = "codigos_qr";
+    public const TABLA_BD_SOLICITUDES = "Solicitudes";
+    public const TABLA_BD_JUSTIFICANTES = "Justificante";
+    public const TABLA_BD_CODIGOS_QR = "Codigos_qr";
 
 
     // CAMPOS DE LA TABLA USUARIO

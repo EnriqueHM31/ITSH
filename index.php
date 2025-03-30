@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include "src/utils/constantes.php";
 include("src/conexion/conexion.php");
@@ -45,7 +46,8 @@ $usuario = new usuario();
             <img class="img-ver" src="./src/assets/extra/invisible.webp" alt="Icono para hacer invisible la contraseña">
         </label>
 
-        <a href="src/layouts/CambiarContraseña/Cambiar Contraseña.php" class="enlaces">Has olvidado la contraseña</a>
+        <a href="https://enriquehm.infinityfreeapp.com/src/layouts/CambiarContraseña/Cambiar%20Contraseña.php" class="enlaces">Has olvidado la contraseña</a>
+
 
         <input type="submit" value="Ingresar" class="btn_login">
     </form>
