@@ -65,14 +65,10 @@ $correo = $_SESSION["correo"];
             <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
             <h2>Bienvenido Estudiante</h2>
             <div class="informacion_usuario">
-
-
                 <div class="contenido_informacion">
                     <?php
                     $usuario->escribirDatosDelUsuario($conexion, $id, $rol, $correo)
-                        ?>
-
-
+                    ?>
                 </div>
 
                 <div class="contenedor_ITSH">

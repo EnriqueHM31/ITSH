@@ -69,7 +69,7 @@ $correo = $_SESSION["correo"];
 
     <main class="main">
         <div class="contenedor_main">
-            <img src="../../assets/extra/encabezado.webp" width="1000px" height="164"
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" 
                 alt="los encabezados de la pagina">
             <h2>Bienvenido Administrador</h2>
             <div class="informacion_usuario">
@@ -174,7 +174,7 @@ $correo = $_SESSION["correo"];
     </template>
 
     <template id="plantilla_usuario-seleccionado-administrador">
-        <div class=" overlay overlay_eliminar overlay_ventana">
+        <div class=" overlay">
             <form id="formulario_eliminar" class="formulario form_eliminar form_verificar_eliminar" method="post">
 
                 <div class="informacion-usuario-eliminar">
@@ -197,7 +197,7 @@ $correo = $_SESSION["correo"];
     </template>
 
     <template id="plantilla_usuario-seleccionado-jefe">
-        <div class=" overlay overlay_eliminar overlay_ventana">
+        <div class=" overlay">
             <form id="formulario_eliminar" class="formulario form_eliminar form_verificar_eliminar" method="post">
                 <div class="informacion-usuario-eliminar">
                     <h2 class="titulo_eliminar-modal">Estas seguro de eliminar a: </h2>

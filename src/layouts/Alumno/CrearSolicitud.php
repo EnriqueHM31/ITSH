@@ -113,11 +113,11 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
                 </label>
 
                 <input type="submit" value="Enviar Solicitud" class="btn_enviar-solicitud">
+                <div class="contenedor_ITSH">
+                    <img src="../../assets/extra//logo.svg" alt="Logo del ITSH">
+                </div>
             </form>
 
-            <div class="contenedor_ITSH">
-                <img src="../../assets/extra//logo.svg" alt="Logo del ITSH">
-            </div>
         </div>
 
 

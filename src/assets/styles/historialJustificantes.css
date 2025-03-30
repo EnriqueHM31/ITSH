@@ -244,4 +244,8 @@
 
         grid-template-columns: repeat(auto-fit, minmax(100px, 140px));
     }
+
+    .contenido_historial{
+        padding-bottom: 4rem;
+    }
 }

@@ -3,11 +3,9 @@
     background: var(--overlay);
     position: fixed;
     top: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: 2000;
-    display: grid;
-    place-content: center;
 }
 
 .titulo {
@@ -147,7 +145,7 @@
     color: var(--vino);
     font-family: Manrope;
     align-content: center;
-    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -189,7 +187,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0;
     padding: 4rem 0;
     padding-right: 15rem;
 }
@@ -213,11 +210,13 @@
 
 .info_usuario_eliminar {
     font-size: clamp(1.4rem, 4vw, 2.4rem);
+    text-wrap: wrap;
     color: var(--vino);
     font-weight: bold;
     display: flex;
     align-items: center;
     width: 100%;
+    height: 100%;
     gap: 1rem;
 }
 
@@ -233,4 +232,42 @@
 .close_eliminar {
     mix-blend-mode: difference;
     right: 5rem;
+}
+
+
+@media (max-width: 1000px) {
+
+    .overlay{
+        position: fixed;
+        inset: 0;  /* 0 para todas las direcciones: top, right, bottom, left */
+        width: 100%;
+        height: 100%;
+    }
+    .form_verificar_eliminar{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* Para centrar la modal */
+        z-index: 20; /* Asegúrate de que la modal esté encima del overlay */
+        max-width: 90%;  /* Controla el tamaño de la modal */
+        min-height: 80vh;
+        max-height: 80vh;  /* Controla la altura de la modal */
+        overflow-y: auto; /* Hace que la modal sea desplazable si el contenido es grande */
+        overflow-x: auto;
+        padding: 2rem;
+    }
+
+    .close{
+        right: 1rem;
+    }
+
+    .info_usuario_eliminar{
+        padding: 0;
+    }
+    .titulo_eliminar-modal{
+        padding: 1rem 2rem;
+        width: fit-content;
+        margin: 0 auto;
+
+    }
 }

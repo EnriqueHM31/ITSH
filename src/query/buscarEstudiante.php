@@ -37,8 +37,5 @@ if (!empty($query) && !empty($carrera)) {
 
     $stmt->close();
     $conexion->close();
-} else {
-    header("location: ../layouts/Errores/404.php");
-    exit;
-}
+} 
 

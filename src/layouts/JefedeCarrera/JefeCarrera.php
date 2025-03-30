@@ -86,28 +86,19 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
 
     <main class="main">
         <div class="contenedor_main">
-            <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
-                height="164">
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
             <h2>Bienvenido Jefe de Carrera</h2>
             <div class="informacion_usuario">
-
-
                 <div class="contenido_informacion">
                     <?php
                     $usuario->escribirDatosDelUsuario($conexion, $id, $rol, $correo);
                     ?>
-
-
                 </div>
-
                 <div class="contenedor_ITSH">
                     <img src="../../assets/extra/logo.svg" alt="Logo del ITSH">
                 </div>
             </div>
-
         </div>
-
-
     </main>
 
     <footer class="footer">

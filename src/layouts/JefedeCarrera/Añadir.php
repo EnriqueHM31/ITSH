@@ -68,8 +68,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
         <div class="contenedor_main">
 
-            <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
-                height="164">
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" >
 
             <form class="formulario" method="post" enctype="multipart/form-data">
                 <label for="clave" class="contenedor_input">

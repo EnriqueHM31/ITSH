@@ -75,8 +75,7 @@ $seccion = "Modificar";
 
         <div class="contenedor_main">
             <div class="contenedor">
-                <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
-                    height="164">
+                <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
 
                 <div class="contenedor_buscar">
                     <label class="contenedor_buscar">

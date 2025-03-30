@@ -8,7 +8,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 2.5rem;
-    padding: 5rem 0;
+    margin: 3rem 0;
 }
 
 .contenido_informacion {
@@ -92,8 +92,6 @@ body {
 
     .contenido_informacion {
         width: 100%;
-        padding: 1rem 0;
-        padding: 1rem;
         padding: 0 1.5rem;
     }
 
@@ -117,6 +115,6 @@ body {
     }
 
     .informacion_usuario {
-        padding: 0;
+        padding: 3rem 0;
     }
 }

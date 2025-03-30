@@ -23,7 +23,7 @@
 .input_pagina{
     width: 70%;
     padding: 1rem 2rem;
-    font-size: clamp(1.5rem, 4vw, 2.3rem);
+    font-size: clamp(2.1rem, 4vw, 2.3rem);
     color: var(--negro);
     border: none;
     border-bottom: .2rem solid var(--vino);
@@ -51,7 +51,7 @@
     position: absolute;
     left: 10rem;
     top: 1rem;
-    font-size: clamp(1.5rem, 4vw, 2.3rem);
+    font-size: clamp(1.9rem, 4vw, 2.3rem);
     opacity: 1;
     transition: top .6s, scale .6s, opacity .6s, color .6s;
 }
@@ -68,7 +68,7 @@
 
 .btn_pagina{
     padding: 1.7rem 5rem;
-    font-size: clamp(1.3rem, 4vw, 2.3rem );
+    font-size: clamp(2rem, 4vw, 2.3rem );
     color: var(--blanco);
     background: var(--vino);
     border-radius: 3rem;
@@ -88,11 +88,56 @@
     padding: 1rem 5rem;
     background: var(--vino);
     color: var(--blanco);
-    font-size: clamp(1.3rem, 4vw, 2.5rem);
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
     grid-column:  span 3;
     border-radius: 3rem;
     justify-self: flex-end;
     margin-right: 8rem;
     cursor: pointer;
     font-weight: 900;
+}
+
+@media (max-width: 1000px) {
+
+    .contenedor_logo{
+        display: none;
+    }
+    .formulario{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 3rem;
+        margin: 0;
+        padding: 2rem;
+    }
+
+    .contenedor_input{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .nombre_input{
+        position: static;
+        order: 1;
+        min-width: 10rem;
+        padding-right: .8rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .input_pagina{
+        order: 2;
+        flex: 1;
+    }
+
+    .btn_archivo{
+        align-self: flex-end;        
+        grid-column:  auto;
+        margin: 0;
+    }
+
+
 }

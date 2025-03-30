@@ -25,7 +25,7 @@ input:focus {
 
 .buscar {
     padding: 1rem 3rem;
-    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
     color: var(--blanco);
     background: var(--vino);
     border: .1rem solid var(--blanco);
@@ -90,4 +90,21 @@ input:focus {
 .input_bloqueado img {
     width: 2.5rem;
     height: 2.5rem;
+}
+
+
+@media (max-width: 1000px) {
+    .contenedor_logo{
+        display: none;
+    }
+    .result_usuarios {
+        max-height: 15rem;
+        top: 8rem;
+    }
+
+    .contenedor_buscar {
+        padding-top: 2rem;
+    }
+
+
 }
