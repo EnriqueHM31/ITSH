@@ -53,7 +53,12 @@ $administrador = new administrador();
             <li class="menu-item"><a href="Admin.php?EliminarPersonal=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
                         src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
+            <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
+                    alt="Imagen para cerrar el menu movil"></li>
         </ul>
+        
+        <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
+
     </nav>
 
     <main class="main">
@@ -65,8 +70,7 @@ $administrador = new administrador();
         <div class="contenedor_main">
 
 
-            <img class="encabezado" src="../../assets/extra/encabezado.webp" 
-                alt="los encabezados de la pagina">
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
 
             <form class="formulario" method="post" enctype="multipart/form-data">
                 <label for="clave" class="contenedor_input">
@@ -116,7 +120,7 @@ $administrador = new administrador();
                 </label>
 
             </form>
-            
+
         </div>
 
     </main>

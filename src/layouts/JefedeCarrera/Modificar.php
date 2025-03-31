@@ -59,13 +59,17 @@ $seccion = "Modificar";
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
             <li class="menu-item"><a href="JefeCarrera.php?EliminarEstudiante=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="Solicitudes.php" class="link">Solicitudes</a></li>
-
             <li class="menu-item">
                 <a href="../../conexion/cerrar_sesion.php" class="link">
                     <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
                 </a>
             </li>
+            <li class="menu-item close_contenedor">
+                <img class="close_menu" src="../../assets/iconos/ic_close.webp" alt="Imagen para cerrar el menu movil">
+            </li>
         </ul>
+
+        <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
     </nav>
 
     <main class="main">

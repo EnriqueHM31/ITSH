@@ -95,6 +95,7 @@
     margin-right: 8rem;
     cursor: pointer;
     font-weight: 900;
+    margin-bottom: 3rem;
 }
 
 @media (max-width: 1000px) {

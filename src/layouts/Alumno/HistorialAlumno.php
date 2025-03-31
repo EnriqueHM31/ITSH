@@ -50,9 +50,14 @@ $id = $_SESSION["id"];
             <li class="menu-item"><a href="alumno.php" class="link">Inicio</a></li>
             <li class="menu-item"><a href="CrearSolicitud.php" class="link">Crear Solicitud</a></li>
             <li class="menu-item"><a href="HistorialAlumno.php" class="link">Historial</a></li>
-            <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link">Cerrar Sesion</a></li>
-            <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
-                    alt="Imagen para cerrar el menu movil"></li>
+            <li class="menu-item">
+                <a href="../../conexion/cerrar_sesion.php" class="link">
+                    <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
+                </a>
+            </li>
+            <li class="menu-item close_contenedor">
+                <img class="close_menu" src="../../assets/iconos/ic_close.webp" alt="Imagen para cerrar el menu movil">
+            </li>
         </ul>
 
         <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
