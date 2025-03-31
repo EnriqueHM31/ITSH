@@ -41,6 +41,13 @@ function mensajeNotificacion($mensaje, $imagen, $color)
     }
 }
 
+function obtenerDatosColumnaTabla($conexion, $columna, $tabla)
+{
+    $sql = $conexion->prepare("SELECT $columna FROM " . $tabla);
+    $sql->execute();
+    return $sql->get_result();
+}
+
 
 
 // CONSULTA PARA OBTENER LA FILA COMPLETA UN ARRAY CLAVE VALOR*/

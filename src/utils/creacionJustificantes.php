@@ -19,6 +19,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
         $grupo = $_POST['grupo'];
         $motivo = $_POST['motivo'];
         $id_jefe = $_POST['id_jefe'];
+        $fecha_codigo = $fecha;
 
         $id_unico = generarCodigo($conexion, $id_folio, $nombre, $fecha, true);
 
@@ -45,7 +46,6 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
     header("location: ../layouts/Errores/404.php");
     exit;
 }
-
 ?>
 
 <html>
@@ -282,7 +282,7 @@ try {
 
     $pdf = new Dompdf();
     $options = $pdf->getOptions();
-    $options->set("isRemoteEnabled", true);  // <-- ¡Sin array!
+    $options->set("isRemoteEnabled", true);  
     $pdf->setOptions($options);
 
     $pdf->loadHtml($html); // Cargar el HTML generado
@@ -297,19 +297,20 @@ try {
 
     InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo);
 
+    EliminarCodigoQR($id_folio, $nombre, $fecha_codigo, $id_unico);
+
+    mysqli_commit($conexion);
+
 } catch (Exception $e) {
     // Rollback en caso de error
     $conexion->rollback();
-
     // Eliminar archivos generados
     if (isset($ruta_imagen) && file_exists($ruta_imagen)) {
         unlink($ruta_imagen);
     }
-
     if (isset($rutaArchivo) && file_exists($rutaArchivo)) {
         unlink($rutaArchivo);
     }
-
     // Respuesta de error
     echo json_encode([
         "sin_error" => "Error al crear el PDF: " . $e->getMessage(),
@@ -439,7 +440,23 @@ function InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre
     $smtm->bind_param('sssssssss', $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe_completo, $nombreArchivo);
 
     if ($smtm->execute()) {
-        mysqli_commit($conexion);
+        
         echo json_encode(["sin_error" => True]);
+    }
+}
+
+
+function EliminarCodigoQR($id_solicitud, $nombre, $fecha_codigo, $id_unico){
+    $qr_text = $id_solicitud-1 . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha_codigo);
+
+    // Directorio para guardar la imagen del QR (se crea si no existe)
+    $dir = '../layouts/Alumno/justificantes/codigos_qr/';
+    if (!file_exists($dir)) {
+        mkdir($dir, 0755, true);
+    }
+    // Ruta de archivo para guardar el QR generado
+    $filename = $dir . $id_unico . "_" . $qr_text . '.png';
+    if (file_exists($filename)) {
+        unlink($filename);
     }
 }

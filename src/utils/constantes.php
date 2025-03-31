@@ -93,9 +93,6 @@ class Variables
     public const CAMPO_Q_VALIDO = "valido";
     public const CAMPO_Q_URL_VERIFICACION = "url_verificacion";
 
-
-
-
     public const MESES = [
         "enero",
         "febrero",

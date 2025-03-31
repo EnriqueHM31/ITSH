@@ -251,6 +251,7 @@ function aceptarSolicitud(objeto) {
 					'var(--rojo)',
 					'miTemplate',
 				);
+				return
 			}
 
 			mostrarTemplate(

@@ -194,4 +194,18 @@ class administrador
         }
     }
 
+
+    public function AgregarCarrera($conexion, $carrera){
+        if (empty($carrera)) {
+            estructuraMensaje("Debes ingresar una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        }
+
+        $sql = $conexion->prepare( "INSERT INTO " . Variables::TABLA_BD_CARRERA . " (" . Variables::CAMPO_CARRERA . ") VALUES (?)");
+        $sql->bind_param("s", $carrera);
+        if( $sql->execute() ) {
+            estructuraMensaje("Se agrego otra carrera al sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
+        }else{
+            estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        }
+    }
 }

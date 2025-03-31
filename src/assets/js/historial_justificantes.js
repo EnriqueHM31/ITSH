@@ -49,7 +49,7 @@ function mostrarDatos(data) {
     fecha = data.fecha_ausencia.split("-").reverse().join("/");
 
     if (data.justificante !== "") {
-        link = `<a href="../../layouts/Alumno/justificantes/${data.justificante}/">Justificante${data.id_justificante}.pdf</a>`
+        link = `<a target="_blank" href="../../layouts/Alumno/justificantes/${data.justificante}/">Justificante${data.id_justificante}.pdf</a>`
     } else {
         link = ""
     }
