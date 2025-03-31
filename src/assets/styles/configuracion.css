@@ -22,7 +22,7 @@
     font-size: clamp(1.4rem, 4vw, 2.2rem);
 }
 
-.contenedor_configuracion_carreras{
+.contenedor_configuracion{
     width: 80%;
 }
 
@@ -54,19 +54,23 @@ summary{
     align-items: center;
     justify-content: space-between;
     font-family: 'poppins';
-    padding: 1rem 1rem;
     border-radius: .5rem .5rem 0 0;
     border: .3rem solid transparent;
 
 }
 
+summary p{
+    font-size: clamp(1.4rem, 4vw, 2.3rem);
+    padding-left: 1rem;
+}
+
 summary button{
     background-color: var(--blanco);
     color: var(--vino);
-    padding: .5rem 1rem;
     border: none;
     font-weight: 700;
     cursor: pointer;
+    padding: 1rem;
 }
 
 .contenido_carreras{
@@ -76,11 +80,14 @@ summary button{
     justify-content: space-between;
     gap: .8rem;
     padding: .5rem 1rem;
+    border: .2rem solid transparent;
 }
 
 .contenido_carreras:hover{
     background-color: var(--blanco);
     color: var(--vino);
+    border: .2rem solid var(--vino);
+
 }
 
 .contenido_carreras:hover .eliminar_carrera{
@@ -94,3 +101,83 @@ summary button{
     cursor: pointer;
 }
 
+
+
+.input_caambio-contraseña{
+    gap: 2rem;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+input[type="number"] {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formulario{
+    min-width: 40%;
+}
+
+.inputs-cambio-contraseña{
+    width: 100%;
+}
+
+.opciones_carrera{
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.opciones_carrera label{
+    border-radius: none;
+}
+
+.menu_carreras{
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.menu_carreras button:last-child{
+    max-width: 3rem;
+}
+
+.menu_carreras button img{
+    width: 100%;
+    object-fit: cover;
+}
+
+
+.contenedor_numerico{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.contenedor_numerico span{
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: var(--blanco);
+}
+
+.input_num{
+    background: var(--vino);
+    color: var(--blanco);
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    border: none;
+
+    max-width: 10rem;
+    padding: 1rem;
+    border: .1rem solid var(--blanco);
+}

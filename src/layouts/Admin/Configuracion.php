@@ -74,35 +74,43 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
             <div class="contenido_configuracion">
                 <button class="btn_listar_usuarios">Listar Usuarios</button>
 
-                <div class="contenedor_configuracion_carreras">
+                <div class="contenedor_configuracion">
                     <h2>Configuracion de la carreras</h2>
                     <details class='detalles_carreras'>
                         <summary>
                             <p> Carreras Existentes </p>
-                            <button id="agregar_carrera">Agregar</button>
+                            <button id="agregar_carrera" data-accion="agregar_carrera">Agregar</button>
                         </summary>
                         <?php
+                        // Asegúrate de que la consulta esté siendo ejecutada y $carreras tenga resultados
                         while ($registro = mysqli_fetch_array($carreras)) {
                             echo "
-                            <div class='contenido_carreras'>
-                                <div class='carrera'> 
-                                    {$registro['carrera']}
-                                </div>
+                                <div class='contenido_carreras'>
+                                    <div class='carrera'> 
+                                        {$registro['carrera']}
+                                    </div>
 
-                                <button data-id='{$registro['carrera']}' class='eliminar_carrera'>
-                                    <img src='../../assets/iconos/ic_eliminar.webp'>
-                                </button>
-                            </div>
+                                    <div class='menu_carreras'>
+                                        <button data-id='{$registro['carrera']}' class='eliminar_carrera boton_eliminar'>
+                                            <img src='../../assets/iconos/ic_eliminar.webp'>
+                                        </button>
+
+                                        <button data-accion='configurar_carrera' id='agregar_carrera' data-id='{$registro['carrera']}' class='eliminar_carrera'>
+                                            <img src='../../assets/iconos/ic_configuracion.webp'>
+                                        </button>
+                                    </div>
+                                </div>
                         ";
                         }
                         ?>
                     </details>
                 </div>
+
+                
+
+
             </div>
-
         </div>
-
-
     </main>
 
     <footer class="footer">
@@ -140,6 +148,44 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
 
     </footer>
 
+    <template id="plantilla_configurar_carrera" >
+        <div class="overlay_cambiar-contraseña overlay_ventana">
+            <form class="formulario" method="post">
+                <h2 class="titulo">Configurar Carrera</h2>
+                <div class="inputs-cambio-contraseña">
+
+                    <input hidden type="text" id="carrera_antigua" name="carrera_antigua">
+                    <label for="carrera_modificar" class="contenedor_input">
+                        <input class="input_login" type="text" name="carrera_nueva" id="carrera_modificar"
+                            placeholder=" " autocomplete="current-password">
+                        <span class="nombre_input">Carrera</span>
+                    </label>
+
+                    <div class="opciones_carrera">
+                        <label for="cantidad_grupos" class="contenedor_numerico">
+                            <span class="nombre_opcion">Cantidad de Grupos</span>
+                            <input min="1" max="15" step="1" value="1" class="input_num" type="number"
+                                name="grupos_nueva_carrera" id="cantidad_grupos" placeholder=" "
+                                autocomplete="current-password">
+                        </label>
+
+                        <label for="id_grupo" class="contenedor_numerico">
+                            <span class="nombre_opcion">Id de la Carrera</span>
+                            <input min="1" max="10" step="1" value="1" class="input_num" type="number"
+                                name="id_carrera_nueva" id="id_grupo" placeholder=" " autocomplete="current-password">
+                        </label>
+                    </div>
+
+                </div>
+                <input type="submit" name="formulario" class="btn-submit btn_login" value="Modificar Carrera">
+
+
+                <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
+                    alt="icono para cerrar la ventana de agregar carrera" loading="lazy">
+            </form>
+        </div>
+    </template>
+
     <template id="plantilla_agregar_carrera">
         <div class="overlay_cambiar-contraseña overlay_ventana">
             <form class="formulario" method="post">
@@ -150,11 +196,25 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
                         <input class="input_login" type="text" name="carrera_nueva" id="contraseña_actual"
                             placeholder=" " autocomplete="current-password">
                         <span class="nombre_input">Escriba la Carrera</span>
-
                     </label>
 
+                    <div class="opciones_carrera">
+                        <label for="cantidad_grupos" class="contenedor_numerico">
+                            <span class="nombre_opcion">Cantidad de Grupos</span>
+                            <input min="1" max="15" step="1" value="1" class="input_num" type="number"
+                                name="grupos_nueva_carrera" id="cantidad_grupos" placeholder=" "
+                                autocomplete="current-password">
+                        </label>
+
+                        <label for="id_grupo" class="contenedor_numerico">
+                            <span class="nombre_opcion">Id de la Carrera</span>
+                            <input min="1" max="10" step="1" value="1" class="input_num" type="number"
+                                name="id_carrera_nueva" id="id_grupo" placeholder=" " autocomplete="current-password">
+                        </label>
+                    </div>
+
                 </div>
-                <input type="submit" name="formulario" class="btn-submit btn_login" value="AgregarCarrera">
+                <input type="submit" name="formulario" class="btn-submit btn_login" value="Agregar Carrera">
 
 
                 <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
@@ -197,9 +257,18 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['formulario'])) {
 
-        if ($_POST['formulario'] === 'AgregarCarrera') {
+        if ($_POST['formulario'] === 'Agregar Carrera') {
             $carreraNueva = trim($_POST['carrera_nueva']);
-            $administrador->AgregarCarrera($conexion, $carreraNueva);
+            $Numero_grupos = trim($_POST['grupos_nueva_carrera']);
+            $id_carrera = trim($_POST['id_carrera_nueva']);
+            $administrador->AgregarCarrera($conexion, $carreraNueva, $Numero_grupos, $id_carrera);
+        }
+        if ($_POST['formulario'] === 'Modificar Carrera') {
+            $carreraAntigua = trim($_POST['carrera_antigua']);
+            $carreraNueva = trim($_POST['carrera_nueva']);
+            $Numero_grupos = trim($_POST['grupos_nueva_carrera']);
+            $id_carrera = trim($_POST['id_carrera_nueva']);
+            $administrador->modificarCarrera($conexion, $carreraAntigua, $carreraNueva, $Numero_grupos, $id_carrera);
         }
     }
     notificaciones($_SESSION["mensaje"]);

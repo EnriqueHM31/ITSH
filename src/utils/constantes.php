@@ -1,6 +1,7 @@
 <?php
 
 class Variables
+
 {
     // VARIABLES PARA LA CONEXION
     public const HOST = "localhost";
@@ -12,6 +13,7 @@ class Variables
     public const TABLA_BD_USUARIO = "Usuario";
     public const TABLA_BD_ROL = "Rol";
     public const TABLA_BD_CARRERA = "Carrera";
+    public const TABLA_BD_GRUPO = "Grupo";
     public const TABLA_BD_AdMINISTRADOR = "Administrador";
     public const TABLA_BD_JEFE = "Jefe";
     public const TABLA_BD_ESTUDIANTE = "Estudiante";
@@ -52,8 +54,13 @@ class Variables
     public const CAMPO_APELLIDOS = "apellidos";
     public const CAMPO_CORREO = "correo";
 
+
+    public const CAMPO_G_CARRERA = "id_carrera";
+    public const CAMPO_G_NUMERO_GRUPOS = "Numero_grupos";
+    public const CAMPO_G_ID_GRUPO = "id_grupos";
+
     public const GRUPOS_DISPONIBLES = [
-        "Industrial" => ["numero" => 1, "cantidad" => 8],
+        'Industrial' => ["numero" => 1, "cantidad" => 8],
         "Insdustrias Alimentarias" => ["numero" => 2, "cantidad" => 7],
         "Electromecanica" => ["numero" => 3, "cantidad" => 9],
         "Sistemas Computacionales" => ["numero" => 4, "cantidad" => 9],

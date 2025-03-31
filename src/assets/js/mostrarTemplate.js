@@ -45,6 +45,7 @@ if (btnClose !== null) {
     const overlayVentana = document.querySelector('.overlay')
     btnClose.addEventListener('click', () => {
         overlayVentana.remove()
+        location.reload()
 
     })
 }

@@ -195,17 +195,61 @@ class administrador
     }
 
 
-    public function AgregarCarrera($conexion, $carrera){
+    public function AgregarCarrera($conexion, $carrera, $numeros_grupos, $id_carrera_nueva)
+    {
+        mysqli_begin_transaction($conexion);
         if (empty($carrera)) {
             estructuraMensaje("Debes ingresar una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
-        $sql = $conexion->prepare( "INSERT INTO " . Variables::TABLA_BD_CARRERA . " (" . Variables::CAMPO_CARRERA . ") VALUES (?)");
+        $sql = $conexion->prepare("INSERT INTO " . Variables::TABLA_BD_CARRERA . " (" . Variables::CAMPO_CARRERA . ") VALUES (?)");
         $sql->bind_param("s", $carrera);
-        if( $sql->execute() ) {
-            estructuraMensaje("Se agrego otra carrera al sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
-        }else{
+
+        if ($sql->execute()) {
+
+            $id_carrera = obtenerIDCarrera($conexion, $carrera);
+
+            $sql = $conexion->prepare("INSERT INTO " . Variables::TABLA_BD_GRUPO . " (" . Variables::CAMPO_G_CARRERA . ", " . Variables::CAMPO_G_NUMERO_GRUPOS . ", " . Variables::CAMPO_G_ID_GRUPO . ") VALUES (?, ?, ?)");
+            $sql->bind_param("sss", $id_carrera, $numeros_grupos, $id_carrera_nueva);
+            if ($sql->execute()) {
+                mysqli_commit($conexion);
+                estructuraMensaje("Se agrego otra carrera al sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
+            } else {
+                estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            }
+
+        } else {
             estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
         }
+    }
+
+    public function ModificarCarrera($conexion, $carreraAntigua, $carreraNueva, $numeros_grupos, $id_carrera_nueva)
+    {
+        mysqli_begin_transaction($conexion);
+        if (empty($carreraNueva)) {
+            estructuraMensaje("Debes ingresar una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        }
+
+        $id_carrera = obtenerIDCarrera($conexion, $carreraAntigua);
+
+        $sql = $conexion->prepare("UPDATE " . Variables::TABLA_BD_CARRERA . " SET " .
+            Variables::CAMPO_CARRERA . " = ? WHERE " . Variables::CAMPO_ID_CARRERA . " = ?");
+
+        $sql->bind_param("ss", $carreraNueva, $id_carrera);
+
+        if ($sql->execute()) {
+            $sql = $conexion->prepare("UPDATE " . Variables::TABLA_BD_GRUPO . " SET " .
+                Variables::CAMPO_G_NUMERO_GRUPOS . " = ?, " . Variables::CAMPO_G_ID_GRUPO . " = ? WHERE ".Variables::CAMPO_G_CARRERA." = ?");
+
+            $sql->bind_param("sss", $numeros_grupos, $id_carrera_nueva, $id_carrera);
+
+            if ($sql->execute()) {
+                mysqli_commit($conexion);
+                estructuraMensaje("Se modifico la carrera en el sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
+            }
+        } else {
+            estructuraMensaje("Error al modificar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        }
+
     }
 }
