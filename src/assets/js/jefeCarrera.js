@@ -1,39 +1,38 @@
 function ajustarContenido(array) {
 	const screenWidth = window.innerWidth;
 
-	const tabla = document.getElementById("table");
-	const detalles = document.getElementById("lista-solicitudes-details");
+	const tabla = document.getElementById('table');
+	const detalles = document.getElementById('lista-solicitudes-details');
 
 	// Limpiar los contenidos
-	if (detalles) detalles.innerHTML = "";
-	if (tabla) tabla.innerHTML = "";
+	if (detalles) detalles.innerHTML = '';
+	if (tabla) tabla.innerHTML = '';
 
 	if (screenWidth > 1000) {
 		let contenidoTabla = array[0][array[0].length - 1]; // Primer contenido
 		for (let i = 0; i < array[0].length - 1; i++) {
-			contenidoTabla += array[0][i];  // Añadir el resto
+			contenidoTabla += array[0][i]; // Añadir el resto
 		}
 		tabla.innerHTML = contenidoTabla; // Asignar todo el contenido de una vez
 	} else {
-		let contenidoDetalles = "";
+		let contenidoDetalles = '';
 		for (let i = 0; i < array[1].length; i++) {
-			contenidoDetalles += array[1][i];  // Crear el contenido completo
+			contenidoDetalles += array[1][i]; // Crear el contenido completo
 		}
-		detalles.innerHTML = contenidoDetalles;  // Asignar todo el contenido de una vez
+		detalles.innerHTML = contenidoDetalles; // Asignar todo el contenido de una vez
 	}
 }
 
 function mostrarDatosResize(array) {
-	document.addEventListener("DOMContentLoaded", function() {
-        ajustarContenido(array);  // Ejecutar directamente cuando la página carga
-    });
+	document.addEventListener('DOMContentLoaded', function () {
+		ajustarContenido(array); // Ejecutar directamente cuando la página carga
+	});
 
-    // Ejecutar al redimensionar la ventana
-    window.addEventListener("resize", function () {
-        ajustarContenido(array);  // Ejecutar nuevamente al redimensionar
-    });
+	// Ejecutar al redimensionar la ventana
+	window.addEventListener('resize', function () {
+		ajustarContenido(array); // Ejecutar nuevamente al redimensionar
+	});
 }
-
 
 function eliminarFila(objeto) {
 	let fila = objeto.closest('tr');
@@ -72,7 +71,7 @@ async function eliminarSolicitud(id, nombreArchivo) {
 		error: function (e) {
 			mostrarTemplate(
 				'Ocurrio un error con la evidencia de la solicitud' +
-				e.responseText,
+					e.responseText,
 				'../../assets/iconos/ic_error.webp',
 				'var(--rojo)',
 				'miTemplate',
@@ -121,7 +120,6 @@ function rechazarSolicitud(objeto) {
 			}
 		},
 		error: function (xhr) {
-
 			let mensajeError = 'Error desconocido';
 
 			try {
@@ -152,11 +150,24 @@ function rechazarSolicitud(objeto) {
 	});
 }
 
-function aceptarSolicitud(objeto) {
-	let id_jefe = objeto.getAttribute('data-id');
+function ObtenerDatosDetails(objeto) {
+	detalle = objeto.closest('details');
+	DataSolicitud = detalle.getAttribute('data-datos').split(',');
+	id_solicitud = DataSolicitud[0].trim();
+	matricula = DataSolicitud[1].trim();
+	nombre = DataSolicitud[2].trim();
+	apellidos = DataSolicitud[3].trim();
+	grupo = DataSolicitud[4].trim();
+	motivo = DataSolicitud[5].trim();
+	fecha = DataSolicitud[6].trim();
+	estado = DataSolicitud[7].trim();	
 
-	let fila = objeto.closest('tr');
-	id = fila.querySelectorAll('td')[0].innerText;
+	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado };
+}
+
+function obtenerDatosTable(objeto) {
+	fila = objeto.closest('tr');
+	id_solicitud = fila.querySelectorAll('td')[0].innerText;
 	matricula = fila.querySelectorAll('td')[1].innerText;
 	nombre = fila.querySelectorAll('td')[2].innerText;
 	apellidos = fila.querySelectorAll('td')[3].innerText;
@@ -164,10 +175,26 @@ function aceptarSolicitud(objeto) {
 	motivo = fila.querySelectorAll('td')[5].innerText;
 	fecha = fila.querySelectorAll('td')[6].innerText;
 	estado = fila.querySelectorAll('td')[8].className;
-	opciones = fila
-		.querySelectorAll('td')[9]
-		.querySelector('div')
-		.querySelectorAll('button');
+	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado };
+}
+
+function obtenerDatosSolicitud(objeto){
+
+	if (document.getElementById('table').innerText !== '') {
+		const datosSolicitudTable = obtenerDatosTable(objeto);
+		return  datosSolicitudTable
+	} else {
+		const datosSolicitudDetail = ObtenerDatosDetails(objeto);
+		return datosSolicitudDetail
+	}
+}
+
+function aceptarSolicitud(objeto) {
+
+	id_jefe = objeto.getAttribute('data-id');
+
+	const datosSolicitud = obtenerDatosSolicitud(objeto);
+	({id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado} = datosSolicitud);
 
 	if (verificarOpciones(estado)) {
 		return;
@@ -178,7 +205,7 @@ function aceptarSolicitud(objeto) {
 		method: 'POST',
 		data: {
 			id_jefe: id_jefe,
-			id_solicitud: id,
+			id_solicitud: id_solicitud,
 			matricula: matricula,
 			nombre: nombre,
 			apellidos: apellidos,
@@ -205,11 +232,9 @@ function aceptarSolicitud(objeto) {
 			}
 		},
 		error: function (xhr) {
-
 			let mensajeError = 'Error desconocido';
 
 			try {
-				// Intentar convertir el responseText en JSON
 				let jsonStart = xhr.responseText.indexOf('{');
 				if (jsonStart !== -1) {
 					let jsonString = xhr.responseText.substring(jsonStart);
@@ -217,12 +242,14 @@ function aceptarSolicitud(objeto) {
 					mensajeError =
 						jsonData['sin_error'] || 'Error en el servidor';
 				} else {
-					mensajeError = xhr.responseText; // En caso de que no sea JSON válido
+					mensajeError = xhr.responseText;
 				}
 			} catch (e) {
-				console.error(
-					'Error al procesar la respuesta del servidor:',
-					e,
+				mostrarTemplate(
+					"Error al procesar la respuesta del servidor: " + e,
+					'../../assets/iconos/ic_error.webp',
+					'var(--rojo)',
+					'miTemplate',
 				);
 			}
 

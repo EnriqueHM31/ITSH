@@ -283,7 +283,8 @@ class Jefe
             ";
 
             $detalles =  "
-                <details class='detalles_solicitudes'>
+                <details class='detalles_solicitudes' 
+                data-datos='{$fila['solicitud']}, {$fila['matricula']}, {$fila['nombre']},{$fila['apellidos']}, {$fila['grupo']}, {$fila['motivo']}, {$fila['fecha_ausencia']}, {$clase}'>
                     <summary>
                         <div class='detalles'>
                             <p>Solicitud: {$fila['solicitud']}</p>
@@ -293,31 +294,31 @@ class Jefe
                         <div class='{$clase} estado'></div>
                     </summary>
                     <div class='contenido_solicitudes'>
-                    <div class='detalle'><strong>Matricula:</strong><p>{$fila['matricula']}</p></div>
-                    <div class='detalle'><strong>Nombre:</strong><p>{$fila['nombre']}</p></div>
-                    <div class='detalle'><strong>Apellidos:</strong><p>{$fila['apellidos']}</p></div>
-                    <div class='detalle'><strong>Grupo:</strong><p>{$fila['grupo']}</p></div>
-                    <div class='detalle'><strong>Motivo:</strong><p>{$fila['motivo']}</p></div>
-                    <div class='detalle'><strong>Ausencia:</strong><p>{$fila['fecha_ausencia']}</p></div>
+                        <div class='detalle'><strong>Matricula:</strong><p>{$fila['matricula']}</p></div>
+                        <div class='detalle'><strong>Nombre:</strong><p>{$fila['nombre']}</p></div>
+                        <div class='detalle'><strong>Apellidos:</strong><p>{$fila['apellidos']}</p></div>
+                        <div class='detalle'><strong>Grupo:</strong><p>{$fila['grupo']}</p></div>
+                        <div class='detalle'><strong>Motivo:</strong><p>{$fila['motivo']}</p></div>
+                        <div class='detalle'><strong>Ausencia:</strong><p>{$fila['fecha_ausencia']}</p></div>
 
-                    <div class='detalle'><strong>Evidencia:</strong>
-                        <a href='../Alumno/evidencias/{$fila['evidencia']}' target='_blank' >
-                            {$fila['evidencia']}
-                        </a>
-                    </div>
-                    <div class='opciones'>
-                            <button class='btn_opciones_solicitudes' data-id='$id' onclick='aceptarSolicitud(this)'>
-                                Aceptar
-                            </button>
-
-                            <button class='btn_opciones_solicitudes' onclick='rechazarSolicitud(this)'>
-                                Rechazar
-                            </button>
-
-                            <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
-                                Eliminar
-                            </button>
+                        <div class='detalle'><strong>Evidencia:</strong>
+                            <a href='../Alumno/evidencias/{$fila['evidencia']}' target='_blank' >
+                                {$fila['evidencia']}
+                            </a>
                         </div>
+                        <div class='opciones'>
+                                <button class='btn_opciones_solicitudes' data-id='$id' onclick='aceptarSolicitud(this)'>
+                                    Aceptar
+                                </button>
+
+                                <button class='btn_opciones_solicitudes' onclick='rechazarSolicitud(this)'>
+                                    Rechazar
+                                </button>
+
+                                <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
+                                    Eliminar
+                                </button>
+                            </div>
                     </div>
                 </details>
             ";
