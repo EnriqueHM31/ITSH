@@ -49,6 +49,9 @@ table {
     border: .1rem solid var(--negro);
     border-collapse: collapse;
     z-index: 10;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 3rem;
 }
 
 th {
@@ -87,4 +90,128 @@ td {
     width: 2rem;
     height: 2rem;
     cursor: pointer;
+}
+
+
+/* Detalles de la solicitud */
+#lista-solicitudes-details{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+
+details {
+    width: 90%;
+    border-radius: 1.5rem;
+    background: var(--vino);
+    margin: 0 auto;
+    color: var(--blanco);
+    z-index: 50;
+}
+
+summary {
+    width: 100%;
+    list-style: none;
+    cursor: pointer;
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: .1rem solid var(--blanco);
+    padding-left: 1rem;
+
+}
+
+summary .estado{
+    padding: 1rem;
+    width:4rem;
+    height: 4rem;
+    border-radius: 0 1rem 1rem 0;
+    border: .1rem solid var(--blanco);
+}
+
+details[open] .estado{
+    border-radius: 0 1rem 0 0;
+}
+
+details[open] summary {
+    background: var(--blanco);
+    color: var(--vino);
+    border: .3rem solid var(--vino);
+    border-radius: 1rem 1rem 0 0;
+    font-weight: bold;
+}
+
+details .opciones{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+
+details .opciones button {
+    padding: .5rem 1rem;
+    border-radius: 1.5rem;
+    font-weight: bold;
+}
+
+details .opciones button:first-child {
+    background: var(--verde);
+}
+
+details .opciones button:nth-child(2) {
+    background: var(--rojo);
+    color: var(--blanco);
+}
+
+details .opciones button:last-child {
+    background: var(--blanco);
+}
+
+.contenido_solicitudes{
+    display: flex;
+    align-items: start;
+    gap: 2rem;
+    font-size: clamp(1.1rem, 4vw, 1.8rem);
+    padding: 1.5rem 0;
+}
+
+.contenido_solicitudes .detalle{
+    display: flex;
+    align-items: center;
+    font-family: 'Poppins';
+    gap: 1rem;
+    width: 100%;
+}
+
+.contenido_solicitudes .detalle strong{
+    flex: 1;
+}
+
+.contenido_solicitudes .detalle p,
+.contenido_solicitudes .detalle a{
+    flex: 2;
+}
+
+.detalle strong{
+    background-color: var(--blanco);
+    color: var(--vino);
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+
+}
+
+.detalle a {
+    color: var(--blanco)
+}
+
+.detalle a:hover {
+    text-decoration: underline;
+    color: var(--gris);
 }

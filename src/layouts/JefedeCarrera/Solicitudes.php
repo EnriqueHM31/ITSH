@@ -74,8 +74,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
         <div class="contenedor_main">
             <div class="contenedor">
-                <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
-                    height="164">
+                <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
             </div>
             <div class="contenido_solicitudes">
                 <a href="./HistorialJustificantes.php" class="btn_historial">
@@ -87,7 +86,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
                 if ($data->num_rows > 0) {
                     ?>
 
-                    <table>
+                    <table id="table">
                         <tr>
                             <th>Solicitud</th>
                             <th>Matricula</th>
@@ -101,8 +100,42 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
                             <th>Opciones</th>
                         </tr>
                         <?php
-                        $jefeCarrera->MostrarSolicitudes($data, $id);
+                        $arraysDatos = $jefeCarrera->MostrarSolicitudes($data, $id);
+                        ?>
+                        <div id="lista-solicitudes-details">
 
+                        </div>
+                        <script>
+
+
+                            function ajustarContenido(array) {
+                                const contentDiv = document.getElementById("content");
+                                const screenWidth = window.innerWidth;
+
+                                document.getElementById("lista-solicitudes-details").innerHTML = "";
+                                document.getElementById("table").innerHTML = ""
+                                
+                                if (screenWidth > 1000) {
+                                    let tabla = document.getElementById("table");
+                                    tabla.innerHTML = array[0][array[0].length - 1];
+                                    for (let i = 0; i < array[0].length - 1; i++) {
+                                        tabla.innerHTML += array[0][i];
+                                    }
+                                } else {
+                                    for (let i = 0; i < array[0].length; i++) {
+                                        document.getElementById("lista-solicitudes-details").innerHTML += array[1][i]
+                                    }
+                                }
+                            }
+
+                            window.addEventListener("load", function () {
+                                ajustarContenido(<?php echo json_encode($arraysDatos); ?>);
+                            })
+                            window.addEventListener("resize", function () {
+                                ajustarContenido(<?php echo json_encode($arraysDatos); ?>);
+                            })
+                        </script>
+                        <?php
                 } else {
                     echo "<p class='sin_solicitudes'>No hay solicitudes</p>";
                 }

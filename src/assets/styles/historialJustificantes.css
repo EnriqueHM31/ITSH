@@ -65,6 +65,7 @@
     margin: 0 auto;
     justify-content: center;
     z-index: 1000;
+    margin-bottom: 4rem;
 }
 
 .contenido_historial:has(:nth-child(5)) {

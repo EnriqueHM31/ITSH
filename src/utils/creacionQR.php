@@ -30,7 +30,7 @@ function generarCodigo($conexion, $id, $nombre, $fecha, $valido)
                 throw new Exception("Faltan librerias para la creacion de codigos QR.");
             }
 
-            QRcode::png($url_verificacion, $filename, QR_ECLEVEL_L, 4);
+            QRcode::png($url_verificacion, $filename, QR_ECLEVEL_L, 4, true);
 
             // Conexión a la base de datos y almacenamiento
 

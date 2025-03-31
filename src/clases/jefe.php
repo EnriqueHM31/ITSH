@@ -218,6 +218,24 @@ class Jefe
 
     public function MostrarSolicitudes($resultado, $id)
     {
+        $tablaArray = [];
+        $detallesArray = [];
+
+        $tablaHead = "
+        <tr>
+            <th>Solicitud</th>
+            <th>Matricula</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Grupo</th>
+            <th>Motivo</th>
+            <th>Fecha</th>
+            <th>Evidencia</th>
+            <th>Estado</th>
+            <th>Opciones</th>
+        </tr>
+        ";
+
         while ($fila = mysqli_fetch_array($resultado)) {
             if ($fila['estado'] == "Aceptada") {
                 $clase = "aceptada";
@@ -226,7 +244,12 @@ class Jefe
             } else {
                 $clase = "rechazada";
             }
-            echo "
+
+            $fecha = explode("-", $fila['fecha_ausencia']);
+
+            $tabla = "";
+            
+            $tabla .=  "
             <tr>
             <td> {$fila['solicitud']}</td>
             <td> {$fila['matricula']}</td>
@@ -234,7 +257,7 @@ class Jefe
             <td> {$fila['apellidos']}</td>
             <td> {$fila['grupo']}</td>
             <td> {$fila['motivo']}</td>
-            <td> {$fila['fecha_ausencia']}</td>
+            <td> {$fecha[2]}-{$fecha[1]}-{$fecha[0]}</td>
             <td>
                 <a href='../Alumno/evidencias/{$fila['evidencia']}' target='_blank' class='link_evidencia'>
                     {$fila['evidencia']}
@@ -258,7 +281,55 @@ class Jefe
             </td>
             </tr>
             ";
+
+            $detalles =  "
+                <details class='detalles_solicitudes'>
+                    <summary>
+                        <div class='detalles'>
+                            <p>Solicitud: {$fila['solicitud']}</p>
+                        </div>
+                        
+
+                        <div class='{$clase} estado'></div>
+                    </summary>
+                    <div class='contenido_solicitudes'>
+                    <div class='detalle'><strong>Matricula:</strong><p>{$fila['matricula']}</p></div>
+                    <div class='detalle'><strong>Nombre:</strong><p>{$fila['nombre']}</p></div>
+                    <div class='detalle'><strong>Apellidos:</strong><p>{$fila['apellidos']}</p></div>
+                    <div class='detalle'><strong>Grupo:</strong><p>{$fila['grupo']}</p></div>
+                    <div class='detalle'><strong>Motivo:</strong><p>{$fila['motivo']}</p></div>
+                    <div class='detalle'><strong>Ausencia:</strong><p>{$fila['fecha_ausencia']}</p></div>
+
+                    <div class='detalle'><strong>Evidencia:</strong>
+                        <a href='../Alumno/evidencias/{$fila['evidencia']}' target='_blank' >
+                            {$fila['evidencia']}
+                        </a>
+                    </div>
+                    <div class='opciones'>
+                            <button class='btn_opciones_solicitudes' data-id='$id' onclick='aceptarSolicitud(this)'>
+                                Aceptar
+                            </button>
+
+                            <button class='btn_opciones_solicitudes' onclick='rechazarSolicitud(this)'>
+                                Rechazar
+                            </button>
+
+                            <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </details>
+            ";
+            array_push($tablaArray, $tabla);
+            array_push($detallesArray, $detalles);
         }
+
+        array_push($tablaArray, $tablaHead);
+
+        return [$tablaArray, $detallesArray];
+
+
     }
 
     public function HistorialJustificantes($conexion, $carrera)
