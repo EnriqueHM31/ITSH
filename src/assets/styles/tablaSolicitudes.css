@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
     max-width: 90%;
     margin: 0 auto;
     z-index: 1;
@@ -14,6 +14,7 @@
     color: var(--vino);
     text-align: center;
     font-weight: bold;
+    margin: 0 auto;
 }
 
 .btn_historial {
@@ -214,4 +215,20 @@ details .opciones button:last-child {
 .detalle a:hover {
     text-decoration: underline;
     color: var(--gris);
+}
+
+
+@media (max-width: 600px) {
+    .lista-solicitudes-details{
+        margin: 0;
+        padding: 0;
+    }
+
+    .btn_historial{
+        margin: 0;
+    }
+
+    table{
+        display: none;
+    }
 }

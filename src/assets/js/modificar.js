@@ -16,7 +16,6 @@ async function cargarUsuarioModificar(id, nombre) {
         dataType: 'json',
         success: function (data) {
             if (data.error) {
-                console.log(data.error)
             } else {
                 document.getElementById('nombre').value = data.nombre;
                 document.getElementById('apellidos').value = data.apellidos;

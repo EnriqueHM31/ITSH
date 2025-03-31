@@ -38,7 +38,7 @@
     border: none;
     border-radius: 1.5rem;
     padding: 1rem 2rem;
-    font-size: clamp(1rem, 4vw, 1.8rem);
+    font-size: clamp(1rem, 3.5vw, 1.8rem);
     cursor: pointer;
     font-weight: bold;
 }
@@ -243,10 +243,34 @@
     .contenido_historial:has(:nth-child(3)),
     .contenido_historial:has(:nth-child(4)) {
 
-        grid-template-columns: repeat(auto-fit, minmax(100px, 140px));
+        grid-template-columns: repeat(auto-fit, minmax(100px, 130px));
     }
 
     .contenido_historial{
         padding-bottom: 4rem;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .contenido_opciones{
+        gap: 2rem;
+    }
+
+    .btn_reiniciar{
+        font-size: 1rem;
+    }
+
+    .contenido_historial{
+        width: 95%;
+        text-align: center;
+    }
+
+    input[type=search]{
+        width: 50%;
+    }
+
+    .contenedor_logo{
+        display: none;
     }
 }

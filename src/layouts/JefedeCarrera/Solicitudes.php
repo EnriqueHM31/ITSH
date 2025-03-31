@@ -18,6 +18,14 @@ $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO
 $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
+$dataSolicitudes = $jefeCarrera->TablaSolicitudesRegistros($conexion, $carreraJefe);
+$sin_resultados = "";
+if ($dataSolicitudes->num_rows > 0) {
+    $arraysDatos = $jefeCarrera->MostrarSolicitudes($dataSolicitudes, $id);
+} else {
+    $sin_resultados = "<p class='sin_solicitudes'>No hay solicitudes</p>";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -81,66 +89,17 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
                     Justificantes
                 </a>
 
+
+                <table id="table">
+                </table>
+                <div id="lista-solicitudes-details">
+                </div>
+
                 <?php
-                $data = $jefeCarrera->TablaSolicitudesRegistros($conexion, $carreraJefe);
-                if ($data->num_rows > 0) {
-                    ?>
-
-                    <table id="table">
-                        <tr>
-                            <th>Solicitud</th>
-                            <th>Matricula</th>
-                            <th>Nombre</th>
-                            <th>Apellidos</th>
-                            <th>Grupo</th>
-                            <th>Motivo</th>
-                            <th>Fecha</th>
-                            <th>Evidencia</th>
-                            <th>Estado</th>
-                            <th>Opciones</th>
-                        </tr>
-                        <?php
-                        $arraysDatos = $jefeCarrera->MostrarSolicitudes($data, $id);
-                        ?>
-                        <div id="lista-solicitudes-details">
-
-                        </div>
-                        <script>
-
-
-                            function ajustarContenido(array) {
-                                const contentDiv = document.getElementById("content");
-                                const screenWidth = window.innerWidth;
-
-                                document.getElementById("lista-solicitudes-details").innerHTML = "";
-                                document.getElementById("table").innerHTML = ""
-                                
-                                if (screenWidth > 1000) {
-                                    let tabla = document.getElementById("table");
-                                    tabla.innerHTML = array[0][array[0].length - 1];
-                                    for (let i = 0; i < array[0].length - 1; i++) {
-                                        tabla.innerHTML += array[0][i];
-                                    }
-                                } else {
-                                    for (let i = 0; i < array[0].length; i++) {
-                                        document.getElementById("lista-solicitudes-details").innerHTML += array[1][i]
-                                    }
-                                }
-                            }
-
-                            window.addEventListener("load", function () {
-                                ajustarContenido(<?php echo json_encode($arraysDatos); ?>);
-                            })
-                            window.addEventListener("resize", function () {
-                                ajustarContenido(<?php echo json_encode($arraysDatos); ?>);
-                            })
-                        </script>
-                        <?php
-                } else {
-                    echo "<p class='sin_solicitudes'>No hay solicitudes</p>";
+                if (strlen($sin_resultados) != 0) {
+                    echo $sin_resultados;
                 }
                 ?>
-                </table>
             </div>
         </div>
 
@@ -208,3 +167,44 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 </body>
 
 </html>
+
+<script defer>
+
+    function ajustarContenido(array) {
+        const screenWidth = window.innerWidth;
+
+        const tabla = document.getElementById("table");
+        const detalles = document.getElementById("lista-solicitudes-details");
+
+        // Limpiar los contenidos
+        if (detalles) detalles.innerHTML = "";
+        if (tabla) tabla.innerHTML = "";
+
+        if (screenWidth > 1000) {
+            let contenidoTabla = array[0][array[0].length - 1]; // Primer contenido
+            for (let i = 0; i < array[0].length - 1; i++) {
+                contenidoTabla += array[0][i];  // Añadir el resto
+            }
+            tabla.innerHTML = contenidoTabla; // Asignar todo el contenido de una vez
+        } else {
+            let contenidoDetalles = "";
+            for (let i = 0; i < array[1].length; i++) {
+                contenidoDetalles += array[1][i];  // Crear el contenido completo
+            }
+            detalles.innerHTML = contenidoDetalles;  // Asignar todo el contenido de una vez
+        }
+    }
+
+    function mostrarDatosResize(array) {
+        document.addEventListener("DOMContentLoaded", function () {
+            ajustarContenido(array);  // Ejecutar directamente cuando la página carga
+        });
+
+        // Ejecutar al redimensionar la ventana
+        window.addEventListener("resize", function () {
+            ajustarContenido(array);  // Ejecutar nuevamente al redimensionar
+        });
+    }
+
+    mostrarDatosResize(<?php echo json_encode($arraysDatos) ?>) 
+</script>

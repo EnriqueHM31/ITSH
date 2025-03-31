@@ -74,8 +74,7 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
             <div class="contenedor_logo">
                 <img src="../../assets/extra/logo.svg" alt="logo del ITSH">
             </div>
-            <img src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" width="1000px"
-                height="164">
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
 
             <div class="contenido_opciones">
                 <button class="btn_reiniciar" onclick="mostrarModal()">Reiniciar Folio</button>
