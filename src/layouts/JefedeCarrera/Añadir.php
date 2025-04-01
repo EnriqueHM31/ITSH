@@ -9,12 +9,18 @@ include "../../utils/functionGlobales.php";
 include "../../validaciones/Validaciones.php";
 include "../../conexion/verificar acceso.php";
 include "../../conexion/verificar_rol_jefe.php";
+include "../../query/obtenerGrupos.php";
 
 $usuario = new usuario();
 $jefe = new jefe();
 $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
 $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
+$GruposCarrera = obtenerGrupos($conexion, $id_carrera);
+$grupos = $GruposCarrera[0][0];
+$modalidades = $GruposCarrera[1][0]["Modalidades"];
+$id_grupos = $grupos["id_grupos"];
+$Numero_grupos = $grupos["Numero_grupos"];
 ?>
 
 <!DOCTYPE html>
@@ -31,6 +37,8 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/opcionesSelect.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
@@ -75,7 +83,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
         <div class="contenedor_main">
 
-            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina" >
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
 
             <form class="formulario" method="post" enctype="multipart/form-data">
                 <label for="clave" class="contenedor_input">
@@ -97,20 +105,17 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
                 </label>
 
                 <label for="modalidad" class="contenedor_input">
-                    <select class="input_pagina select_info" id="modalidad" name="modalidad">
-                        <option class="opcion_select" value="Escolarizado">
-                            Escolarizado
-                        </option>
-                        <option class="opcion_select" value="Flexible">
-                            Flexible
-                        </option>
+                    <select class="input_pagina select_info" id="modalidad" name="modalidad"
+                        data-modalidades="<?php echo $modalidades ?>">
+
                     </select>
                     <span class="nombre_input">Modalidad</span>
                 </label>
 
                 <label for="grupo" class="contenedor_input">
                     <select class="input_pagina select_info" name="grupo" id="grupo"
-                        data-carrera="<?php echo $carreraJefe ?>">
+                        data-carrera="<?php echo $carreraJefe ?>" data-id_grupos="<?php echo $id_grupos ?>"
+                        data-numero_grupos="<?php echo $Numero_grupos ?>">
 
                     </select>
 

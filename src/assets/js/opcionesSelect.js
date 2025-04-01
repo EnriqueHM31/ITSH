@@ -2,47 +2,24 @@ const modalidadSelect = document.getElementById('modalidad');
 const grupoSelect = document.getElementById('grupo');
 
 if (grupoSelect !== null) {
-	// Función para actualizar los grupos según la modalidad
 	function actualizarGrupos() {
-		// Limpiar el select de grupos
-		grupoSelect.innerHTML = '';
 
-		// Obtener la modalidad seleccionada
 		const modalidad = modalidadSelect.value;
+		const id_grupos = grupoSelect.dataset.id_grupos;
+		const numero_grupos = grupoSelect.dataset.numero_grupos;
 
-		let carrera = grupoSelect.dataset.carrera;
-
-		const carreras = [
-			{ 'Gestion Empresarial': 1 },
-			{ Contaduria: 2 },
-			{ Industrial: 3 },
-			{ 'Sistemas Computacionales': 4 },
-			{ Electromecanica: 5 },
-			{ Alimentarias: 6 },
-			{ Quimica: 7 },
-			{ Ambiental: 8 },
-		];
-
-		const carreraEncontrada = carreras.find(
-			(obj) => obj[carrera] !== undefined,
-		);
-		const numeroGrupo = carreraEncontrada
-			? carreraEncontrada[carrera]
-			: '-';
-
-		// Según la modalidad, definir los grupos
 		opciones = [];
+
 		if (modalidad === 'Escolarizado') {
-			for (let i = 1; i <= 9; i++) {
-				opciones.push(i + '0' + numeroGrupo + 'A');
+			for (let i = 1; i <= numero_grupos; i++) {
+				opciones.push(i + '0' + id_grupos + 'A');
 			}
 		} else if (modalidad === 'Flexible') {
-			for (let i = 1; i <= 9; i++) {
-				opciones.push(i + '0' + numeroGrupo + 'B');
+			for (let i = 1; i <= id_grupos; i++) {
+				opciones.push(i + '0' + id_grupos + 'B');
 			}
 		}
-
-		// Llenar el select de grupos con las opciones correspondientes
+		grupoSelect.innerHTML = '';
 		opciones.forEach((opcion) => {
 			const optionElement = document.createElement('option');
 			optionElement.value = opcion;
@@ -51,11 +28,11 @@ if (grupoSelect !== null) {
 		});
 	}
 
+
 	// Inicializar con la modalidad seleccionada por defecto
 	modalidadSelect.addEventListener('change', actualizarGrupos);
 
 	// Llamar a la función para cargar los grupos iniciales
-	actualizarGrupos();
 }
 
 const cargo = document.getElementById('rol');
@@ -64,9 +41,6 @@ const groupCarrera = document.getElementById('carrera');
 if (cargo !== null) {
 	// Función para actualizar los grupos según la modalidad
 	function actualizarCargo() {
-		// Limpiar el select de grupos
-		groupCarrera.innerHTML = '';
-
 		// Obtener la modalidad seleccionada
 		const cargoActivo = cargo.value;
 
@@ -74,8 +48,7 @@ if (cargo !== null) {
 
 		if (cargoActivo === 'Administrador') {
 			opciones.push('Null');
-			ponerDatosOptions(opciones);
-			return;
+			ponerDatosOptions(opciones, groupCarrera);
 		} else if (cargoActivo === 'Jefe de Carrera') {
 			$.ajax({
 				url: '../../query/obtenerCarreras.php',
@@ -86,9 +59,9 @@ if (cargo !== null) {
 				dataType: 'json',
 				success: function (data) {
 					data.result.forEach((opcion) => {
-						opciones.push(opcion['carrera']);
+						opciones.push(opcion['carrera'].trim());
 					});
-					ponerDatosOptions(opciones);
+					ponerDatosOptions(opciones, groupCarrera);
 				},
 				error: function (xhr) {
 					mostrarTemplate(
@@ -102,15 +75,16 @@ if (cargo !== null) {
 		}
 	}
 
-	function ponerDatosOptions(opciones) {
+	function ponerDatosOptions(opciones, groupCarrera) {
+		groupCarrera.innerHTML = '';
 		opciones.forEach((opcion) => {
 			const optionElement = document.createElement('option');
 			if (opcion.trim() === 'Sistemas Computacionales') {
-				optionElement.textContent = 'Sistemas';
+				optionElement.textContent = 'Sistemas'.trim();
 			} else {
-                optionElement.textContent = opcion;
-            }
-            optionElement.value = opcion;
+				optionElement.textContent = opcion.trim();
+			}
+			optionElement.value = opcion.trim();
 			groupCarrera.appendChild(optionElement);
 		});
 	}
@@ -121,3 +95,28 @@ if (cargo !== null) {
 	// Llamar a la función para cargar los grupos iniciales
 	actualizarCargo();
 }
+
+
+function crearModalidad(modalidad, modalidadSelect) {
+	// Crear la opción modalidad
+	let modalidadOption = document.createElement('option');
+	modalidadOption.value = modalidad;
+	modalidadOption.textContent = modalidad;
+	modalidadSelect.appendChild(modalidadOption);
+}
+
+
+function ponerModalidades() {
+	const modalidades = document.getElementById('modalidad').dataset.modalidades;
+	const modalidadSelect = document.getElementById('modalidad');
+
+	if (modalidades == 2) {
+		crearModalidad('Escolarizado', modalidadSelect);
+		crearModalidad('Flexible', modalidadSelect);
+	} if (modalidades == 1) {
+		crearModalidad('Escolarizado', modalidadSelect);
+	}
+}
+
+ponerModalidades();
+actualizarGrupos();

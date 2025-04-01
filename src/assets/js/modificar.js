@@ -1,56 +1,88 @@
+
 async function cargarUsuarioModificar(id, nombre) {
     if (id == null) {
         mostrarTemplate(
             'Busca y seleccione a un usuario',
             '../../assets/iconos/ic_error.webp',
             'var(--rojo)',
-            'miTemplate'
-        )
+            'miTemplate',
+        );
+        return; // Terminar la ejecución si no hay ID
     }
+
     $.ajax({
         url: `../../query/${nombre}`,
         method: 'POST',
         data: {
-            id: id
+            id: id,
         },
         dataType: 'json',
         success: function (data) {
-            if (data.error) {
-            } else {
-                document.getElementById('nombre').value = data.nombre;
-                document.getElementById('apellidos').value = data.apellidos;
-                document.getElementById('correo').value = data.correo;
+            resultadosBusqueda = document.getElementById('resultados')
+            inputBuscar = document.getElementById('buscar')
 
-                if (nombre === 'getInfoPersonal.php') {
+            nombreUsuario = document.getElementById('nombre');
+            apellidosUsuario = document.getElementById('apellidos');
+            correoUsuario = document.getElementById('correo');
 
-                    document.getElementById('clave').value = data.clave_empleado;
-                    document.getElementById('clave_anterior').value = data.clave_empleado;
-                    document.getElementById('rol').value = data.rol;
+            clave = document.getElementById('clave');
+            claveAnterior = document.getElementById('clave_anterior');
 
-                    if (data.rol === "Administrador") {
-                        actualizarCargo();
-                    } else {
-                        actualizarCargo();
-                        document.getElementById('carrera').value = data.carrera;
-                    }
+            modalidad = document.getElementById('modalidad')
+            grupo = document.getElementById('grupo');
+            carreras = document.getElementById('carrera');
+            rol = document.getElementById('rol');
 
+            nombreUsuario.value = data.nombre;
+            apellidosUsuario.value = data.apellidos;
+            correoUsuario.value = data.correo;
+            rol.value = data.rol;
+
+
+            if (nombre === 'getInfoPersonal.php') {
+                clave.value = data.clave_empleado;
+                claveAnterior.value = data.clave_empleado;
+
+                if (data.rol === 'Administrador') {
+                    actualizarCargo();
+
+                } else if (data.rol === 'Jefe de Carrera') {
+                    actualizarCargo();
+                    // Esperar a que las opciones estén completamente cargadas
+                    setTimeout(() => {
+                        const carreras = document.getElementById('carrera');
+                        carreras.value = data.carrera;
+
+                        if (!carreras.value) {
+                            for (let i = 0; i < carreras.options.length; i++) {
+                                if (carreras.options[i].value === data.carrera) {
+                                    carreras.selectedIndex = i;
+                                    break;
+                                }
+                            }
+                        }
+                    }, 100);
                 }
-                if (nombre === 'getInfoEstudiante.php') {
-                    document.getElementById('clave').value = data.matricula;
-                    document.getElementById('clave_anterior').value = data.matricula;
-                    document.getElementById('modalidad').value = data.id_modalidad;
-                    actualizarGrupos();
-                    document.getElementById('grupo').value = data.grupo;
-
-                }
-
-                document.getElementById("resultados").innerHTML = ""
-                document.getElementById("buscar").value = ""
             }
+
+            if (nombre === 'getInfoEstudiante.php') {
+                clave.value = data.matricula;
+                claveAnterior.value = data.matricula;
+                modalidad.value = data.id_modalidad;
+                grupo.value = data.grupo;
+            }
+
+            // Limpiar resultados anteriores y el campo de búsqueda
+            resultadosBusqueda.innerHTML = '';
+            inputBuscar.value = '';
         },
-        error: function () {
-            new throwError("Fallo con los datos")
+        error: function (xhr, status, error) {
+            mostrarTemplate(
+                'Error al obtener los datos: \n' + error,
+                '../../assets/iconos/ic_error.webp',
+                'var(--rojo)',
+                'miTemplate',
+            );
         }
     });
-
 }

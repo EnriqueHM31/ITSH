@@ -1,9 +1,8 @@
-
-
 <?php
 
 include "../conexion/conexion.php";
 include "../utils/constantes.php";
+
 
 $stmt = $conexion->prepare("SELECT " . Variables::CAMPO_CARRERA . " FROM " . Variables::TABLA_BD_CARRERA);
 $stmt->execute();
@@ -19,4 +18,3 @@ while ($row = $result->fetch_assoc()) {
 
 // Devolvemos el array como un JSON
 echo json_encode(["result" => $data]);
-
