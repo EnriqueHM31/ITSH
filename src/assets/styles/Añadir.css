@@ -59,10 +59,15 @@
 .select_info{
     background: var(--vino) ; 
     color: var(--blanco) ; 
-    padding: 1.2rem 2.7rem;
-    font-size: clamp(1.4rem, 4vw,2rem);
+    padding: 1.2rem 3.2rem;
+    font-size: clamp(1.4rem, 4vw, 2.1rem);
     cursor: pointer;
     margin-top: 1rem;
+    padding-right: 4rem;
+}
+
+.select_info option{
+    font-size: clamp(1.4rem, 4vw, 1.6rem);
 }
 
 

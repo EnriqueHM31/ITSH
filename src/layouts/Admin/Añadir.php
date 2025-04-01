@@ -28,6 +28,8 @@ $administrador = new administrador();
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
     <script src="../../assets/js/opcionesSelect.js" defer></script>
