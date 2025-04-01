@@ -2,6 +2,7 @@ const botonesOpciones = document.querySelectorAll('#agregar_carrera');
 const plantillaCarrera = document.getElementById('plantilla_agregar_carrera');
 const plantillaGrupo = document.getElementById('plantilla_configurar_carrera');
 
+
 if (botonesOpciones !== null) {
 	botonesOpciones.forEach((btnOpcion) => {
 		btnOpcion.addEventListener('click', () => {
@@ -32,7 +33,6 @@ function cerrarVentana(boton) {
 }
 
 const btnEliminarCarrera = document.querySelectorAll('.boton_eliminar');
-
 if (btnEliminarCarrera !== null) {
 	btnEliminarCarrera.forEach((element) => {
 		element.addEventListener('click', () => {
@@ -63,35 +63,7 @@ if (btnEliminarCarrera !== null) {
 					}
 				},
 				error: function (xhr) {
-					let mensajeError = 'Error desconocido';
-
-					try {
-						let jsonStart = xhr.responseText.indexOf('{');
-						if (jsonStart !== -1) {
-							let jsonString =
-								xhr.responseText.substring(jsonStart);
-							let jsonData = JSON.parse(jsonString);
-							mensajeError =
-								jsonData['sin_error'] || 'Error en el servidor';
-						} else {
-							mensajeError = xhr.responseText;
-						}
-					} catch (e) {
-						mostrarTemplate(
-							'Error al procesar la respuesta del servidor: ' + e,
-							'../../assets/iconos/ic_error.webp',
-							'var(--rojo)',
-							'miTemplate',
-						);
-						return;
-					}
-
-					mostrarTemplate(
-						mensajeError,
-						'../../assets/iconos/ic_error.webp',
-						'var(--rojo)',
-						'miTemplate',
-					);
+					mostrarErrorAjax(xhr);
 				},
 			});
 		});
@@ -109,39 +81,63 @@ function obtenerDatosCarrera(id) {
 		success: function (data) {
 			document.querySelector('#carrera_antigua').value = id;
 			document.querySelector('#carrera_modificar').value = id;
-			document.querySelector('#cantidad_grupos').value = data["sin_error"][0];
-			document.querySelector('#id_grupo').value = data["sin_error"][1];
+			document.querySelector('#cantidad_grupos').value =
+				data['sin_error'][0];
+			document.querySelector('#id_grupo').value = data['sin_error'][1];
 		},
 		error: function (xhr) {
-			let mensajeError = 'Error desconocido';
-			try {
-				let jsonStart = xhr.responseText.indexOf('{');
-				if (jsonStart !== -1) {
-					let jsonString = xhr.responseText.substring(jsonStart);
-					let jsonData = JSON.parse(jsonString);
-					mensajeError =
-						jsonData['sin_error'] || 'Error en el servidor';
-				} else {
-					mensajeError = xhr.responseText;
-				}
-			} catch (e) {
-				mostrarTemplate(
-					'Error al procesar la respuesta del servidor: ' + e,
-					'../../assets/iconos/ic_error.webp',
-					'var(--rojo)',
-					'miTemplate',
-				);
-				reject(e);
-				return;
-			}
-
-			mostrarTemplate(
-				mensajeError,
-				'../../assets/iconos/ic_error.webp',
-				'var(--rojo)',
-				'miTemplate',
-			);
-			reject(new Error(mensajeError)); // Rechaza la promesa en caso de error
-		},
+            mostrarErrorAjax(xhr);
+        },
 	});
 }
+
+function mostrarErrorAjax(xhr) {
+	let mensajeError = 'Error desconocido';
+	try {
+		let jsonStart = xhr.responseText.indexOf('{');
+		if (jsonStart !== -1) {
+			let jsonString = xhr.responseText.substring(jsonStart);
+			let jsonData = JSON.parse(jsonString);
+			mensajeError = jsonData['sin_error'] || 'Error en el servidor';
+		} else {
+			mensajeError = xhr.responseText;
+		}
+	} catch (e) {
+		mostrarTemplate(
+			'Error al procesar la respuesta del servidor: ' + e,
+			'../../assets/iconos/ic_error.webp',
+			'var(--rojo)',
+			'miTemplate',
+		);
+		reject(e);
+		return;
+	}
+
+	mostrarTemplate(
+		mensajeError,
+		'../../assets/iconos/ic_error.webp',
+		'var(--rojo)',
+		'miTemplate',
+	);
+}
+
+
+const btnCrearPDFUsuarios = document.querySelector('.btn_listar_usuarios');
+
+btnCrearPDFUsuarios !== null ?
+btnCrearPDFUsuarios.addEventListener('click', () => {
+    $.ajax({
+        url: '../../utils/ListarUsuarios.php',
+        method: 'GET',
+        dataType: 'html',
+        success: function (data) {
+            const element = document.createElement('a')
+            element.href = '../../utils/ListarUsuarios.php'
+            element.download = 'usuarios_en_sistema.pdf'
+            element.click();
+        },
+        error: function (xhr) {
+            mostrarErrorAjax(xhr);
+        },
+    });
+}) : null;
