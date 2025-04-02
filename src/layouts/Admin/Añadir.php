@@ -12,6 +12,8 @@ include "../../conexion/verificar_rol_admin.php";
 
 $usuario = new usuario();
 $administrador = new administrador();
+
+
 ?>
 
 <!DOCTYPE html>

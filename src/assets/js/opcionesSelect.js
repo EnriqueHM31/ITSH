@@ -107,10 +107,7 @@ function crearModalidad(modalidad, modalidadSelect) {
 
 
 function ponerModalidades() {
-	const rol = document.querySelector("body").dataset.rol;
-	if (rol === 'Administrador') {
-		return;
-	}
+
 	const modalidades = document.getElementById('modalidad').dataset.modalidades;
 	const modalidadSelect = document.getElementById('modalidad');
 

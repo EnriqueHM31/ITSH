@@ -11,8 +11,9 @@ include "../../conexion/verificar_rol_jefe.php";
 include "../../query/obtenerGrupos.php";
 
 $jefe = new jefe();
-$data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
-$id_carrera = $data[Variables::CAMPO_ID_CARRERA];
+$rol = $_SESSION["rol"];
+$dataJefeCarrera = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
+$id_carrera = $dataJefeCarrera[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
 [$id_grupos, $Numero_grupos, $modalidades] = $jefe->ObtenerGruposDeLaCarrera($conexion, $id_carrera);
 ?>
@@ -42,7 +43,7 @@ $carreraJefe = getResultCarrera($conexion, $id_carrera);
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 
-<body>
+<body data-rol="<?php echo $rol ?>">
 
     <nav class="navegacion">
 

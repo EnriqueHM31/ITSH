@@ -12,8 +12,8 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
-
 $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variables::TABLA_BD_CARRERA);
+
 ?>
 
 <!DOCTYPE html>

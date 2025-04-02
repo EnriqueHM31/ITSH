@@ -409,7 +409,7 @@ function guardarArchivoPDF($data, $id_solicitud, $matricula)
 function estructurarFechaAusencia($fecha)
 {
     $array = explode("-", $fecha);
-    return $array[2] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[0];
+    return $array[0] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[2];
 }
 
 function ModificarEstadoSolicitud($conexion, $id_solicitud)

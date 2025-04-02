@@ -21,10 +21,7 @@ $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
 $seccion = "Eliminar";
 
-
 $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'true';
-
-
 
 ?>
 
