@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
@@ -12,6 +13,7 @@ include "../../query/obtenerGrupos.php";
 
 $usuario = new usuario();
 $jefe = new jefe();
+$rol = $_SESSION["rol"];
 $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
 $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
@@ -33,6 +35,10 @@ $Numero_grupos = $grupos["Numero_grupos"];
     <meta name="description"
         content="Pagina donde los jefes de carrera pueden modificar datos de los usuarios de tipo estudiante">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
@@ -46,7 +52,7 @@ $Numero_grupos = $grupos["Numero_grupos"];
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
 
-<body data-carrera="<?php echo $carreraJefe ?>" data-modo="<?php echo $seccion ?>">
+<body data-carrera="<?php echo $carreraJefe ?>" data-modo="<?php echo $seccion ?>" data-rol="<?php echo $rol ?>">
 
     <nav class="navegacion">
 

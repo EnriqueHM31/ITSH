@@ -37,6 +37,10 @@ $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'tr
     <meta name="description" content="Pagina principal del Jefe de carrera">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/Inicio.css">

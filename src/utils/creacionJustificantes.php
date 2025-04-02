@@ -282,7 +282,7 @@ try {
 
     $pdf = new Dompdf();
     $options = $pdf->getOptions();
-    $options->set("isRemoteEnabled", true);  
+    $options->set("isRemoteEnabled", true);
     $pdf->setOptions($options);
 
     $pdf->loadHtml($html); // Cargar el HTML generado
@@ -440,14 +440,15 @@ function InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre
     $smtm->bind_param('sssssssss', $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe_completo, $nombreArchivo);
 
     if ($smtm->execute()) {
-        
+
         echo json_encode(["sin_error" => True]);
     }
 }
 
 
-function EliminarCodigoQR($id_solicitud, $nombre, $fecha_codigo, $id_unico){
-    $qr_text = $id_solicitud-1 . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha_codigo);
+function EliminarCodigoQR($id_solicitud, $nombre, $fecha_codigo, $id_unico)
+{
+    $qr_text = $id_solicitud - 1 . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha_codigo);
 
     // Directorio para guardar la imagen del QR (se crea si no existe)
     $dir = '../layouts/Alumno/justificantes/codigos_qr/';

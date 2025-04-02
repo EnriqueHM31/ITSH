@@ -25,9 +25,6 @@ if (isset($_POST['id'])) {
 
 
     echo json_encode(crearDataInformacionJefe($idUser, $nombre, $apellidos, $grupo, $carrera, $modalidad, $rol, $correo));
-} else {
-    header("location: ../layouts/Errores/404.php");
-    exit;
 }
 
 

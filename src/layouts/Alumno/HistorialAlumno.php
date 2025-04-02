@@ -22,6 +22,10 @@ $id = $_SESSION["id"];
     <meta name="description" content="Pagina para crear las solicitudes para los justificantes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">

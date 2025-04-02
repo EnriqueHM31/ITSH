@@ -36,9 +36,6 @@ if (isset($_POST['id'])) {
     } else {
         echo json_encode(["sin_error" => false]);
     }
-} else {
-    header("location: ../layouts/Errores/404.php");
-    exit;
 }
 
 

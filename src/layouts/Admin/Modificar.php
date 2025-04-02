@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
@@ -12,6 +13,8 @@ include "../../conexion/verificar_rol_admin.php";
 
 $usuario = new usuario();
 $administrador = new administrador();
+$rol = $_SESSION["rol"];
+
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +27,10 @@ $administrador = new administrador();
     <meta name="description"
         content="Pagina para que el administrador modifique usuarios que sean administradores o jefes de carrera">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
@@ -38,7 +45,7 @@ $administrador = new administrador();
 
 </head>
 
-<body data-modo="Modificar" data-carrera="">
+<body data-modo="Modificar" data-carrera="" data-rol="<?php echo $rol ?>">
 
     <nav class="navegacion">
 

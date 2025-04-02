@@ -2,55 +2,48 @@
 // Incluir la conexión a la base de datos (ajusta la ruta según tu estructura)
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
-include "../conexion/verificar acceso.php";
 
 
 // Verificar que se haya enviado el parámetro con el texto del QR
-if (isset($_GET['qr_text'])) {
-    $qr_text = $_GET['qr_text'];
+$qr_text = $_GET['qr_text'];
 
-    // Preparar la consulta para buscar el código QR en la base de datos
-    $sql = "SELECT " . Variables::CAMPO_Q_VALIDO . " FROM " . Variables::TABLA_BD_CODIGOS_QR . " WHERE " . Variables::CAMPO_Q_TEXTO . " = ?";
+// Preparar la consulta para buscar el código QR en la base de datos
+$sql = "SELECT " . Variables::CAMPO_Q_VALIDO . " FROM " . Variables::TABLA_BD_CODIGOS_QR . " WHERE " . Variables::CAMPO_Q_TEXTO . " = ?";
 
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("s", $qr_text);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+$stmt = $conexion->prepare($sql);
+$stmt->bind_param("s", $qr_text);
+$stmt->execute();
+$resultado = $stmt->get_result();
 
-    // Verificar si se encontró el código
-    if ($resultado->num_rows > 0) {
-        $row = $resultado->fetch_assoc();
+// Verificar si se encontró el código
+if ($resultado->num_rows > 0) {
+    $row = $resultado->fetch_assoc();
 
-        // Si el código aún es válido (valor 1)
-        if ($row['valido'] == 1) {
-            // Actualizar a 2 para marcarlo como ya escaneado
-            $update = "UPDATE " . Variables::TABLA_BD_CODIGOS_QR . " SET " . Variables::CAMPO_Q_VALIDO . " = 2 WHERE " . Variables::CAMPO_Q_TEXTO . " = ?";
+    // Si el código aún es válido (valor 1)
+    if ($row['valido'] == 1) {
+        // Actualizar a 2 para marcarlo como ya escaneado
+        $update = "UPDATE " . Variables::TABLA_BD_CODIGOS_QR . " SET " . Variables::CAMPO_Q_VALIDO . " = 2 WHERE " . Variables::CAMPO_Q_TEXTO . " = ?";
 
-            $stmt_update = $conexion->prepare($update);
-            $stmt_update->bind_param("s", $qr_text);
-            if ($stmt_update->execute()) {
-                $src = "../assets/iconos/ic_correcto.webp";
-                $codigo_valido = "El codigo es valido";
-            } else {
-                $src = "../assets/iconos/ic_error.webp";
-
-                $codigo_valido = "El codigo es invalido";
-            }
-            $stmt_update->close();
+        $stmt_update = $conexion->prepare($update);
+        $stmt_update->bind_param("s", $qr_text);
+        if ($stmt_update->execute()) {
+            $src = "../assets/iconos/ic_correcto.webp";
+            $codigo_valido = "El codigo es valido";
         } else {
             $src = "../assets/iconos/ic_error.webp";
-            $codigo_valido = "Código inválido: ya fue escaneado previamente";
+
+            $codigo_valido = "El codigo es invalido";
         }
+        $stmt_update->close();
     } else {
         $src = "../assets/iconos/ic_error.webp";
-        $codigo_valido = "Código no encontrado";
+        $codigo_valido = "Código inválido: ya fue escaneado previamente";
     }
-    $stmt->close();
 } else {
-    header("location: ../layouts/Errores/404.php");
-    exit;
+    $src = "../assets/iconos/ic_error.webp";
+    $codigo_valido = "Código no encontrado";
 }
-
+$stmt->close();
 // Cierra la conexión
 $conexion->close();
 ?>

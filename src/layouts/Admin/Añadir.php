@@ -24,11 +24,15 @@ $administrador = new administrador();
     <meta name="description"
         content="Pagina para que el administrador pueda añadir usuarios administradores o jefes de carrera">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/Añadir.css">
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
@@ -60,7 +64,7 @@ $administrador = new administrador();
             <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
                     alt="Imagen para cerrar el menu movil"></li>
         </ul>
-        
+
         <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
 
     </nav>

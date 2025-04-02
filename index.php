@@ -17,6 +17,10 @@ $usuario = new usuario();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Pagina de login del sistema">
     <link rel="shortcut icon" href="src/assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="src/assets/Fonts/fonts.css">
     <link rel="stylesheet" href="src/assets/styles/index.css">
     <link rel="stylesheet" href="src/assets/styles/notificacion.css">
@@ -46,7 +50,8 @@ $usuario = new usuario();
             <img class="img-ver" src="./src/assets/extra/invisible.webp" alt="Icono para hacer invisible la contraseña">
         </label>
 
-        <a href="https://enriquehm.infinityfreeapp.com/src/layouts/CambiarContraseña/Cambiar%20Contraseña.php" class="enlaces">Has olvidado la contraseña</a>
+        <a href="https://enriquehm.infinityfreeapp.com/src/layouts/CambiarContraseña/Cambiar%20Contraseña.php"
+            class="enlaces">Has olvidado la contraseña</a>
 
 
         <input type="submit" value="Ingresar" class="btn_login">

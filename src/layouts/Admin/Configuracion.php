@@ -25,6 +25,10 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
     <meta name="description" content="Pagina principal del administrador">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
@@ -106,7 +110,7 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
                     </details>
                 </div>
 
-                
+
 
 
             </div>
@@ -148,7 +152,7 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
 
     </footer>
 
-    <template id="plantilla_configurar_carrera" >
+    <template id="plantilla_configurar_carrera">
         <div class="overlay_cambiar-contraseña overlay_ventana">
             <form class="formulario" method="post">
                 <h2 class="titulo">Configurar Carrera</h2>

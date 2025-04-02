@@ -16,6 +16,10 @@ $usuario = new usuario();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Pagina de cambiar contraseña del sistema">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" rel="preload" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" rel="preload" href="../../assets/styles/index.css">
     <link rel="stylesheet" rel="preload" href="../../assets/styles/notificacion.css">

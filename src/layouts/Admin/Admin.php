@@ -24,6 +24,10 @@ $correo = $_SESSION["correo"];
     <meta name="description" content="Pagina principal del administrador">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/Inicio.css">
@@ -59,7 +63,7 @@ $correo = $_SESSION["correo"];
             <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
             <li class="menu-item"><a href="Admin.php?EliminarPersonal=true" class="link">Eliminar</a></li>
             <li class="menu-item"><a href="Configuracion.php" class="link">Configuracion</a></li>
-            
+
             <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
                         src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
             <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
@@ -71,8 +75,7 @@ $correo = $_SESSION["correo"];
 
     <main class="main">
         <div class="contenedor_main">
-            <img class="encabezado" src="../../assets/extra/encabezado.webp" 
-                alt="los encabezados de la pagina">
+            <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
             <h2>Bienvenido Administrador</h2>
             <div class="informacion_usuario">
 

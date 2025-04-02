@@ -18,7 +18,7 @@ if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
     $carpeta_origen = "../layouts/Alumno/evidencias/";
     $carpeta_destino = "../layouts/Alumno/papelera/";
 
-    $consulta = "DELETE FROM " . Variables::TABLA_SOLICITUDES . " WHERE " . Variables::ID_SOLICITUD . " = ?";
+    $consulta = "DELETE FROM " . Variables::TABLA_BD_SOLICITUDES . " WHERE " . Variables::CAMPO_S_ID_SOLICITUD . " = ?";
 
     $sql = $conexion->prepare($consulta);
     $sql->bind_param("s", $id);

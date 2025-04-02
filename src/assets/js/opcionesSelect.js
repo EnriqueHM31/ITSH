@@ -107,6 +107,10 @@ function crearModalidad(modalidad, modalidadSelect) {
 
 
 function ponerModalidades() {
+	const rol = document.querySelector("body").dataset.rol;
+	if (rol === 'Administrador') {
+		return;
+	}
 	const modalidades = document.getElementById('modalidad').dataset.modalidades;
 	const modalidadSelect = document.getElementById('modalidad');
 
@@ -119,4 +123,7 @@ function ponerModalidades() {
 }
 
 ponerModalidades();
-actualizarGrupos();
+
+if (document.querySelector("body").dataset.rol === 'Jefe de Carrera') {
+	actualizarGrupos();
+}

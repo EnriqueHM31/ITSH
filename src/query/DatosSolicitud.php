@@ -6,31 +6,27 @@ include "../conexion/verificar acceso.php";
 
 header('Content-Type: application/json');
 
-if (isset($_POST['id'])) {
-    $id = $_POST['id'];
-    $data = getResultDataTabla($conexion, Variables::TABLA_BD_SOLICITUDES, Variables::CAMPO_S_ID_SOLICITUD, $id);
+$id = $_POST['id'];
+$data = getResultDataTabla($conexion, Variables::TABLA_BD_SOLICITUDES, Variables::CAMPO_S_ID_SOLICITUD, $id);
 
-    $motivo = $data[Variables::CAMPO_S_MOTIVO];
-    $fecha_ausencia = $data[Variables::CAMPO_S_FECHA_AUSENCIA];
-    $estado = $data[Variables::CAMPO_S_ESTADO];
+$motivo = $data[Variables::CAMPO_S_MOTIVO];
+$fecha_ausencia = $data[Variables::CAMPO_S_FECHA_AUSENCIA];
+$estado = $data[Variables::CAMPO_S_ESTADO];
 
-    if ($estado == "Aceptada") {
-        $dataJustificante = getResultDataTabla($conexion, Variables::TABLA_BD_JUSTIFICANTES, Variables::CAMPO_J_ID_SOLICITUD, $id);
-        $id_justificante = $dataJustificante[Variables::CAMPO_J_ID];
-        $justificante = $dataJustificante[Variables::CAMPO_J_JUSTIFICANTE];
-    } else {
-        $id_justificante = "";
-        $justificante = "";
-    }
-
-
-
-
-    echo json_encode(crearDataInformacionSolicitud($motivo, $fecha_ausencia, $estado, $id_justificante, $justificante));
+if ($estado == "Aceptada") {
+    $dataJustificante = getResultDataTabla($conexion, Variables::TABLA_BD_JUSTIFICANTES, Variables::CAMPO_J_ID_SOLICITUD, $id);
+    $id_justificante = $dataJustificante[Variables::CAMPO_J_ID];
+    $justificante = $dataJustificante[Variables::CAMPO_J_JUSTIFICANTE];
 } else {
-    header("location: ../layouts/Errores/404.php");
-    exit;
+    $id_justificante = "";
+    $justificante = "";
 }
+
+
+
+
+echo json_encode(crearDataInformacionSolicitud($motivo, $fecha_ausencia, $estado, $id_justificante, $justificante));
+
 
 
 function crearDataInformacionSolicitud($motivo, $fecha_ausencia, $estado, $id_justificante, $justificante)

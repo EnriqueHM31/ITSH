@@ -248,8 +248,8 @@ class Jefe
             $fecha = explode("-", $fila['fecha_ausencia']);
 
             $tabla = "";
-            
-            $tabla .=  "
+
+            $tabla .= "
             <tr>
             <td> {$fila['solicitud']}</td>
             <td> {$fila['matricula']}</td>
@@ -282,7 +282,7 @@ class Jefe
             </tr>
             ";
 
-            $detalles =  "
+            $detalles = "
                 <details class='detalles_solicitudes' 
                 data-datos='{$fila['solicitud']}, {$fila['matricula']}, {$fila['nombre']},{$fila['apellidos']}, {$fila['grupo']}, {$fila['motivo']}, {$fila['fecha_ausencia']}, {$clase}'>
                     <summary>
@@ -376,6 +376,18 @@ class Jefe
         } catch (Exception $e) {
             estructuraMensaje("Error: " . $e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
         }
+    }
+
+
+    public function ObtenerGruposDeLaCarrera($conexion, $id_carrera)
+    {
+        $GruposCarrera = obtenerGrupos($conexion, $id_carrera);
+        $grupos = $GruposCarrera[0][0];
+        $modalidades = $GruposCarrera[1][0]["Modalidades"];
+        $id_grupos = $grupos["id_grupos"];
+        $Numero_grupos = $grupos["Numero_grupos"];
+
+        return [$id_grupos, $Numero_grupos, $modalidades];
     }
 
 }

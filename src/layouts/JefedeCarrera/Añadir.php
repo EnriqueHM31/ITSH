@@ -3,7 +3,6 @@ session_start();
 
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
-include "../../clases/usuario.php";
 include "../../clases/jefe.php";
 include "../../utils/functionGlobales.php";
 include "../../validaciones/Validaciones.php";
@@ -11,16 +10,11 @@ include "../../conexion/verificar acceso.php";
 include "../../conexion/verificar_rol_jefe.php";
 include "../../query/obtenerGrupos.php";
 
-$usuario = new usuario();
 $jefe = new jefe();
 $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
 $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
-$GruposCarrera = obtenerGrupos($conexion, $id_carrera);
-$grupos = $GruposCarrera[0][0];
-$modalidades = $GruposCarrera[1][0]["Modalidades"];
-$id_grupos = $grupos["id_grupos"];
-$Numero_grupos = $grupos["Numero_grupos"];
+[$id_grupos, $Numero_grupos, $modalidades] = $jefe->ObtenerGruposDeLaCarrera($conexion, $id_carrera);
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +27,10 @@ $Numero_grupos = $grupos["Numero_grupos"];
     <meta name="description"
         content="Pagina para que el jefe de carrera pueda añadir usuarios de tipo estudiante y que solo sean de su carrera">
     <link rel="shortcut icon" href="../../assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/Fonts/fonts.css">
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">

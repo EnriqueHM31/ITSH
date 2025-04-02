@@ -1,7 +1,8 @@
 <?php
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
-include "../conexion/verificar acceso.php";
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
@@ -34,6 +35,4 @@ if (!empty($query)) {
 
     $stmt->close();
     $conexion->close();
-
-
 }
