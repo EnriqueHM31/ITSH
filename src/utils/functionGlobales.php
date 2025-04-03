@@ -39,7 +39,10 @@ $CAMPO_NUMERO_GRUPOS = Variables::CAMPO_G_NUMERO_GRUPOS;
 
 $CAMPO_ESTADO = Variables::CAMPO_S_ESTADO;
 $CAMPO_ID_SOLICITUD = Variables::CAMPO_S_ID_SOLICITUD;
+$CAMPO_MOTIVO = Variables::CAMPO_S_MOTIVO;
+$CAMPO_FECHA_AUSE = Variables::CAMPO_S_FECHA_AUSENCIA;
 
+$CAMPO_J_ID_JUSTIFICANTE = Variables::CAMPO_J_ID;
 $CAMPO_J_ID_SOLICITUD = Variables::CAMPO_J_ID_SOLICITUD;
 $CAMPO_J_MATRICULA = Variables::CAMPO_J_MATRICULA;
 $CAMPO_J_NOMBRE = Variables::CAMPO_J_NOMBRE;
@@ -504,11 +507,21 @@ function obtenerAllCarreras($conexion)
     return $stmt->get_result();
 }
 
-
 function EliminarDatosTablaJustificante($conexion)
 {
     global $TABLA_JUSTIFICANTES;
     $sql = "TRUNCATE TABLE $TABLA_JUSTIFICANTES";
     $stmt = $conexion->prepare($sql);
     return $stmt->execute();
+}
+
+function EliminarSolicitudID($conexion, $id)
+{
+    global $TABLA_SOLICITUDES;
+    global $CAMPO_ID_SOLICITUD;
+    $consulta = "DELETE FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_SOLICITUD = ?";
+
+    $sql = $conexion->prepare($consulta);
+    $sql->bind_param("s", $id);
+    return $sql->execute();
 }

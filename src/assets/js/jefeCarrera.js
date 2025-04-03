@@ -36,12 +36,11 @@ function mostrarDatosResize(array) {
 
 function eliminarFila(objeto) {
 	const datosSolicitud = obtenerDatosSolicitud(objeto);
-	({ id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado, elemento } = datosSolicitud);
-	eliminarSolicitud(id_solicitud, estado);
-	elemento.remove();
+	({ id_solicitud, evidencia, elemento } = datosSolicitud);
+	eliminarSolicitud(id_solicitud, evidencia, elemento);
 }
 
-async function eliminarSolicitud(id, nombreArchivo) {
+async function eliminarSolicitud(id, nombreArchivo, elemento) {
 	$.ajax({
 		url: '../../query/eliminarSolicitud.php',
 		method: 'POST',
@@ -51,19 +50,20 @@ async function eliminarSolicitud(id, nombreArchivo) {
 		},
 		dataType: 'json',
 		success: function (data) {
-			if (data['error'] === 'False') {
-				mostrarTemplate(
-					'Ocurrio un error al eliminar la solicitud',
-					'../../assets/iconos/ic_error.webp',
-					'var(--rojo)',
-					'miTemplate',
-				);
-			} else {
+			if (data['error'] === 'True') {
 				mostrarTemplate(
 					'Se ha eliminado la solicitud',
 					'../../assets/iconos/ic_correcto.webp',
 					'var(--verde)',
-					'miTemplate',
+					'miTemplate_cargar',
+				);
+				elemento.remove();
+			} else {
+				mostrarTemplate(
+					data['error'],
+					'../../assets/iconos/ic_error.webp',
+					'var(--rojo)',
+					'miTemplate_cargar',
 				);
 			}
 		},
@@ -125,8 +125,9 @@ function ObtenerDatosDetails(objeto) {
 	motivo = DataSolicitud[5].trim();
 	fecha = DataSolicitud[6].trim();
 	estado = DataSolicitud[7].trim();
+	evidencia = DataSolicitud[8].trim();
 
-	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado, elemento: detalle };
+	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, evidencia, estado, elemento: detalle };
 }
 
 function obtenerDatosTable(objeto) {
@@ -138,8 +139,9 @@ function obtenerDatosTable(objeto) {
 	grupo = fila.querySelectorAll('td')[4].innerText;
 	motivo = fila.querySelectorAll('td')[5].innerText;
 	fecha = fila.querySelectorAll('td')[6].innerText;
+	evidencia = fila.querySelectorAll('td')[7].innerText;
 	estado = fila.querySelectorAll('td')[8].className;
-	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado, elemento: fila };
+	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, evidencia, estado, elemento: fila };
 }
 
 function obtenerDatosSolicitud(objeto) {

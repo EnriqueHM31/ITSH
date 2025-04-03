@@ -7,16 +7,16 @@ include "../conexion/verificar acceso.php";
 header('Content-Type: application/json');
 
 $id = $_POST['id'];
-$data = getResultDataTabla($conexion, Variables::TABLA_BD_SOLICITUDES, Variables::CAMPO_S_ID_SOLICITUD, $id);
+$data = getResultDataTabla($conexion, $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD, $id);
 
-$motivo = $data[Variables::CAMPO_S_MOTIVO];
-$fecha_ausencia = $data[Variables::CAMPO_S_FECHA_AUSENCIA];
-$estado = $data[Variables::CAMPO_S_ESTADO];
+$motivo = $data[$CAMPO_MOTIVO];
+$fecha_ausencia = $data[$CAMPO_FECHA_AUSE];
+$estado = $data[$CAMPO_ESTADO];
 
 if ($estado == "Aceptada") {
-    $dataJustificante = getResultDataTabla($conexion, Variables::TABLA_BD_JUSTIFICANTES, Variables::CAMPO_J_ID_SOLICITUD, $id);
-    $id_justificante = $dataJustificante[Variables::CAMPO_J_ID];
-    $justificante = $dataJustificante[Variables::CAMPO_J_JUSTIFICANTE];
+    $dataJustificante = getResultDataTabla($conexion, $TABLA_JUSTIFICANTES, $CAMPO_J_ID_SOLICITUD, $id);
+    $id_justificante = $dataJustificante[$CAMPO_J_ID_JUSTIFICANTE];
+    $justificante = $dataJustificante[$CAMPO_J_JUSTIFICANTE];
 } else {
     $id_justificante = "";
     $justificante = "";

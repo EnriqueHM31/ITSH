@@ -284,7 +284,7 @@ class Jefe
 
             $detalles = "
                 <details class='detalles_solicitudes' 
-                data-datos='{$fila['solicitud']}, {$fila['matricula']}, {$fila['nombre']},{$fila['apellidos']}, {$fila['grupo']}, {$fila['motivo']}, {$fila['fecha_ausencia']}, {$clase}'>
+                data-datos='{$fila['solicitud']}, {$fila['matricula']}, {$fila['nombre']},{$fila['apellidos']}, {$fila['grupo']}, {$fila['motivo']}, {$fila['fecha_ausencia']}, {$clase}, {$fila['evidencia']} '>
                     <summary>
                         <div class='detalles'>
                             <p>Solicitud: {$fila['solicitud']}</p>
