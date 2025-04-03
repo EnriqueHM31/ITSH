@@ -31,16 +31,8 @@ function generarCodigo($conexion, $id, $nombre, $fecha, $valido)
 
         QRcode::png($url_verificacion, $filename, QR_ECLEVEL_L, 4, true);
 
-        // Conexión a la base de datos y almacenamiento
-
-        // Inserción en la base de datos
-        $sql = "INSERT INTO " . Variables::TABLA_BD_CODIGOS_QR . " (" . Variables::CAMPO_Q_FOLIO_JUSTIFICANTE . ", " . Variables::CAMPO_Q_TEXTO . ", " . Variables::CAMPO_Q_VALIDO . ", " . Variables::CAMPO_Q_URL_VERIFICACION . ") VALUES (?, ?, ?, ?)";
-
-        $smtm = $conexion->prepare($sql);
-        $valido = 1;
-        $smtm->bind_param("isss", $id, $qr_text, $valido, $url_verificacion);
-
-        if ($smtm->execute()) {
+        // Inserción en la base de datos en la tabla qr  
+        if (insertarCodigoQR($conexion, $id, $qr_text, $valido, $url_verificacion)) {
             return $id_unico;
         } else {
             throw new Exception("Ocurrio un error al insertar los datos en la DB");

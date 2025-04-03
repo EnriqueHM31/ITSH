@@ -9,6 +9,7 @@ $TABLA_MODALIDADES = Variables::tABLA_BD_MODALIDAD;
 $TABLA_GRUPO = Variables::TABLA_BD_GRUPO;
 $TABLA_SOLICITUDES = Variables::TABLA_BD_SOLICITUDES;
 $TABLA_JUSTIFICANTES = Variables::TABLA_BD_JUSTIFICANTES;
+$TABLA_CODIGOQR = Variables::TABLA_BD_CODIGOS_QR;
 
 $CAMPO_ID_USUARIO = Variables::CAMPO_ID_USUARIO;
 $CAMPO_CONTRASEÑA = Variables::CAMPO_CONTRASEÑA;
@@ -46,6 +47,12 @@ $CAMPO_J_GRUPO = Variables::CAMPO_J_GRUPO;
 $CAMPO_J_CARRERA = Variables::CAMPO_J_CARRERA;
 $CAMPO_J_NOMBRE_JEFE = Variables::CAMPO_J_NOMBRE_JEFE;
 $CAMPO_J_JUSTIFICANTE = Variables::CAMPO_J_JUSTIFICANTE;
+
+
+$CAMPO_FOLIO_QR = Variables::CAMPO_Q_FOLIO_JUSTIFICANTE;
+$CAMPO_TEXTO_QR = Variables::CAMPO_Q_TEXTO;
+$CAMPO_VALIDO_QR = Variables::CAMPO_Q_VALIDO;
+$CAMPO_URL_QR = Variables::CAMPO_Q_URL_VERIFICACION;
 
 
 
@@ -398,5 +405,21 @@ function InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre
     $smtm = $conexion->prepare($sql);
     $smtm->bind_param('sssssssss', $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe_completo, $nombreArchivo);
 
+    return $smtm->execute();
+}
+
+function insertarCodigoQR($conexion, $id, $qr_text, $valido, $url_verificacion)
+{
+
+    global $TABLA_CODIGOQR;
+    global $CAMPO_FOLIO_QR;
+    global $CAMPO_TEXTO_QR;
+    global $CAMPO_VALIDO_QR;
+    global $CAMPO_URL_QR;
+    $sql = "INSERT INTO $TABLA_CODIGOQR ($CAMPO_FOLIO_QR, $CAMPO_TEXTO_QR, $CAMPO_VALIDO_QR, $CAMPO_URL_QR) VALUES (?, ?, ?, ?)";
+
+    $smtm = $conexion->prepare($sql);
+    $valido = 1;
+    $smtm->bind_param("isss", $id, $qr_text, $valido, $url_verificacion);
     return $smtm->execute();
 }

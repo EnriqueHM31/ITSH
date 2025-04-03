@@ -1,5 +1,10 @@
 <?php
 
+include "../conexion/conexion.php";
+include "../utils/constantes.php";
+include "../utils/functionGlobales.php";
+require_once "./dompdf/autoload.inc.php";
+
 function obtenerIMGLogos()
 {
     // LOGOS DE LA ESCUELA
@@ -12,41 +17,45 @@ function obtenerIMGLogos()
     return 'data:image/jpeg;base64,' . $imagen_base64;
 }
 
-include "../conexion/conexion.php";
-require_once "./dompdf/autoload.inc.php";
-
 use Dompdf\Dompdf;
 use Dompdf\Options;
+
+$ADMINISTRADOR = "Administrador";
+$JEFE_CARRERA = "Jefe de Carrera";
+$ESTUDIANTE = "Estudiante";
 
 
 // Consulta para obtener todos los usuarios de las tablas
 $query = "
     SELECT 
-    u.id_usuario, 
-    u.contraseña, 
-    u.correo, 
-    r.rol,  
-    e.nombre AS nombre_estudiante, 
-    e.apellidos AS apellidos_estudiante, 
-    j.nombre AS nombre_jefe, 
-    j.apellidos AS apellidos_jefe, 
-    a.nombre AS nombre_administrador, 
-    a.apellidos AS apellidos_administrador
-FROM usuario u
-LEFT JOIN estudiante e ON u.id_usuario = e.matricula
-LEFT JOIN jefe j ON u.id_usuario = j.clave_empleado
-LEFT JOIN administrador a ON u.id_usuario = a.clave_empleado
-LEFT JOIN rol r ON u.id_rol = r.id_rol
-ORDER BY 
+    u.$CAMPO_ID_USUARIO, 
+    u.$CAMPO_CORREO, 
+    r.$CAMPO_ROL,  
+    e.$CAMPO_NOMBRE AS nombre_estudiante, 
+    e.$CAMPO_APELLIDOS AS apellidos_estudiante, 
+    j.$CAMPO_NOMBRE AS nombre_jefe, 
+    j.$CAMPO_APELLIDOS AS apellidos_jefe, 
+    a.$CAMPO_NOMBRE AS nombre_administrador, 
+    a.$CAMPO_APELLIDOS AS apellidos_administrador,
+    COALESCE(c.$CAMPO_CARRERA, 'No aplica') AS carrera
+    FROM $TABLA_USUARIO u
+    LEFT JOIN $TABLA_ESTUDIANTE e ON u.$CAMPO_ID_USUARIO = e.$CAMPO_MATRICULA
+    LEFT JOIN $TABLA_JEFE j ON u.$CAMPO_ID_USUARIO  = j.$CAMPO_CLAVE_EMPLEADO_JEFE
+    LEFT JOIN $TABLA_ADMIN a ON u.$CAMPO_ID_USUARIO  = a.$CAMPO_CLAVE_EMPLEADO_ADMIN
+    LEFT JOIN $TABLA_ROL r ON u.$CAMPO_ID_ROL = r.$CAMPO_ID_ROL
+    LEFT JOIN $TABLA_CARRERAS c ON c.$CAMPO_ID_CARRERA = COALESCE(e.$CAMPO_ID_CARRERA, j.$CAMPO_ID_CARRERA)
+    ORDER BY 
     CASE 
-        WHEN r.rol = 'Administrador' THEN 1
-        WHEN r.rol = 'Jefe de Carrera' THEN 2
-        WHEN r.rol = 'Estudiante' THEN 3
+        WHEN r.$CAMPO_ROL = '$ADMINISTRADOR' THEN 1
+        WHEN r.$CAMPO_ROL = '$JEFE_CARRERA' THEN 2
+        WHEN r.$CAMPO_ROL = '$ESTUDIANTE' THEN 3
         ELSE 4 
     END;
 ";
+$stmt = $conexion->prepare($query);
+$stmt->execute();
+$resultado = $stmt->get_result();
 
-$resultado = $conexion->query($query);
 
 $src = obtenerIMGLogos();
 
@@ -98,46 +107,14 @@ if ($resultado->num_rows > 0) {
                 <tr>
                     <th>id_usuario</th>
                     <th>Nombre</th>
-                    <th>Apellidos</th>
                     <th>Rol</th>
+                    <th>Carrera</th>
                     <th>Correo</th>
-                    <th>Contraseña</th>
-
                 </tr>
             </thead>
             <tbody>';
 
-            while ($row = $resultado->fetch_assoc()) {
-                // Aquí aseguramos que solo se muestre un rol por usuario
-                $rol = $row['rol']; // El nombre del rol viene de la tabla rol
-            
-                // Verificamos qué rol tiene el usuario
-                $nombre = '';
-                $apellidos = '';
-            
-                if ($rol == 'Estudiante') {
-                    $nombre = $row['nombre_estudiante'];
-                    $apellidos = $row['apellidos_estudiante'];
-                } elseif ($rol == 'Jefe de Carrera') {
-                    $nombre = $row['nombre_jefe'];
-                    $apellidos = $row['apellidos_jefe'];
-                } elseif ($rol == 'Administrador') {
-                    $nombre = $row['nombre_administrador'];
-                    $apellidos = $row['apellidos_administrador'];
-                }
-            
-                // Agregar la fila con los datos correctos
-                $html .= '
-                    <tr>
-                        <td>' . $row['id_usuario'] . '</td>
-                        <td>' . $nombre . '</td>
-                        <td>' . $apellidos . '</td>
-                        <td>' . $rol . '</td>
-                        <td>' . $row['correo'] . '</td>
-                        <td>' . $row['contraseña'] . '</td>
-                    </tr>';
-            }
-            
+    ponerDatosTabla($resultado);
 
     $html .= '
             </tbody>
@@ -170,4 +147,46 @@ if ($resultado->num_rows > 0) {
 
 // Cerrar la conexión
 $conexion->close();
-?>
+
+
+
+function ponerDatosTabla($resultado)
+{
+    global $ADMINISTRADOR, $JEFE_CARRERA, $ESTUDIANTE, $CAMPO_ROL, $html, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
+    while ($row = $resultado->fetch_assoc()) {
+        // Asegurar que solo se muestre un rol por usuario
+        $rol = $row[$CAMPO_ROL]; // El nombre del rol viene de la tabla rol
+
+        // Variables para almacenar datos dinámicos
+        $nombre = '';
+        $apellidos = '';
+        $carrera = 'No aplica'; // Valor predeterminado para administradores
+
+        // Verificar el rol del usuario y asignar los valores correspondientes
+        if ($rol == $ESTUDIANTE) {
+            $nombre = $row['nombre_estudiante'];
+            $apellidos = $row['apellidos_estudiante'];
+            $carrera = $row['carrera']; // Asigna la carrera del estudiante
+        } elseif ($rol == $JEFE_CARRERA) {
+            $nombre = $row['nombre_jefe'];
+            $apellidos = $row['apellidos_jefe'];
+            $carrera = $row['carrera']; // Asigna la carrera del jefe
+        } elseif ($rol == $ADMINISTRADOR) {
+            $nombre = $row['nombre_administrador'];
+            $apellidos = $row['apellidos_administrador'];
+            $carrera = 'No aplica'; // Los administradores no tienen carrera
+        }
+
+        $nombre_completo = "$nombre $apellidos";
+
+        // Construcción del HTML con la columna de carrera
+        $html .= '
+            <tr>
+                <td>' . $row[$CAMPO_ID_USUARIO] . '</td>
+                <td>' . $nombre_completo . '</td>
+                <td>' . $rol . '</td>
+                <td>' . $carrera . '</td> 
+                <td>' . $row[$CAMPO_CORREO] . '</td>
+            </tr>';
+    }
+}
