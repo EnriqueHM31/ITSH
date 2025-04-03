@@ -12,6 +12,7 @@ include "../../conexion/verificar_rol_admin.php";
 
 $usuario = new usuario();
 $administrador = new administrador();
+$rol = $_SESSION["rol"];
 
 
 ?>
@@ -41,7 +42,7 @@ $administrador = new administrador();
     <script src="../../assets/js/opcionesSelect.js" defer></script>
 </head>
 
-<body>
+<body data-rol="<?php echo $rol ?>">
 
     <nav class="navegacion">
 

@@ -102,16 +102,18 @@ function crearModalidad(modalidad, modalidadSelect) {
 
 
 function ponerModalidades() {
+	if (document.querySelector("body").dataset.rol === 'Jefe de Carrera') {
+		const modalidades = document.getElementById('modalidad').dataset.modalidades;
+		const modalidadSelect = document.getElementById('modalidad');
 
-	const modalidades = document.getElementById('modalidad').dataset.modalidades;
-	const modalidadSelect = document.getElementById('modalidad');
-
-	if (modalidades == 2) {
-		crearModalidad('Escolarizado', modalidadSelect);
-		crearModalidad('Flexible', modalidadSelect);
-	} if (modalidades == 1) {
-		crearModalidad('Escolarizado', modalidadSelect);
+		if (modalidades == 2) {
+			crearModalidad('Escolarizado', modalidadSelect);
+			crearModalidad('Flexible', modalidadSelect);
+		} if (modalidades == 1) {
+			crearModalidad('Escolarizado', modalidadSelect);
+		}
 	}
+
 }
 
 ponerModalidades();

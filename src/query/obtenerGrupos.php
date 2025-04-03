@@ -2,12 +2,15 @@
 function obtenerGrupos($conexion, $id_carrera)
 {
 
-    $stmt = $conexion->prepare("SELECT  c.carrera, g.id_grupos, g.Numero_grupos FROM grupo g JOIN carrera c ON g.id_carrera = c.id_carrera WHERE g.id_carrera = $id_carrera ");
+    $stmt = $conexion->prepare("SELECT  c." . Variables::CAMPO_CARRERA . ", g." . Variables::CAMPO_G_ID_GRUPO . ", g." . Variables::CAMPO_G_NUMERO_GRUPOS . " FROM " . Variables::TABLA_BD_GRUPO . " g JOIN " . Variables::TABLA_BD_CARRERA . " c ON g." . Variables::CAMPO_ID_CARRERA . " = c." . Variables::CAMPO_ID_CARRERA . " WHERE g." . Variables::CAMPO_ID_CARRERA . " = ? ");
+
+    $stmt->bind_param("i", $id_carrera);
     $stmt->execute();
     $result = $stmt->get_result();
     $dataGrupos = [];
 
-    $stmtModalidades = $conexion->prepare("SELECT COUNT(*) as Modalidades FROM Carrera_Modalidad WHERE id_carrera = $id_carrera GROUP BY id_carrera");
+    $stmtModalidades = $conexion->prepare("SELECT COUNT(*) as Modalidades FROM " . Variables::TABLA_BD_CARRERA_MODALIDAD . " WHERE " . Variables::CAMPO_ID_CARRERA . " = ? GROUP BY " . Variables::CAMPO_ID_CARRERA);
+    $stmtModalidades->bind_param("i", $id_carrera);
     $stmtModalidades->execute();
     $resultModalidades = $stmtModalidades->get_result();
 

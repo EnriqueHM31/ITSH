@@ -1,7 +1,6 @@
 <?php
 
 class Variables
-
 {
     // VARIABLES PARA LA CONEXION
     public const HOST = "localhost";
@@ -21,6 +20,7 @@ class Variables
     public const TABLA_BD_SOLICITUDES = "Solicitudes";
     public const TABLA_BD_JUSTIFICANTES = "Justificante";
     public const TABLA_BD_CODIGOS_QR = "Codigos_qr";
+    public const TABLA_BD_CARRERA_MODALIDAD = "Carrera_Modalidad";
 
 
     // CAMPOS DE LA TABLA USUARIO
