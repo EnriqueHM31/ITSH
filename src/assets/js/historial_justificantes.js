@@ -20,26 +20,7 @@ function mostrarDatosSolicitud(id) {
             mostrarDatos(data)
         },
         error: function (xhr) {
-            let mensajeError = "Error desconocido";
-            try {
-                // Intentar convertir el responseText en JSON
-                let jsonStart = xhr.responseText.indexOf("{");
-                if (jsonStart !== -1) {
-                    let jsonString = xhr.responseText.substring(jsonStart);
-                    let jsonData = JSON.parse(jsonString);
-                    mensajeError = jsonData["sin_error"] || "Error en el servidor";
-                } else {
-                    mensajeError = xhr.responseText; // En caso de que no sea JSON válido
-                }
-            } catch (e) {
-                console.error("Error al procesar la respuesta del servidor:", e);
-            }
-            mostrarTemplate(
-                mensajeError,
-                '../../assets/iconos/ic_error.webp',
-                'var(--rojo)',
-                'miTemplate'
-            )
+            mostrarErrorAjax(xhr);
         },
     });
 }

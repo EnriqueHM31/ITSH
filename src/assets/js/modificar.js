@@ -77,12 +77,7 @@ async function cargarUsuarioModificar(id, nombre) {
             inputBuscar.value = '';
         },
         error: function (xhr, status, error) {
-            mostrarTemplate(
-                'Error al obtener los datos: \n' + error,
-                '../../assets/iconos/ic_error.webp',
-                'var(--rojo)',
-                'miTemplate',
-            );
+            mostrarErrorAjax(xhr);
         }
     });
 }

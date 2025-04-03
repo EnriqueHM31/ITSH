@@ -35,11 +35,10 @@ function mostrarDatosResize(array) {
 }
 
 function eliminarFila(objeto) {
-	let fila = objeto.closest('tr');
-	id = fila.querySelectorAll('td')[0].innerText;
-	nombreArchivo = fila.querySelectorAll('td')[7].innerText;
-	eliminarSolicitud(id, nombreArchivo);
-	fila.remove();
+	const datosSolicitud = obtenerDatosSolicitud(objeto);
+	({ id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado, elemento } = datosSolicitud);
+	eliminarSolicitud(id_solicitud, estado);
+	elemento.remove();
 }
 
 async function eliminarSolicitud(id, nombreArchivo) {
@@ -68,27 +67,17 @@ async function eliminarSolicitud(id, nombreArchivo) {
 				);
 			}
 		},
-		error: function (e) {
-			mostrarTemplate(
-				'Ocurrio un error con la evidencia de la solicitud' +
-					e.responseText,
-				'../../assets/iconos/ic_error.webp',
-				'var(--rojo)',
-				'miTemplate',
-			);
+		error: function (xhr) {
+			mostrarErrorAjax(xhr);
 		},
 	});
 }
 
 function rechazarSolicitud(objeto) {
-	let fila = objeto.closest('tr');
-	id = fila.querySelectorAll('td')[0].innerText;
-	nombreArchivo = fila.querySelectorAll('td')[7].innerText;
-	estado = fila.querySelectorAll('td')[8].className;
-	opciones = fila
-		.querySelectorAll('td')[9]
-		.querySelector('div')
-		.querySelectorAll('button');
+	id_jefe = objeto.getAttribute('data-id');
+
+	const datosSolicitud = obtenerDatosSolicitud(objeto);
+	({ id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado } = datosSolicitud);
 
 	if (verificarOpciones(estado)) {
 		return;
@@ -98,8 +87,8 @@ function rechazarSolicitud(objeto) {
 		url: '../../query/rechazarSolicitud.php',
 		method: 'POST',
 		data: {
-			id: id,
-			nombreArchivo: nombreArchivo,
+			id: id_solicitud,
+			nombreArchivo: estado,
 		},
 		dataType: 'json',
 		success: function (data) {
@@ -120,32 +109,7 @@ function rechazarSolicitud(objeto) {
 			}
 		},
 		error: function (xhr) {
-			let mensajeError = 'Error desconocido';
-
-			try {
-				// Intentar convertir el responseText en JSON
-				let jsonStart = xhr.responseText.indexOf('{');
-				if (jsonStart !== -1) {
-					let jsonString = xhr.responseText.substring(jsonStart);
-					let jsonData = JSON.parse(jsonString);
-					mensajeError =
-						jsonData['sin_error'] || 'Error en el servidor';
-				} else {
-					mensajeError = xhr.responseText; // En caso de que no sea JSON válido
-				}
-			} catch (e) {
-				console.error(
-					'Error al procesar la respuesta del servidor:',
-					e,
-				);
-			}
-
-			mostrarTemplate(
-				mensajeError,
-				'../../assets/iconos/ic_error.webp',
-				'var(--rojo)',
-				'miTemplate',
-			);
+			mostrarErrorAjax(xhr);
 		},
 	});
 }
@@ -160,9 +124,9 @@ function ObtenerDatosDetails(objeto) {
 	grupo = DataSolicitud[4].trim();
 	motivo = DataSolicitud[5].trim();
 	fecha = DataSolicitud[6].trim();
-	estado = DataSolicitud[7].trim();	
+	estado = DataSolicitud[7].trim();
 
-	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado };
+	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado, elemento: detalle };
 }
 
 function obtenerDatosTable(objeto) {
@@ -175,15 +139,15 @@ function obtenerDatosTable(objeto) {
 	motivo = fila.querySelectorAll('td')[5].innerText;
 	fecha = fila.querySelectorAll('td')[6].innerText;
 	estado = fila.querySelectorAll('td')[8].className;
-	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado };
+	return { id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado, elemento: fila };
 }
 
-function obtenerDatosSolicitud(objeto){
+function obtenerDatosSolicitud(objeto) {
 
 	if (document.getElementById('table').innerText !== '') {
 		const datosSolicitudTable = obtenerDatosTable(objeto);
-		return  datosSolicitudTable
-	} else {
+		return datosSolicitudTable
+	} else if (document.getElementById('lista-solicitudes-details').innerText !== '') {
 		const datosSolicitudDetail = ObtenerDatosDetails(objeto);
 		return datosSolicitudDetail
 	}
@@ -194,7 +158,7 @@ function aceptarSolicitud(objeto) {
 	id_jefe = objeto.getAttribute('data-id');
 
 	const datosSolicitud = obtenerDatosSolicitud(objeto);
-	({id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado} = datosSolicitud);
+	({ id_solicitud, matricula, nombre, apellidos, grupo, motivo, fecha, estado } = datosSolicitud);
 
 	if (verificarOpciones(estado)) {
 		return;
@@ -232,34 +196,7 @@ function aceptarSolicitud(objeto) {
 			}
 		},
 		error: function (xhr) {
-			let mensajeError = 'Error desconocido';
-
-			try {
-				let jsonStart = xhr.responseText.indexOf('{');
-				if (jsonStart !== -1) {
-					let jsonString = xhr.responseText.substring(jsonStart);
-					let jsonData = JSON.parse(jsonString);
-					mensajeError =
-						jsonData['sin_error'] || 'Error en el servidor';
-				} else {
-					mensajeError = xhr.responseText;
-				}
-			} catch (e) {
-				mostrarTemplate(
-					"Error al procesar la respuesta del servidor: " + e,
-					'../../assets/iconos/ic_error.webp',
-					'var(--rojo)',
-					'miTemplate',
-				);
-				return
-			}
-
-			mostrarTemplate(
-				mensajeError,
-				'../../assets/iconos/ic_error.webp',
-				'var(--rojo)',
-				'miTemplate',
-			);
+			mostrarErrorAjax(xhr);
 		},
 	});
 }
@@ -325,14 +262,8 @@ function reiniciarFolio() {
 				'miTemplate_cargar',
 			);
 		},
-		error: function (data) {
-			mostrarTemplate(
-				data.mensaje,
-				'../../assets/iconos/ic_correcto.webp',
-				'var(--verde)',
-				'miTemplate_cargar',
-				'miTemplate_cargar',
-			);
+		error: function (xhr) {
+			mostrarErrorAjax(xhr);
 		},
 	});
 }

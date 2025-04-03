@@ -8,7 +8,8 @@ if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
     $id = $_POST['id'];
     $nombreArchivo = $_POST['nombreArchivo'];
 
-    $sql = "UPDATE " . Variables::TABLA_BD_SOLICITUDES . " SET " . Variables::CAMPO_S_ESTADO . " = Rechazada WHERE " . Variables::CAMPO_S_ID_SOLICITUD . " = ?";
+    $sql = "UPDATE " . Variables::TABLA_BD_SOLICITUDES . " SET " . Variables::CAMPO_S_ESTADO . " = 'Rechazada' WHERE " . Variables::CAMPO_S_ID_SOLICITUD . " = ?";
+
 
     $smtm = $conexion->prepare($sql);
     $smtm->bind_param("s", $id);

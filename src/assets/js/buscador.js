@@ -79,13 +79,8 @@ function cargarUsuarioEliminar(id, nombre) {
                 cerrarVentana('.close_eliminar');
             }
         },
-        error: function (data) {
-            mostrarTemplate(
-                'Ocurrio un error con la peticion',
-                '../../assets/iconos/ic_error.webp',
-                'var(--rojo)',
-                'miTemplate'
-            )
+        error: function (xhr) {
+            mostrarErrorAjax(xhr);
         },
     });
 }

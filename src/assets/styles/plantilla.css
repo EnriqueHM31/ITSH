@@ -4,7 +4,7 @@
     --rojo: red;
     --verde: rgb(3, 209, 3);
     --overlay: linear-gradient(#0009, #000a);
-    --gris: #acaaaa;
+    --gris: rgb(172, 170, 170);
     --negro: #000;
     --naranja: #ffe600;
 }

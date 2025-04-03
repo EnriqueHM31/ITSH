@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/src/assets/extra/logo.svg" type="image/x-icon">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Poppins/Poppins-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
+    <link rel="preload" href="/src/assets/Fonts/fonts/Manrope/Manrope-Regular.woff2" as="font" type="font/woff2"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="/src/assets/styles/index.css">
     <link rel="stylesheet" href="/src/assets/Fonts/fonts.css">
     <link rel="stylesheet" href="/src/assets/styles/404.css">

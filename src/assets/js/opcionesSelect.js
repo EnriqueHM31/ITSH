@@ -64,12 +64,7 @@ if (cargo !== null) {
 					ponerDatosOptions(opciones, groupCarrera);
 				},
 				error: function (xhr) {
-					mostrarTemplate(
-						'Error al obtener las carreras',
-						'../../assets/iconos/ic_error.webp',
-						'var(--rojo)',
-						'miTemplate',
-					);
+					mostrarErrorAjax(xhr);
 				},
 			});
 		}

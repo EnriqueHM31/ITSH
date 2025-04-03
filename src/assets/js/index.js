@@ -44,3 +44,32 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 })
 
+function mostrarErrorAjax(xhr) {
+	let mensajeError = 'Error desconocido';
+	try {
+		let jsonStart = xhr.responseText.indexOf('{');
+		if (jsonStart !== -1) {
+			let jsonString = xhr.responseText.substring(jsonStart);
+			let jsonData = JSON.parse(jsonString);
+			mensajeError = jsonData['sin_error'] || 'Error en el servidor';
+		} else {
+			mensajeError = xhr.responseText;
+		}
+	} catch (e) {
+		mostrarTemplate(
+			'Error al procesar la respuesta del servidor: ' + e,
+			'../../assets/iconos/ic_error.webp',
+			'var(--rojo)',
+			'miTemplate',
+		);
+		reject(e);
+		return;
+	}
+
+	mostrarTemplate(
+		mensajeError,
+		'../../assets/iconos/ic_error.webp',
+		'var(--rojo)',
+		'miTemplate',
+	);
+}
