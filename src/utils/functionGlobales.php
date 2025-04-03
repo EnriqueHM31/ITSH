@@ -52,6 +52,7 @@ $CAMPO_J_GRUPO = Variables::CAMPO_J_GRUPO;
 $CAMPO_J_CARRERA = Variables::CAMPO_J_CARRERA;
 $CAMPO_J_NOMBRE_JEFE = Variables::CAMPO_J_NOMBRE_JEFE;
 $CAMPO_J_JUSTIFICANTE = Variables::CAMPO_J_JUSTIFICANTE;
+$CAMPO_J_FECHA_CREACION = Variables::CAMPO_J_FECHA;
 
 
 $CAMPO_FOLIO_QR = Variables::CAMPO_Q_FOLIO_JUSTIFICANTE;
@@ -524,4 +525,63 @@ function EliminarSolicitudID($conexion, $id)
     $sql = $conexion->prepare($consulta);
     $sql->bind_param("s", $id);
     return $sql->execute();
+}
+
+function buscarPersonalBD($conexion, $query)
+{
+    global $TABLA_ADMIN;
+    global $TABLA_JEFE;
+    global $CAMPO_CLAVE_EMPLEADO_ADMIN;
+    global $CAMPO_CLAVE_EMPLEADO_JEFE;
+    global $CAMPO_NOMBRE;
+
+    $sql = "SELECT $CAMPO_CLAVE_EMPLEADO_ADMIN, $CAMPO_NOMBRE FROM $TABLA_ADMIN
+    WHERE $CAMPO_CLAVE_EMPLEADO_ADMIN LIKE ? OR $CAMPO_NOMBRE LIKE ? UNION
+    SELECT $CAMPO_CLAVE_EMPLEADO_JEFE, $CAMPO_NOMBRE FROM $TABLA_JEFE
+    WHERE $CAMPO_CLAVE_EMPLEADO_JEFE LIKE ? OR $CAMPO_NOMBRE LIKE ?";
+    ;
+    $stmt = $conexion->prepare($sql);
+    $param = "%$query%";
+    $stmt->bind_param('ssss', $param, $param, $param, $param);
+
+    $stmt->execute();
+    return $stmt->get_result();
+}
+
+function buscarEstudianteBD($conexion, $query, $id_carrera)
+{
+    global $TABLA_ESTUDIANTE;
+    global $CAMPO_MATRICULA;
+    global $CAMPO_NOMBRE;
+    global $CAMPO_ID_CARRERA;
+
+    $sql = "SELECT $CAMPO_MATRICULA, $CAMPO_NOMBRE FROM $TABLA_ESTUDIANTE WHERE ($CAMPO_MATRICULA LIKE ? OR $CAMPO_NOMBRE LIKE ?) AND $CAMPO_ID_CARRERA = ?";
+
+    $stmt = $conexion->prepare($sql);
+    $param = "%$query%";
+    $stmt->bind_param('ssi', $param, $param, $id_carrera);
+
+    $stmt->execute();
+    return $stmt->get_result();
+}
+
+function buscarJustificantes($conexion, $query)
+{
+    global $TABLA_JUSTIFICANTES;
+    global $CAMPO_J_MATRICULA;
+    global $CAMPO_J_NOMBRE;
+    if (strlen($query) > 0) {
+        $sql = "SELECT * FROM $TABLA_JUSTIFICANTES WHERE $CAMPO_J_MATRICULA LIKE ? OR $CAMPO_J_NOMBRE LIKE ? ";
+        ;
+        $stmt = $conexion->prepare($sql);
+        $param = "%$query%";
+        $stmt->bind_param('ss', $param, $param);
+
+    } else {
+        $sql = "SELECT * FROM $TABLA_JUSTIFICANTES";
+        $stmt = $conexion->prepare($sql);
+    }
+
+    $stmt->execute();
+    return $stmt->get_result();
 }

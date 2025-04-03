@@ -1,38 +1,27 @@
 <?php
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+include "../utils/functionGlobales.php";
+
 
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
 if (!empty($query)) {
-    $sql = "SELECT " . Variables::CAMPO_CLAVE_EMPLEADO_ADMIN . "," . Variables::CAMPO_NOMBRE . " FROM " . Variables::TABLA_BD_AdMINISTRADOR . " 
-    WHERE " . Variables::CAMPO_CLAVE_EMPLEADO_ADMIN . " LIKE ? OR " . Variables::CAMPO_NOMBRE . " LIKE ? UNION
-    SELECT " . Variables::CAMPO_CLAVE_EMPLEADO_JEFE . "," . Variables::CAMPO_NOMBRE . " FROM " . Variables::TABLA_BD_JEFE . " 
-    WHERE " . Variables::CAMPO_CLAVE_EMPLEADO_JEFE . " LIKE ? OR " . Variables::CAMPO_NOMBRE . " LIKE ?";
-    ;
-    $stmt = $conexion->prepare($sql);
-    $param = "%$query%";
-    $stmt->bind_param('ssss', $param, $param, $param, $param);
+    $resultadoBusquedaPersonal = buscarPersonalBD($conexion, $query);
 
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if ($resultadoBusquedaPersonal->num_rows > 0) {
+        while ($row = $resultadoBusquedaPersonal->fetch_assoc()) {
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-
-            $clave = $row[Variables::CAMPO_CLAVE_EMPLEADO_ADMIN];
-            $nombre = $row[Variables::CAMPO_NOMBRE];
+            $clave = $row[$CAMPO_CLAVE_EMPLEADO_ADMIN];
+            $nombre = $row[$CAMPO_CLAVE_EMPLEADO_ADMIN];
 
             echo "<div class='result'>
-                    <p data-id=" . $clave . " >" . $nombre . "<span> " . $clave . "</span> " . "</p>
+                    <p data-id=$clave>$nombre<span>$clave</span></p>
                 </div>";
         }
     } else {
         echo "<div class='sin_resultados'>No se encontraron resultados.</div>";
     }
 
-    $stmt->close();
     $conexion->close();
 }
