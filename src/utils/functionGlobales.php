@@ -10,6 +10,7 @@ $TABLA_GRUPO = Variables::TABLA_BD_GRUPO;
 $TABLA_SOLICITUDES = Variables::TABLA_BD_SOLICITUDES;
 $TABLA_JUSTIFICANTES = Variables::TABLA_BD_JUSTIFICANTES;
 $TABLA_CODIGOQR = Variables::TABLA_BD_CODIGOS_QR;
+$TABLA_CARRERA_MODALIDAD = Variables::TABLA_BD_CARRERA_MODALIDAD;
 
 $CAMPO_ID_USUARIO = Variables::CAMPO_ID_USUARIO;
 $CAMPO_CONTRASEÑA = Variables::CAMPO_CONTRASEÑA;
@@ -31,6 +32,7 @@ $CAMPO_ROL = Variables::CAMPO_ROL;
 
 $CAMPO_ID_MODALIDAD = Variables::CAMPO_ID_MODALIDAD;
 $CAMPO_MODALIDAD = Variables::CAMPO_MODALIDAD;
+$CAMPO_GRUPO = Variables::CAMPO_GRUPO;
 
 $CAMPO_ID_GRUPOS = Variables::CAMPO_G_ID_GRUPO;
 $CAMPO_NUMERO_GRUPOS = Variables::CAMPO_G_NUMERO_GRUPOS;
@@ -238,7 +240,7 @@ function obtenerModalidad($conexion, $id_modalidad)
     $result = $sql->get_result();
     $response = $result->fetch_assoc();
 
-    return $response[$CAMPO_ID_MODALIDAD];
+    return $response[$CAMPO_MODALIDAD];
 }
 
 // CONSULTA PARA OBTENER LA CONTRASEÑA ACTUAL DESDE LA BD A PARTIR DE UNA ID
@@ -422,4 +424,91 @@ function insertarCodigoQR($conexion, $id, $qr_text, $valido, $url_verificacion)
     $valido = 1;
     $smtm->bind_param("isss", $id, $qr_text, $valido, $url_verificacion);
     return $smtm->execute();
+}
+
+function obtenerCodigoQVerificacion($conexion, $qr_text)
+{
+    global $TABLA_CODIGOQR;
+    global $CAMPO_VALIDO_QR;
+    global $CAMPO_TEXTO_QR;
+
+    $sql = "SELECT $CAMPO_VALIDO_QR FROM $TABLA_CODIGOQR WHERE $CAMPO_TEXTO_QR = ?";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $qr_text);
+    $stmt->execute();
+    return $stmt->get_result();
+}
+
+function actualizarValidacionCodigoQR($conexion, $qr_text)
+{
+    // Actualizar a 2 para marcarlo como ya escaneado
+    $update = "UPDATE " . Variables::TABLA_BD_CODIGOS_QR . " SET " . Variables::CAMPO_Q_VALIDO . " = 2 WHERE " . Variables::CAMPO_Q_TEXTO . " = ?";
+
+    $stmt_update = $conexion->prepare($update);
+    $stmt_update->bind_param("s", $qr_text);
+    return $stmt_update->execute();
+}
+
+function modificarSolicitudRechazado($conexion, $id_solicitud)
+{
+    global $TABLA_SOLICITUDES;
+    global $CAMPO_ESTADO;
+    global $CAMPO_ID_SOLICITUD;
+    $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ESTADO = 'Rechazada' WHERE $CAMPO_ID_SOLICITUD = ?";
+
+
+    $smtm = $conexion->prepare($sql);
+    $smtm->bind_param("s", $id_solicitud);
+    return $smtm->execute();
+}
+
+function obtenerIDAndNumerosGrupos($conexion, $id_carrera)
+{
+    global $CAMPO_CARRERA;
+    global $CAMPO_ID_GRUPOS;
+    global $CAMPO_NUMERO_GRUPOS;
+    global $TABLA_GRUPO;
+    global $TABLA_CARRERAS;
+    global $CAMPO_ID_CARRERA;
+
+
+    $sql = "SELECT  c.$CAMPO_CARRERA, g.$CAMPO_ID_GRUPOS, g.$CAMPO_NUMERO_GRUPOS FROM $TABLA_GRUPO g JOIN $TABLA_CARRERAS c ON g.$CAMPO_ID_CARRERA = c.$CAMPO_ID_CARRERA WHERE g.$CAMPO_ID_CARRERA = ? ";
+    $stmt = $conexion->prepare($sql);
+
+    $stmt->bind_param("i", $id_carrera);
+    $stmt->execute();
+    return $stmt->get_result();
+}
+
+function obtenerModalidades($conexion, $id_carrera)
+{
+    global $TABLA_CARRERA_MODALIDAD;
+    global $CAMPO_ID_CARRERA;
+
+    $sql = "SELECT COUNT(*) as Modalidades FROM $TABLA_CARRERA_MODALIDAD WHERE $CAMPO_ID_CARRERA = ? GROUP BY $CAMPO_ID_CARRERA";
+
+    $stmtModalidades = $conexion->prepare($sql);
+    $stmtModalidades->bind_param("i", $id_carrera);
+    $stmtModalidades->execute();
+    return $stmtModalidades->get_result();
+}
+
+function obtenerAllCarreras($conexion)
+{
+    global $TABLA_CARRERAS;
+    global $CAMPO_CARRERA;
+    $sql = "SELECT $CAMPO_CARRERA FROM $TABLA_CARRERAS";
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute();
+    return $stmt->get_result();
+}
+
+
+function EliminarDatosTablaJustificante($conexion)
+{
+    global $TABLA_JUSTIFICANTES;
+    $sql = "TRUNCATE TABLE $TABLA_JUSTIFICANTES";
+    $stmt = $conexion->prepare($sql);
+    return $stmt->execute();
 }

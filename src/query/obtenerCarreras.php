@@ -2,16 +2,14 @@
 
 include "../conexion/conexion.php";
 include "../utils/constantes.php";
+include "../utils/functionGlobales.php";
 
-
-$stmt = $conexion->prepare("SELECT " . Variables::CAMPO_CARRERA . " FROM " . Variables::TABLA_BD_CARRERA);
-$stmt->execute();
-$result = $stmt->get_result();
+$resultadoAllCarreras = obtenerAllCarreras($conexion);
 
 // Creamos un array para almacenar los resultados
 $data = [];
 
-while ($row = $result->fetch_assoc()) {
+while ($row = $resultadoAllCarreras->fetch_assoc()) {
     // Agregamos cada fila del resultado al array
     $data[] = $row;
 }

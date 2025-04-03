@@ -9,20 +9,17 @@ header('Content-Type: application/json');
 if (isset($_POST['id'])) {
     $id = $_POST['id'];
 
+    $dataUser = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
+    $idUser = $dataUser[$CAMPO_ID_USUARIO];
+    $correo = $dataUser[$CAMPO_CORREO];
+    $rol = obtenerRol($conexion, $dataUser[$CAMPO_ID_ROL]);
 
-    $dataUser = getResultDataTabla($conexion, Variables::TABLA_BD_USUARIO, Variables::CAMPO_ID_USUARIO, $id);
-    $idUser = $dataUser[Variables::CAMPO_ID_USUARIO];
-    $correo = $dataUser[Variables::CAMPO_CORREO];
-    $rol = obtenerRol($conexion, $dataUser[Variables::CAMPO_ID_ROL]);
-
-    $estudiante = getResultDataTabla($conexion, Variables::TABLA_BD_ESTUDIANTE, Variables::CAMPO_MATRICULA, $id);
-    $nombre = $estudiante[Variables::CAMPO_NOMBRE];
-    $apellidos = $estudiante[Variables::CAMPO_APELLIDOS];
-    $modalidad = obtenerModalidad($conexion, $estudiante[Variables::CAMPO_ID_MODALIDAD]);
-    $grupo = $estudiante[Variables::CAMPO_GRUPO];
-    $carrera = getResultCarrera($conexion, $estudiante[Variables::CAMPO_ID_CARRERA]);
-
-
+    $estudiante = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_MATRICULA, $id);
+    $nombre = $estudiante[$CAMPO_NOMBRE];
+    $apellidos = $estudiante[$CAMPO_APELLIDOS];
+    $modalidad = obtenerModalidad($conexion, $estudiante[$CAMPO_ID_MODALIDAD]);
+    $grupo = $estudiante[$CAMPO_GRUPO];
+    $carrera = getResultCarrera($conexion, $estudiante[$CAMPO_ID_CARRERA]);
 
     echo json_encode(crearDataInformacionJefe($idUser, $nombre, $apellidos, $grupo, $carrera, $modalidad, $rol, $correo));
 }

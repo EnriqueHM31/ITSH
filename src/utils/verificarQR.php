@@ -2,49 +2,37 @@
 // Incluir la conexión a la base de datos (ajusta la ruta según tu estructura)
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
+include "../utils/functionGlobales.php";
 
 
 // Verificar que se haya enviado el parámetro con el texto del QR
 $qr_text = $_GET['qr_text'];
 
-// Preparar la consulta para buscar el código QR en la base de datos
-$sql = "SELECT " . Variables::CAMPO_Q_VALIDO . " FROM " . Variables::TABLA_BD_CODIGOS_QR . " WHERE " . Variables::CAMPO_Q_TEXTO . " = ?";
-
-$stmt = $conexion->prepare($sql);
-$stmt->bind_param("s", $qr_text);
-$stmt->execute();
-$resultado = $stmt->get_result();
+$resultado_consulta = obtenerCodigoQVerificacion($conexion, $qr_text);
 
 // Verificar si se encontró el código
 if ($resultado->num_rows > 0) {
     $row = $resultado->fetch_assoc();
 
-    // Si el código aún es válido (valor 1)
-    if ($row['valido'] == 1) {
-        // Actualizar a 2 para marcarlo como ya escaneado
-        $update = "UPDATE " . Variables::TABLA_BD_CODIGOS_QR . " SET " . Variables::CAMPO_Q_VALIDO . " = 2 WHERE " . Variables::CAMPO_Q_TEXTO . " = ?";
+    if ($row[$CAMPO_VALIDO_QR] == 1) {
 
-        $stmt_update = $conexion->prepare($update);
-        $stmt_update->bind_param("s", $qr_text);
-        if ($stmt_update->execute()) {
+        if (actualizarValidacionCodigoQR($conexion, $qr_text)) {
             $src = "../assets/iconos/ic_correcto.webp";
-            $codigo_valido = "El codigo es valido";
+            $mensaje_validacion = "El codigo es valido";
         } else {
             $src = "../assets/iconos/ic_error.webp";
-
-            $codigo_valido = "El codigo es invalido";
+            $mensaje_validacion = "El codigo es invalido";
         }
         $stmt_update->close();
     } else {
         $src = "../assets/iconos/ic_error.webp";
-        $codigo_valido = "Código inválido: ya fue escaneado previamente";
+        $mensaje_validacion = "Código inválido: ya fue escaneado previamente";
     }
 } else {
     $src = "../assets/iconos/ic_error.webp";
-    $codigo_valido = "Código no encontrado";
+    $mensaje_validacion = "Código no encontrado";
 }
 $stmt->close();
-// Cierra la conexión
 $conexion->close();
 ?>
 
@@ -108,7 +96,7 @@ $conexion->close();
     </div>
     <div class="mensaje">
         <img src=<?php echo $src ?> alt="Logo que representa el error o correcto del codigo">
-        <p><?php echo $codigo_valido ?></p>
+        <p><?php echo $mensaje_validacion ?></p>
     </div>
 </body>
 

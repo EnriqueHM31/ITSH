@@ -15,7 +15,7 @@ if (grupoSelect !== null) {
 				opciones.push(i + '0' + id_grupos + 'A');
 			}
 		} else if (modalidad === 'Flexible') {
-			for (let i = 1; i <= id_grupos; i++) {
+			for (let i = 1; i <= numero_grupos; i++) {
 				opciones.push(i + '0' + id_grupos + 'B');
 			}
 		}

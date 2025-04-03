@@ -3,14 +3,12 @@
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../conexion/verificar acceso.php";
+include "../utils/functionGlobales.php";
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['reiniciar'])) {
     try {
-        $sql = "TRUNCATE TABLE " . Variables::TABLA_BD_JUSTIFICANTES;
-        $stmt = $conexion->prepare($sql);
-
-        if ($stmt->execute()) {
+        if (EliminarDatosTablaJustificante($conexion)) {
             echo json_encode(["mensaje" => "Se ha reiniciado el folio"]);
         } else {
             echo json_encode(["mensaje" => "Ocurrió un error al reiniciar el folio"]);

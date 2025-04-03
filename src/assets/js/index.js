@@ -57,12 +57,11 @@ function mostrarErrorAjax(xhr) {
 		}
 	} catch (e) {
 		mostrarTemplate(
-			'Error al procesar la respuesta del servidor: ' + e,
+			'Error al procesar la respuesta del servidor',
 			'../../assets/iconos/ic_error.webp',
 			'var(--rojo)',
 			'miTemplate',
 		);
-		reject(e);
 		return;
 	}
 

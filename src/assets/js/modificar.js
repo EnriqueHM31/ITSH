@@ -36,12 +36,13 @@ async function cargarUsuarioModificar(id, nombre) {
             nombreUsuario.value = data.nombre;
             apellidosUsuario.value = data.apellidos;
             correoUsuario.value = data.correo;
-            rol.value = data.rol;
 
 
             if (nombre === 'getInfoPersonal.php') {
                 clave.value = data.clave_empleado;
                 claveAnterior.value = data.clave_empleado;
+                rol.value = data.rol;
+
 
                 if (data.rol === 'Administrador') {
                     actualizarCargo();
@@ -69,6 +70,7 @@ async function cargarUsuarioModificar(id, nombre) {
                 clave.value = data.matricula;
                 claveAnterior.value = data.matricula;
                 modalidad.value = data.id_modalidad;
+                actualizarGrupos();
                 grupo.value = data.grupo;
             }
 
