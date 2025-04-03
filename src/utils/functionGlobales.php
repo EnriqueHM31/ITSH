@@ -6,6 +6,9 @@ $TABLA_ESTUDIANTE = Variables::TABLA_BD_ESTUDIANTE;
 $TABLA_CARRERAS = Variables::TABLA_BD_CARRERA;
 $TABLA_ROL = Variables::TABLA_BD_ROL;
 $TABLA_MODALIDADES = Variables::tABLA_BD_MODALIDAD;
+$TABLA_GRUPO = Variables::TABLA_BD_GRUPO;
+$TABLA_SOLICITUDES = Variables::TABLA_BD_SOLICITUDES;
+$TABLA_JUSTIFICANTES = Variables::TABLA_BD_JUSTIFICANTES;
 
 $CAMPO_ID_USUARIO = Variables::CAMPO_ID_USUARIO;
 $CAMPO_CONTRASEÑA = Variables::CAMPO_CONTRASEÑA;
@@ -27,6 +30,23 @@ $CAMPO_ROL = Variables::CAMPO_ROL;
 
 $CAMPO_ID_MODALIDAD = Variables::CAMPO_ID_MODALIDAD;
 $CAMPO_MODALIDAD = Variables::CAMPO_MODALIDAD;
+
+$CAMPO_ID_GRUPOS = Variables::CAMPO_G_ID_GRUPO;
+$CAMPO_NUMERO_GRUPOS = Variables::CAMPO_G_NUMERO_GRUPOS;
+
+$CAMPO_ESTADO = Variables::CAMPO_S_ESTADO;
+$CAMPO_ID_SOLICITUD = Variables::CAMPO_S_ID_SOLICITUD;
+
+$CAMPO_J_ID_SOLICITUD = Variables::CAMPO_J_ID_SOLICITUD;
+$CAMPO_J_MATRICULA = Variables::CAMPO_J_MATRICULA;
+$CAMPO_J_NOMBRE = Variables::CAMPO_J_NOMBRE;
+$CAMPO_J_APELLIDOS = Variables::CAMPO_J_APELLIDOS;
+$CAMPO_J_MOTIVO = Variables::CAMPO_J_MOTIVO;
+$CAMPO_J_GRUPO = Variables::CAMPO_J_GRUPO;
+$CAMPO_J_CARRERA = Variables::CAMPO_J_CARRERA;
+$CAMPO_J_NOMBRE_JEFE = Variables::CAMPO_J_NOMBRE_JEFE;
+$CAMPO_J_JUSTIFICANTE = Variables::CAMPO_J_JUSTIFICANTE;
+
 
 
 function estructuraMensaje($mensaje, $icono, $color)
@@ -322,3 +342,61 @@ function EliminarUsuario($conexion, $id)
 
 }
 
+
+
+
+
+
+function EliminarCarrera($conexion, $carreraNueva)
+{
+    global $TABLA_CARRERAS;
+    global $CAMPO_CARRERA;
+
+    $consulta = "DELETE FROM $TABLA_CARRERAS WHERE $CAMPO_CARRERA = ?";
+    $sql = $conexion->prepare($consulta);
+    $sql->bind_param("s", $carreraNueva);
+    return $sql->execute();
+}
+
+function ModificarEstadoSolicitud($conexion, $id_solicitud)
+{
+    global $TABLA_SOLICITUDES;
+    global $CAMPO_ESTADO;
+    global $CAMPO_ID_SOLICITUD;
+    $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ESTADO = 'Aceptada' WHERE $CAMPO_ID_SOLICITUD = ?";
+
+    $smtm = $conexion->prepare($sql);
+    $smtm->bind_param("i", $id_solicitud);
+    $smtm->execute();
+}
+
+function obtenerNumeroFolio($conexion)
+{
+    global $TABLA_JUSTIFICANTES;
+    $sql = "SELECT COUNT(*) AS total FROM $TABLA_JUSTIFICANTES";
+    $result = $conexion->query($sql);
+    $row = $result->fetch_assoc();
+    return $row["total"];
+}
+
+function InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo)
+{
+    global $TABLA_JUSTIFICANTES;
+    global $CAMPO_J_ID_SOLICITUD;
+    global $CAMPO_J_MATRICULA;
+    global $CAMPO_J_NOMBRE;
+    global $CAMPO_J_APELLIDOS;
+    global $CAMPO_J_MOTIVO;
+    global $CAMPO_J_GRUPO;
+    global $CAMPO_J_CARRERA;
+    global $CAMPO_J_NOMBRE_JEFE;
+    global $CAMPO_J_JUSTIFICANTE;
+    $sql = "INSERT INTO $TABLA_JUSTIFICANTES ( $CAMPO_J_ID_SOLICITUD, $CAMPO_J_MATRICULA, $CAMPO_J_NOMBRE, $CAMPO_J_APELLIDOS, $CAMPO_J_MOTIVO, $CAMPO_J_GRUPO, $CAMPO_J_CARRERA, $CAMPO_J_NOMBRE_JEFE, $CAMPO_J_JUSTIFICANTE) VALUES (?,?,?,?,?,?,?,?,?)";
+
+    $nombre_jefe_completo = "$nombre_jefe  $apellidos_jefe";
+
+    $smtm = $conexion->prepare($sql);
+    $smtm->bind_param('sssssssss', $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe_completo, $nombreArchivo);
+
+    return $smtm->execute();
+}

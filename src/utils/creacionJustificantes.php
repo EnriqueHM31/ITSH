@@ -23,14 +23,15 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         $id_unico = generarCodigo($conexion, $id_folio, $nombre, $fecha, true);
 
-        $datos_jefe = ObtenerDatosJustificanteJefe($conexion, $id_jefe);
-        $nombre_jefe = $datos_jefe[0];
-        $apellidos_jefe = $datos_jefe[1];
-        $carrera = $datos_jefe[2];
+        $datos_jefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $id_jefe);
+        $nombre_jefe = $datos_jefe[$CAMPO_NOMBRE];
+        $apellidos_jefe = $datos_jefe[$CAMPO_APELLIDOS];
+        $carrera = getResultCarrera($conexion, $datos_jefe[$CAMPO_ID_CARRERA]);
 
         $fecha_actual = obtenerFechaActual();
 
         $src = obtenerIMGLogos();
+
         $src_qr = obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha);
 
         $fecha = estructurarFechaAusencia($fecha);
@@ -295,7 +296,9 @@ try {
 
     ModificarEstadoSolicitud($conexion, $id_solicitud);
 
-    InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo);
+    if (InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo)) {
+        echo json_encode(["sin_error" => True]);
+    }
 
     EliminarCodigoQR($id_folio, $nombre, $fecha_codigo, $id_unico);
 
@@ -318,34 +321,6 @@ try {
     exit();
 }
 
-
-function obtenerNumeroFolio($conexion)
-{
-    $sql = "SELECT COUNT(*) AS total FROM Justificante";
-    $result = $conexion->query($sql);
-    $row = $result->fetch_assoc();
-    return $row["total"];
-}
-
-function ObtenerDatosJustificanteJefe($conexion, $id_jefe)
-{
-    try {
-
-        $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id_jefe);
-
-        $nombre_jefe = $data[Variables::CAMPO_NOMBRE];
-        $apellidos_jefe = $data[Variables::CAMPO_APELLIDOS];
-        $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
-        $carrera = getResultCarrera($conexion, $id_carrera);
-
-        return [$nombre_jefe, $apellidos_jefe, $carrera];
-    } catch (Exception $e) {
-        echo json_encode([
-            "sin_error" => "Error en la obtencion de datos del jefe(a) de carrera"
-        ]);
-        exit();
-    }
-}
 
 function obtenerFechaActual()
 {
@@ -409,40 +384,7 @@ function guardarArchivoPDF($data, $id_solicitud, $matricula)
 function estructurarFechaAusencia($fecha)
 {
     $array = explode("-", $fecha);
-    return $array[0] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[2];
-}
-
-function ModificarEstadoSolicitud($conexion, $id_solicitud)
-{
-    $sql = "UPDATE " . Variables::TABLA_BD_SOLICITUDES . " SET " . Variables::CAMPO_S_ESTADO . " = 'Aceptada' WHERE " . Variables::CAMPO_S_ID_SOLICITUD . " = ?";
-
-    $smtm = $conexion->prepare($sql);
-    $smtm->bind_param("i", $id_solicitud);
-    $smtm->execute();
-}
-
-function InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo)
-{
-    $sql = "INSERT INTO " . Variables::TABLA_BD_JUSTIFICANTES . "("
-        . Variables::CAMPO_J_ID_SOLICITUD . ", "
-        . Variables::CAMPO_J_MATRICULA . ", "
-        . Variables::CAMPO_J_NOMBRE . ", "
-        . Variables::CAMPO_J_APELLIDOS . ", "
-        . Variables::CAMPO_J_MOTIVO . ", "
-        . Variables::CAMPO_J_GRUPO . ", "
-        . Variables::CAMPO_J_CARRERA . ", "
-        . Variables::CAMPO_J_NOMBRE_JEFE . ", "
-        . Variables::CAMPO_J_JUSTIFICANTE . ") VALUES (?,?,?,?,?,?,?,?,?)";
-
-    $nombre_jefe_completo = $nombre_jefe . " " . $apellidos_jefe;
-
-    $smtm = $conexion->prepare($sql);
-    $smtm->bind_param('sssssssss', $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe_completo, $nombreArchivo);
-
-    if ($smtm->execute()) {
-
-        echo json_encode(["sin_error" => True]);
-    }
+    return $array[2] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[0];
 }
 
 
