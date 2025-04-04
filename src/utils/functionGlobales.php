@@ -683,3 +683,13 @@ function obtenerSolicitudesJefeCarrera($conexion, $carrera)
     $resultado->execute();
     return $resultado->get_result();
 }
+
+function obtenerJustificantesJefeCarrera($conexion, $carrera)
+{
+    global $TABLA_JUSTIFICANTES, $CAMPO_J_CARRERA;
+    $sql = "SELECT * FROM $TABLA_JUSTIFICANTES WHERE $CAMPO_J_CARRERA = ?";
+    $resultado = $conexion->prepare($sql);
+    $resultado->bind_param("s", $carrera);
+    $resultado->execute();
+    return $resultado->get_result();
+}

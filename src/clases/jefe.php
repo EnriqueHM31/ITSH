@@ -309,8 +309,7 @@ class Jefe
 
     public function HistorialJustificantes($conexion, $carrera)
     {
-        global $TABLA_JUSTIFICANTES, $CAMPO_J_CARRERA;
-        $resultado = getResultDataTabla($conexion, $TABLA_JUSTIFICANTES, $CAMPO_J_CARRERA, $carrera);
+        $resultado = obtenerJustificantesJefeCarrera($conexion, $carrera);
 
         if ($resultado->num_rows == 0) {
             echo "<p class='sin_justificantes'>No hay justificantes disponibles</p>";
@@ -320,37 +319,17 @@ class Jefe
                 $tiempo_fecha = explode("-", $tiempo[0]);
 
                 echo "
-        <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
-            <h2> Folio {$fila['id']} </h2>
-            <p> {$fila['matricula_alumno']} </p>
-            <p> {$fila['nombre_alumno']} </p>
-            <span>Hora: {$tiempo[1]} </span>
-            <span>Fecha: {$tiempo_fecha[2]} de " . Variables::MESES[$tiempo_fecha[1][1] - 1] . " de " . $tiempo_fecha[0] . " </span>
-        </a>
-        ";
+                <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
+                    <h2> Folio {$fila['id']} </h2>
+                    <p> {$fila['matricula_alumno']} </p>
+                    <p> {$fila['nombre_alumno']} </p>
+                    <span>Hora: {$tiempo[1]} </span>
+                    <span>Fecha: {$tiempo_fecha[2]} de " . Variables::MESES[$tiempo_fecha[1][1] - 1] . " de " . $tiempo_fecha[0] . " </span>
+                </a>
+                ";
             }
         }
-
     }
-
-    public function reiniciarFolio($conexion)
-    {
-        try {
-            $sql = "TRUNCATE TABLE " . Variables::TABLA_BD_JUSTIFICANTES;
-            $stmt = $conexion->prepare($sql);
-
-            if ($stmt->execute()) {
-                estructuraMensaje("Se ha reiniciado el folio", "../../assets/iconos/ic_correcto.webp", "--verde");
-            } else {
-                estructuraMensaje("Ocurrió un error al reiniciar el folio", "../../assets/iconos/ic_error.webp", "--rojo");
-            }
-
-            $stmt->close(); // Cerrar el statement
-        } catch (Exception $e) {
-            estructuraMensaje("Error: " . $e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
-        }
-    }
-
 
     public function ObtenerGruposDeLaCarrera($conexion, $id_carrera)
     {
