@@ -18,9 +18,9 @@ $data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO
 $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
 
-$dataSolicitudes = $jefeCarrera->TablaSolicitudesRegistros($conexion, $carreraJefe);
+$dataSolicitudes = obtenerSolicitudesJefeCarrera($conexion, $carreraJefe);
 $sin_resultados = "";
-if ($dataSolicitudes->num_rows > 0) {
+if ($dataSolicitudes) {
     $arraysDatos = $jefeCarrera->MostrarSolicitudes($dataSolicitudes, $id);
 } else {
     $sin_resultados = "<p class='sin_solicitudes'>No hay solicitudes</p>";

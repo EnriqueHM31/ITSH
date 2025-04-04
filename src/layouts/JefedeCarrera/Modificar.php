@@ -8,6 +8,7 @@ include "../../clases/jefe.php";
 include "../../conexion/verificar acceso.php";
 include "../../conexion/verificar_rol_jefe.php";
 include "../../query/obtenerGrupos.php";
+include "../../validaciones/Validaciones.php";
 
 
 

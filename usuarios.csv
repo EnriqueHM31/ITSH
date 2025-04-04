@@ -1,6 +1,6 @@
-identificador,nombre,apellidos,cargo,carrera,correo
-ITSH_3245,Juan,Pérez,Jefe de Carrera,Electromecanica,juan@huatusco.tecnm.mx
-ITSH_1234,María,López,Administrador, Null,maria@huatusco.tecnm.mx
-ITSH_5678,José,Gómez,Jefe de Carrera,Industrial,jose@huatusco.tecnm.mx
-ITSH_9012,Ana,Morales,Administrador, Null,ana@huatusco.tecnm.mx
-ITSH_3456,Luis,Sánchez,Jefe de Carrera,Quimica,luis@huatusco.tecnm.mx
+identificador,nombre,apellidos,cargo,carrera,correo,
+ITSH_3245,Juan,Perez,Jefe de Carrera,Electromecanica,juan@huatusco.tecnm.mx,
+ITSH_1234,Maria,Lopez,Administrador, Null,maria@huatusco.tecnm.mx,
+ITSH_5678,Jose,Gomez,Jefe de Carrera,Industrial,jose@huatusco.tecnm.mx,
+ITSH_9012,Ana,Morales,Administrador, Null,ana@huatusco.tecnm.mx,
+ITSH_3456,Luis,Sanchez,Jefe de Carrera,Quimica,luis@huatusco.tecnm.mx,

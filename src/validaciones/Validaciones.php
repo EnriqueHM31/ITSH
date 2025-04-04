@@ -199,3 +199,35 @@ function revisionCorreoEstudiante($correo)
         return true;
     }
 }
+
+function revisarModificacionCorreoEstudiante($conexion, $correoNuevo, $correoAntiguo, $matricula)
+{
+
+    global $CAMPO_ID_USUARIO, $TABLA_USUARIO, $CAMPO_CORREO;
+
+    if (isset($correoNuevo) && $correoNuevo !== $correoAntiguo) {
+        $sql = "SELECT $CAMPO_ID_USUARIO FROM $TABLA_USUARIO WHERE $CAMPO_CORREO = ? AND $CAMPO_ID_USUARIO != ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("ss", $correoNuevo, $matricula);
+        $stmt->execute();
+        $stmt->store_result();
+        return $stmt;
+    }
+    return FALSE;
+}
+
+function revisarModificacionMatriculaEstudiante($conexion, $stmt, $matriculaNueva, $matriculaAntigua)
+{
+    global $CAMPO_ID_USUARIO, $TABLA_USUARIO;
+    if (isset($matriculaNueva) && $matriculaNueva !== $matriculaAntigua) {
+
+        $sql = "SELECT $CAMPO_ID_USUARIO FROM $TABLA_USUARIO WHERE $CAMPO_ID_USUARIO = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("s", $matriculaNueva); // Nueva matrícula = futuro ID
+        $stmt->execute();
+        $stmt->store_result();
+
+        return $stmt;
+    }
+    return FALSE;
+}

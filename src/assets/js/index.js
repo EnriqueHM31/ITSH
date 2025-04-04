@@ -22,12 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	//Funcion para el boton cuando es mobile
 	if (document.querySelector('.icono_menu') !== null) {
 		document.querySelector('.icono_menu').addEventListener('click', () => {
-			document.querySelector('.menu').style.display = 'flex'
-
+			document.querySelector('.menu').style.transform = 'translateX(0)'
 			document
 				.querySelector('.close_contenedor')
 				.addEventListener('click', () => {
-					document.querySelector('.menu').style.display = 'none'
+					document.querySelector('.menu').style.transform = 'translateX(100dvw)'
 				})
 		})
 	}

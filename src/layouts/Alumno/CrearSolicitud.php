@@ -79,26 +79,27 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
 
                 <div class="contenedor_info-solicitud">
                     <p>Matricula:</p>
-                    <input type="text" id="id" name="identificador" value="<?php echo $row['matricula']; ?>" readonly>
+                    <input type="text" id="id" name="identificador" value="<?php echo $row[$CAMPO_MATRICULA]; ?>"
+                        readonly>
 
-                    <input type="text" id="grupo" name="grupo" value="<?php echo $row['grupo']; ?>" readonly>
+                    <input type="text" id="grupo" name="grupo" value="<?php echo $row[$CAMPO_GRUPO]; ?>" readonly>
                 </div>
 
                 <div class="contenedor_info-solicitud">
                     <p>Nombre:</p>
-                    <input type="text" id="nombre" name="nombre" value="<?php echo $row['nombre']; ?>" readonly>
+                    <input type="text" id="nombre" name="nombre" value="<?php echo $row[$CAMPO_NOMBRE]; ?>" readonly>
                 </div>
 
                 <div class="contenedor_info-solicitud">
                     <p>Apellidos:</p>
-                    <input type="text" id="apellidos" name="apellidos" value="<?php echo $row['apellidos']; ?>"
+                    <input type="text" id="apellidos" name="apellidos" value="<?php echo $row[$CAMPO_APELLIDOS]; ?>"
                         readonly>
                 </div>
 
                 <div class="contenedor_info-solicitud">
                     <p for="email">Carrera:</p>
                     <input type="text" id="carrera" name="carrera"
-                        value="<?php echo getResultCarrera($conexion, $row['id_carrera']); ?>" readonly>
+                        value="<?php echo getResultCarrera($conexion, $row[$CAMPO_ID_CARRERA]); ?>" readonly>
                 </div>
 
                 <div class="contenedor_info-solicitud">
@@ -111,7 +112,7 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
                 </div>
 
                 <div class="contenedor_info-solicitud">
-                    <p>Fecha de Ausencia: </p>
+                    <p>Ausente el: </p>
                     <input class="fecha_ausencia" type="date" name="fecha_ausencia" id="fecha_de_ausencia">
                 </div>
 

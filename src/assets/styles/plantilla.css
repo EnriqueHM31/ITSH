@@ -278,16 +278,17 @@ main {
     }
 
     .menu {
-        display: none;
         position: fixed;
         top: 0;
         inset: 0;
         z-index: 3000;
+        transform: translateX(100dvw);
         flex-direction: column;
         align-items: center;
         justify-content: center;
         background-color: var(--vino);
         gap: 3rem;
+        transition: transform .6s;
     }
 
     .menu-item {
@@ -296,6 +297,8 @@ main {
         align-items: center;
         justify-content: center;
         text-align: center;
+        user-select: none;
+
     }
 
     .link {
@@ -310,6 +313,7 @@ main {
         max-width: 4rem;
         display: flex;
         cursor: pointer;
+        user-select: none;
     }
 
     .close_contenedor {
@@ -357,6 +361,11 @@ main {
     .redes {
         width: 100%;
         justify-content: space-around;
+    }
+
+    .definicion span {
+        width: 100%;
+        text-align: center;
     }
 
     .definicion p {

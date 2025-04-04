@@ -61,8 +61,8 @@ class administrador
                     if (!insertarAdministrador($conexion, $clave_empleado, $nombre, $apellidos)) {
                         estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
-                    mysqli_commit($conexion);
 
+                    mysqli_commit($conexion);
                     estructuraMensaje("Registro de administrador exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
                     return;
                 }
@@ -72,12 +72,14 @@ class administrador
                     if (!insertarJefedeCarrera($conexion, $clave_empleado, $nombre, $apellidos, $carrera)) {
                         estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
-                    mysqli_commit($conexion);
 
+                    mysqli_commit($conexion);
                     estructuraMensaje("Registro Jefe de carrera exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
                     return;
                 }
 
+            } else {
+                throw new Exception("No se pudo añadir el registro a la BD");
             }
 
         } catch (Exception $e) {
@@ -170,7 +172,7 @@ class administrador
 
     public function validarRowsCSV($conexion, $clave_empleado, $nombre, $apellidos, $correo, $carrera, $cargo)
     {
-        if (empty($clave_empleado) || empty($nombre) || empty($apellidos) || empty($correo) || empty($carrera)) {
+        if (empty($clave_empleado) || empty($nombre) || empty($apellidos) || empty($correo) || empty($carrera) || empty($cargo)) {
             estructuraMensaje("Faltan datos obligatorios en la fila del CSV", "../../assets/iconos/ic_error.webp", "var(--rojo)");
             return true;
         }
@@ -198,58 +200,51 @@ class administrador
     public function AgregarCarrera($conexion, $carrera, $numeros_grupos, $id_carrera_nueva)
     {
         mysqli_begin_transaction($conexion);
+
         if (empty($carrera)) {
             estructuraMensaje("Debes ingresar una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
         }
 
-        $sql = $conexion->prepare("INSERT INTO " . Variables::TABLA_BD_CARRERA . " (" . Variables::CAMPO_CARRERA . ") VALUES (?)");
-        $sql->bind_param("s", $carrera);
-
-        if ($sql->execute()) {
-
-            $id_carrera = obtenerIDCarrera($conexion, $carrera);
-
-            $sql = $conexion->prepare("INSERT INTO " . Variables::TABLA_BD_GRUPO . " (" . Variables::CAMPO_G_CARRERA . ", " . Variables::CAMPO_G_NUMERO_GRUPOS . ", " . Variables::CAMPO_G_ID_GRUPO . ") VALUES (?, ?, ?)");
-            $sql->bind_param("sss", $id_carrera, $numeros_grupos, $id_carrera_nueva);
-            if ($sql->execute()) {
-                mysqli_commit($conexion);
-                estructuraMensaje("Se agrego otra carrera al sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
-            } else {
-                estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
-            }
-
-        } else {
+        if (!insertarCarrerasDB($conexion, $carrera)) {
             estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
         }
+
+        $id_carrera = obtenerIDCarrera($conexion, $carrera);
+
+        if (!insertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)) {
+            estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+        mysqli_commit($conexion);
+        estructuraMensaje("Se agregó otra carrera al sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
+
     }
 
     public function ModificarCarrera($conexion, $carreraAntigua, $carreraNueva, $numeros_grupos, $id_carrera_nueva)
     {
         mysqli_begin_transaction($conexion);
-        if (empty($carreraNueva)) {
-            estructuraMensaje("Debes ingresar una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+
+        if (empty($carreraNueva) || empty($numeros_grupos) || empty($id_carrera_nueva)) {
+            estructuraMensaje("Faltan datos para su modificacion", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
         }
 
         $id_carrera = obtenerIDCarrera($conexion, $carreraAntigua);
 
-        $sql = $conexion->prepare("UPDATE " . Variables::TABLA_BD_CARRERA . " SET " .
-            Variables::CAMPO_CARRERA . " = ? WHERE " . Variables::CAMPO_ID_CARRERA . " = ?");
-
-        $sql->bind_param("ss", $carreraNueva, $id_carrera);
-
-        if ($sql->execute()) {
-            $sql = $conexion->prepare("UPDATE " . Variables::TABLA_BD_GRUPO . " SET " .
-                Variables::CAMPO_G_NUMERO_GRUPOS . " = ?, " . Variables::CAMPO_G_ID_GRUPO . " = ? WHERE ".Variables::CAMPO_G_CARRERA." = ?");
-
-            $sql->bind_param("sss", $numeros_grupos, $id_carrera_nueva, $id_carrera);
-
-            if ($sql->execute()) {
-                mysqli_commit($conexion);
-                estructuraMensaje("Se modifico la carrera en el sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
-            }
-        } else {
+        if (!modificarNombreCarreraDB($conexion, $carreraNueva, $id_carrera)) {
             estructuraMensaje("Error al modificar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
         }
 
+        if (!modificarNumeroGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)) {
+            estructuraMensaje("Error al modificar los grupos de la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+        mysqli_commit($conexion);
+        estructuraMensaje("Se modificó la carrera en el sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
     }
 }

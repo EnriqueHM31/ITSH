@@ -34,12 +34,19 @@ $CAMPO_ID_MODALIDAD = Variables::CAMPO_ID_MODALIDAD;
 $CAMPO_MODALIDAD = Variables::CAMPO_MODALIDAD;
 $CAMPO_GRUPO = Variables::CAMPO_GRUPO;
 
+$CAMPO_G_ID_CARRERA = Variables::CAMPO_G_CARRERA;
 $CAMPO_ID_GRUPOS = Variables::CAMPO_G_ID_GRUPO;
 $CAMPO_NUMERO_GRUPOS = Variables::CAMPO_G_NUMERO_GRUPOS;
 
 $CAMPO_ESTADO = Variables::CAMPO_S_ESTADO;
 $CAMPO_ID_SOLICITUD = Variables::CAMPO_S_ID_SOLICITUD;
+$CAMPO_S_MATRICULA = Variables::CAMPO_S_MATRICULA;
+$CAMPO_S_NOMBRE = Variables::CAMPO_S_NOMBRE;
+$CAMPO_S_APELLIDOS = Variables::CAMPO_S_APELLIDOS;
+$CAMPO_S_GRUPO = Variables::CAMPO_S_GRUPO;
+$CAMPO_S_CARRERA = Variables::CAMPO_S_CARRERA;
 $CAMPO_MOTIVO = Variables::CAMPO_S_MOTIVO;
+$CAMPO_S_EVIDENCIA = Variables::CAMPO_S_EVIDENCIA;
 $CAMPO_FECHA_AUSE = Variables::CAMPO_S_FECHA_AUSENCIA;
 
 $CAMPO_J_ID_JUSTIFICANTE = Variables::CAMPO_J_ID;
@@ -355,11 +362,6 @@ function EliminarUsuario($conexion, $id)
 
 }
 
-
-
-
-
-
 function EliminarCarrera($conexion, $carreraNueva)
 {
     global $TABLA_CARRERAS;
@@ -584,4 +586,100 @@ function buscarJustificantes($conexion, $query)
 
     $stmt->execute();
     return $stmt->get_result();
+}
+function insertarSolicitudBD($conexion, $identificador, $nombre, $apellidos, $grupo, $carrera, $motivo, $fecha, $identificador_archivo, $estado)
+{
+    global $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD, $CAMPO_S_MATRICULA, $CAMPO_S_NOMBRE, $CAMPO_S_APELLIDOS,
+    $CAMPO_S_GRUPO, $CAMPO_S_CARRERA, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE, $CAMPO_S_EVIDENCIA, $CAMPO_ESTADO;
+
+    $sql = "INSERT INTO $TABLA_SOLICITUDES ($CAMPO_ID_SOLICITUD, $CAMPO_S_MATRICULA, $CAMPO_S_NOMBRE, $CAMPO_S_APELLIDOS, $CAMPO_S_GRUPO, $CAMPO_S_CARRERA, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE, $CAMPO_S_EVIDENCIA, $CAMPO_ESTADO) 
+    VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("sssssssss", $identificador, $nombre, $apellidos, $grupo, $carrera, $motivo, $fecha, $identificador_archivo, $estado);
+    echo json_encode($identificador);
+    return $stmt->execute();
+}
+
+function buscarHistorialJustificantesAlumno($conexion, $id)
+{
+    global $TABLA_SOLICITUDES, $CAMPO_MATRICULA;
+    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_MATRICULA = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    return $stmt->get_result();
+}
+
+function insertarCarrerasDB($conexion, $carrera)
+{
+    global $TABLA_CARRERAS, $CAMPO_CARRERA;
+    $sql = "INSERT INTO $TABLA_CARRERAS ($CAMPO_CARRERA) VALUES (?)";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $carrera);
+    return $stmt->execute();
+}
+
+function insertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)
+{
+    global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
+
+    $sql = "INSERT INTO $TABLA_GRUPO ($CAMPO_G_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS) VALUES (?, ?, ?)";
+
+    $sql = $conexion->prepare($sql);
+    $sql->bind_param("sss", $id_carrera, $numeros_grupos, $id_carrera_nueva);
+    return $sql->execute();
+}
+
+function modificarNombreCarreraDB($conexion, $nombreNuevo, $id_carrera)
+{
+    global $TABLA_CARRERAS, $CAMPO_ID_CARRERA, $CAMPO_CARRERA;
+
+    $sql = "UPDATE $TABLA_CARRERAS SET $CAMPO_CARRERA = ? WHERE $CAMPO_ID_CARRERA= ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("ss", $nombreNuevo, $id_carrera);
+    return $stmt->execute();
+}
+
+function modificarNumeroGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)
+{
+    global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
+
+    $sql = "UPDATE $TABLA_GRUPO SET $CAMPO_NUMERO_GRUPOS = ?, $CAMPO_ID_GRUPOS = ? WHERE $CAMPO_G_ID_CARRERA = ?";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("sss", $numeros_grupos, $id_carrera_nueva, $id_carrera);
+    return $stmt->execute();
+}
+
+function modificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $apellidos, $grupo, $id_modalidad, $matricula)
+{
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $CAMPO_MATRICULA, $CAMPO_CORREO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_MODALIDAD;
+
+    $sql = " UPDATE $TABLA_USUARIO SET $CAMPO_ID_USUARIO = ?, $CAMPO_CORREO = ? WHERE $CAMPO_ID_USUARIO = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("sss", $id_usuario, $correo, $matricula);
+
+    if (!$stmt->execute()) {
+        return false;
+    }
+
+    $sql = " UPDATE $TABLA_ESTUDIANTE SET $CAMPO_NOMBRE = ?, $CAMPO_APELLIDOS = ?, $CAMPO_GRUPO = ?, $CAMPO_ID_MODALIDAD = ? WHERE $CAMPO_MATRICULA = ?";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("sssis", $nombre, $apellidos, $grupo, $id_modalidad, $id_usuario);
+
+    if (!$stmt->execute()) {
+        return false;
+    }
+    return true;
+}
+
+function obtenerSolicitudesJefeCarrera($conexion, $carrera)
+{
+    global $TABLA_SOLICITUDES, $CAMPO_S_CARRERA;
+    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_S_CARRERA = ?";
+    $resultado = $conexion->prepare($sql);
+    $resultado->bind_param("s", $carrera);
+    $resultado->execute();
+    return $resultado->get_result();
 }

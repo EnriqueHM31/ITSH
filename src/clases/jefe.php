@@ -24,7 +24,6 @@ class Jefe
 
     public function operacionInsertarEstudiante($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo)
     {
-
         if (restriccionKeyDuplicadaEstudiante($matricula, $correo, $conexion)) {
             return;
         }
@@ -32,23 +31,22 @@ class Jefe
         mysqli_begin_transaction($conexion);
 
         try {
-
-            if (insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol)) {
-
-                if (!insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)) {
-                    estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
-                }
-                mysqli_commit($conexion);
-
-                estructuraMensaje("Registro del estudiante exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
-                return;
-
+            if (!insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol)) {
+                throw new Exception("Error al insertar el usuario");
             }
+
+            if (!insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)) {
+                throw new Exception("Ocurrió un problema con la BD al insertar estudiante");
+            }
+
+            mysqli_commit($conexion);
+            estructuraMensaje("Registro del estudiante exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
+            return;
+
         } catch (Exception $e) {
-            estructuraMensaje("Error al añadir el registro", "../../assets/iconos/ic_error.webp", "--rojo");
+            mysqli_rollback($conexion);
+            estructuraMensaje($e, "../../assets/iconos/ic_error.webp", "--rojo");
         }
-
-
     }
 
     public function añadirPorCSVEstudiantes($conexion, $rol, $id_carrera)
@@ -57,11 +55,15 @@ class Jefe
 
         $archivo = $_FILES["archivo_csv"]["tmp_name"];
 
-        if (($handle = fopen($archivo, "r")) !== FALSE) {
-            fgetcsv($handle);
+        if (($handle = fopen($archivo, "r")) === false) {
+            estructuraMensaje("Error al abrir el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
 
-            while (($datos = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        fgetcsv($handle); // Saltar encabezado
 
+        try {
+            while (($datos = fgetcsv($handle, 1000, ",")) !== false) {
                 $matricula = trim($datos[0]);
                 $nombre = trim($datos[1]);
                 $apellidos = trim($datos[2]);
@@ -71,20 +73,25 @@ class Jefe
                 $contraseña = "Aa12345%";
 
                 if ($this->validarRowsCSV($conexion, $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera)) {
-                    return;
+                    throw new Exception("Error en los datos del CSV para la matrícula: $matricula");
                 }
 
-                insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol);
+                if (!insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol)) {
+                    throw new Exception("Error al insertar usuario: $matricula");
+                }
 
-                insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo);
+                if (!insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)) {
+                    throw new Exception("Error al insertar estudiante: $matricula");
+                }
             }
 
             mysqli_commit($conexion);
             estructuraMensaje("Datos insertados correctamente", "../../assets/iconos/ic_correcto.webp", "--verde");
-            return;
-        } else {
-            estructuraMensaje("Error al abrir el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
+        } catch (Exception $e) {
+            mysqli_rollback($conexion);
+            estructuraMensaje($e, "../../assets/iconos/ic_error.webp", "--rojo");
         }
+
     }
 
     public function validarRowsCSV($conexion, $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera)
@@ -109,6 +116,8 @@ class Jefe
 
     function actualizarUsuario($conexion, $matricula, $nuevosDatos)
     {
+        global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
+
         mysqli_begin_transaction($conexion);
 
         if (empty($matricula)) {
@@ -117,75 +126,46 @@ class Jefe
         }
 
         // Obtener datos actuales del usuario (incluyendo 'matricula')
-        $stmt = $conexion->prepare("SELECT " . Variables::CAMPO_ID_USUARIO . ",  " . Variables::CAMPO_CORREO . " FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?");
-        $stmt->bind_param("s", $matricula); // $matricula = ID actual del usuario
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $usuarioActual = $result->fetch_assoc();
+        $usuarioActual = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $matricula);
 
         if (!$usuarioActual) {
             estructuraMensaje("Usuario no está en el sistema", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
+        $correoAntiguo = $usuarioActual[$CAMPO_CORREO];
+        $correoNuevo = $nuevosDatos['correo'];
 
-        // Validar email (correcto)
-        if (isset($nuevosDatos['correo']) && $nuevosDatos['correo'] !== $usuarioActual['correo']) {
-            $sql = "SELECT " . Variables::CAMPO_ID_USUARIO . " FROM " . Variables::TABLA_BD_USUARIO . " WHERE " . Variables::CAMPO_CORREO . " = ? AND " . Variables::CAMPO_ID_USUARIO . " != ?";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bind_param("ss", $nuevosDatos['correo'], $matricula);
-            $stmt->execute();
-            $stmt->store_result();
+        $stmt = revisarModificacionCorreoEstudiante($conexion, $correoNuevo, $correoAntiguo, $matricula);
 
-            if ($stmt->num_rows > 0) {
-                estructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
-                return;
-            }
+        if ($stmt && $stmt->num_rows > 0) {
+            estructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
         }
 
-        // Validar matrícula
-        if (isset($nuevosDatos['clave']) && $nuevosDatos['clave'] !== $usuarioActual['id_usuario']) {
-            // Buscar si la nueva matrícula ya existe como ID en otro usuario
-            $stmt = $conexion->prepare("SELECT  " . Variables::CAMPO_ID_USUARIO . " FROM " . Variables::TABLA_BD_USUARIO . " WHERE  " . Variables::CAMPO_ID_USUARIO . " = ?");
-            $stmt->bind_param("s", $nuevosDatos['clave']); // Nueva matrícula = futuro ID
-            $stmt->execute();
-            $stmt->store_result();
+        $matriculaAntigua = $usuarioActual[$CAMPO_ID_USUARIO];
+        $matriculaNueva = $nuevosDatos["clave"];
 
-            if ($stmt->num_rows > 0) {
-                estructuraMensaje("Esta matrícula ya está registrada", "../../assets/iconos/ic_error.webp", "--rojo");
-                return;
-            }
+        $stmt = revisarModificacionMatriculaEstudiante($conexion, $stmt, $matriculaNueva, $matriculaAntigua);
+
+        if ($stmt && $stmt->num_rows > 0) {
+            estructuraMensaje("Esta matrícula ya está registrada", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
         }
 
         $id_usuario = $nuevosDatos['clave'];
         $nombre = $nuevosDatos['nombre'];
         $apellidos = $nuevosDatos['apellidos'];
         $correo = $nuevosDatos['correo'];
-        $modalidad = $nuevosDatos['modalidad'];
+        $id_modalidad = $nuevosDatos['modalidad'] == "Escolarizado" ? 1 : 2;
         $grupo = $nuevosDatos['grupo'];
 
 
-        $sql_usuario = "UPDATE " . Variables::TABLA_BD_USUARIO . " SET " . Variables::CAMPO_ID_USUARIO . " = ?, " . Variables::CAMPO_CORREO . " = ? WHERE " . variables::CAMPO_ID_USUARIO . " = ?";
 
-        $sql_estudiante = "UPDATE " . Variables::TABLA_BD_ESTUDIANTE . " SET " . Variables::CAMPO_NOMBRE . " = ?, " . variables::CAMPO_APELLIDOS . " = ?, " . Variables::CAMPO_GRUPO . " = ?, " . Variables::CAMPO_ID_MODALIDAD . " = ? WHERE " . Variables::CAMPO_MATRICULA . " = ?";
-
-        $stmt = $conexion->prepare($sql_usuario);
-        $stmt->bind_param("sss", $id_usuario, $correo, $matricula);
-
-
-        if (!$stmt->execute()) {
-            estructuraMensaje("Ocurrio un problema con los datos de usuario", "../../assets/iconos/ic_error.webp", "--rojo");
-            return;
-        }
-
-        $modalidad = $modalidad == "Escolarizado" ? 1 : 2;
-
-        $stmt = $conexion->prepare($sql_estudiante);
-        $stmt->bind_param("sssis", $nombre, $apellidos, $grupo, $modalidad, $matricula);
-
-        if (!$stmt->execute()) {
+        if (!modificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $apellidos, $grupo, $id_modalidad, $matricula)) {
             estructuraMensaje("Ocurrio un problema con los datos personales", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
+
 
         mysqli_commit($conexion);
         estructuraMensaje("Se ha modificado los datos en la base de datos", "../../assets/iconos/ic_correcto.webp", "--verde");
@@ -208,13 +188,7 @@ class Jefe
 
     }
 
-    public function TablaSolicitudesRegistros($conexion, $carrera)
-    {
-        $sql = "SELECT * FROM " . Variables::TABLA_BD_SOLICITUDES . " WHERE " . Variables::CAMPO_S_CARRERA . " = '$carrera'";
-        $resultado = mysqli_query($conexion, $sql);
 
-        return $resultado;
-    }
 
     public function MostrarSolicitudes($resultado, $id)
     {
@@ -236,7 +210,7 @@ class Jefe
         </tr>
         ";
 
-        while ($fila = mysqli_fetch_array($resultado)) {
+        while ($fila = $resultado->fetch_assoc()) {
             if ($fila['estado'] == "Aceptada") {
                 $clase = "aceptada";
             } else if ($fila['estado'] == "Pendiente") {
@@ -335,29 +309,28 @@ class Jefe
 
     public function HistorialJustificantes($conexion, $carrera)
     {
-        $sql = "SELECT * FROM " . Variables::TABLA_BD_JUSTIFICANTES . " 
-        WHERE " . Variables::CAMPO_J_CARRERA . " = '$carrera'";
+        global $TABLA_JUSTIFICANTES, $CAMPO_J_CARRERA;
+        $resultado = getResultDataTabla($conexion, $TABLA_JUSTIFICANTES, $CAMPO_J_CARRERA, $carrera);
 
-
-        $resultado = mysqli_query($conexion, $sql);
-        if (mysqli_num_rows($resultado) == 0) {
+        if ($resultado->num_rows == 0) {
             echo "<p class='sin_justificantes'>No hay justificantes disponibles</p>";
-        }
-        while ($fila = mysqli_fetch_array($resultado)) {
+        } else {
+            while ($fila = $resultado->fetch_array()) {
+                $tiempo = explode(" ", $fila['fecha_creacion']);
+                $tiempo_fecha = explode("-", $tiempo[0]);
 
-            $tiempo = explode(" ", $fila['fecha_creacion']);
-
-            $tiempo_fecha = explode("-", $tiempo[0]);
-            echo "
-            <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
-                <h2> Folio {$fila['id']} </h2>
-                <p> {$fila['matricula_alumno']} </p>
-                <p> {$fila['nombre_alumno']} </p>
-                <span>Hora: {$tiempo[1]} </span>
-                <span>Fecha: {$tiempo_fecha[2]} de " . Variables::MESES[$tiempo_fecha[1][1] - 1] . " de " . $tiempo_fecha[0] . " </span>
-            </a>
-            ";
+                echo "
+        <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
+            <h2> Folio {$fila['id']} </h2>
+            <p> {$fila['matricula_alumno']} </p>
+            <p> {$fila['nombre_alumno']} </p>
+            <span>Hora: {$tiempo[1]} </span>
+            <span>Fecha: {$tiempo_fecha[2]} de " . Variables::MESES[$tiempo_fecha[1][1] - 1] . " de " . $tiempo_fecha[0] . " </span>
+        </a>
+        ";
+            }
         }
+
     }
 
     public function reiniciarFolio($conexion)

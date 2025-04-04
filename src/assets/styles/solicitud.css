@@ -9,7 +9,7 @@
 
 .formulario_solicitud {
     margin-bottom: 4rem;
-    position:relative;
+    position: relative;
 }
 
 .contenedor_ITSH {
@@ -60,6 +60,7 @@ select {
     background: var(--gris);
     border: .1rem solid var(--vino);
     z-index: 10;
+    flex: 1;
 
 }
 
