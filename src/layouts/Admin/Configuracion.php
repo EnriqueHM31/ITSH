@@ -139,7 +139,7 @@ $carreras = obtenerAllCarreras($conexion);
                 <div class="inputs-cambio-contraseña">
 
                     <section class="seccion_tipo">
-                        <input type="hidden" id="carrera_antigua">
+                        <input type="hidden" name="carrera_antigua" id="carrera_antigua">
 
                         <label for="carrera_modificar" class="contenedor_input">
                             <input class="input_login" type="text" name="carrera_nueva" id="carrera_modificar"
@@ -186,7 +186,7 @@ $carreras = obtenerAllCarreras($conexion);
                     </section>
 
                 </div>
-                <input type=" submit" name="formulario" class="btn-submit btn_login" value="Agregar Carrera">
+                <input type="submit" name="formulario" class="btn-submit btn_login" value="Modificar Carrera">
 
 
                 <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
@@ -303,7 +303,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $carreraNueva = trim($_POST['carrera_nueva']);
             $Numero_grupos = trim($_POST['grupos_nueva_carrera']);
             $id_carrera = trim($_POST['id_carrera_nueva']);
-            $administrador->modificarCarrera($conexion, $carreraAntigua, $carreraNueva, $Numero_grupos, $id_carrera);
+            $id_tipo_carrera_nueva = obtenerIDTipoCarrera($conexion, trim($_POST["tipo_carrera"]));
+
+            $administrador->modificarCarrera($conexion, $carreraAntigua, $carreraNueva, $id_tipo_carrera_nueva, $Numero_grupos, $id_carrera);
         }
     }
     notificaciones($_SESSION["mensaje"]);

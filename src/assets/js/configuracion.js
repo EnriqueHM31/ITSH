@@ -95,8 +95,6 @@ function obtenerDatosCarrera(id) {
 				document.querySelector('#modalidad_flexible').checked = true
 			}
 
-			console.log(data['success'][3][0].checked === true)
-
 		},
 		error: function (xhr) {
 			mostrarErrorAjax(xhr);

@@ -642,19 +642,19 @@ function insertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_c
     return $sql->execute();
 }
 
-function modificarNombreCarreraDB($conexion, $nombreNuevo, $id_carrera)
+function modificarNombreTipoCarreraDB($conexion, $nombreNuevo, $id_tipo_carrera_nueva, $id_carrera)
 {
-    global $TABLA_CARRERAS, $CAMPO_ID_CARRERA, $CAMPO_CARRERA;
+    global $TABLA_CARRERAS, $CAMPO_ID_CARRERA, $CAMPO_CARRERA, $CAMPO_ID_TIPO_CARRERA;
 
-    $sql = "UPDATE $TABLA_CARRERAS SET $CAMPO_CARRERA = ? WHERE $CAMPO_ID_CARRERA= ?";
+    $sql = "UPDATE $TABLA_CARRERAS SET $CAMPO_CARRERA = ?, $CAMPO_ID_TIPO_CARRERA = ? WHERE $CAMPO_ID_CARRERA = ?";
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("ss", $nombreNuevo, $id_carrera);
+    $stmt->bind_param("sii", $nombreNuevo, $id_tipo_carrera_nueva, $id_carrera);
     return $stmt->execute();
 }
 
 function modificarNumeroGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)
 {
-    global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
+    global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
 
     $sql = "UPDATE $TABLA_GRUPO SET $CAMPO_NUMERO_GRUPOS = ?, $CAMPO_ID_GRUPOS = ? WHERE $CAMPO_G_ID_CARRERA = ?";
 

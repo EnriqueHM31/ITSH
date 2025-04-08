@@ -223,7 +223,7 @@ class administrador
 
     }
 
-    public function ModificarCarrera($conexion, $carreraAntigua, $carreraNueva, $numeros_grupos, $id_carrera_nueva)
+    public function ModificarCarrera($conexion, $carreraAntigua, $carreraNueva, $id_tipo_carrera_nueva, $numeros_grupos, $id_carrera_nueva)
     {
         mysqli_begin_transaction($conexion);
 
@@ -234,7 +234,7 @@ class administrador
 
         $id_carrera = obtenerIDCarrera($conexion, $carreraAntigua);
 
-        if (!modificarNombreCarreraDB($conexion, $carreraNueva, $id_carrera)) {
+        if (!modificarNombreTipoCarreraDB($conexion, $carreraNueva, $id_tipo_carrera_nueva, $id_carrera)) {
             estructuraMensaje("Error al modificar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }

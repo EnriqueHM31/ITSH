@@ -13,12 +13,10 @@ $dbname = 'ITSH';
 
 // Crear la conexión con MySQL
 $conexion = mysqli_connect($host, $user, $pass, $dbname);
-
 // Verificar si la conexión fue exitosa
 if (!$conexion) {
     die("Conexión fallida: " . mysqli_connect_error());  // Si la conexión falla, muestra el error
 }
-
 // Establecer el conjunto de caracteres de la conexión a UTF-8
 mysqli_set_charset($conexion, 'utf8mb4');
 ?>
