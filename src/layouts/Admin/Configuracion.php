@@ -13,7 +13,7 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
-$carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variables::TABLA_BD_CARRERA);
+$carreras = obtenerAllCarreras($conexion);
 
 ?>
 
@@ -135,51 +135,14 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
     <template id="plantilla_configurar_carrera">
         <div class="overlay_cambiar-contraseña overlay_ventana">
             <form class="formulario" method="post">
-                <h2 class="titulo">Configurar Carrera</h2>
-                <div class="inputs-cambio-contraseña">
-
-                    <input hidden type="text" id="carrera_antigua" name="carrera_antigua">
-                    <label for="carrera_modificar" class="contenedor_input">
-                        <input class="input_login" type="text" name="carrera_nueva" id="carrera_modificar"
-                            placeholder=" " autocomplete="current-password">
-                        <span class="nombre_input">Carrera</span>
-                    </label>
-
-                    <div class="opciones_carrera">
-                        <label for="cantidad_grupos" class="contenedor_numerico">
-                            <span class="nombre_opcion">Cantidad de Grupos</span>
-                            <input min="1" max="15" step="1" value="1" class="input_num" type="number"
-                                name="grupos_nueva_carrera" id="cantidad_grupos" placeholder=" "
-                                autocomplete="current-password">
-                        </label>
-
-                        <label for="id_grupo" class="contenedor_numerico">
-                            <span class="nombre_opcion">Id de la Carrera</span>
-                            <input min="1" max="10" step="1" value="1" class="input_num" type="number"
-                                name="id_carrera_nueva" id="id_grupo" placeholder=" " autocomplete="current-password">
-                        </label>
-                    </div>
-
-                </div>
-                <input type="submit" name="formulario" class="btn-submit btn_login" value="Modificar Carrera">
-
-
-                <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
-                    alt="icono para cerrar la ventana de agregar carrera" loading="lazy">
-            </form>
-        </div>
-    </template>
-
-    <template id="plantilla_agregar_carrera">
-        <div class="overlay_cambiar-contraseña overlay_ventana">
-            <form class="formulario" method="post">
                 <h2 class="titulo">Agregar Carrera</h2>
                 <div class="inputs-cambio-contraseña">
 
                     <section class="seccion_tipo">
+                        <input type="hidden" id="carrera_antigua">
 
-                        <label for="contraseña_actual" class="contenedor_input">
-                            <input class="input_login" type="text" name="carrera_nueva" id="contraseña_actual"
+                        <label for="carrera_modificar" class="contenedor_input">
+                            <input class="input_login" type="text" name="carrera_nueva" id="carrera_modificar"
                                 placeholder=" " autocomplete="current-password">
                             <span class="nombre_input">Escriba la Carrera</span>
                         </label>
@@ -209,8 +172,70 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
                             </select>
                         </label>
 
-                        <label for="modalidades" class="select_carrera">
-                            <span class="nombre_select" id="modalidades">Escoga las modalidades</span>
+                        <label class="select_carrera">
+                            <span class="nombre_select">Escoga las modalidades</span>
+                            <div class="contenedor_radio">
+                                <input type="radio" name="modalidad" value="Escolarizado" id="modalidad_escolarizado">
+                                <span>Escolarizado</span>
+                            </div>
+                            <div class="contenedor_radio">
+                                <input type="radio" name="modalidad" value="Flexible" id="modalidad_flexible">
+                                <span>Flexible</span>
+                            </div>
+                        </label>
+                    </section>
+
+                </div>
+                <input type=" submit" name="formulario" class="btn-submit btn_login" value="Agregar Carrera">
+
+
+                <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
+                    alt="icono para cerrar la ventana de agregar carrera" loading="lazy">
+            </form>
+        </div>
+    </template>
+
+    <template id="plantilla_agregar_carrera">
+        <div class="overlay_cambiar-contraseña overlay_ventana">
+            <form class="formulario" method="post">
+                <h2 class="titulo">Agregar Carrera</h2>
+                <div class="inputs-cambio-contraseña">
+
+                    <section class="seccion_tipo">
+
+                        <label for="carrera_nueva" class="contenedor_input">
+                            <input class="input_login" type="text" name="carrera_nueva" id="carrera_nueva"
+                                placeholder=" " autocomplete="current-password">
+                            <span class="nombre_input">Escriba la Carrera</span>
+                        </label>
+                        <div class="opciones_carrera">
+                            <label for="cantidad_grupos" class="contenedor_numerico">
+                                <span class="nombre_opcion">Cantidad de Grupos</span>
+                                <input min="1" max="15" step="1" value="1" class="input_num" type="number"
+                                    name="grupos_nueva_carrera" id="cantidad_grupos" placeholder=" "
+                                    autocomplete="current-password">
+                            </label>
+
+                            <label for="id_grupo" class="contenedor_numerico">
+                                <span class="nombre_opcion">Id de la Carrera</span>
+                                <input min="1" max="10" step="1" value="1" class="input_num" type="number"
+                                    name="id_carrera_nueva" id="id_grupo" placeholder=" "
+                                    autocomplete="current-password">
+                            </label>
+                        </div>
+                    </section>
+
+                    <section class="seccion_tipo">
+                        <label for="tipo_carrera" class="select_carrera">
+                            <span class="nombre_select">Escoga el Tipo de Carrera</span>
+                            <select name="tipo_carrera" id="tipo_carrera">
+                                <option value="Licenciatura">Licenciatura</option>
+                                <option value="Ingenieria">Ingenieria</option>
+                            </select>
+                        </label>
+
+                        <label class="select_carrera">
+                            <span class="nombre_select">Escoga las modalidades</span>
                             <div class="contenedor_radio">
                                 <input type="radio" name="modalidad" value="Escolarizado">
                                 <span>Escolarizado</span>
@@ -270,7 +295,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $carreraNueva = trim($_POST['carrera_nueva']);
             $Numero_grupos = trim($_POST['grupos_nueva_carrera']);
             $id_carrera = trim($_POST['id_carrera_nueva']);
-            $administrador->AgregarCarrera($conexion, $carreraNueva, $Numero_grupos, $id_carrera);
+            $id_tipo_carrera = obtenerIDTipoCarrera($conexion, trim($_POST["tipo_carrera"]));
+            $administrador->AgregarCarrera($conexion, $carreraNueva, $Numero_grupos, $id_carrera, $id_tipo_carrera);
         }
         if ($_POST['formulario'] === 'Modificar Carrera') {
             $carreraAntigua = trim($_POST['carrera_antigua']);

@@ -197,7 +197,7 @@ class administrador
     }
 
 
-    public function AgregarCarrera($conexion, $carrera, $numeros_grupos, $id_carrera_nueva)
+    public function AgregarCarrera($conexion, $carrera, $numeros_grupos, $id_carrera_nueva, $id_tipo_carrera)
     {
         mysqli_begin_transaction($conexion);
 
@@ -206,7 +206,7 @@ class administrador
             return;
         }
 
-        if (!insertarCarrerasDB($conexion, $carrera)) {
+        if (!insertarCarrerasDB($conexion, $carrera, $id_tipo_carrera)) {
             estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }

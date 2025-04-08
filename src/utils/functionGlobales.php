@@ -19,6 +19,7 @@ $TABLA_SOLICITUDES = Variables::TABLA_BD_SOLICITUDES;
 $TABLA_JUSTIFICANTES = Variables::TABLA_BD_JUSTIFICANTES;
 $TABLA_CODIGOQR = Variables::TABLA_BD_CODIGOS_QR;
 $TABLA_CARRERA_MODALIDAD = Variables::TABLA_BD_CARRERA_MODALIDAD;
+$TABLA_TIPO_CARRERA = Variables::TABLA_BD_TIPO_CARRERA;
 
 $CAMPO_ID_USUARIO = Variables::CAMPO_ID_USUARIO;
 $CAMPO_CONTRASEÑA = Variables::CAMPO_CONTRASEÑA;
@@ -33,6 +34,9 @@ $CAMPO_APELLIDOS = Variables::CAMPO_APELLIDOS;
 
 $CAMPO_ID_CARRERA = Variables::CAMPO_ID_CARRERA;
 $CAMPO_CARRERA = Variables::CAMPO_CARRERA;
+$CAMPO_ID_TIPO_CARRERA = Variables::CAMPO_ID_TIPO_CARRERA;
+$CAMPO_ID_CARRERA_MODALIDAD = Variables::CAMPO_ID_CARRERA_MODALIDAD;
+$CAMPO_TIPO_CARRERA = Variables::CAMPO_TIPO_CARRERA;
 $CAMPO_CORREO = Variables::CAMPO_CORREO;
 
 $CAMPO_ID_ROL = Variables::CAMPO_ID_ROL;
@@ -512,7 +516,7 @@ function obtenerAllCarreras($conexion)
 {
     global $TABLA_CARRERAS;
     global $CAMPO_CARRERA;
-    $sql = "SELECT $CAMPO_CARRERA FROM $TABLA_CARRERAS";
+    $sql = "SELECT $CAMPO_CARRERA FROM $TABLA_CARRERAS ORDER BY $CAMPO_CARRERA";
     $stmt = $conexion->prepare($sql);
     $stmt->execute();
     return $stmt->get_result();
@@ -618,18 +622,18 @@ function buscarHistorialJustificantesAlumno($conexion, $id)
     return $stmt->get_result();
 }
 
-function insertarCarrerasDB($conexion, $carrera)
+function insertarCarrerasDB($conexion, $carrera, $id_tipo_carrera)
 {
-    global $TABLA_CARRERAS, $CAMPO_CARRERA;
-    $sql = "INSERT INTO $TABLA_CARRERAS ($CAMPO_CARRERA) VALUES (?)";
+    global $TABLA_CARRERAS, $CAMPO_CARRERA, $CAMPO_ID_TIPO_CARRERA;
+    $sql = "INSERT INTO $TABLA_CARRERAS ($CAMPO_CARRERA, $CAMPO_ID_TIPO_CARRERA) VALUES (?, ?)";
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("s", $carrera);
+    $stmt->bind_param("si", $carrera, $id_tipo_carrera);
     return $stmt->execute();
 }
 
 function insertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)
 {
-    global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
+    global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
 
     $sql = "INSERT INTO $TABLA_GRUPO ($CAMPO_G_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS) VALUES (?, ?, ?)";
 
@@ -711,4 +715,54 @@ function obtenerDataUsuarioPorIDBD($conexion, $id)
     $prepareUsuario->bind_param("s", $id);
     $prepareUsuario->execute();
     return $prepareUsuario->get_result();
+}
+
+
+function obtenerIDTipoCarrera($conexion, $tipo_carrera)
+{
+    global $TABLA_TIPO_CARRERA, $CAMPO_ID_TIPO_CARRERA, $CAMPO_TIPO_CARRERA;
+
+    $sql = "SELECT $CAMPO_ID_TIPO_CARRERA FROM $TABLA_TIPO_CARRERA WHERE $CAMPO_TIPO_CARRERA = ?";
+    $prepare = $conexion->prepare($sql);
+    $prepare->bind_param("s", $tipo_carrera);
+    $prepare->execute();
+    $resultado = $prepare->get_result();
+    $response = $resultado->fetch_assoc();
+    return $response[$CAMPO_ID_TIPO_CARRERA];
+}
+
+function obtenerTipoCarrera($conexion, $id_tipo_carrera)
+{
+    global $TABLA_TIPO_CARRERA, $CAMPO_ID_TIPO_CARRERA, $CAMPO_TIPO_CARRERA;
+
+    $sql = "SELECT $CAMPO_TIPO_CARRERA FROM $TABLA_TIPO_CARRERA WHERE $CAMPO_ID_TIPO_CARRERA = ?";
+    $prepare = $conexion->prepare($sql);
+    $prepare->bind_param("i", $id_tipo_carrera);
+    $prepare->execute();
+    $resultado = $prepare->get_result();
+    $response = $resultado->fetch_assoc();
+    return $response[$CAMPO_TIPO_CARRERA];
+}
+
+function obtenerModalidadesCarrera($conexion, $id_carrera)
+{
+    global $TABLA_CARRERA_MODALIDAD, $CAMPO_ID_CARRERA, $CAMPO_ID_MODALIDAD;
+
+    $sql = "SELECT $CAMPO_ID_MODALIDAD FROM $TABLA_CARRERA_MODALIDAD WHERE $CAMPO_ID_CARRERA = ?";
+    $prepare = $conexion->prepare($sql);
+    $prepare->bind_param("i", $id_carrera);
+    $prepare->execute();
+    $resultado = $prepare->get_result();
+    if ($resultado->num_rows == 1) {
+        $row = $resultado->fetch_assoc();
+        return [obtenerModalidad($conexion, $row[$CAMPO_ID_MODALIDAD])];
+    } else if ($resultado->num_rows == 2) {
+        $data = [];
+        while ($row = $resultado->fetch_assoc()) {
+            $data[] = obtenerModalidad($conexion, $row[$CAMPO_ID_MODALIDAD]);
+        }
+
+        return $data;
+
+    }
 }

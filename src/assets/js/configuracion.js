@@ -81,9 +81,22 @@ function obtenerDatosCarrera(id) {
 		success: function (data) {
 			document.querySelector('#carrera_antigua').value = id;
 			document.querySelector('#carrera_modificar').value = id;
-			document.querySelector('#cantidad_grupos').value =
-				data['success'][0];
+			document.querySelector('#cantidad_grupos').value = data['success'][0];
 			document.querySelector('#id_grupo').value = data['success'][1];
+			document.querySelector('#tipo_carrera').value = data['success'][2]
+
+
+			if (data['success'][3].lenght === 1 && data['success'][3][0] === "Escolarizado") {
+				document.querySelector('#modalidad_escolarizado').checked
+			} else if (data['success'][3].lenght === 1 && data['success'][3][0] === "Flexible") {
+				document.querySelector('#modalidad_flexible').checked
+			} else if (data['success'][3].length === 2) {
+				document.querySelector('#modalidad_escolarizado').checked = true
+				document.querySelector('#modalidad_flexible').checked = true
+			}
+
+			console.log(data['success'][3][0].checked === true)
+
 		},
 		error: function (xhr) {
 			mostrarErrorAjax(xhr);

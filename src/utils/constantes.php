@@ -21,6 +21,8 @@ class Variables
     public const TABLA_BD_JUSTIFICANTES = "Justificante";
     public const TABLA_BD_CODIGOS_QR = "Codigos_qr";
     public const TABLA_BD_CARRERA_MODALIDAD = "Carrera_Modalidad";
+    public const TABLA_BD_TIPO_CARRERA = "Tipo_Carrera";
+
 
 
     // CAMPOS DE LA TABLA USUARIO
@@ -43,6 +45,10 @@ class Variables
     public const CAMPO_CLAVE_EMPLEADO_JEFE = "clave_empleado";
     public const CAMPO_CARRERA = "carrera";
     public const CAMPO_ID_CARRERA = "id_carrera";
+    public const CAMPO_ID_TIPO_CARRERA = "id_tipo_carrera";
+
+    public const CAMPO_ID_CARRERA_MODALIDAD = "id_carrera_modalidad";
+    public const CAMPO_TIPO_CARRERA = "tipo_carrera";
 
     // CAMPOS DE LA TABLA ESTUDIANTE
     public const CAMPO_MATRICULA = "matricula";
