@@ -6,6 +6,7 @@ include "../../clases/administrador.php";
 include "../../utils/functionGlobales.php";
 include "../../conexion/verificar acceso.php";
 include "../../conexion/verificar_rol_admin.php";
+include "../../Components/Admin.php";
 
 $administrador = new administrador();
 $id = $_SESSION["id"];
@@ -76,45 +77,24 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
             <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
 
             <div class="contenido_configuracion">
-                <button class="btn_listar_usuarios">Listar Usuarios</button>
 
                 <div class="contenedor_configuracion">
                     <h2>Configuracion de la carreras</h2>
-                    <details class='detalles_carreras'>
-                        <summary>
-                            <p> Carreras Existentes </p>
-                            <button id="agregar_carrera" data-accion="agregar_carrera">Agregar</button>
-                        </summary>
+                    <div class="opciones-configuracion">
+                        <button class="btn-configuracion" id="agregar_carrera"
+                            data-accion="agregar_carrera">Agregar</button>
+                        <button class="btn_listar_usuarios btn-configuracion">Listar Usuarios</button>
+                    </div>
+                    <div class="contenedor-carreras">
                         <?php
                         // Asegúrate de que la consulta esté siendo ejecutada y $carreras tenga resultados
                         while ($registro = mysqli_fetch_array($carreras)) {
-                            echo "
-                                <div class='contenido_carreras'>
-                                    <div class='carrera'> 
-                                        {$registro['carrera']}
-                                    </div>
-
-                                    <div class='menu_carreras'>
-                                        <button data-id='{$registro['carrera']}' class='eliminar_carrera boton_eliminar'>
-                                            <img src='../../assets/iconos/ic_eliminar.webp'>
-                                        </button>
-
-                                        <button data-accion='configurar_carrera' id='agregar_carrera' data-id='{$registro['carrera']}' class='eliminar_carrera'>
-                                            <img src='../../assets/iconos/ic_configuracion.webp'>
-                                        </button>
-                                    </div>
-                                </div>
-                        ";
+                            componenteCarrerasConfiguracion($registro);
                         }
                         ?>
-                    </details>
+                    </div>
                 </div>
-
-
-
-
             </div>
-        </div>
     </main>
 
     <footer class="footer">
@@ -196,26 +176,51 @@ $carreras = obtenerDatosColumnaTabla($conexion, Variables::CAMPO_CARRERA, Variab
                 <h2 class="titulo">Agregar Carrera</h2>
                 <div class="inputs-cambio-contraseña">
 
-                    <label for="contraseña_actual" class="contenedor_input">
-                        <input class="input_login" type="text" name="carrera_nueva" id="contraseña_actual"
-                            placeholder=" " autocomplete="current-password">
-                        <span class="nombre_input">Escriba la Carrera</span>
-                    </label>
+                    <section class="seccion_tipo">
 
-                    <div class="opciones_carrera">
-                        <label for="cantidad_grupos" class="contenedor_numerico">
-                            <span class="nombre_opcion">Cantidad de Grupos</span>
-                            <input min="1" max="15" step="1" value="1" class="input_num" type="number"
-                                name="grupos_nueva_carrera" id="cantidad_grupos" placeholder=" "
-                                autocomplete="current-password">
+                        <label for="contraseña_actual" class="contenedor_input">
+                            <input class="input_login" type="text" name="carrera_nueva" id="contraseña_actual"
+                                placeholder=" " autocomplete="current-password">
+                            <span class="nombre_input">Escriba la Carrera</span>
+                        </label>
+                        <div class="opciones_carrera">
+                            <label for="cantidad_grupos" class="contenedor_numerico">
+                                <span class="nombre_opcion">Cantidad de Grupos</span>
+                                <input min="1" max="15" step="1" value="1" class="input_num" type="number"
+                                    name="grupos_nueva_carrera" id="cantidad_grupos" placeholder=" "
+                                    autocomplete="current-password">
+                            </label>
+
+                            <label for="id_grupo" class="contenedor_numerico">
+                                <span class="nombre_opcion">Id de la Carrera</span>
+                                <input min="1" max="10" step="1" value="1" class="input_num" type="number"
+                                    name="id_carrera_nueva" id="id_grupo" placeholder=" "
+                                    autocomplete="current-password">
+                            </label>
+                        </div>
+                    </section>
+
+                    <section class="seccion_tipo">
+                        <label for="tipo_carrera" class="select_carrera">
+                            <span class="nombre_select">Escoga el Tipo de Carrera</span>
+                            <select name="tipo_carrera" id="tipo_carrera">
+                                <option value="Licenciatura">Licenciatura</option>
+                                <option value="Ingenieria">Ingenieria</option>
+                            </select>
                         </label>
 
-                        <label for="id_grupo" class="contenedor_numerico">
-                            <span class="nombre_opcion">Id de la Carrera</span>
-                            <input min="1" max="10" step="1" value="1" class="input_num" type="number"
-                                name="id_carrera_nueva" id="id_grupo" placeholder=" " autocomplete="current-password">
+                        <label for="modalidades" class="select_carrera">
+                            <span class="nombre_select" id="modalidades">Escoga las modalidades</span>
+                            <div class="contenedor_radio">
+                                <input type="radio" name="modalidad" value="Escolarizado">
+                                <span>Escolarizado</span>
+                            </div>
+                            <div class="contenedor_radio">
+                                <input type="radio" name="modalidad" value="Flexible">
+                                <span>Flexible</span>
+                            </div>
                         </label>
-                    </div>
+                    </section>
 
                 </div>
                 <input type="submit" name="formulario" class="btn-submit btn_login" value="Agregar Carrera">

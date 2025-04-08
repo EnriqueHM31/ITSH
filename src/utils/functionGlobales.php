@@ -1,4 +1,12 @@
 <?php
+
+$ADMIN = "Administrador";
+$JEFE = "Jefe de Carrera";
+$ESTUDIANTE = "Estudiante";
+$ESCOLARIZADO = "Escolarizado";
+$FLEXIBLE = "Flexible";
+$LETRA_ESCOLARIZADO = "A";
+$LETRA_FLEXIBLE = "B";
 $TABLA_USUARIO = Variables::TABLA_BD_USUARIO;
 $TABLA_ADMIN = Variables::TABLA_BD_AdMINISTRADOR;
 $TABLA_JEFE = Variables::TABLA_BD_JEFE;

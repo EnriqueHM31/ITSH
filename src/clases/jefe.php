@@ -72,8 +72,10 @@ class Jefe
                 $correo = trim($datos[5]);
                 $contraseña = "Aa12345%";
 
-                if ($this->validarRowsCSV($conexion, $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera)) {
-                    throw new Exception("Error en los datos del CSV para la matrícula: $matricula");
+                $salidaValidacion = $this->validarRowsCSV($conexion, $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera);
+
+                if ($salidaValidacion != "true") {
+                    throw new Exception("Error: $salidaValidacion ($matricula)");
                 }
 
                 if (!insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol)) {
@@ -97,21 +99,24 @@ class Jefe
     public function validarRowsCSV($conexion, $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera)
     {
         if (empty($matricula) || empty($nombre) || empty($apellidos) || empty($grupo) || empty($id_modalidad) || empty($rol) || empty($correo) || empty($id_carrera)) {
-            estructuraMensaje("Faltan datos obligatorios en la fila del CSV", "../../assets/iconos/ic_error.webp", "var(--rojo)");
-            return true;
+            return "Faltan datos obligatorios en la fila del CSV";
         }
         if (revisionCorreoEstudiante($correo)) {
-            return true;
+            return "El correo ya existe";
         }
         if (revisionNombreCompleto($nombre, $apellidos)) {
-            return true;
+            return "El nombre o apellidos no son validos";
         }
         if (revisionIdentificadorEstudiante($matricula)) {
-            return true;
+            return "Esa matricula no es valida";
         }
         if (restriccionKeyDuplicada($matricula, $correo, $conexion)) {
-            return true;
+            return "Ya existe la matricula o el correo";
         }
+        if (revisarGrupoModalidadCSV($conexion, $id_modalidad, $grupo)) {
+            return "El grupo no pertenece a la modalidad esperada";
+        }
+        return "true";
     }
 
     function actualizarUsuario($conexion, $matricula, $nuevosDatos)

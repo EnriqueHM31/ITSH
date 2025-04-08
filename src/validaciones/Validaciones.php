@@ -231,3 +231,18 @@ function revisarModificacionMatriculaEstudiante($conexion, $stmt, $matriculaNuev
     }
     return FALSE;
 }
+
+function revisarGrupoModalidadCSV($conexion, $id_modalidad, $grupo)
+{
+    $modalidad = obtenerModalidad($conexion, $id_modalidad);
+    global $ESCOLARIZADO, $LETRA_ESCOLARIZADO, $FLEXIBLE, $LETRA_FLEXIBLE;
+    if ($modalidad === $ESCOLARIZADO) {
+        if ($grupo[3] != $LETRA_ESCOLARIZADO) {
+            return true;
+        }
+    } else if ($modalidad == $FLEXIBLE) {
+        if ($grupo[3] !== $LETRA_FLEXIBLE) {
+            return true;
+        }
+    }
+}
