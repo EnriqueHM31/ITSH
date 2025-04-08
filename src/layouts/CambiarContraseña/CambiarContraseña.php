@@ -1,6 +1,6 @@
 <?php
-include "../../utils/functionGlobales.php";
 include "../../utils/constantes.php";
+include "../../utils/functionGlobales.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 

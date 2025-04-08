@@ -19,12 +19,12 @@ if (mysqli_num_rows($result) > 0) {
     $resultadoModificar = $usuario->cambiarContraseñaEnBD($conexion, $id_usuario, $nuevaContraseña);
 
     if ($resultadoModificar) {
-        echo json_encode(['valido' => true]);
+        echo json_encode(['success' => true]);
     } else {
-        echo json_encode(['valido' => false]);
+        echo json_encode(['success' => "Ocurrio un problema al cambiar la contraseña"]);
     }
 } else {
-    echo json_encode(['error' => "nose pudo"]);
+    echo json_encode(['success' => "Ocurrio un problema con tus credenciales de usuario"]);
     exit();
 }
 $conexion->close();
