@@ -34,11 +34,11 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         $src_qr = obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha);
 
-        $fecha = estructurarFechaAusencia($fecha);
+        $fecha_ausencia_pdf = estructurarFechaAusencia($fecha);
 
 
     } catch (Exception $e) {
-        return json_encode(["sin_error" => $e->getMessage()]);
+        return json_encode(["success" => $e->getMessage()]);
     }
 
     // Capturar el HTML en un buffer
@@ -230,7 +230,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <p><strong>Fecha de Falta: </strong><?php echo $fecha ?></p>
+                            <p><strong>Fecha de Falta: </strong><?php echo $fecha_ausencia_pdf ?></p>
                         </td>
                     </tr>
                     <tr>
@@ -292,12 +292,12 @@ try {
 
     $data = $pdf->output();
 
-    $nombreArchivo = guardarArchivoPDF($data, $id_solicitud, $matricula);
+    $nombreArchivo = guardarArchivoPDF($data, $id_folio, $matricula);
 
     ModificarEstadoSolicitud($conexion, $id_solicitud);
 
     if (InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo)) {
-        echo json_encode(["sin_error" => True]);
+        echo json_encode(["success" => True]);
     }
 
     EliminarCodigoQR($id_folio, $nombre, $fecha_codigo, $id_unico);
@@ -364,7 +364,7 @@ function obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha)
     return 'data:image/png;base64,' . $imagen_base64;
 }
 
-function guardarArchivoPDF($data, $id_solicitud, $matricula)
+function guardarArchivoPDF($data, $id_folio, $matricula)
 {
     // Ruta donde se guardará el archivo
     $rutaGuardado = "../layouts/Alumno/justificantes/";
@@ -372,7 +372,7 @@ function guardarArchivoPDF($data, $id_solicitud, $matricula)
         mkdir($rutaGuardado, 0777, true);
     }
 
-    $nombreArchivo = "justificante_" . $id_solicitud . "_" . $matricula . "_" . date("Ymd_His") . ".pdf";
+    $nombreArchivo = "justificante_" . $id_folio . "_" . $matricula . "_" . date("Ymd_His") . ".pdf";
     $rutaArchivo = $rutaGuardado . $nombreArchivo;
 
     // Guardar el PDF en la carpeta especificada

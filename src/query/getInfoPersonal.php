@@ -29,7 +29,7 @@ if (isset($_POST['id'])) {
         echo json_encode(crearDataInformacionJefe($idUser, $nombre, $apellidos, $rol, $carrera, $correo));
 
     } else {
-        echo json_encode(["sin_error" => false]);
+        echo json_encode(["success" => false]);
     }
 }
 

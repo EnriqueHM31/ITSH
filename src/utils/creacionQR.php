@@ -39,7 +39,7 @@ function generarCodigo($conexion, $id, $nombre, $fecha, $valido)
 
         }
     } catch (Exception $e) {
-        echo json_encode(["sin_error" => $e->getMessage()]);
+        echo json_encode(["success" => $e->getMessage()]);
     }
 
 }

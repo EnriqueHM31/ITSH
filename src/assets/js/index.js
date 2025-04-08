@@ -50,7 +50,7 @@ function mostrarErrorAjax(xhr) {
 		if (jsonStart !== -1) {
 			let jsonString = xhr.responseText.substring(jsonStart);
 			let jsonData = JSON.parse(jsonString);
-			mensajeError = jsonData['sin_error'] || 'Error en el servidor';
+			mensajeError = jsondata['success'] || 'Error en el servidor';
 		} else {
 			mensajeError = xhr.responseText;
 		}

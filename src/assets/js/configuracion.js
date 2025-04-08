@@ -46,7 +46,7 @@ if (btnEliminarCarrera !== null) {
 				},
 				dataType: 'json',
 				success: function (data) {
-					if (data['sin_error'] === true) {
+					if (data['success'] === true) {
 						mostrarTemplate(
 							'Se ha eliminado la carrera',
 							'../../assets/iconos/ic_correcto.webp',
@@ -55,7 +55,7 @@ if (btnEliminarCarrera !== null) {
 						);
 					} else {
 						mostrarTemplate(
-							data['sin_error'],
+							data['success'],
 							'../../assets/iconos/ic_error.webp',
 							'var(--rojo)',
 							'miTemplate',
@@ -82,8 +82,8 @@ function obtenerDatosCarrera(id) {
 			document.querySelector('#carrera_antigua').value = id;
 			document.querySelector('#carrera_modificar').value = id;
 			document.querySelector('#cantidad_grupos').value =
-				data['sin_error'][0];
-			document.querySelector('#id_grupo').value = data['sin_error'][1];
+				data['success'][0];
+			document.querySelector('#id_grupo').value = data['success'][1];
 		},
 		error: function (xhr) {
 			mostrarErrorAjax(xhr);

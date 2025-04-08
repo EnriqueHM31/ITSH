@@ -9,7 +9,7 @@ if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
     $nombreArchivo = $_POST['nombreArchivo'];
 
     if (modificarSolicitudRechazado($nombreArchivo, $id)) {
-        echo json_encode(["sin_error" => "True"]);
+        echo json_encode(["success" => "True"]);
     } else {
         echo json_encode(["error" => "False"]);
     }

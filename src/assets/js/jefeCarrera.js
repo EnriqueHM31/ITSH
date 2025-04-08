@@ -92,7 +92,7 @@ function rechazarSolicitud(objeto) {
 		},
 		dataType: 'json',
 		success: function (data) {
-			if (data['sin_error'] === 'True') {
+			if (data['success'] === 'True') {
 				mostrarTemplate(
 					'Se ha rechazado la solicitud',
 					'../../assets/iconos/ic_correcto.webp',
@@ -181,7 +181,7 @@ function aceptarSolicitud(objeto) {
 		},
 		dataType: 'json',
 		success: function (data) {
-			if (data['sin_error'] === true) {
+			if (data['success'] === true) {
 				mostrarTemplate(
 					'Se ha creado y enviado el justificante',
 					'../../assets/iconos/ic_correcto.webp',
@@ -190,7 +190,7 @@ function aceptarSolicitud(objeto) {
 				);
 			} else {
 				mostrarTemplate(
-					data['sin_error'],
+					data['success'],
 					'../../assets/iconos/ic_error.webp',
 					'var(--rojo)',
 					'miTemplate',

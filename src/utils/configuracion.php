@@ -9,9 +9,9 @@ if (isset($_POST["id_carrera_nueva"])) {
     $carreraNueva = $_POST["id_carrera_nueva"];
 
     if (EliminarCarrera($conexion, $carreraNueva)) {
-        echo json_encode(["sin_error" => true]);
+        echo json_encode(["success" => true]);
     } else {
-        echo json_encode(["sin_error" => "Error al eliminar la carrera"]);
+        echo json_encode(["success" => "Error al eliminar la carrera"]);
     }
 }
 
@@ -27,6 +27,6 @@ if (isset($_POST["obtener_datos_carrera"])) {
     $Numero_grupos = $DataGrupos[$CAMPO_NUMERO_GRUPOS];
     $id_grupos = $DataGrupos[$CAMPO_ID_GRUPOS];
 
-    echo json_encode(["sin_error" => [$Numero_grupos, $id_grupos]]);
+    echo json_encode(["success" => [$Numero_grupos, $id_grupos]]);
 
 }
