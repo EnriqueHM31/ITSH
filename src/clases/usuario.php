@@ -12,18 +12,13 @@ class Usuario
 
     public function Verificacion($conexion, $id, $contraseña)
     {
+        global $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
         if (empty($id) || empty($contraseña)) {
             estructuraMensaje("Llena todos los campos", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $sqlUsuario = "SELECT * FROM " . Variables::TABLA_BD_USUARIO .
-            " WHERE " . Variables::CAMPO_ID_USUARIO . " = ?";
-
-        $prepareUsuario = $conexion->prepare($sqlUsuario);
-        $prepareUsuario->bind_param("s", $id);
-        $prepareUsuario->execute();
-        $resultUsuario = $prepareUsuario->get_result();
+        $resultUsuario = obtenerDataUsuarioPorIDBD($conexion, $id);
 
         if ($resultUsuario->num_rows < 1) {
             estructuraMensaje("Usuario Invalido", "./src/assets/iconos/ic_error.webp", "--rojo");
@@ -31,48 +26,37 @@ class Usuario
         }
 
         $usuario = $resultUsuario->fetch_assoc();
-        $contraseñaBD = $usuario[Variables::CAMPO_CONTRASEÑA];
+        $contraseñaBD = $usuario[$CAMPO_CONTRASEÑA];
+        $rolBD = $usuario[$CAMPO_ID_ROL];
 
         if ($contraseñaBD !== $contraseña) {
             estructuraMensaje("Contraseña Incorrecta", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $rolBD = $usuario[Variables::CAMPO_ID_ROL];
 
-        $sqlRol = "SELECT " . Variables::CAMPO_ROL . " FROM " . Variables::TABLA_BD_ROL .
-            " WHERE " . Variables::CAMPO_ID_ROL . " = ?";
+        $rol = obtenerRol($conexion, $usuario[$CAMPO_ID_ROL]);
 
-        $prepareRol = $conexion->prepare($sqlRol);
-        $prepareRol->bind_param("s", $rolBD);
-        $prepareRol->execute();
-        $resultRol = $prepareRol->get_result();
-        $rol = $resultRol->fetch_assoc();
-
-        if ($rol[Variables::CAMPO_ROL] === Usuario::ADMIN) {
-            session_start();
-            $_SESSION["id"] = $usuario[Variables::CAMPO_ID_USUARIO];
-            $_SESSION["correo"] = $usuario[Variables::CAMPO_CORREO];
-            $_SESSION["rol"] = $rol[Variables::CAMPO_ROL];
-            header("Location: src/layouts/Admin/Admin.php");
-
+        if ($rol === Usuario::ADMIN) {
+            $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Admin/Admin.php");
         }
-        if ($rol[Variables::CAMPO_ROL] === Usuario::JEFE_DE_CARRERA) {
-            session_start();
-            $_SESSION["id"] = $usuario[Variables::CAMPO_ID_USUARIO];
-            $_SESSION["correo"] = $usuario[Variables::CAMPO_CORREO];
-            $_SESSION["rol"] = $rol[Variables::CAMPO_ROL];
-            header("location: src/layouts/JefedeCarrera/JefeCarrera.php");
+        if ($rol === Usuario::JEFE_DE_CARRERA) {
+            $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "JefedeCarrera/JefeCarrera.php");
         }
-        if ($rol[Variables::CAMPO_ROL] === Usuario::ESTUDIANTE) {
-            session_start();
-            $_SESSION["id"] = $usuario[Variables::CAMPO_ID_USUARIO];
-            $_SESSION["correo"] = $usuario[Variables::CAMPO_CORREO];
-            $_SESSION["rol"] = $rol[Variables::CAMPO_ROL];
-            header("location: src/layouts/Alumno/alumno.php");
+        if ($rol === Usuario::ESTUDIANTE) {
+            $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Alumno/alumno.php");
         } else {
             estructuraMensaje("Ocurrio un error con la pagina", "./src/assets/iconos/ic_error.webp", "--rojo");
         }
+    }
+
+    public function asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, $redireccion)
+    {
+        session_start();
+        $_SESSION["id"] = $usuario[$CAMPO_ID_USUARIO];
+        $_SESSION["correo"] = $usuario[$CAMPO_CORREO];
+        $_SESSION["rol"] = $rol;
+        header("location: src/layouts/$redireccion");
 
     }
 

@@ -10,6 +10,7 @@ $user = 'root';
 $pass = '1234';
 $dbname = 'ITSH';
 
+
 // Crear la conexión con MySQL
 $conexion = mysqli_connect($host, $user, $pass, $dbname);
 

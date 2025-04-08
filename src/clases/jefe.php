@@ -45,7 +45,7 @@ class Jefe
 
         } catch (Exception $e) {
             mysqli_rollback($conexion);
-            estructuraMensaje($e, "../../assets/iconos/ic_error.webp", "--rojo");
+            estructuraMensaje($e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
         }
     }
 
@@ -89,7 +89,7 @@ class Jefe
             estructuraMensaje("Datos insertados correctamente", "../../assets/iconos/ic_correcto.webp", "--verde");
         } catch (Exception $e) {
             mysqli_rollback($conexion);
-            estructuraMensaje($e, "../../assets/iconos/ic_error.webp", "--rojo");
+            estructuraMensaje($e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
     }

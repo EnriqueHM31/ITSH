@@ -693,3 +693,14 @@ function obtenerJustificantesJefeCarrera($conexion, $carrera)
     $resultado->execute();
     return $resultado->get_result();
 }
+
+function obtenerDataUsuarioPorIDBD($conexion, $id)
+{
+    global $TABLA_USUARIO, $CAMPO_ID_USUARIO;
+    $sqlUsuario = "SELECT * FROM $TABLA_USUARIO WHERE $CAMPO_ID_USUARIO = ?";
+
+    $prepareUsuario = $conexion->prepare($sqlUsuario);
+    $prepareUsuario->bind_param("s", $id);
+    $prepareUsuario->execute();
+    return $prepareUsuario->get_result();
+}
