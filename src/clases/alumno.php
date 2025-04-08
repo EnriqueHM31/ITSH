@@ -90,25 +90,18 @@ class alumno
 
     public function HistorialJustificantes($conexion, $matricula)
     {
-        global $CAMPO_FECHA_AUSE, $CAMPO_ID_SOLICITUD, $CAMPO_MATRICULA, $CAMPO_ESTADO;
+        global $CAMPO_FECHA_AUSE;
 
         $dataJustificantesAlumno = buscarHistorialJustificantesAlumno($conexion, $matricula);
 
         if ($dataJustificantesAlumno->num_rows === 0) {
-            echo "<p class='sin_justificantes'>No hay solicitudes disponibles</p>";
+            componenteSinSolicitudes();
         } else {
             $i = 0;
             while ($fila = $dataJustificantesAlumno->fetch_assoc()) {
                 $i++;
                 $tiempo_fecha = explode("-", $fila[$CAMPO_FECHA_AUSE]);
-                echo "
-                    <div class='archivo' data-id='{$fila[$CAMPO_ID_SOLICITUD]}'>
-                        <h2> Solicitud {$i} </h2>
-                        <p> {$fila[$CAMPO_MATRICULA]} </p>
-                        <p> {$fila[$CAMPO_ESTADO]} </p>
-                        <span> {$tiempo_fecha[2]} / {$tiempo_fecha[1]} / {$tiempo_fecha[0]} </span>
-                    </div>
-                ";
+                componenteJustificanteHistorial($fila, $i, $tiempo_fecha);
             }
         }
 

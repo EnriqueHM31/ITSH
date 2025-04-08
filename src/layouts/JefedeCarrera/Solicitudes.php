@@ -9,6 +9,7 @@ include "../../utils/functionGlobales.php";
 include "../../clases/jefe.php";
 include "../../conexion/verificar acceso.php";
 include "../../conexion/verificar_rol_jefe.php";
+include "../../Components/JefeCarrera.php";
 
 
 $usuario = new usuario();

@@ -195,20 +195,7 @@ class Jefe
         $tablaArray = [];
         $detallesArray = [];
 
-        $tablaHead = "
-        <tr>
-            <th>Solicitud</th>
-            <th>Matricula</th>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>Grupo</th>
-            <th>Motivo</th>
-            <th>Fecha</th>
-            <th>Evidencia</th>
-            <th>Estado</th>
-            <th>Opciones</th>
-        </tr>
-        ";
+        $tablaHead = componenteCabeceraTablaSolicitudes();
 
         while ($fila = $resultado->fetch_assoc()) {
             if ($fila['estado'] == "Aceptada") {
@@ -223,79 +210,9 @@ class Jefe
 
             $tabla = "";
 
-            $tabla .= "
-            <tr>
-            <td> {$fila['solicitud']}</td>
-            <td> {$fila['matricula']}</td>
-            <td> {$fila['nombre']}</td>
-            <td> {$fila['apellidos']}</td>
-            <td> {$fila['grupo']}</td>
-            <td> {$fila['motivo']}</td>
-            <td> {$fecha[2]}-{$fecha[1]}-{$fecha[0]}</td>
-            <td>
-                <a href='../Alumno/evidencias/{$fila['evidencia']}' target='_blank' class='link_evidencia'>
-                    {$fila['evidencia']}
-                </a> 
-            </td>
-            <td class='{$clase}'></td>
-            <td>
-                <div class='opciones'>
-                    <button class='btn_opciones_solicitudes' data-id='$id' onclick='aceptarSolicitud(this)'>
-                        <img src='../../assets/iconos/ic_correcto.webp' alt='icono para aceptar la solicitud para el justificante'>
-                    </button>
+            $tabla .= componenteFilaSolicitud($fila, $id, $clase, $fecha);
 
-                    <button class='btn_opciones_solicitudes' onclick='rechazarSolicitud(this)'>
-                        <img src='../../assets/iconos/ic_error.webp' alt='icono para rechazar la solicitud para el justificante'>
-                    </button>
-
-                    <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
-                        <img src='../../assets/iconos/ic_eliminar.webp' alt='icono para eliminar la solicitud para el justificante'>
-                    </button>
-                </div>
-            </td>
-            </tr>
-            ";
-
-            $detalles = "
-                <details class='detalles_solicitudes' 
-                data-datos='{$fila['solicitud']}, {$fila['matricula']}, {$fila['nombre']},{$fila['apellidos']}, {$fila['grupo']}, {$fila['motivo']}, {$fila['fecha_ausencia']}, {$clase}, {$fila['evidencia']} '>
-                    <summary>
-                        <div class='detalles'>
-                            <p>Solicitud: {$fila['solicitud']}</p>
-                        </div>
-                        
-
-                        <div class='{$clase} estado'></div>
-                    </summary>
-                    <div class='contenido_solicitudes'>
-                        <div class='detalle'><strong>Matricula:</strong><p>{$fila['matricula']}</p></div>
-                        <div class='detalle'><strong>Nombre:</strong><p>{$fila['nombre']}</p></div>
-                        <div class='detalle'><strong>Apellidos:</strong><p>{$fila['apellidos']}</p></div>
-                        <div class='detalle'><strong>Grupo:</strong><p>{$fila['grupo']}</p></div>
-                        <div class='detalle'><strong>Motivo:</strong><p>{$fila['motivo']}</p></div>
-                        <div class='detalle'><strong>Ausencia:</strong><p>{$fila['fecha_ausencia']}</p></div>
-
-                        <div class='detalle'><strong>Evidencia:</strong>
-                            <a href='../Alumno/evidencias/{$fila['evidencia']}' target='_blank' >
-                                {$fila['evidencia']}
-                            </a>
-                        </div>
-                        <div class='opciones'>
-                                <button class='btn_opciones_solicitudes' data-id='$id' onclick='aceptarSolicitud(this)'>
-                                    Aceptar
-                                </button>
-
-                                <button class='btn_opciones_solicitudes' onclick='rechazarSolicitud(this)'>
-                                    Rechazar
-                                </button>
-
-                                <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
-                                    Eliminar
-                                </button>
-                            </div>
-                    </div>
-                </details>
-            ";
+            $detalles = componenteDetailSolicitud($fila, $clase, $id);
             array_push($tablaArray, $tabla);
             array_push($detallesArray, $detalles);
         }
@@ -312,21 +229,13 @@ class Jefe
         $resultado = obtenerJustificantesJefeCarrera($conexion, $carrera);
 
         if ($resultado->num_rows == 0) {
-            echo "<p class='sin_justificantes'>No hay justificantes disponibles</p>";
+            componenteSinJustificantes();
         } else {
             while ($fila = $resultado->fetch_array()) {
                 $tiempo = explode(" ", $fila['fecha_creacion']);
                 $tiempo_fecha = explode("-", $tiempo[0]);
 
-                echo "
-                <a href='../Alumno/justificantes/{$fila['justificante_pdf']}' class='archivo' target='_blank'>
-                    <h2> Folio {$fila['id']} </h2>
-                    <p> {$fila['matricula_alumno']} </p>
-                    <p> {$fila['nombre_alumno']} </p>
-                    <span>Hora: {$tiempo[1]} </span>
-                    <span>Fecha: {$tiempo_fecha[2]} de " . Variables::MESES[$tiempo_fecha[1][1] - 1] . " de " . $tiempo_fecha[0] . " </span>
-                </a>
-                ";
+                componenteJustificanteJefe($fila, $tiempo_fecha);
             }
         }
     }

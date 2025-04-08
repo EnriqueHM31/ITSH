@@ -91,52 +91,41 @@ class Usuario
 
     public function verificarIdentidadCorreoIdentificador($id_usuario, $correoDB, $conexion)
     {
+        global $TABLA_USUARIO, $CAMPO_CORREO, $CAMPO_ID_USUARIO;
+        $sql = "SELECT * FROM $TABLA_USUARIO WHERE $CAMPO_CORREO = ? AND $CAMPO_ID_USUARIO = ?";
 
-        $sql = "SELECT * FROM " . Variables::TABLA_BD_USUARIO .
-            " WHERE " . Variables::CAMPO_CORREO . " = '$correoDB' AND " .
-            Variables::CAMPO_ID_USUARIO . " = '" . $id_usuario . "'";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param('ss', $correoDB, $id_usuario);
 
-        return mysqli_query($conexion, $sql);
+        return $stmt->execute();
     }
 
     public function cambiarContraseñaEnBD($conexion, $id_usuario, $nuevaContraseña)
     {
-        $sql = "UPDATE " . Variables::TABLA_BD_USUARIO . " SET "
-            . Variables::CAMPO_CONTRASEÑA . " = '$nuevaContraseña' WHERE " .
-            Variables::CAMPO_ID_USUARIO . " = '" . $id_usuario . "'";
+        global $TABLA_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_ID_USUARIO;
+        $sql = "UPDATE $TABLA_USUARIO SET $CAMPO_CONTRASEÑA = ? WHERE $CAMPO_ID_USUARIO= ?";
 
-        return mysqli_query($conexion, $sql);
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param('ss', $nuevaContraseña, $id_usuario);
+
+        return $stmt->execute();
+
     }
 
     public function escribirDatosDelUsuario($conexion, $id, $rol, $correo)
     {
         if ($rol === Usuario::ADMIN) {
             $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_AdMINISTRADOR, Variables::CAMPO_CLAVE_EMPLEADO_ADMIN, $id);
+            componenteDatosUsuarioInicioAdministrador($usuario, $correo);
 
-            echo "<div class='contenedor-datos'>";
-            echo "<p><strong>Clave:</strong> " . $usuario[Variables::CAMPO_CLAVE_EMPLEADO_ADMIN] . "</p>";
-            echo "<p><strong>Nombre:</strong> " . $usuario[Variables::CAMPO_NOMBRE] . "</p>";
-            echo "<p><strong>Apellidos:</strong> " . $usuario[Variables::CAMPO_APELLIDOS] . "</p>";
-            echo "<p><strong>Correo:</strong> " . $correo . "</p>";
-            echo "<button id='btn_contraseña' class='btn_vino'>Cambiar contraseña</button>";
-            echo "</div>";
             return;
         }
 
         if ($rol === Usuario::JEFE_DE_CARRERA) {
 
             $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id);
-
             $carrera = getResultCarrera($conexion, $usuario[Variables::CAMPO_ID_CARRERA]);
-
-            echo "<div class='contenedor-datos'>";
-            echo "<p><strong>Identificador:</strong> " . $usuario[Variables::CAMPO_CLAVE_EMPLEADO_JEFE] . "</p>";
-            echo "<p><strong>Nombre:</strong> " . $usuario[Variables::CAMPO_NOMBRE] . "</p>";
-            echo "<p><strong>Apellidos:</strong> " . $usuario[Variables::CAMPO_APELLIDOS] . "</p>";
-            echo "<p><strong>Carrera:</strong> " . $carrera . "</p>";
-            echo "<p><strong>Correo:</strong> " . $correo . "</p>";
-            echo "<button id='btn_contraseña' class='btn_vino'>Cambiar contraseña</button>";
-            echo "</div>";
+            componenteDatosUsuarioInicioJefeCarrera($usuario, $carrera, $correo);
 
             return;
         }
@@ -144,17 +133,7 @@ class Usuario
         if ($rol === Usuario::ESTUDIANTE) {
             $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_ESTUDIANTE, Variables::CAMPO_MATRICULA, $id);
             $carrera = getResultCarrera($conexion, $usuario[Variables::CAMPO_ID_CARRERA]);
-
-
-            echo "<div class='contenedor-datos'>";
-            echo "<p><strong>Identificador:</strong> " . $usuario[Variables::CAMPO_MATRICULA] . "</p>";
-            echo "<p><strong>Nombre:</strong> " . $usuario[Variables::CAMPO_NOMBRE] . "</p>";
-            echo "<p><strong>Apellidos:</strong> " . $usuario[Variables::CAMPO_APELLIDOS] . "</p>";
-            echo "<p><strong>Carrera:</strong> " . $carrera . "</p>";
-            echo "<p><strong>Grupo:</strong> " . $usuario[Variables::CAMPO_GRUPO] . "</p>";
-            echo "<p><strong>Correo:</strong> " . $correo . "</p>";
-            echo "<button id='btn_contraseña' class='btn_vino'>Cambiar contraseña</button>";
-            echo "</div>";
+            componenteDatosUsuarioInicioAlumno($usuario, $carrera, $correo);
         }
     }
 }
