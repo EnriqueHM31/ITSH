@@ -52,6 +52,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <style>
         * {
             margin: 0;
@@ -211,7 +212,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
                     <tr>
                         <td colspan="2">
-                            <p><strong>Nombre del Alumno(a):</strong> <?php echo $nombre . " " . $apellidos ?></p>
+                            <p><strong>Nombre del Alumno(a):</strong> <?php echo "$nombre  $apellidos" ?></p>
                         </td>
                     </tr>
 
@@ -255,7 +256,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
         <div class="datos_jefe">
             <p>ATENTAMENTE</p>
 
-            <p>MRT(A). <?php echo $nombre_jefe . " " . $apellidos_jefe ?></p>
+            <p>MRT(A). <?php echo "$nombre_jefe $apellidos_jefe" ?></p>
 
             <p>JEFE(A) DE LA DIVISION DE <?php echo Variables::TIPO_CARRERA[$carrera] . " en " . $carrera ?></p>
 
@@ -384,7 +385,7 @@ function guardarArchivoPDF($data, $id_folio, $matricula)
 function estructurarFechaAusencia($fecha)
 {
     $array = explode("-", $fecha);
-    return $array[2] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[0];
+    return $array[0] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[2];
 }
 
 

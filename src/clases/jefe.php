@@ -232,14 +232,14 @@ class Jefe
 
     public function HistorialJustificantes($conexion, $carrera)
     {
-        global $CAMPO_FECHA_AUSE;
+        global $CAMPO_J_FECHA_CREACION;
         $resultado = obtenerJustificantesJefeCarrera($conexion, $carrera);
 
         if ($resultado->num_rows == 0) {
             componenteSinJustificantes();
         } else {
             while ($fila = $resultado->fetch_array()) {
-                $tiempo = explode(" ", $fila[Variables::CAMPO_J_FECHA]);
+                $tiempo = explode(" ", $fila[$CAMPO_J_FECHA_CREACION]);
                 $tiempo_fecha = explode("-", $tiempo[0]);
 
                 componenteJustificanteJefe($fila, $tiempo_fecha);

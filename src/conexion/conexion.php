@@ -18,5 +18,6 @@ if (!$conexion) {
     die("Conexión fallida: " . mysqli_connect_error());  // Si la conexión falla, muestra el error
 }
 // Establecer el conjunto de caracteres de la conexión a UTF-8
-mysqli_set_charset($conexion, 'utf8mb4');
+$conexion->set_charset("utf8");
+
 ?>
