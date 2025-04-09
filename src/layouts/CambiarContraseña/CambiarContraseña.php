@@ -3,6 +3,7 @@ include "../../utils/constantes.php";
 include "../../utils/functionGlobales.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
+include "../../Components/Usuario.php";
 
 $usuario = new usuario();
 ?>
@@ -63,19 +64,9 @@ $usuario = new usuario();
         <input type="submit" value="Enviar" class="btn_login" id="button">
     </form>
 
-    <template id="miTemplate">
-
-        <div class="overlay" id="overlay">
-            <div class="notificacion">
-                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
-                <div class="contenido_notificacion ">
-                    <p id="mensaje"></p>
-                </div>
-                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
-            </div>
-        </div>
-
-    </template>
+    <?php
+    componenteTemplateModalNormal();
+    ?>
 
 </body>
 

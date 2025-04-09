@@ -239,7 +239,7 @@ class Jefe
             componenteSinJustificantes();
         } else {
             while ($fila = $resultado->fetch_array()) {
-                $tiempo = explode(" ", $fila[$CAMPO_FECHA_AUSE]);
+                $tiempo = explode(" ", $fila[Variables::CAMPO_J_FECHA]);
                 $tiempo_fecha = explode("-", $tiempo[0]);
 
                 componenteJustificanteJefe($fila, $tiempo_fecha);

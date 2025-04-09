@@ -50,7 +50,7 @@ async function eliminarSolicitud(id, nombreArchivo, elemento) {
 		},
 		dataType: 'json',
 		success: function (data) {
-			if (data['error'] === 'True') {
+			if (data['success'] === true) {
 				mostrarTemplate(
 					'Se ha eliminado la solicitud',
 					'../../assets/iconos/ic_correcto.webp',

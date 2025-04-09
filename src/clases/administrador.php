@@ -129,6 +129,7 @@ class administrador
 
     public function añadirPorCSV($conexion)
     {
+        global $ADMIN, $JEFE;
         mysqli_begin_transaction($conexion);
 
         $archivo = $_FILES["archivo_csv"]["tmp_name"];
@@ -152,10 +153,10 @@ class administrador
 
                 insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $cargo);
 
-                if ($cargo === Usuario::ADMIN) {
+                if ($cargo === $ADMIN) {
                     insertarAdministrador($conexion, $clave_empleado, $nombre, $apellidos);
 
-                } else if ($cargo === Usuario::JEFE_DE_CARRERA) {
+                } else if ($cargo === $JEFE) {
                     if (revisionDeCarreras($carrera) || RestriccionJefedeCarrera($carrera, $cargo, $conexion)) {
                         return;
                     }

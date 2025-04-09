@@ -1,24 +1,7 @@
 {
-	"name": "itsh",
-	"private": true,
-	"version": "0.0.0",
-	"type": "module",
 	"scripts": {
-		"dev": "concurrently \"vite\" \"php -S 192.168.1.104:8000\"",
 		"build": "vite build",
 		"preview": "vite preview",
 		"php": "php -S 192.168.1.104:8000"
-	},
-	"devDependencies": {
-		"concurrently": "^9.1.2",
-		"eslint-config-standard": "^17.1.0",
-		"prettier": "3.4.2",
-		"standard": "17.1.2",
-		"vite": "^6.0.11"
-	},
-	"eslintConfig": {
-		"extends": [
-			"standard"
-		]
 	}
 }

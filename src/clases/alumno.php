@@ -33,42 +33,45 @@ class alumno
         $motivo = $_POST['motivo'];
         $fecha = $_POST['fecha_ausencia'];
         $estado = 2;
+        try {
+            if (!$this->esFechaValida($fecha)) {
+                estructuraMensaje("La fecha no puede ser posterior al día actual", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
 
-        if (!$this->esFechaValida($fecha)) {
-            estructuraMensaje("La fecha no puede ser posterior al día actual", "../../assets/iconos/ic_error.webp", "--rojo");
-            return;
-        }
+            if (!isset($_FILES['archivo_evidencia']) || $_FILES['archivo_evidencia']['error'] !== 0) {
+                estructuraMensaje("Sube tu evidencia", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
 
-        if (!isset($_FILES['archivo_evidencia']) || $_FILES['archivo_evidencia']['error'] !== 0) {
-            estructuraMensaje("Sube tu evidencia", "../../assets/iconos/ic_error.webp", "--rojo");
-            return;
-        }
+            $archivo_tmp = $_FILES['archivo_evidencia']['tmp_name'];
+            $archivo_tipo = mime_content_type($archivo_tmp);
 
-        $archivo_tmp = $_FILES['archivo_evidencia']['tmp_name'];
-        $archivo_tipo = mime_content_type($archivo_tmp);
+            if ($archivo_tipo !== 'application/pdf') {
+                estructuraMensaje("Tu evidencia debe estar en formato PDF", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
 
-        if ($archivo_tipo !== 'application/pdf') {
-            estructuraMensaje("Tu evidencia debe estar en formato PDF", "../../assets/iconos/ic_error.webp", "--rojo");
-            return;
-        }
+            $fecha_nombre = str_replace("-", "", $fecha);
+            $identificador_archivo = $fecha_nombre . ".pdf";
+            $archivo_destino = 'evidencias/' . $identificador_archivo;
 
-        $fecha_nombre = str_replace("-", "", $fecha);
-        $identificador_archivo = $fecha_nombre . ".pdf";
-        $archivo_destino = 'evidencias/' . $identificador_archivo;
+            if (!move_uploaded_file($archivo_tmp, $archivo_destino)) {
+                estructuraMensaje("Ocurrió un error con el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
 
-        if (!move_uploaded_file($archivo_tmp, $archivo_destino)) {
-            estructuraMensaje("Ocurrió un error con el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
-            return;
-        }
+            if (!insertarSolicitudBD($conexion, $identificador, $nombre, $apellidos, $grupo, $carrera, $motivo, $fecha, $identificador_archivo, $estado)) {
+                estructuraMensaje("Ocurrió un error con el envío de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
 
-        if (!insertarSolicitudBD($conexion, $identificador, $nombre, $apellidos, $grupo, $carrera, $motivo, $fecha, $identificador_archivo, $estado)) {
+            mysqli_commit($conexion);
+            estructuraMensaje("Se ha enviado la solicitud a tu jefe de carrera", "../../assets/iconos/ic_correcto.webp", "--verde");
+        } catch (Exception $e) {
             estructuraMensaje("Ocurrió un error con el envío de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
-
-        mysqli_commit($conexion);
-        estructuraMensaje("Se ha enviado la solicitud a tu jefe de carrera", "../../assets/iconos/ic_correcto.webp", "--verde");
-
     }
 
     public function verificarPOST()

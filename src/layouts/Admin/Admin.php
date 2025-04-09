@@ -40,7 +40,7 @@ $correo = $_SESSION["correo"];
 
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
-    <script src="../../assets//js/eliminar.js" defer></script>
+    <script src="../../assets/js/eliminar.js" defer></script>
     <script src="../../assets/js/buscador.js" defer></script>
     <script src="../../assets/js/cambiarContraseñaInicio.js" defer></script>
 

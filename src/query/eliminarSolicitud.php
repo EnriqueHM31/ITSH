@@ -11,7 +11,11 @@ include "../conexion/verificar acceso.php";
 
 header('Content-Type: application/json');
 
-if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
+try {
+    if (!isset($_POST['id']) || !isset($_POST['nombreArchivo'])) {
+        throw new Exception("Datos incompletos");
+    }
+
     $id_solicitud = $_POST['id'];
     $nombreArchivo = $_POST['nombreArchivo'];
 
@@ -21,30 +25,24 @@ if (isset($_POST['id']) && isset($_POST['nombreArchivo'])) {
     $ruta_origen = $carpeta_origen . $nombreArchivo;
     $ruta_destino = $carpeta_destino . $nombreArchivo;
 
-    // Verificar si el archivo existe antes de hacer cualquier cambio
-    if (!file_exists($ruta_origen)) {
-        echo json_encode(["error" => "La evidencia no existe"]);
-        exit;
+    if (!@file_exists($ruta_origen)) {
+        throw new Exception("La evidencia no existe");
     }
 
-    // Intentar mover el archivo antes de eliminar la solicitud
-    if (!rename($ruta_origen, $ruta_destino)) {
-        echo json_encode(["error" => "Error al mover el archivo"]);
-        exit;
+    if (!@rename($ruta_origen, $ruta_destino)) {
+        throw new Exception("Error al mover el archivo");
     }
 
-    // Si el archivo se movió, ahora sí eliminamos la solicitud
     if (!EliminarSolicitudID($conexion, $id_solicitud)) {
-        // Si la eliminación en la BD falla, devolver el archivo a su ubicación original
+        // Volver a poner el archivo en su lugar original
         rename($ruta_destino, $ruta_origen);
-        echo json_encode(["error" => "Error al eliminar la solicitud en la BD"]);
-        exit;
+        throw new Exception("Error al eliminar la solicitud en la BD");
     }
 
-    // Si todo se hizo correctamente
-    echo json_encode(["error" => "True"]);
+    echo json_encode(["success" => true]);
     exit;
-} else {
-    header("location: ../layouts/Errores/404.php");
+
+} catch (Exception $e) {
+    echo json_encode(["error" => $e->getMessage()]);
     exit;
 }
