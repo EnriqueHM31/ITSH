@@ -48,3 +48,38 @@ function componenteDatosUsuarioInicioAlumno($usuario, $carrera, $correo)
         HTML;
 }
 
+function componenteTemplateModalNormal()
+{
+    echo
+        <<<HTML
+        <template id="miTemplate">
+            <div class="overlay" id="overlay">
+                <div class="notificacion">
+                    <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
+                    <div class="contenido_notificacion ">
+                        <p id="mensaje"></p>
+                    </div>
+                    <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
+                </div>
+            </div>
+        </template>
+    HTML;
+}
+
+function componenteTemplateModalCargar()
+{
+    echo
+        <<<HTML
+        <template id="miTemplate_cargar">
+            <div class="overlay" id="overlay">
+                <div class="notificacion">
+                    <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
+                    <div class="contenido_notificacion ">
+                        <p id="mensaje"></p>
+                    </div>
+                    <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate('cargar')">Cerrar</button>
+                </div>
+            </div>
+        </template>
+    HTML;
+}

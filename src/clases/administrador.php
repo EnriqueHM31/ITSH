@@ -110,6 +110,8 @@ class administrador
 
     public function eliminarRegistro($conexion, $id)
     {
+        mysqli_begin_transaction($conexion);
+
         $id = trim($id) == null ? "" : $id;
         if ($id == "") {
             estructuraMensaje("Busque y seleccione a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
@@ -117,8 +119,8 @@ class administrador
         }
 
         if (EliminarUsuario($conexion, $id)) {
+            mysqli_commit($conexion);
             estructuraMensaje("El registro fue eliminado de forma exitosa", "../../assets/iconos/ic_correcto.webp", "--verde");
-
         } else {
             estructuraMensaje("Ocurrio un error al eliminarlo", "../../assets/iconos/ic_error.webp", "--rojo");
         }

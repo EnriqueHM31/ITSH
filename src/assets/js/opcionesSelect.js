@@ -113,9 +113,7 @@ function ponerModalidades() {
 			crearModalidad('Escolarizado', modalidadSelect);
 		}
 	}
-
 }
-
 ponerModalidades();
 
 if (document.querySelector("body").dataset.rol === 'Jefe de Carrera') {

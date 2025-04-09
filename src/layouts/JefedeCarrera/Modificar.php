@@ -9,6 +9,8 @@ include "../../conexion/verificar acceso.php";
 include "../../conexion/verificar_rol_jefe.php";
 include "../../query/obtenerGrupos.php";
 include "../../validaciones/Validaciones.php";
+include "../../Components/Usuario.php";
+include "../../Components/Layout.php";
 
 
 
@@ -55,35 +57,9 @@ $Numero_grupos = $grupos["Numero_grupos"];
 
 <body data-carrera="<?php echo $carreraJefe ?>" data-modo="<?php echo $seccion ?>" data-rol="<?php echo $rol ?>">
 
-    <nav class="navegacion">
-
-        <div class="gobierno">
-            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
-
-            <div class="texto_gobierno">
-                <h3>Gobierno de</h3>
-                <h4>Mexico</h4>
-            </div>
-        </div>
-
-        <ul class="menu">
-            <li class="menu-item"><a href="JefeCarrera.php" class="link">Inicio</a></li>
-            <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
-            <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
-            <li class="menu-item"><a href="JefeCarrera.php?EliminarEstudiante=true" class="link">Eliminar</a></li>
-            <li class="menu-item"><a href="Solicitudes.php" class="link">Solicitudes</a></li>
-            <li class="menu-item">
-                <a href="../../conexion/cerrar_sesion.php" class="link">
-                    <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
-                </a>
-            </li>
-            <li class="menu-item close_contenedor">
-                <img class="close_menu" src="../../assets/iconos/ic_close.webp" alt="Imagen para cerrar el menu movil">
-            </li>
-        </ul>
-
-        <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
-    </nav>
+    <?php
+    componenteNavegacionLayout($rol);
+    ?>
 
     <main class="main">
         <div class="contenedor_logo">
@@ -154,50 +130,13 @@ $Numero_grupos = $grupos["Numero_grupos"];
 
     </main>
 
-    <footer class="footer">
-        <div class="contenido_footer">
-            <div class="siguenos">
-                <p>Siguenos en</p>
-                <div class="redes">
-                    <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank"><img
-                            src="../../assets/iconos/ic_facebook.webp" alt="icono de facebook"></a>
-                    <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank"><img
-                            src="../../assets/iconos/ic_instagram.webp" alt="icono de instagram"></a>
-                </div>
-            </div>
+    <?php
+    componenteFooter();
+    ?>
 
-            <div class="definicion">
-                <span>¿Que esto?</span>
-                <p>Un sistema de justificantes para el Instituto Tecnologico Superior de Huatusco</p>
-            </div>
-
-            <div class="terminos">
-                <a href="../Terminos/Terminos y Condiciones.php">Terminos y Condiciones</a>
-            </div>
-        </div>
-
-        <div class="footer_gobierno">
-            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
-
-            <div class="texto_gobierno">
-                <p>Gobierno de Mexico</p>
-
-            </div>
-        </div>
-
-    </footer>
-
-    <template id="miTemplate">
-        <div class="overlay" id="overlay">
-            <div class="notificacion">
-                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
-                <div class="contenido_notificacion ">
-                    <p id="mensaje"></p>
-                </div>
-                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
-            </div>
-        </div>
-    </template>
+    <?php
+    componenteTemplateModalNormal();
+    ?>
 
 </body>
 

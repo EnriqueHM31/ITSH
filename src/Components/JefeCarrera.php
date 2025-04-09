@@ -117,4 +117,87 @@ function componenteDetailSolicitud($fila, $clase, $id)
     HTML;
 }
 
+function componenteTemplateUsuarioEstudianteEliminar()
+{
+    echo <<<HTML
+        <template id="plantilla_eliminar-estudiante">
+            <div class=" overlay overlay_eliminar">
+                <form class="formulario form_eliminar" method="post">
+                    <h2 class="titulo titulo_eliminar">Eliminar Registro</h2>
+                    <div class="buscador-usuarios">
+                        <label for="buscar" class="contenedor_input">
+                            <input class="input_buscar" type="search" name="buscar" id="buscar" placeholder="Buscar">
+                        </label>
+                        <div id="resultados">
+                        </div>
+                    </div>
+
+                    <img class="close" src="../../assets/iconos/ic_close.webp"
+                        alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
+
+                    <button type="button" class="btn_eliminar" id="eliminar_registro">Eliminar</button>
+                </form>
+
+            </div>
+        </template>
+    HTML;
+}
+
+function componenteTemplateUsuarioEstudianteSeleccionado()
+{
+    echo <<<HTML
+        <template id="plantilla_usuario-seleccionado-estudiante">
+            <div class=" overlay overlay_eliminar overlay_ventana">
+                <form id="formulario_eliminar" class="formulario form_eliminar form_verificar_eliminar" method="post">
+    
+                    <div class="informacion-usuario-eliminar">
+                        <h2 class="titulo_eliminar-modal">Estas seguro de eliminar a: </h2>
+                        <p class="info_usuario_eliminar">Clave: <span id="matricula-info"></span></p>
+                        <p class="info_usuario_eliminar">Nombre: <span id="nombre-info"></span></p>
+                        <p class="info_usuario_eliminar">Apellidos: <span id="apellidos-info"></span></p>
+                        <p class="info_usuario_eliminar">Grupo: <span id="grupo-info"></span></p>
+                        <p class="info_usuario_eliminar">Carrera: <span id="carrera-info"></span></p>
+                        <p class="info_usuario_eliminar">Modalidad: <span id="id_modalidad-info"></span></p>
+                        <p class="info_usuario_eliminar">Rol: <span id="rol-info"></span></p>
+                        <p class="info_usuario_eliminar">Correo: <span id="correo-info"></span></p>
+                        <input type="hidden" name="identificador" value="" id="identificador">
+                    </div>
+    
+                    <img class="close close_eliminar" src="../../assets/iconos/ic_close.webp"
+                        alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
+    
+                    <input type="submit" name="formulario" value="Eliminar" class="btn_eliminar btn_ventana-eliminar">
+                </form>
+    
+            </div>
+        </template>
+    HTML;
+}
+
+function componenteModalSeguridadFolio()
+{
+    echo
+        <<<HTML
+        <template id="modal_seguridad">
+            <div class=" overlay overlay_eliminar overlay_ventana" id="overlay">
+
+                <div class="modal">
+                    <h2>¿Esta seguro de reiniciar el Folio</h2>
+                    <p>Se borraran todos los justificantes creados hasta el momento</p>
+
+                    <div class="opciones_decision">
+                        <button class="btn_opcion" onclick="reiniciarFolio()">Si</button>
+                        <button class="btn_opcion" onclick="cerrarTemplate()">No</button>
+                    </div>
+
+                    <span>
+                        Se aguardan en el respaldo por si se requieren<br>
+                        Se recomienda hacerlo cada inicio de semestre
+                    </span>
+                </div>
+
+            </div>
+        </template>
+    HTML;
+}
 ?>

@@ -2,9 +2,6 @@
 
 class Usuario
 {
-    public const ADMIN = Variables::MENU_DE_ROLES[0];
-    public const JEFE_DE_CARRERA = Variables::MENU_DE_ROLES[1];
-    public const ESTUDIANTE = Variables::MENU_DE_ROLES[2];
 
     public function __usuario()
     {
@@ -12,7 +9,7 @@ class Usuario
 
     public function Verificacion($conexion, $id, $contraseña)
     {
-        global $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
+        global $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $ADMIN, $JEFE, $ESTUDIANTE;
         if (empty($id) || empty($contraseña)) {
             estructuraMensaje("Llena todos los campos", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
@@ -35,15 +32,15 @@ class Usuario
         }
 
 
-        $rol = obtenerRol($conexion, $usuario[$CAMPO_ID_ROL]);
+        $rol = obtenerRol($conexion, $rolBD);
 
-        if ($rol === Usuario::ADMIN) {
+        if ($rol === $ADMIN) {
             $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Admin/Admin.php");
         }
-        if ($rol === Usuario::JEFE_DE_CARRERA) {
+        if ($rol === $JEFE) {
             $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "JefedeCarrera/JefeCarrera.php");
         }
-        if ($rol === Usuario::ESTUDIANTE) {
+        if ($rol === $ESTUDIANTE) {
             $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Alumno/alumno.php");
         } else {
             estructuraMensaje("Ocurrio un error con la pagina", "./src/assets/iconos/ic_error.webp", "--rojo");
@@ -114,25 +111,27 @@ class Usuario
 
     public function escribirDatosDelUsuario($conexion, $id, $rol, $correo)
     {
-        if ($rol === Usuario::ADMIN) {
-            $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_AdMINISTRADOR, Variables::CAMPO_CLAVE_EMPLEADO_ADMIN, $id);
+        global $ADMIN, $JEFE, $ESTUDIANTE, $TABLA_ADMIN, $CAMPO_CLAVE_EMPLEADO_ADMIN, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $TABLA_ESTUDIANTE, $CAMPO_MATRICULA, $CAMPO_ID_CARRERA;
+
+        if ($rol === $ADMIN) {
+            $usuario = getResultDataTabla($conexion, $TABLA_ADMIN, $CAMPO_CLAVE_EMPLEADO_ADMIN, $id);
             componenteDatosUsuarioInicioAdministrador($usuario, $correo);
 
             return;
         }
 
-        if ($rol === Usuario::JEFE_DE_CARRERA) {
+        if ($rol === $JEFE) {
 
-            $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id);
-            $carrera = getResultCarrera($conexion, $usuario[Variables::CAMPO_ID_CARRERA]);
+            $usuario = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $id);
+            $carrera = getResultCarrera($conexion, $usuario[$CAMPO_ID_CARRERA]);
             componenteDatosUsuarioInicioJefeCarrera($usuario, $carrera, $correo);
 
             return;
         }
 
-        if ($rol === Usuario::ESTUDIANTE) {
-            $usuario = getResultDataTabla($conexion, Variables::TABLA_BD_ESTUDIANTE, Variables::CAMPO_MATRICULA, $id);
-            $carrera = getResultCarrera($conexion, $usuario[Variables::CAMPO_ID_CARRERA]);
+        if ($rol === $ESTUDIANTE) {
+            $usuario = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_MATRICULA, $id);
+            $carrera = getResultCarrera($conexion, $usuario[$CAMPO_ID_CARRERA]);
             componenteDatosUsuarioInicioAlumno($usuario, $carrera, $correo);
         }
     }

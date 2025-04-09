@@ -197,21 +197,22 @@ class Jefe
 
     public function MostrarSolicitudes($resultado, $id)
     {
+        global $CAMPO_ESTADO, $CAMPO_FECHA_AUSE;
         $tablaArray = [];
         $detallesArray = [];
 
         $tablaHead = componenteCabeceraTablaSolicitudes();
 
         while ($fila = $resultado->fetch_assoc()) {
-            if ($fila['estado'] == "Aceptada") {
+            if ($fila[$CAMPO_ESTADO] == "Aceptada") {
                 $clase = "aceptada";
-            } else if ($fila['estado'] == "Pendiente") {
+            } else if ($fila[$CAMPO_ESTADO] == "Pendiente") {
                 $clase = "pendiente";
             } else {
                 $clase = "rechazada";
             }
 
-            $fecha = explode("-", $fila['fecha_ausencia']);
+            $fecha = explode("-", $fila[$CAMPO_FECHA_AUSE]);
 
             $tabla = "";
 
@@ -231,13 +232,14 @@ class Jefe
 
     public function HistorialJustificantes($conexion, $carrera)
     {
+        global $CAMPO_FECHA_AUSE;
         $resultado = obtenerJustificantesJefeCarrera($conexion, $carrera);
 
         if ($resultado->num_rows == 0) {
             componenteSinJustificantes();
         } else {
             while ($fila = $resultado->fetch_array()) {
-                $tiempo = explode(" ", $fila['fecha_creacion']);
+                $tiempo = explode(" ", $fila[$CAMPO_FECHA_AUSE]);
                 $tiempo_fecha = explode("-", $tiempo[0]);
 
                 componenteJustificanteJefe($fila, $tiempo_fecha);
@@ -247,6 +249,7 @@ class Jefe
 
     public function ObtenerGruposDeLaCarrera($conexion, $id_carrera)
     {
+        global $CAMPO_ID_GRUPOS, $CAMPO_NUMERO_GRUPOS;
         $GruposCarrera = obtenerGrupos($conexion, $id_carrera);
         $grupos = $GruposCarrera[0][0];
         $modalidades = $GruposCarrera[1][0]["Modalidades"];

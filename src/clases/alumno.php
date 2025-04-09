@@ -8,7 +8,6 @@ class alumno
     public function ponerDatosFormulario($conexion, $id)
     {
         global $TABLA_ESTUDIANTE, $CAMPO_MATRICULA;
-
         return getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_MATRICULA, $id);
     }
 

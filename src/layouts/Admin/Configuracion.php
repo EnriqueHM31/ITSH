@@ -7,6 +7,9 @@ include "../../utils/functionGlobales.php";
 include "../../conexion/verificar acceso.php";
 include "../../conexion/verificar_rol_admin.php";
 include "../../Components/Admin.php";
+include "../../Components/Usuario.php";
+include "../../Components/Layout.php";
+
 
 $administrador = new administrador();
 $id = $_SESSION["id"];
@@ -45,32 +48,10 @@ $carreras = obtenerAllCarreras($conexion);
 
 <body data-modo="Eliminar" data-carrera="">
 
-    <nav class="navegacion">
+    <?php
+    componenteNavegacionLayout($rol);
+    ?>
 
-        <div class="gobierno">
-            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
-
-            <div class="texto_gobierno">
-                <h3>Gobierno de</h3>
-                <h4>Mexico</h4>
-            </div>
-        </div>
-
-        <ul class="menu">
-            <li class="menu-item"><a href="Admin.php" class="link">Inicio</a></li>
-            <li class="menu-item"><a href="Añadir.php" class="link">Añadir</a></li>
-            <li class="menu-item"><a href="Modificar.php" class="link">Modificar</a></li>
-            <li class="menu-item"><a href="Admin.php?EliminarPersonal=true" class="link">Eliminar</a></li>
-            <li class="menu-item"><a href="Configuracion.php" class="link">Configuracion</a></li>
-
-            <li class="menu-item"><a href="../../conexion/cerrar_sesion.php" class="link"><img
-                        src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion"></a></li>
-            <li class="menu-item close_contenedor"><img class="close_menu" src="../../assets/iconos/ic_close.webp"
-                    alt="Imagen para cerrar el menu movil"></li>
-        </ul>
-
-        <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
-    </nav>
 
     <main class="main">
         <div class="contenedor_main">
@@ -97,190 +78,18 @@ $carreras = obtenerAllCarreras($conexion);
             </div>
     </main>
 
-    <footer class="footer">
-        <div class="contenido_footer">
-            <div class="siguenos">
-                <p>Siguenos en</p>
-                <div class="redes">
-                    <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank">
-                        <img src="../../assets/iconos/ic_facebook.webp" alt="icono de facebook">
-                    </a>
-                    <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank">
-                        <img src="../../assets/iconos/ic_instagram.webp" alt="icono de facebook">
-                    </a>
-                </div>
-            </div>
-
-            <div class="definicion">
-                <span>¿Que esto?</span>
-                <p>Un sistema de justificantes para el Instituto Tecnologico Superior de Huatusco</p>
-            </div>
-
-            <div class="terminos">
-                <a href="../Terminos/Terminos y Condiciones.php">Terminos y Condiciones</a>
-            </div>
-        </div>
-
-        <div class="footer_gobierno">
-            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
-
-            <div class="texto_gobierno">
-                <p>Gobierno de Mexico</p>
-
-            </div>
-        </div>
-
-    </footer>
-
-    <template id="plantilla_configurar_carrera">
-        <div class="overlay_cambiar-contraseña overlay_ventana">
-            <form class="formulario" method="post">
-                <h2 class="titulo">Agregar Carrera</h2>
-                <div class="inputs-cambio-contraseña">
-
-                    <section class="seccion_tipo">
-                        <input type="hidden" name="carrera_antigua" id="carrera_antigua">
-
-                        <label for="carrera_modificar" class="contenedor_input">
-                            <input class="input_login" type="text" name="carrera_nueva" id="carrera_modificar"
-                                placeholder=" " autocomplete="current-password">
-                            <span class="nombre_input">Escriba la Carrera</span>
-                        </label>
-                        <div class="opciones_carrera">
-                            <label for="cantidad_grupos" class="contenedor_numerico">
-                                <span class="nombre_opcion">Cantidad de Grupos</span>
-                                <input min="1" max="15" step="1" value="1" class="input_num" type="number"
-                                    name="grupos_nueva_carrera" id="cantidad_grupos" placeholder=" "
-                                    autocomplete="current-password">
-                            </label>
-
-                            <label for="id_grupo" class="contenedor_numerico">
-                                <span class="nombre_opcion">Id de la Carrera</span>
-                                <input min="1" max="10" step="1" value="1" class="input_num" type="number"
-                                    name="id_carrera_nueva" id="id_grupo" placeholder=" "
-                                    autocomplete="current-password">
-                            </label>
-                        </div>
-                    </section>
-
-                    <section class="seccion_tipo">
-                        <label for="tipo_carrera" class="select_carrera">
-                            <span class="nombre_select">Escoga el Tipo de Carrera</span>
-                            <select name="tipo_carrera" id="tipo_carrera">
-                                <option value="Licenciatura">Licenciatura</option>
-                                <option value="Ingenieria">Ingenieria</option>
-                            </select>
-                        </label>
-
-                        <label class="select_carrera">
-                            <span class="nombre_select">Escoga las modalidades</span>
-                            <div class="contenedor_radio">
-                                <input type="radio" name="modalidad" value="Escolarizado" id="modalidad_escolarizado">
-                                <span>Escolarizado</span>
-                            </div>
-                            <div class="contenedor_radio">
-                                <input type="radio" name="modalidad" value="Flexible" id="modalidad_flexible">
-                                <span>Flexible</span>
-                            </div>
-                        </label>
-                    </section>
-
-                </div>
-                <input type="submit" name="formulario" class="btn-submit btn_login" value="Modificar Carrera">
+    <?php
+    componenteFooter();
+    ?>
 
 
-                <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
-                    alt="icono para cerrar la ventana de agregar carrera" loading="lazy">
-            </form>
-        </div>
-    </template>
+    <?php
+    componenteTemplateAgregarCarrera();
+    componenteTemplateConfigurarCarrera();
+    componenteTemplateModalNormal();
+    componenteTemplateModalCargar();
+    ?>
 
-    <template id="plantilla_agregar_carrera">
-        <div class="overlay_cambiar-contraseña overlay_ventana">
-            <form class="formulario" method="post">
-                <h2 class="titulo">Agregar Carrera</h2>
-                <div class="inputs-cambio-contraseña">
-
-                    <section class="seccion_tipo">
-
-                        <label for="carrera_nueva" class="contenedor_input">
-                            <input class="input_login" type="text" name="carrera_nueva" id="carrera_nueva"
-                                placeholder=" " autocomplete="current-password">
-                            <span class="nombre_input">Escriba la Carrera</span>
-                        </label>
-                        <div class="opciones_carrera">
-                            <label for="cantidad_grupos" class="contenedor_numerico">
-                                <span class="nombre_opcion">Cantidad de Grupos</span>
-                                <input min="1" max="15" step="1" value="1" class="input_num" type="number"
-                                    name="grupos_nueva_carrera" id="cantidad_grupos" placeholder=" "
-                                    autocomplete="current-password">
-                            </label>
-
-                            <label for="id_grupo" class="contenedor_numerico">
-                                <span class="nombre_opcion">Id de la Carrera</span>
-                                <input min="1" max="10" step="1" value="1" class="input_num" type="number"
-                                    name="id_carrera_nueva" id="id_grupo" placeholder=" "
-                                    autocomplete="current-password">
-                            </label>
-                        </div>
-                    </section>
-
-                    <section class="seccion_tipo">
-                        <label for="tipo_carrera" class="select_carrera">
-                            <span class="nombre_select">Escoga el Tipo de Carrera</span>
-                            <select name="tipo_carrera" id="tipo_carrera">
-                                <option value="Licenciatura">Licenciatura</option>
-                                <option value="Ingenieria">Ingenieria</option>
-                            </select>
-                        </label>
-
-                        <label class="select_carrera">
-                            <span class="nombre_select">Escoga las modalidades</span>
-                            <div class="contenedor_radio">
-                                <input type="radio" name="modalidad" value="Escolarizado">
-                                <span>Escolarizado</span>
-                            </div>
-                            <div class="contenedor_radio">
-                                <input type="radio" name="modalidad" value="Flexible">
-                                <span>Flexible</span>
-                            </div>
-                        </label>
-                    </section>
-
-                </div>
-                <input type="submit" name="formulario" class="btn-submit btn_login" value="Agregar Carrera">
-
-
-                <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
-                    alt="icono para cerrar la ventana de agregar carrera" loading="lazy">
-            </form>
-        </div>
-    </template>
-
-    <template id="miTemplate">
-        <div class="overlay" id="overlay">
-            <div class="notificacion">
-                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
-                <div class="contenido_notificacion ">
-                    <p id="mensaje"></p>
-                </div>
-                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
-            </div>
-        </div>
-    </template>
-    <template id="miTemplate_cargar">
-
-        <div class="overlay" id="overlay">
-            <div class="notificacion">
-                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
-                <div class="contenido_notificacion ">
-                    <p id="mensaje"></p>
-                </div>
-                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate('cargar')">Cerrar</button>
-            </div>
-        </div>
-
-    </template>
 </body>
 
 </html>

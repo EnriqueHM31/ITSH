@@ -8,17 +8,20 @@ include "../../validaciones/Validaciones.php";
 include "../../utils/functionGlobales.php";
 include "../../conexion/verificar acceso.php";
 include "../../Components/Alumno.php";
+include "../../Components/Usuario.php";
+include "../../Components/Layout.php";
 
 $usuario = new usuario();
 $alumno = new alumno();
 $id = $_SESSION["id"];
+$rol = $_SESSION["rol"];
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <title>Crear Solicitud</title>
+    <title>Historial de Solicitudes</title>
     <meta charset="UTF-8">
     <meta name="description" content="Pagina para crear las solicitudes para los justificantes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,33 +43,9 @@ $id = $_SESSION["id"];
 
 <body>
 
-    <nav class="navegacion">
-
-        <div class="gobierno">
-            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
-
-            <div class="texto_gobierno">
-                <h3>Gobierno de</h3>
-                <h4>Mexico</h4>
-            </div>
-        </div>
-
-        <ul class="menu">
-            <li class="menu-item"><a href="alumno.php" class="link">Inicio</a></li>
-            <li class="menu-item"><a href="CrearSolicitud.php" class="link">Crear Solicitud</a></li>
-            <li class="menu-item"><a href="HistorialAlumno.php" class="link">Historial</a></li>
-            <li class="menu-item">
-                <a href="../../conexion/cerrar_sesion.php" class="link">
-                    <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
-                </a>
-            </li>
-            <li class="menu-item close_contenedor">
-                <img class="close_menu" src="../../assets/iconos/ic_close.webp" alt="Imagen para cerrar el menu movil">
-            </li>
-        </ul>
-
-        <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
-    </nav>
+    <?php
+    componenteNavegacionLayout($rol);
+    ?>
 
     <main class="main">
         <div class="contenedor_main">
@@ -87,50 +66,13 @@ $id = $_SESSION["id"];
 
     </main>
 
-    <footer class="footer">
-        <div class="contenido_footer">
-            <div class="siguenos">
-                <p>Siguenos en</p>
-                <div class="redes">
-                    <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank"><img
-                            src="../../assets//iconos/ic_facebook.webp" alt="icono de facebook"></a>
-                    <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank"><img
-                            src="../../assets/iconos/ic_instagram.webp" alt="icono de facebook"></a>
-                </div>
-            </div>
+    <?php
+    componenteFooter();
+    ?>
 
-            <div class="definicion">
-                <span>¿Que esto?</span>
-                <p>Un sistema de justificantes para el Instituto Tecnologico Superior de Huatusco</p>
-            </div>
-
-            <div class="terminos">
-                <a href="../Terminos/Terminos y Condiciones.php">Terminos y Condiciones</a>
-            </div>
-        </div>
-
-        <div class="footer_gobierno">
-            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
-
-            <div class="texto_gobierno">
-                <p>Gobierno de Mexico</p>
-
-            </div>
-        </div>
-
-    </footer>
-
-    <template id="miTemplate">
-        <div class="overlay" id="overlay">
-            <div class="notificacion">
-                <img class="img_notificacion" src="" alt="icono de notificacion" id="imagen">
-                <div class="contenido_notificacion ">
-                    <p id="mensaje"></p>
-                </div>
-                <button class="btn_mensaje" id="btn_mensaje" onclick="cerrarTemplate()">Cerrar</button>
-            </div>
-        </div>
-    </template>
+    <?php
+    componenteTemplateModalNormal();
+    ?>
 
 </body>
 

@@ -6,6 +6,7 @@ include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 include "../../conexion/verificar acceso.php";
 include "../../Components/Usuario.php";
+include "../../Components/Layout.php";
 
 $usuario = new usuario();
 $id = $_SESSION["id"];
@@ -42,33 +43,9 @@ $correo = $_SESSION["correo"];
 
 <body>
 
-    <nav class="navegacion">
-
-        <div class="gobierno">
-            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
-
-            <div class="texto_gobierno">
-                <h3>Gobierno de</h3>
-                <h4>Mexico</h4>
-            </div>
-        </div>
-
-        <ul class="menu">
-            <li class="menu-item"><a href="alumno.php" class="link">Inicio</a></li>
-            <li class="menu-item"><a href="CrearSolicitud.php" class="link">Crear Solicitud</a></li>
-            <li class="menu-item"><a href="HistorialAlumno.php" class="link">Historial</a></li>
-            <li class="menu-item">
-                <a href="../../conexion/cerrar_sesion.php" class="link">
-                    <img src="../../assets/iconos/ic_cerrar_sesion.webp" alt="icono de cerrar sesion">
-                </a>
-            </li>
-            <li class="menu-item close_contenedor">
-                <img class="close_menu" src="../../assets/iconos/ic_close.webp" alt="Imagen para cerrar el menu movil">
-            </li>
-        </ul>
-
-        <img src="../../assets/iconos/ic_menu_movil.webp" alt="icono para el menu en movil" class="icono_menu">
-    </nav>
+    <?php
+    componenteNavegacionLayout($rol);
+    ?>
 
     <main class="main">
         <div class="contenedor_main">
@@ -91,65 +68,13 @@ $correo = $_SESSION["correo"];
 
     </main>
 
-    <footer class="footer">
-        <div class="contenido_footer">
-            <div class="siguenos">
-                <p>Siguenos en</p>
-                <div class="redes">
-                    <a href="https://www.facebook.com/ITSHuatusco/?locale=es_LA" target="_blank"><img
-                            src="../../assets/iconos/ic_facebook.webp" alt="icono de facebook"></a>
-                    <a href="https://www.instagram.com/itshuatusco/?hl=es-la" target="_blank"><img
-                            src="../../assets/iconos/ic_instagram.webp" alt="icono de facebook"></a>
-                </div>
-            </div>
+    <?php
+    componenteFooter();
+    ?>
 
-            <div class="definicion">
-                <span>¿Que esto?</span>
-                <p>Un sistema de justificantes para el Instituto Tecnologico Superior de Huatusco</p>
-            </div>
-
-            <div class="terminos">
-                <a href="../Terminos/Terminos y Condiciones.php">Terminos y Condiciones</a>
-            </div>
-        </div>
-
-        <div class="footer_gobierno">
-            <img src="../../assets/iconos/ic_gobierno.webp" alt="icono del gobierno de Mexico">
-
-            <div class="texto_gobierno">
-                <p>Gobierno de Mexico</p>
-
-            </div>
-        </div>
-
-    </footer>
-
-    <template id="plantilla_cambiar-contraseña">
-        <div class="overlay_cambiar-contraseña overlay_ventana">
-            <form class="formulario" method="post">
-                <h2 class="titulo">Cambiar Contraseña</h2>
-                <div class="inputs-cambio-contraseña">
-
-                    <label for="contraseña_actual" class="contenedor_input">
-                        <input class="input_login" type="text" name="contraseña_actual" id="contraseña_actual"
-                            placeholder=" " autocomplete="current-password">
-                        <span class="nombre_input">Contraseña actual</span>
-                    </label>
-
-                    <label for="contraseña_nueva" class="contenedor_input">
-                        <input class="input_login" type="password" name="contraseña_nueva" id="contraseña_nueva"
-                            placeholder=" " autocomplete="new-password">
-                        <span class="nombre_input">Contraseña nueva</span>
-                    </label>
-                </div>
-
-                <input type="submit" name="formulario" class="btn-submit btn_login" value="Cambiar">
-
-                <img class="close" id="cerrar" src="../../assets/iconos/ic_close.webp"
-                    alt="icono para cerrar la ventana de cerrar contraseña" loading="lazy">
-            </form>
-        </div>
-    </template>
+    <?php
+    componenteTemplateCambiarContraseña()
+        ?>
 
 </body>
 
