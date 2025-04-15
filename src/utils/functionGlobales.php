@@ -534,15 +534,21 @@ function EliminarSolicitudID($conexion, $id)
 
 function buscarPersonalBD($conexion, $query)
 {
-    global $TABLA_USUARIO, $CAMPO_ID_USUARIO;
+    global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_ID_ROL;
     global $CAMPO_NOMBRE;
 
-    $sql = "SELECT $CAMPO_ID_USUARIO, $CAMPO_NOMBRE FROM $TABLA_USUARIO
-    WHERE $CAMPO_ID_USUARIO LIKE ? OR $CAMPO_NOMBRE LIKE ?";
-    ;
+    $sql = "SELECT $CAMPO_ID_USUARIO, $CAMPO_NOMBRE 
+        FROM $TABLA_USUARIO 
+        WHERE 
+            ($CAMPO_ID_USUARIO LIKE ? OR $CAMPO_NOMBRE LIKE ?) 
+            AND 
+            ($CAMPO_ID_ROL = ? OR $CAMPO_ID_ROL = ?)";
+
     $stmt = $conexion->prepare($sql);
     $param = "%$query%";
-    $stmt->bind_param('ss', $param, $param);
+    $RolAdmin = 1;
+    $RolJefe = 2;
+    $stmt->bind_param('ssii', $param, $param, $RolAdmin, $RolJefe);
 
     $stmt->execute();
     return $stmt->get_result();
@@ -550,16 +556,24 @@ function buscarPersonalBD($conexion, $query)
 
 function buscarEstudianteBD($conexion, $query, $id_carrera)
 {
-    global $TABLA_ESTUDIANTE;
+    global $TABLA_USUARIO;
     global $CAMPO_MATRICULA;
     global $CAMPO_NOMBRE;
     global $CAMPO_ID_CARRERA;
+    global $CAMPO_ID_ESTUDIANTE;
 
-    $sql = "SELECT $CAMPO_MATRICULA, $CAMPO_NOMBRE FROM $TABLA_ESTUDIANTE WHERE ($CAMPO_MATRICULA LIKE ? OR $CAMPO_NOMBRE LIKE ?) AND $CAMPO_ID_CARRERA = ?";
+    $sql = "SELECT $CAMPO_MATRICULA, $CAMPO_NOMBRE 
+        FROM $TABLA_USUARIO 
+        WHERE 
+            ($CAMPO_MATRICULA LIKE ? OR $CAMPO_NOMBRE LIKE ?) 
+            AND $CAMPO_ID_CARRERA = ? 
+            AND $CAMPO_ID_ESTUDIANTE = ?";
 
     $stmt = $conexion->prepare($sql);
     $param = "%$query%";
-    $stmt->bind_param('ssi', $param, $param, $id_carrera);
+    $id_estudiante = 3; // o puedes pasarlo como argumento si quieres más dinamismo
+
+    $stmt->bind_param('ssii', $param, $param, $id_carrera, $id_estudiante);
 
     $stmt->execute();
     return $stmt->get_result();
