@@ -19,8 +19,8 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
-$data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
-$id_carrera = $data[Variables::CAMPO_ID_CARRERA];
+$data = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
+$id_carrera = $data[$CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
 $seccion = "Eliminar";
 

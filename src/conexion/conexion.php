@@ -8,7 +8,7 @@
 $host = 'localhost';
 $user = 'root';
 $pass = '1234';
-$dbname = 'ITSH';
+$dbname = 'Sistema';
 
 
 // Crear la conexión con MySQL

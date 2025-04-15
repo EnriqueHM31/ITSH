@@ -49,16 +49,16 @@ class administrador
 
     public function consultaAñadirPorAdministrador($clave_empleado, $nombre, $apellidos, $cargo, $carrera, $correo, $contraseña, $conexion)
     {
-
+        global $ADMIN, $JEFE;
         mysqli_begin_transaction($conexion);
 
         try {
 
-            if (insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $cargo)) {
+            if (insertarUsuario($conexion, $clave_empleado, $nombre, $apellidos, $contraseña, $correo, $cargo)) {
 
-                if ($cargo === administrador::ADMIN) {
+                if ($cargo === $ADMIN) {
 
-                    if (!insertarAdministrador($conexion, $clave_empleado, $nombre, $apellidos)) {
+                    if ($cargo === $ADMIN) {
                         estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
 
@@ -67,9 +67,9 @@ class administrador
                     return;
                 }
 
-                if ($cargo === administrador::JEFE_DE_CARRERA) {
+                if ($cargo === $JEFE) {
 
-                    if (!insertarJefedeCarrera($conexion, $clave_empleado, $nombre, $apellidos, $carrera)) {
+                    if (!insertarJefedeCarrera($conexion, $clave_empleado, $carrera)) {
                         estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
 
@@ -135,9 +135,23 @@ class administrador
         $archivo = $_FILES["archivo_csv"]["tmp_name"];
 
         if (($handle = fopen($archivo, "r")) !== FALSE) {
-            fgetcsv($handle);
+            fgetcsv(
+                $handle,
+                1000,
+                ",",
+                '"',
+                "\\"
+            );
 
-            while (($datos = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            while (
+                ($datos = fgetcsv(
+                    $handle,
+                    1000,
+                    ",",
+                    '"',
+                    "\\"
+                )) !== FALSE
+            ) {
 
                 $clave_empleado = trim($datos[0]);
                 $nombre = trim($datos[1]);
@@ -151,16 +165,15 @@ class administrador
                     return;
                 }
 
-                insertarUsuario($conexion, $clave_empleado, $contraseña, $correo, $cargo);
+                insertarUsuario($conexion, $clave_empleado, $nombre, $apellidos, $contraseña, $correo, $cargo);
 
                 if ($cargo === $ADMIN) {
-                    insertarAdministrador($conexion, $clave_empleado, $nombre, $apellidos);
-
+                    continue;
                 } else if ($cargo === $JEFE) {
                     if (revisionDeCarreras($carrera) || RestriccionJefedeCarrera($carrera, $cargo, $conexion)) {
                         return;
                     }
-                    insertarJefedeCarrera($conexion, $clave_empleado, $nombre, $apellidos, $carrera);
+                    insertarJefedeCarrera($conexion, $clave_empleado, $carrera);
                 }
             }
 

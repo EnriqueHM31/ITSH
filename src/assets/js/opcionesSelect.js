@@ -59,7 +59,7 @@ if (cargo !== null) {
 				dataType: 'json',
 				success: function (data) {
 					data.result.forEach((opcion) => {
-						opciones.push(opcion['carrera'].trim());
+						opciones.push(opcion['nombre_carrera'].trim());
 					});
 					ponerDatosOptions(opciones, groupCarrera);
 				},

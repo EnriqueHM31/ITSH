@@ -27,10 +27,12 @@
 
 
 .formulario_solicitud {
-    padding: 0 2rem;
+    padding: 3rem 2rem;
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    max-width: 80%;
+    margin: 0 auto;
 }
 
 .contenedor_info-solicitud {

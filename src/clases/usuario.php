@@ -111,10 +111,10 @@ class Usuario
 
     public function escribirDatosDelUsuario($conexion, $id, $rol, $correo)
     {
-        global $ADMIN, $JEFE, $ESTUDIANTE, $TABLA_ADMIN, $CAMPO_CLAVE_EMPLEADO_ADMIN, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $TABLA_ESTUDIANTE, $CAMPO_MATRICULA, $CAMPO_ID_CARRERA;
+        global $ADMIN, $JEFE, $ESTUDIANTE, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $TABLA_ESTUDIANTE, $CAMPO_GRUPO, $CAMPO_ID_CARRERA;
 
         if ($rol === $ADMIN) {
-            $usuario = getResultDataTabla($conexion, $TABLA_ADMIN, $CAMPO_CLAVE_EMPLEADO_ADMIN, $id);
+            $usuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
             componenteDatosUsuarioInicioAdministrador($usuario, $correo);
 
             return;
@@ -122,17 +122,21 @@ class Usuario
 
         if ($rol === $JEFE) {
 
-            $usuario = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $id);
-            $carrera = getResultCarrera($conexion, $usuario[$CAMPO_ID_CARRERA]);
+            $usuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
+            $jefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id);
+            $carrera = getResultCarrera($conexion, $jefe[$CAMPO_ID_CARRERA]);
             componenteDatosUsuarioInicioJefeCarrera($usuario, $carrera, $correo);
 
             return;
         }
 
         if ($rol === $ESTUDIANTE) {
-            $usuario = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_MATRICULA, $id);
-            $carrera = getResultCarrera($conexion, $usuario[$CAMPO_ID_CARRERA]);
-            componenteDatosUsuarioInicioAlumno($usuario, $carrera, $correo);
+            $usuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
+            $estudiante = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
+
+            $carrera = getResultCarrera($conexion, $estudiante[$CAMPO_ID_CARRERA]);
+            $grupo = $estudiante[$CAMPO_GRUPO];
+            componenteDatosUsuarioInicioAlumno($usuario, $carrera, $correo, $grupo);
         }
     }
 }

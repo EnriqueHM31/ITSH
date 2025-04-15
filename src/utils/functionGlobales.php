@@ -20,8 +20,17 @@ $TABLA_JUSTIFICANTES = Variables::TABLA_BD_JUSTIFICANTES;
 $TABLA_CODIGOQR = Variables::TABLA_BD_CODIGOS_QR;
 $TABLA_CARRERA_MODALIDAD = Variables::TABLA_BD_CARRERA_MODALIDAD;
 $TABLA_TIPO_CARRERA = Variables::TABLA_BD_TIPO_CARRERA;
+$TABLA_ESTADO = Variables::TABLA_BD_ESTADO;
+
 
 $CAMPO_ID_USUARIO = Variables::CAMPO_ID_USUARIO;
+$CAMPO_ID_ALUMNO = Variables::CAMPO_ID_ALUMNO;
+$CAMPO_ID_JEFE = Variables::CAMPO_ID_JEFE;
+$CAMPO_ID_ESTADO = Variables::CAMPO_ID_ESTADO;
+
+$CAMPO_NOMBRE_ESTADO = Variables::CAMPO_ESTADO;
+
+
 $CAMPO_CONTRASEÑA = Variables::CAMPO_CONTRASEÑA;
 $CAMPO_CORREO = Variables::CAMPO_CORREO;
 
@@ -282,48 +291,30 @@ function obtenerContraseñaActualBD($conexion, $id)
 }
 
 //CONSULTAS PARA INSERTAR DATOS EN LA TABLA USUARIO
-function insertarUsuario($conexion, $id_usuario, $contraseña, $correo, $cargo)
+function insertarUsuario($conexion, $id_usuario, $nombre, $apellidos, $correo, $contraseña, $cargo)
 {
-    global $TABLA_USUARIO;
-    global $CAMPO_ID_USUARIO;
-    global $CAMPO_CONTRASEÑA;
-    global $CAMPO_CORREO;
-    global $CAMPO_ID_ROL;
+    global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_CONTRASEÑA, $CAMPO_CORREO, $CAMPO_ID_ROL;
 
     $rol = obtenerIDRol($conexion, $cargo);
-    $consulta = "INSERT INTO $TABLA_USUARIO ($CAMPO_ID_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_CORREO, $CAMPO_ID_ROL) VALUES (?, ?, ?, ?)";
+    $consulta = "INSERT INTO $TABLA_USUARIO ($CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_CORREO, $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL) VALUES (?, ?, ?, ?, ?, ?)";
 
     $usuario = $conexion->prepare($consulta);
-    $usuario->bind_param("sssi", $id_usuario, $contraseña, $correo, $rol);
+    $usuario->bind_param("sssssi", $id_usuario, $nombre, $apellidos, $contraseña, $correo, $rol);
     return $usuario->execute();
 }
 
-//CONSULTA PARA INSERTAR DATOS EN LA TABLA ADMINISTRADOR
-function insertarAdministrador($conexion, $identificador, $nombre, $apellidos)
-{
-    global $TABLA_ADMIN;
-    global $CAMPO_CLAVE_EMPLEADO_ADMIN;
-    global $CAMPO_NOMBRE;
-    global $CAMPO_APELLIDOS;
-    $stmt = $conexion->prepare("INSERT INTO $TABLA_ADMIN ($CAMPO_CLAVE_EMPLEADO_ADMIN, $CAMPO_NOMBRE, $CAMPO_APELLIDOS) VALUES (?, ?, ?)");
 
-    $stmt->bind_param("sss", $identificador, $nombre, $apellidos);
-    return $stmt->execute();
-}
 
 // CONSULTA PARA INSERTAR DATOS EN LA TABLA JEFE
-function insertarJefedeCarrera($conexion, $identificador, $nombre, $apellidos, $carrera)
+function insertarJefedeCarrera($conexion, $identificador, $carrera)
 {
-    global $TABLA_JEFE;
-    global $CAMPO_CLAVE_EMPLEADO_JEFE;
-    global $CAMPO_NOMBRE;
-    global $CAMPO_APELLIDOS;
-    global $CAMPO_ID_CARRERA;
+    global $TABLA_JEFE, $CAMPO_ID_CARRERA, $CAMPO_ID_USUARIO;
+
 
     $IDCarrera = obtenerIDCarrera($conexion, $carrera);
 
-    $jefe = $conexion->prepare("INSERT INTO $TABLA_JEFE ($CAMPO_CLAVE_EMPLEADO_JEFE, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_ID_CARRERA) VALUES (?, ?, ?, ?)");
-    $jefe->bind_param("sssi", $identificador, $nombre, $apellidos, $IDCarrera);
+    $jefe = $conexion->prepare("INSERT INTO $TABLA_JEFE ($CAMPO_ID_USUARIO, $CAMPO_ID_CARRERA) VALUES (?, ?)");
+    $jefe->bind_param("si", $identificador, $IDCarrera);
 
     return $jefe->execute();
 }
@@ -543,20 +534,15 @@ function EliminarSolicitudID($conexion, $id)
 
 function buscarPersonalBD($conexion, $query)
 {
-    global $TABLA_ADMIN;
-    global $TABLA_JEFE;
-    global $CAMPO_CLAVE_EMPLEADO_ADMIN;
-    global $CAMPO_CLAVE_EMPLEADO_JEFE;
+    global $TABLA_USUARIO, $CAMPO_ID_USUARIO;
     global $CAMPO_NOMBRE;
 
-    $sql = "SELECT $CAMPO_CLAVE_EMPLEADO_ADMIN, $CAMPO_NOMBRE FROM $TABLA_ADMIN
-    WHERE $CAMPO_CLAVE_EMPLEADO_ADMIN LIKE ? OR $CAMPO_NOMBRE LIKE ? UNION
-    SELECT $CAMPO_CLAVE_EMPLEADO_JEFE, $CAMPO_NOMBRE FROM $TABLA_JEFE
-    WHERE $CAMPO_CLAVE_EMPLEADO_JEFE LIKE ? OR $CAMPO_NOMBRE LIKE ?";
+    $sql = "SELECT $CAMPO_ID_USUARIO, $CAMPO_NOMBRE FROM $TABLA_USUARIO
+    WHERE $CAMPO_ID_USUARIO LIKE ? OR $CAMPO_NOMBRE LIKE ?";
     ;
     $stmt = $conexion->prepare($sql);
     $param = "%$query%";
-    $stmt->bind_param('ssss', $param, $param, $param, $param);
+    $stmt->bind_param('ss', $param, $param);
 
     $stmt->execute();
     return $stmt->get_result();
@@ -614,8 +600,8 @@ function insertarSolicitudBD($conexion, $identificador, $nombre, $apellidos, $gr
 
 function buscarHistorialJustificantesAlumno($conexion, $id)
 {
-    global $TABLA_SOLICITUDES, $CAMPO_MATRICULA;
-    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_MATRICULA = ?";
+    global $TABLA_SOLICITUDES, $CAMPO_ID_ALUMNO;
+    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_ALUMNO = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $id);
     $stmt->execute();
@@ -765,4 +751,17 @@ function obtenerModalidadesCarrera($conexion, $id_carrera)
         return $data;
 
     }
+}
+
+function obtenerNombreEstado($conexion, $id_estado)
+{
+    global $CAMPO_ID_SOLICITUD, $CAMPO_ID_ALUMNO, $CAMPO_ID_ESTADO, $TABLA_ESTADO, $CAMPO_NOMBRE_ESTADO;
+
+    $sql = "SELECT $CAMPO_NOMBRE_ESTADO FROM $TABLA_ESTADO WHERE $CAMPO_ID_ESTADO = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("i", $id_estado);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $response = $result->fetch_assoc();
+    return $response[$CAMPO_NOMBRE_ESTADO];
 }

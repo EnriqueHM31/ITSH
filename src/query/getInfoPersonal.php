@@ -11,22 +11,19 @@ if (isset($_POST['id'])) {
 
     $dataUsuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
     $idUser = $dataUsuario[$CAMPO_ID_USUARIO];
+    $nombreUsuario = $dataUsuario[$CAMPO_NOMBRE];
+    $apellidosUsuario = $dataUsuario[$CAMPO_APELLIDOS];
     $correo = $dataUsuario[$CAMPO_CORREO];
     $rol = obtenerRol($conexion, $dataUsuario[$CAMPO_ID_ROL]);
 
 
     if ($rol === "Administrador") {
-        $dataAdministrador = getResultDataTabla($conexion, $TABLA_ADMIN, $CAMPO_CLAVE_EMPLEADO_ADMIN, $id);
-        $nombre = $dataAdministrador[$CAMPO_NOMBRE];
-        $apellidos = $dataAdministrador[$CAMPO_APELLIDOS];
-        echo json_encode(crearDataInformacionAdministrador($idUser, $nombre, $apellidos, $rol, $correo));
+        echo json_encode(crearDataInformacionAdministrador($idUser, $nombreUsuario, $apellidosUsuario, $rol, $correo));
 
     } else if ($rol === "Jefe de Carrera") {
-        $dataJefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, campo: $id);
-        $nombre = $dataJefe[$CAMPO_NOMBRE];
-        $apellidos = $dataJefe[$CAMPO_APELLIDOS];
+        $dataJefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, campo: $id);
         $carrera = getResultCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA]);
-        echo json_encode(crearDataInformacionJefe($idUser, $nombre, $apellidos, $rol, $carrera, $correo));
+        echo json_encode(crearDataInformacionJefe($idUser, $nombreUsuario, $apellidosUsuario, $rol, $carrera, $correo));
 
     } else {
         echo json_encode(["success" => false]);

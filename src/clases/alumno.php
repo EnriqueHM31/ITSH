@@ -7,8 +7,8 @@ class alumno
 
     public function ponerDatosFormulario($conexion, $id)
     {
-        global $TABLA_ESTUDIANTE, $CAMPO_MATRICULA;
-        return getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_MATRICULA, $id);
+        global $TABLA_USUARIO, $CAMPO_ID_USUARIO;
+        return getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
     }
 
     public function esFechaValida($fecha)
@@ -103,7 +103,7 @@ class alumno
             while ($fila = $dataJustificantesAlumno->fetch_assoc()) {
                 $i++;
                 $tiempo_fecha = explode("-", $fila[$CAMPO_FECHA_AUSE]);
-                componenteJustificanteHistorial($fila, $i, $tiempo_fecha);
+                componenteJustificanteHistorial($conexion, $fila, $i, $tiempo_fecha);
             }
         }
 

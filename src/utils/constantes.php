@@ -14,24 +14,32 @@ class Variables
     public const TABLA_BD_CARRERA = "Carrera";
     public const TABLA_BD_GRUPO = "Grupo";
     public const TABLA_BD_AdMINISTRADOR = "Administrador";
-    public const TABLA_BD_JEFE = "Jefe";
+    public const TABLA_BD_JEFE = "JefeCarrera";
     public const TABLA_BD_ESTUDIANTE = "Estudiante";
     public const tABLA_BD_MODALIDAD = "Modalidad";
-    public const TABLA_BD_SOLICITUDES = "Solicitudes";
+    public const TABLA_BD_SOLICITUDES = "Solicitud";
     public const TABLA_BD_JUSTIFICANTES = "Justificante";
     public const TABLA_BD_CODIGOS_QR = "Codigos_qr";
-    public const TABLA_BD_CARRERA_MODALIDAD = "Carrera_Modalidad";
-    public const TABLA_BD_TIPO_CARRERA = "Tipo_Carrera";
+    public const TABLA_BD_CARRERA_MODALIDAD = "CarreraModalidad";
+    public const TABLA_BD_TIPO_CARRERA = "TipoCarrera";
+    public const TABLA_BD_ESTADO = "Estado";
+
 
 
 
     // CAMPOS DE LA TABLA USUARIO
     public const CAMPO_ID_USUARIO = "id_usuario";
+    public const CAMPO_ID_ALUMNO = "id_estudiante";
+    public const CAMPO_ID_JEFE = "id_jefe";
+    public const CAMPO_ID_ESTADO = "id_estado";
+
+    public const CAMPO_ESTADO = "nombre_estado";
+
     public const CAMPO_CONTRASEÑA = "contraseña";
     public const CAMPO_ID_ROL = "id_rol";
 
     // CAMPOS DE LA TABLA ROL
-    public const CAMPO_ROL = "rol";
+    public const CAMPO_ROL = "nombre_rol";
     public const MENU_DE_ROLES = [
         "Administrador",
         "Jefe de Carrera",
@@ -43,18 +51,18 @@ class Variables
 
     // CAMPOS DE LA TABLA JEFE
     public const CAMPO_CLAVE_EMPLEADO_JEFE = "clave_empleado";
-    public const CAMPO_CARRERA = "carrera";
+    public const CAMPO_CARRERA = "nombre_carrera";
     public const CAMPO_ID_CARRERA = "id_carrera";
     public const CAMPO_ID_TIPO_CARRERA = "id_tipo_carrera";
 
     public const CAMPO_ID_CARRERA_MODALIDAD = "id_carrera_modalidad";
-    public const CAMPO_TIPO_CARRERA = "tipo_carrera";
+    public const CAMPO_TIPO_CARRERA = "nombre_tipo_carrera";
 
     // CAMPOS DE LA TABLA ESTUDIANTE
     public const CAMPO_MATRICULA = "matricula";
     public const CAMPO_GRUPO = "grupo";
     public const CAMPO_ID_MODALIDAD = "id_modalidad";
-    public const CAMPO_MODALIDAD = "modalidad";
+    public const CAMPO_MODALIDAD = "nombre_modalidad";
 
     public const CAMPO_NOMBRE = "nombre";
     public const CAMPO_APELLIDOS = "apellidos";
@@ -62,8 +70,8 @@ class Variables
 
 
     public const CAMPO_G_CARRERA = "id_carrera";
-    public const CAMPO_G_NUMERO_GRUPOS = "Numero_grupos";
-    public const CAMPO_G_ID_GRUPO = "id_grupos";
+    public const CAMPO_G_NUMERO_GRUPOS = "numero_grupos";
+    public const CAMPO_G_ID_GRUPO = "clave_grupo";
 
     public const GRUPOS_DISPONIBLES = [
         'Industrial' => ["numero" => 1, "cantidad" => 8],
@@ -76,7 +84,7 @@ class Variables
         "Ambiental" => ["numero" => 1, "cantidad" => 7],
     ];
 
-    public const CAMPO_S_ID_SOLICITUD = "solicitud";
+    public const CAMPO_S_ID_SOLICITUD = "id_solicitud";
     public const CAMPO_S_MATRICULA = "matricula";
     public const CAMPO_S_NOMBRE = "nombre";
     public const CAMPO_S_APELLIDOS = "apellidos";

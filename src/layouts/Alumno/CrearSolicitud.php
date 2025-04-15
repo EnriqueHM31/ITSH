@@ -14,6 +14,7 @@ $alumno = new alumno();
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $row = $alumno->ponerDatosFormulario($conexion, $id);
+$estudianteData = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
 ?>
 
 <!DOCTYPE html>
@@ -55,10 +56,12 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
 
                 <div class="contenedor_info-solicitud">
                     <p>Matricula:</p>
-                    <input type="text" id="id" name="identificador" value="<?php echo $row[$CAMPO_MATRICULA]; ?>"
+                    <input type="text" id="id" name="identificador" value="<?php echo $row[$CAMPO_ID_USUARIO]; ?>"
                         readonly>
 
-                    <input type="text" id="grupo" name="grupo" value="<?php echo $row[$CAMPO_GRUPO]; ?>" readonly>
+                    <p>Grupo:</p>
+                    <input type="text" id="grupo" name="grupo" value="<?php echo $estudianteData[$CAMPO_GRUPO]; ?>"
+                        readonly>
                 </div>
 
                 <div class="contenedor_info-solicitud">
@@ -75,7 +78,7 @@ $row = $alumno->ponerDatosFormulario($conexion, $id);
                 <div class="contenedor_info-solicitud">
                     <p for="email">Carrera:</p>
                     <input type="text" id="carrera" name="carrera"
-                        value="<?php echo getResultCarrera($conexion, $row[$CAMPO_ID_CARRERA]); ?>" readonly>
+                        value="<?php echo getResultCarrera($conexion, $estudianteData[$CAMPO_ID_CARRERA]); ?>" readonly>
                 </div>
 
                 <div class="contenedor_info-solicitud">

@@ -52,6 +52,10 @@ $query = "
         ELSE 4 
     END;
 ";
+
+$query = "
+    SELECT $CAMPO_ID_USUARIO FROM $TABLA_USUARIO
+";
 $stmt = $conexion->prepare($query);
 $stmt->execute();
 $resultado = $stmt->get_result();
@@ -152,10 +156,10 @@ $conexion->close();
 
 function ponerDatosTabla($resultado)
 {
-    global $ADMINISTRADOR, $JEFE_CARRERA, $ESTUDIANTE, $CAMPO_ROL, $html, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
+    global $ADMINISTRADOR, $JEFE_CARRERA, $ESTUDIANTE, $CAMPO_ID_ROL, $html, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
     while ($row = $resultado->fetch_assoc()) {
         // Asegurar que solo se muestre un rol por usuario
-        $rol = $row[$CAMPO_ROL]; // El nombre del rol viene de la tabla rol
+        $rol = $row[$CAMPO_ID_ROL]; // El nombre del rol viene de la tabla rol
 
         // Variables para almacenar datos dinámicos
         $nombre = '';

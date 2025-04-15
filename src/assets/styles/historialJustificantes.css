@@ -22,6 +22,7 @@
 
 .contenedor_ITSH img {
     width: clamp(20rem, 40vw, 50rem);
+    opacity: 60%;
 }
 
 .sin_justificantes {
@@ -30,6 +31,7 @@
     text-align: center;
     font-weight: bold;
     margin-top: 2.5rem;
+    z-index: 50;
 }
 
 .contenido_opciones button {
@@ -246,31 +248,31 @@
         grid-template-columns: repeat(auto-fit, minmax(100px, 130px));
     }
 
-    .contenido_historial{
+    .contenido_historial {
         padding-bottom: 4rem;
     }
 }
 
 
 @media (max-width: 600px) {
-    .contenido_opciones{
+    .contenido_opciones {
         gap: 2rem;
     }
 
-    .btn_reiniciar{
+    .btn_reiniciar {
         font-size: 1rem;
     }
 
-    .contenido_historial{
+    .contenido_historial {
         width: 95%;
         text-align: center;
     }
 
-    input[type=search]{
+    input[type=search] {
         width: 50%;
     }
 
-    .contenedor_logo{
+    .contenedor_logo {
         display: none;
     }
 }
