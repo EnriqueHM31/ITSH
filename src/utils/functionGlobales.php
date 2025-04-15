@@ -617,6 +617,16 @@ function insertarCarrerasDB($conexion, $carrera, $id_tipo_carrera)
     return $stmt->execute();
 }
 
+function insertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)
+{
+    global $TABLA_CARRERA_MODALIDAD, $CAMPO_ID_CARRERA, $CAMPO_ID_MODALIDAD;
+    $sql = "INSERT INTO $TABLA_CARRERA_MODALIDAD ($CAMPO_ID_CARRERA, $CAMPO_ID_MODALIDAD) VALUES (?, ?)";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("si", $id_carrera, $id_modalidad);
+    return $stmt->execute();
+
+}
+
 function insertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)
 {
     global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
@@ -764,4 +774,13 @@ function obtenerNombreEstado($conexion, $id_estado)
     $result = $stmt->get_result();
     $response = $result->fetch_assoc();
     return $response[$CAMPO_NOMBRE_ESTADO];
+}
+
+function eliminarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)
+{
+    global $TABLA_CARRERA_MODALIDAD, $CAMPO_ID_MODALIDAD, $CAMPO_ID_CARRERA;
+    $sql = "DELETE FROM $TABLA_CARRERA_MODALIDAD WHERE $CAMPO_ID_CARRERA = ? AND $CAMPO_ID_MODALIDAD = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("ii", $id_carrera, $id_modalidad);
+    return $stmt->execute();
 }

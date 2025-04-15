@@ -30,21 +30,21 @@ function restriccionJefedeCarrera($carrera, $cargo, $conexion)
         return false;
     }
 
-    $carrerasvalidas = [
-        "Gestion Empresarial",
-        "Contaduria",
-        "Industrial",
-        "Sistemas Computacionales",
-        "Electromecanica",
-        "Alimentarias",
-        "Quimica",
-        "Ambiental",
-    ];
+    // Obtiene todas las carreras válidas
+    $resultado = obtenerAllCarreras($conexion);
+    $data = [];
+    while ($row = $resultado->fetch_assoc()) {
+        $data[] = $row["nombre_carrera"];
+    }
 
-    if (!in_array($carrera, $carrerasvalidas, false) && $cargo === "Jefe de Carrera") {
-        estructuraMensaje("Un jefe de carrera debe tener una carrera vinculada", "../../assets/iconos/ic_error.webp", "--rojo");
+    var_dump($data);
+
+
+    if ($cargo === "Jefe de Carrera" && !in_array($carrera, $data, false)) {
+        estructuraMensaje("Un jefe de carrera debe tener una carrera vinculada: $carrera", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
+
 
     $resultadoIdCarrera = obtenerIDCarrera($conexion, $carrera);
 

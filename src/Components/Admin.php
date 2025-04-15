@@ -148,14 +148,27 @@ function componenteTemplateAgregarCarrera()
 
                             <label class="select_carrera">
                                 <span class="nombre_select">Escoga las modalidades</span>
-                                <div class="contenedor_radio">
-                                    <input type="radio" name="modalidad" value="Escolarizado">
+                                
+                                <label class="switch">
+                                    <input name="escolarizado" type="checkbox" id="modalidad_escolarizado">
+                                    <div class="slider">
+                                        <div class="circle">
+                                            
+                                        </div>
+                                    </div>
                                     <span>Escolarizado</span>
-                                </div>
-                                <div class="contenedor_radio">
-                                    <input type="radio" name="modalidad" value="Flexible">
+                                </label>
+
+                                <label class="switch">
+                                    <input type="checkbox" name="flexible" id="modalidad_flexible">
+                                    <div class="slider">
+                                        <div class="circle">
+                                            
+                                        </div>
+                                    </div>
                                     <span>Flexible</span>
-                                </div>
+                                </label>
+                            
                             </label>
                         </section>
 
@@ -183,6 +196,7 @@ function componenteTemplateConfigurarCarrera()
     
                         <section class="seccion_tipo">
                             <input type="hidden" name="carrera_antigua" id="carrera_antigua">
+                            <input type="hidden" name="clave_grupo_antigua" id="clave_grupo_antigua">
     
                             <label for="carrera_modificar" class="contenedor_input">
                                 <input class="input_login" type="text" name="carrera_nueva" id="carrera_modificar"
@@ -217,14 +231,27 @@ function componenteTemplateConfigurarCarrera()
     
                             <label class="select_carrera">
                                 <span class="nombre_select">Escoga las modalidades</span>
-                                <div class="contenedor_radio">
-                                    <input type="radio" name="modalidad" value="Escolarizado" id="modalidad_escolarizado">
+                                
+                                <label class="switch">
+                                    <input name="escolarizado" value="Escolarizado" type="checkbox" id="modalidad_escolarizado">
+                                    <div class="slider">
+                                        <div class="circle">
+                                            
+                                        </div>
+                                    </div>
                                     <span>Escolarizado</span>
-                                </div>
-                                <div class="contenedor_radio">
-                                    <input type="radio" name="modalidad" value="Flexible" id="modalidad_flexible">
+                                </label>
+
+                                <label class="switch">
+                                    <input type="checkbox" name="flexible" value="Flexible" id="modalidad_flexible">
+                                    <div class="slider">
+                                        <div class="circle">
+                                            
+                                        </div>
+                                    </div>
                                     <span>Flexible</span>
-                                </div>
+                                </label>
+                            
                             </label>
                         </section>
     

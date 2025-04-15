@@ -79,19 +79,25 @@ function obtenerDatosCarrera(id) {
 		},
 		dataType: 'json',
 		success: function (data) {
+			numeroGrupos = data['success'][0];
+			idGrupo = data['success'][1];
+			tipoCarrera = data['success'][2];
+			modalidades = data['success'][3];
+
 			document.querySelector('#carrera_antigua').value = id;
+			document.querySelector('#clave_grupo_antigua').value = idGrupo;
+
 			document.querySelector('#carrera_modificar').value = id;
-			document.querySelector('#cantidad_grupos').value = data['success'][0];
-			document.querySelector('#id_grupo').value = data['success'][1];
-			document.querySelector('#tipo_carrera').value = data['success'][2]
 
+			document.querySelector('#cantidad_grupos').value = numeroGrupos;
+			document.querySelector('#id_grupo').value = idGrupo;
+			document.querySelector('#tipo_carrera').value = tipoCarrera
 
-			if (data['success'][3].lenght === 1 && data['success'][3][0] === "Escolarizado") {
-				document.querySelector('#modalidad_escolarizado').checked
-			} else if (data['success'][3].lenght === 1 && data['success'][3][0] === "Flexible") {
-				document.querySelector('#modalidad_flexible').checked
-			} else if (data['success'][3].length === 2) {
+			if (modalidades.includes('Escolarizado')) {
 				document.querySelector('#modalidad_escolarizado').checked = true
+			}
+
+			if (modalidades.includes('Flexible')) {
 				document.querySelector('#modalidad_flexible').checked = true
 			}
 

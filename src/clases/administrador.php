@@ -213,12 +213,19 @@ class administrador
     }
 
 
-    public function AgregarCarrera($conexion, $carrera, $numeros_grupos, $id_carrera_nueva, $id_tipo_carrera)
+    public function AgregarCarrera($conexion, $carrera, $numeros_grupos, $id_carrera_nueva, $id_tipo_carrera, $modalidadEscolarizada, $modalidadFlexible)
     {
+        global $TABLA_GRUPO, $CAMPO_ID_GRUPOS;
         mysqli_begin_transaction($conexion);
+
 
         if (empty($carrera)) {
             estructuraMensaje("Debes ingresar una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+        if ($modalidadEscolarizada == "" && $modalidadFlexible == "") {
+            estructuraMensaje("Debes seleccionar la modalidad escolarizada o flexible", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
@@ -229,9 +236,33 @@ class administrador
 
         $id_carrera = obtenerIDCarrera($conexion, $carrera);
 
+        $existeClaveGrupo = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_ID_GRUPOS, $id_carrera_nueva);
+
+        if ($existeClaveGrupo) {
+            estructuraMensaje("Esa clave de grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
         if (!insertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)) {
             estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
+        }
+
+        if ($modalidadEscolarizada != '') {
+
+            $id_modalidad = obtenerIdModalidad($conexion, $modalidadEscolarizada);
+            if (!insertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)) {
+                estructuraMensaje("Error al agregar la carrera con la modalidad escolarizado", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
+        }
+
+        if ($modalidadFlexible != '') {
+            $id_modalidad = obtenerIdModalidad($conexion, $modalidadFlexible);
+            if (!insertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)) {
+                estructuraMensaje("Error al agregar la carrera con la modalidad flexible", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
         }
 
         mysqli_commit($conexion);
@@ -239,25 +270,69 @@ class administrador
 
     }
 
-    public function ModificarCarrera($conexion, $carreraAntigua, $carreraNueva, $id_tipo_carrera_nueva, $numeros_grupos, $id_carrera_nueva)
+    public function ModificarCarrera($conexion, $carreraAntigua, $claveGrupoAntigua, $carreraNueva, $id_tipo_carrera_nueva, $numeros_grupos, $id_carrera_nueva, $modalidadEscolarizada, $modalidadFlexible)
     {
+        global $TABLA_GRUPO, $CAMPO_ID_GRUPOS, $TABLA_CARRERAS, $CAMPO_CARRERA;
+
         mysqli_begin_transaction($conexion);
 
         if (empty($carreraNueva) || empty($numeros_grupos) || empty($id_carrera_nueva)) {
-            estructuraMensaje("Faltan datos para su modificacion", "../../assets/iconos/ic_error.webp", "--rojo");
+            estructuraMensaje("Faltan datos para su modificación", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $id_carrera = obtenerIDCarrera($conexion, $carreraAntigua);
+        if ($modalidadEscolarizada == "" && $modalidadFlexible == "") {
+            estructuraMensaje("Debes seleccionar la modalidad escolarizada o flexible", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
 
-        if (!modificarNombreTipoCarreraDB($conexion, $carreraNueva, $id_tipo_carrera_nueva, $id_carrera)) {
+        if ($carreraNueva != $carreraAntigua) {
+            $existeCarrera = getResultDataTabla($conexion, $TABLA_CARRERAS, $CAMPO_CARRERA, $carreraNueva);
+            if ($existeCarrera) {
+                estructuraMensaje("Esa carrera ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
+        }
+
+        $idCarreraAntigua = obtenerIDCarrera($conexion, $carreraAntigua);
+
+        if (!modificarNombreTipoCarreraDB($conexion, $carreraNueva, $id_tipo_carrera_nueva, $idCarreraAntigua)) {
             estructuraMensaje("Error al modificar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if (!modificarNumeroGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)) {
+        if ($claveGrupoAntigua != $id_carrera_nueva) {
+            $existeClave = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_ID_GRUPOS, $id_carrera_nueva);
+            if ($existeClave) {
+                estructuraMensaje("Esa clave grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+                return;
+            }
+        }
+
+        if (!modificarNumeroGruposDB($conexion, $idCarreraAntigua, $numeros_grupos, $id_carrera_nueva)) {
             estructuraMensaje("Error al modificar los grupos de la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
+        }
+
+        $modalidades = obtenerModalidadesCarrera($conexion, $idCarreraAntigua);
+
+        $modalidadInputs = [
+            "Escolarizado" => $modalidadEscolarizada,
+            "Flexible" => $modalidadFlexible
+        ];
+
+        foreach ( $modalidadInputs as $tipo => $valor ) {
+            $id_modalidad = obtenerIdModalidad($conexion, $tipo);
+
+            if (empty($valor)) {
+                if (in_array($tipo, $modalidades)) {
+                    eliminarCarreraModalidadDB($conexion, $idCarreraAntigua, $id_modalidad);
+                }
+            } else {
+                if (!in_array($tipo, $modalidades)) {
+                    insertarCarreraModalidadDB($conexion, $idCarreraAntigua, $id_modalidad);
+                }
+            }
         }
 
         mysqli_commit($conexion);
