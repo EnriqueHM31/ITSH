@@ -556,18 +556,18 @@ function buscarPersonalBD($conexion, $query)
 
 function buscarEstudianteBD($conexion, $query, $id_carrera)
 {
-    global $TABLA_USUARIO;
-    global $CAMPO_MATRICULA;
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE;
     global $CAMPO_NOMBRE;
     global $CAMPO_ID_CARRERA;
-    global $CAMPO_ID_ESTUDIANTE;
+    global $CAMPO_ID_USUARIO, $CAMPO_ID_ROL;
 
-    $sql = "SELECT $CAMPO_MATRICULA, $CAMPO_NOMBRE 
-        FROM $TABLA_USUARIO 
+    $sql = "SELECT u.$CAMPO_ID_USUARIO, u.$CAMPO_NOMBRE 
+        FROM $TABLA_USUARIO u
+        JOIN $TABLA_ESTUDIANTE e ON u.$CAMPO_ID_USUARIO = e.$CAMPO_ID_USUARIO
         WHERE 
-            ($CAMPO_MATRICULA LIKE ? OR $CAMPO_NOMBRE LIKE ?) 
-            AND $CAMPO_ID_CARRERA = ? 
-            AND $CAMPO_ID_ESTUDIANTE = ?";
+            (u.$CAMPO_ID_USUARIO LIKE ? OR u.$CAMPO_NOMBRE LIKE ?) 
+            AND e.$CAMPO_ID_CARRERA = ? 
+            AND u.$CAMPO_ID_ROL = ?";
 
     $stmt = $conexion->prepare($sql);
     $param = "%$query%";

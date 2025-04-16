@@ -158,7 +158,6 @@ function componenteTemplateUsuarioEstudianteSeleccionado()
                         <p class="info_usuario_eliminar">Grupo: <span id="grupo-info"></span></p>
                         <p class="info_usuario_eliminar">Carrera: <span id="carrera-info"></span></p>
                         <p class="info_usuario_eliminar">Modalidad: <span id="id_modalidad-info"></span></p>
-                        <p class="info_usuario_eliminar">Rol: <span id="rol-info"></span></p>
                         <p class="info_usuario_eliminar">Correo: <span id="correo-info"></span></p>
                         <input type="hidden" name="identificador" value="" id="identificador">
                     </div>

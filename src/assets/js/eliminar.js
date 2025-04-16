@@ -89,9 +89,7 @@ function mostrarDatosParaEliminar(data) {
 		modalClone.getElementById('apellidos-info').innerText = data.apellidos
 		modalClone.getElementById('grupo-info').innerText = data.grupo
 		modalClone.getElementById('carrera-info').innerText = data.carrera
-		modalClone.getElementById('id_modalidad-info').innerText =
-			data.id_modalidad
-		modalClone.getElementById('rol-info').innerText = data.rol
+		modalClone.getElementById('id_modalidad-info').innerText = data.id_modalidad
 		modalClone.getElementById('correo-info').innerText = data.correo
 		modalClone.getElementById('identificador').value = data.matricula
 		modalContainer.appendChild(modalClone)

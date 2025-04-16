@@ -13,7 +13,7 @@ include "../../Components/Layout.php";
 
 $jefe = new jefe();
 $rol = $_SESSION["rol"];
-$dataJefeCarrera = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
+$dataJefeCarrera = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
 $id_carrera = $dataJefeCarrera[$CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
 [$id_grupos, $Numero_grupos, $modalidades] = $jefe->ObtenerGruposDeLaCarrera($conexion, $id_carrera);

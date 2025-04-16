@@ -31,7 +31,7 @@ class Jefe
         mysqli_begin_transaction($conexion);
 
         try {
-            if (!insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol)) {
+            if (!insertarUsuario($conexion, $matricula, $nombre, $apellidos, $contraseña, $correo, $rol)) {
                 throw new Exception("Error al insertar el usuario");
             }
 
@@ -78,7 +78,7 @@ class Jefe
                     throw new Exception("Error: $salidaValidacion ($matricula)");
                 }
 
-                if (!insertarUsuario($conexion, $matricula, $contraseña, $correo, $rol)) {
+                if (!insertarUsuario($conexion, $matricula, $nombre, $apellidos, $contraseña, $correo, $rol)) {
                     throw new Exception("Error al insertar usuario: $matricula");
                 }
 
@@ -253,8 +253,8 @@ class Jefe
         $GruposCarrera = obtenerGrupos($conexion, $id_carrera);
         $grupos = $GruposCarrera[0][0];
         $modalidades = $GruposCarrera[1][0]["Modalidades"];
-        $id_grupos = $grupos["id_grupos"];
-        $Numero_grupos = $grupos["Numero_grupos"];
+        $id_grupos = $grupos["clave_grupo"];
+        $Numero_grupos = $grupos["numero_grupos"];
 
         return [$id_grupos, $Numero_grupos, $modalidades];
     }

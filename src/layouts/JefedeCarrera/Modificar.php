@@ -17,15 +17,15 @@ include "../../Components/Layout.php";
 $usuario = new usuario();
 $jefe = new jefe();
 $rol = $_SESSION["rol"];
-$data = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $_SESSION["id"]);
+$data = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
 $id_carrera = $data[Variables::CAMPO_ID_CARRERA];
 $carreraJefe = getResultCarrera($conexion, $id_carrera);
 $seccion = "Modificar";
 $GruposCarrera = obtenerGrupos($conexion, $id_carrera);
 $grupos = $GruposCarrera[0][0];
 $modalidades = $GruposCarrera[1][0]["Modalidades"];
-$id_grupos = $grupos["id_grupos"];
-$Numero_grupos = $grupos["Numero_grupos"];
+$id_grupos = $grupos["clave_grupo"];
+$Numero_grupos = $grupos["numero_grupos"];
 ?>
 
 <!DOCTYPE html>

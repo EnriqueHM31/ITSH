@@ -16,7 +16,7 @@ if (!empty($query) && !empty($carrera)) {
     if ($resultadoEstudiantes->num_rows > 0) {
         while ($row = $resultadoEstudiantes->fetch_assoc()) {
 
-            $clave = $row[$CAMPO_MATRICULA];
+            $clave = $row[$CAMPO_ID_USUARIO];
             $nombre = $row[$CAMPO_NOMBRE];
 
             echo "<div class='result'>

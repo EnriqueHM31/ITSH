@@ -11,21 +11,21 @@ if (isset($_POST['id'])) {
 
     $dataUser = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
     $idUser = $dataUser[$CAMPO_ID_USUARIO];
+    $nombreUser = $dataUser[$CAMPO_NOMBRE];
+    $apellidosUser = $dataUser[$CAMPO_APELLIDOS];
     $correo = $dataUser[$CAMPO_CORREO];
     $rol = obtenerRol($conexion, $dataUser[$CAMPO_ID_ROL]);
 
-    $estudiante = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_MATRICULA, $id);
-    $nombre = $estudiante[$CAMPO_NOMBRE];
-    $apellidos = $estudiante[$CAMPO_APELLIDOS];
+    $estudiante = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
     $modalidad = obtenerModalidad($conexion, $estudiante[$CAMPO_ID_MODALIDAD]);
     $grupo = $estudiante[$CAMPO_GRUPO];
     $carrera = getResultCarrera($conexion, $estudiante[$CAMPO_ID_CARRERA]);
 
-    echo json_encode(crearDataInformacionJefe($idUser, $nombre, $apellidos, $grupo, $carrera, $modalidad, $rol, $correo));
+    echo json_encode(crearDataInformacionJefe($idUser, $nombreUser, $apellidosUser, $grupo, $rol, $carrera, $modalidad, $correo));
 }
 
 
-function crearDataInformacionJefe($idUser, $nombre, $apellidos, $grupo, $carrera, $modalidad, $rol, $correo)
+function crearDataInformacionJefe($idUser, $nombre, $apellidos, $grupo, $rol, $carrera, $modalidad, $correo)
 {
     $data = [
         "matricula" => $idUser,
