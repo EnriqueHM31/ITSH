@@ -19,7 +19,7 @@ class Variables
     public const tABLA_BD_MODALIDAD = "Modalidad";
     public const TABLA_BD_SOLICITUDES = "Solicitud";
     public const TABLA_BD_JUSTIFICANTES = "Justificante";
-    public const TABLA_BD_CODIGOS_QR = "Codigos_qr";
+    public const TABLA_BD_CODIGOS_QR = "Codigoqr";
     public const TABLA_BD_CARRERA_MODALIDAD = "CarreraModalidad";
     public const TABLA_BD_TIPO_CARRERA = "TipoCarrera";
     public const TABLA_BD_ESTADO = "Estado";

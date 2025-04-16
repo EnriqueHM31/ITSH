@@ -195,18 +195,18 @@ class Jefe
 
 
 
-    public function MostrarSolicitudes($resultado, $id)
+    public function MostrarSolicitudes($conexion, $resultado, $id)
     {
-        global $CAMPO_ESTADO, $CAMPO_FECHA_AUSE;
+        global $CAMPO_ID_ESTADO, $CAMPO_FECHA_AUSE;
         $tablaArray = [];
         $detallesArray = [];
 
         $tablaHead = componenteCabeceraTablaSolicitudes();
 
         while ($fila = $resultado->fetch_assoc()) {
-            if ($fila[$CAMPO_ESTADO] == "Aceptada") {
+            if ($fila[$CAMPO_ID_ESTADO] == "1") {
                 $clase = "aceptada";
-            } else if ($fila[$CAMPO_ESTADO] == "Pendiente") {
+            } else if ($fila[$CAMPO_ID_ESTADO] == "2") {
                 $clase = "pendiente";
             } else {
                 $clase = "rechazada";
@@ -216,9 +216,9 @@ class Jefe
 
             $tabla = "";
 
-            $tabla .= componenteFilaSolicitud($fila, $id, $clase, $fecha);
+            $tabla .= componenteFilaSolicitud($conexion, $fila, $id, $clase, $fecha);
 
-            $detalles = componenteDetailSolicitud($fila, $clase, $id);
+            $detalles = componenteDetailSolicitud($conexion, $fila, $clase, $id);
             array_push($tablaArray, $tabla);
             array_push($detallesArray, $detalles);
         }

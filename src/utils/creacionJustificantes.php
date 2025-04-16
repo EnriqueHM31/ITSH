@@ -4,44 +4,48 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 include "./creacionQR.php";
+include "./FuncionesJustificante.php";
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
     try {
         mysqli_begin_transaction($conexion);
 
-        $id_folio = obtenerNumeroFolio($conexion);
+        $id_justificante = obtenerNumeroFolio($conexion);
         $id_solicitud = $_POST["id_solicitud"];
         $nombre = $_POST['nombre'];
         $fecha = $_POST['fecha'];
-        $matricula = $_POST['matricula'];
+        $id_estudiante = $_POST['matricula'];
         $apellidos = $_POST['apellidos'];
         $grupo = $_POST['grupo'];
         $motivo = $_POST['motivo'];
         $id_jefe = $_POST['id_jefe'];
         $fecha_codigo = $fecha;
 
-        $id_unico = generarCodigo($conexion, $id_folio, $nombre, $fecha, true);
+        [$id_unico, $id_codigo] = generarCodigo($conexion, $id_justificante, $nombre, $fecha, true);
 
-        $datos_jefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $id_jefe);
-        $nombre_jefe = $datos_jefe[$CAMPO_NOMBRE];
-        $apellidos_jefe = $datos_jefe[$CAMPO_APELLIDOS];
+        $datos_jefeUser = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id_jefe);
+
+        $datos_jefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id_jefe);
+
+        $nombre_jefe = $datos_jefeUser[$CAMPO_NOMBRE];
+        $apellidos_jefe = $datos_jefeUser[$CAMPO_APELLIDOS];
         $carrera = getResultCarrera($conexion, $datos_jefe[$CAMPO_ID_CARRERA]);
 
         $fecha_actual = obtenerFechaActual();
 
-        $src = obtenerIMGLogos();
-
-        $src_qr = obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha);
+        $src_qr = obtenerCodigoQR($id_unico, $id_justificante, $nombre, $fecha);
 
         $fecha_ausencia_pdf = estructurarFechaAusencia($fecha);
 
 
     } catch (Exception $e) {
-        return json_encode(["success" => $e->getMessage()]);
+
+        return json_encode(["success" => "Error: {$e->getMessage()}"]);
     }
 
-    // Capturar el HTML en un buffer
     ob_start();
 } else {
     header("location: ../layouts/Errores/404.php");
@@ -194,8 +198,8 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
             <span>
                 ISC/
                 <?php
-                $id_folio = $id_folio + 1;
-                echo (strlen($id_folio) == 1) ? "0" . $id_folio : $id_folio; ?>
+                $id_justificante = $id_justificante + 1;
+                echo (strlen($id_justificante) == 1) ? "0" . $id_justificante : $id_justificante; ?>
                 /2025
             </span>
         </p>
@@ -221,7 +225,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
                             <p><strong>Grupo:</strong> <?php echo $grupo ?></p>
                         </td>
                         <td>
-                            <p><strong>Num. de Control:</strong> <?php echo $matricula ?></p>
+                            <p><strong>Num. de Control:</strong> <?php echo $id_estudiante ?></p>
                         </td>
                     </tr>
                     <tr>
@@ -293,20 +297,21 @@ try {
 
     $data = $pdf->output();
 
-    $nombreArchivo = guardarArchivoPDF($data, $id_folio, $matricula);
+    $nombre_justificante = guardarArchivoPDF($data, $id_justificante, $id_estudiante);
 
     ModificarEstadoSolicitud($conexion, $id_solicitud);
 
-    if (InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo)) {
+    if (InsertarTablaJustificante($conexion, $id_justificante, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)) {
         echo json_encode(["success" => True]);
     }
 
-    EliminarCodigoQR($id_folio, $nombre, $fecha_codigo, $id_unico);
+    EliminarCodigoQR($id_justificante, $nombre, $fecha_codigo, $id_unico);
 
     mysqli_commit($conexion);
 
 } catch (Exception $e) {
     // Rollback en caso de error
+
     $conexion->rollback();
     // Eliminar archivos generados
     if (isset($ruta_imagen) && file_exists($ruta_imagen)) {
@@ -317,90 +322,9 @@ try {
     }
     // Respuesta de error
     echo json_encode([
-        "sin_error" => "Error al crear el PDF: " . $e->getMessage(),
+        "success" => "Error al crear el PDF: " . $e->getMessage(),
     ]);
     exit();
 }
 
 
-function obtenerFechaActual()
-{
-    $date = new DateTime(); // Obtiene la fecha actual
-    $dia = $date->format('d'); // Día en dos dígitos
-    $mes = Variables::MESES[$date->format('n') - 1]; // Obtiene el nombre del mes
-    $año = $date->format('Y'); // Año en cuatro dígitos
-    return "$dia de $mes de $año";
-}
-
-function obtenerIMGLogos()
-{
-    // LOGOS DE LA ESCUELA
-    $ruta_logos = $_SERVER['DOCUMENT_ROOT'] . "/src/assets/justificantes/logos.jpg";
-    // Verificar si existe el logo
-    if (!file_exists($ruta_logos)) {
-        throw new Exception("Archivo de logos no encontrado: $ruta_logos");
-    }
-    $imagen_base64 = base64_encode(file_get_contents($ruta_logos));
-    return 'data:image/jpeg;base64,' . $imagen_base64;
-}
-
-function obtenerCodigoQR($id_unico, $id_folio, $nombre, $fecha)
-{
-    // IMAGEN DEL QR
-    $qr_text = $id_folio . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha);
-    $filename = $id_unico . "_" . $qr_text . '.png';
-    $ruta_imagen = $_SERVER['DOCUMENT_ROOT'] . "/src/layouts/Alumno/justificantes/codigos_qr/$filename";
-
-    // Verificar si existe el QR antes de leerlo
-    if (!file_exists($ruta_imagen)) {
-        throw new Exception("Archivo QR no generado");
-    }
-
-    $imagen_contenido = file_get_contents($ruta_imagen);
-    if ($imagen_contenido === false) {
-        throw new Exception("Error al leer el archivo QR");
-    }
-
-    $imagen_base64 = base64_encode($imagen_contenido);
-    return 'data:image/png;base64,' . $imagen_base64;
-}
-
-function guardarArchivoPDF($data, $id_folio, $matricula)
-{
-    // Ruta donde se guardará el archivo
-    $rutaGuardado = "../layouts/Alumno/justificantes/";
-    if (!file_exists($rutaGuardado)) {
-        mkdir($rutaGuardado, 0777, true);
-    }
-
-    $nombreArchivo = "justificante_" . $id_folio . "_" . $matricula . "_" . date("Ymd_His") . ".pdf";
-    $rutaArchivo = $rutaGuardado . $nombreArchivo;
-
-    // Guardar el PDF en la carpeta especificada
-    file_put_contents($rutaArchivo, $data);
-
-    return $nombreArchivo;
-}
-
-function estructurarFechaAusencia($fecha)
-{
-    $array = explode("-", $fecha);
-    return $array[0] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[2];
-}
-
-
-function EliminarCodigoQR($id_solicitud, $nombre, $fecha_codigo, $id_unico)
-{
-    $qr_text = $id_solicitud - 1 . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha_codigo);
-
-    // Directorio para guardar la imagen del QR (se crea si no existe)
-    $dir = '../layouts/Alumno/justificantes/codigos_qr/';
-    if (!file_exists($dir)) {
-        mkdir($dir, 0755, true);
-    }
-    // Ruta de archivo para guardar el QR generado
-    $filename = $dir . $id_unico . "_" . $qr_text . '.png';
-    if (file_exists($filename)) {
-        unlink($filename);
-    }
-}

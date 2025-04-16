@@ -377,12 +377,13 @@ function EliminarCarrera($conexion, $carreraNueva)
 function ModificarEstadoSolicitud($conexion, $id_solicitud)
 {
     global $TABLA_SOLICITUDES;
-    global $CAMPO_ESTADO;
+    global $CAMPO_ID_ESTADO;
     global $CAMPO_ID_SOLICITUD;
-    $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ESTADO = 'Aceptada' WHERE $CAMPO_ID_SOLICITUD = ?";
+    $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ID_ESTADO = ? WHERE $CAMPO_ID_SOLICITUD = ?";
 
+    $id_estado = 1;
     $smtm = $conexion->prepare($sql);
-    $smtm->bind_param("i", $id_solicitud);
+    $smtm->bind_param("ii", $id_estado, $id_solicitud);
     $smtm->execute();
 }
 
@@ -390,29 +391,23 @@ function obtenerNumeroFolio($conexion)
 {
     global $TABLA_JUSTIFICANTES;
     $sql = "SELECT COUNT(*) AS total FROM $TABLA_JUSTIFICANTES";
-    $result = $conexion->query($sql);
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $row = $result->fetch_assoc();
     return $row["total"];
 }
 
-function InsertarTablaJustificante($conexion, $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe, $apellidos_jefe, $nombreArchivo)
+function InsertarTablaJustificante($conexion, $id_justificante, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)
 {
     global $TABLA_JUSTIFICANTES;
-    global $CAMPO_J_ID_SOLICITUD;
-    global $CAMPO_J_MATRICULA;
-    global $CAMPO_J_NOMBRE;
-    global $CAMPO_J_APELLIDOS;
-    global $CAMPO_J_MOTIVO;
-    global $CAMPO_J_GRUPO;
-    global $CAMPO_J_CARRERA;
-    global $CAMPO_J_NOMBRE_JEFE;
-    global $CAMPO_J_JUSTIFICANTE;
-    $sql = "INSERT INTO $TABLA_JUSTIFICANTES ( $CAMPO_J_ID_SOLICITUD, $CAMPO_J_MATRICULA, $CAMPO_J_NOMBRE, $CAMPO_J_APELLIDOS, $CAMPO_J_MOTIVO, $CAMPO_J_GRUPO, $CAMPO_J_CARRERA, $CAMPO_J_NOMBRE_JEFE, $CAMPO_J_JUSTIFICANTE) VALUES (?,?,?,?,?,?,?,?,?)";
 
-    $nombre_jefe_completo = "$nombre_jefe  $apellidos_jefe";
+    $sql = "INSERT INTO $TABLA_JUSTIFICANTES 
+            (id_justificante, id_estudiante, id_jefe, id_codigo, nombre_justificante)
+            VALUES (?, ?, ?, ?, ?)";
 
     $smtm = $conexion->prepare($sql);
-    $smtm->bind_param('sssssssss', $id_solicitud, $matricula, $nombre, $apellidos, $motivo, $grupo, $carrera, $nombre_jefe_completo, $nombreArchivo);
+    $smtm->bind_param('issss', $id_justificante, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante);
 
     return $smtm->execute();
 }
@@ -425,13 +420,17 @@ function insertarCodigoQR($conexion, $id, $qr_text, $valido, $url_verificacion)
     global $CAMPO_TEXTO_QR;
     global $CAMPO_VALIDO_QR;
     global $CAMPO_URL_QR;
-    $sql = "INSERT INTO $TABLA_CODIGOQR ($CAMPO_FOLIO_QR, $CAMPO_TEXTO_QR, $CAMPO_VALIDO_QR, $CAMPO_URL_QR) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO $TABLA_CODIGOQR (id_codigo, datos_codigo, url, id_estado) VALUES (?, ?, ?, ?)";
 
     $smtm = $conexion->prepare($sql);
     $valido = 1;
-    $smtm->bind_param("isss", $id, $qr_text, $valido, $url_verificacion);
-    return $smtm->execute();
+    $smtm->bind_param("isss", $id, $qr_text, $url_verificacion, $valido);
+    $smtm->execute();
+    $ultimo_id = $conexion->insert_id;
+    return $ultimo_id;
+
 }
+
 
 function obtenerCodigoQVerificacion($conexion, $qr_text)
 {
@@ -460,13 +459,14 @@ function actualizarValidacionCodigoQR($conexion, $qr_text)
 function modificarSolicitudRechazado($conexion, $id_solicitud)
 {
     global $TABLA_SOLICITUDES;
-    global $CAMPO_ESTADO;
+    global $CAMPO_ID_ESTADO;
     global $CAMPO_ID_SOLICITUD;
-    $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ESTADO = 'Rechazada' WHERE $CAMPO_ID_SOLICITUD = ?";
+    $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ID_ESTADO = ? WHERE $CAMPO_ID_SOLICITUD = ?";
 
 
     $smtm = $conexion->prepare($sql);
-    $smtm->bind_param("s", $id_solicitud);
+    $rechazada = 3;
+    $smtm->bind_param("is", $rechazada, $id_solicitud);
     return $smtm->execute();
 }
 
@@ -694,12 +694,12 @@ function modificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $a
     return true;
 }
 
-function obtenerSolicitudesJefeCarrera($conexion, $carrera)
+function obtenerSolicitudesJefeCarrera($conexion, $id_jefe)
 {
-    global $TABLA_SOLICITUDES, $CAMPO_S_CARRERA;
-    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_S_CARRERA = ?";
+    global $TABLA_SOLICITUDES, $CAMPO_ID_JEFE;
+    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_JEFE = ?";
     $resultado = $conexion->prepare($sql);
-    $resultado->bind_param("s", $carrera);
+    $resultado->bind_param("s", $id_jefe);
     $resultado->execute();
     return $resultado->get_result();
 }
@@ -776,6 +776,19 @@ function obtenerModalidadesCarrera($conexion, $id_carrera)
 }
 
 function obtenerNombreEstado($conexion, $id_estado)
+{
+    global $CAMPO_ID_SOLICITUD, $CAMPO_ID_ALUMNO, $CAMPO_ID_ESTADO, $TABLA_ESTADO, $CAMPO_NOMBRE_ESTADO;
+
+    $sql = "SELECT $CAMPO_NOMBRE_ESTADO FROM $TABLA_ESTADO WHERE $CAMPO_ID_ESTADO = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("i", $id_estado);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $response = $result->fetch_assoc();
+    return $response[$CAMPO_NOMBRE_ESTADO];
+}
+
+function obtenerNombreMotivo($conexion, $id_estado)
 {
     global $CAMPO_ID_SOLICITUD, $CAMPO_ID_ALUMNO, $CAMPO_ID_ESTADO, $TABLA_ESTADO, $CAMPO_NOMBRE_ESTADO;
 

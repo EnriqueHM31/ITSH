@@ -39,16 +39,30 @@ function componenteCabeceraTablaSolicitudes()
     HTML;
 }
 
-function componenteFilaSolicitud($fila, $id, $clase, $fecha)
+function componenteFilaSolicitud($conexion, $fila, $id, $clase, $fecha)
 {
-    global $CAMPO_ID_SOLICITUD, $CAMPO_S_MATRICULA, $CAMPO_S_NOMBRE, $CAMPO_S_APELLIDOS, $CAMPO_S_GRUPO, $CAMPO_MOTIVO, $CAMPO_S_EVIDENCIA;
-    return <<<HTML
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_S_EVIDENCIA, $CAMPO_MOTIVO;
+
+    $sql = "SELECT u.*, e.* 
+        FROM $TABLA_USUARIO u 
+        JOIN $TABLA_ESTUDIANTE e 
+        ON u.$CAMPO_ID_USUARIO = e.$CAMPO_ID_USUARIO 
+        WHERE u.$CAMPO_ID_USUARIO = ?";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $fila["id_estudiante"]);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    while ($row = $resultado->fetch_assoc()) {
+        return <<<HTML
+
     <tr>
     <td> {$fila[$CAMPO_ID_SOLICITUD]}</td>
-    <td> {$fila[$CAMPO_S_MATRICULA]}</td>
-    <td> {$fila[$CAMPO_S_NOMBRE]}</td>
-    <td> {$fila[$CAMPO_S_APELLIDOS]}</td>
-    <td> {$fila[$CAMPO_S_GRUPO]}</td>
+    <td> {$row[$CAMPO_ID_USUARIO]}</td>
+    <td> {$row[$CAMPO_NOMBRE]}</td>
+    <td> {$row[$CAMPO_APELLIDOS]}</td>
+    <td> {$row[$CAMPO_GRUPO]}</td>
     <td> {$fila[$CAMPO_MOTIVO]}</td>
     <td> {$fecha[2]}-{$fecha[1]}-{$fecha[0]}</td>
     <td>
@@ -72,49 +86,67 @@ function componenteFilaSolicitud($fila, $id, $clase, $fecha)
     </td>
     </tr>
     HTML;
+    }
 }
 
 
-function componenteDetailSolicitud($fila, $clase, $id)
+function componenteDetailSolicitud($conexion, $fila, $clase, $id)
 {
-    global $CAMPO_ID_SOLICITUD, $CAMPO_S_MATRICULA, $CAMPO_S_NOMBRE, $CAMPO_S_APELLIDOS, $CAMPO_S_GRUPO, $CAMPO_MOTIVO, $CAMPO_S_EVIDENCIA, $CAMPO_FECHA_AUSE;
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_S_EVIDENCIA, $CAMPO_FECHA_AUSE, $CAMPO_MOTIVO;
 
-    return <<<HTML
-        <details class='detalles_solicitudes' 
-        data-datos='{$fila[$CAMPO_ID_SOLICITUD]}, {$fila[$CAMPO_S_MATRICULA]}, {$fila[$CAMPO_S_NOMBRE]}, {$fila[$CAMPO_S_APELLIDOS]}, {$fila[$CAMPO_S_GRUPO]}, {$fila[$CAMPO_MOTIVO]}, {$fila['fecha_ausencia']}, {$clase}, {$fila[$CAMPO_S_EVIDENCIA]}'>
-            <summary>
-                <div class='detalles'>
-                    <p>Solicitud: {$fila[$CAMPO_ID_SOLICITUD]}</p>
-                </div>
-            
-                <div class='{$clase} estado'></div>
-            </summary>
-            <div class='contenido_solicitudes'>
-                <div class='detalle'><strong>Matricula:</strong><p>{$fila[$CAMPO_S_MATRICULA]}</p></div>
-                <div class='detalle'><strong>Nombre:</strong><p>{$fila[$CAMPO_S_NOMBRE]}</p></div>
-                <div class='detalle'><strong>Apellidos:</strong><p>{$fila[$CAMPO_S_APELLIDOS]}</p></div>
-                <div class='detalle'><strong>Grupo:</strong><p>{$fila[$CAMPO_S_GRUPO]}</p></div>
-                <div class='detalle'><strong>Motivo:</strong><p>{$fila[$CAMPO_MOTIVO]}</p></div>
-                <div class='detalle'><strong>Ausencia:</strong><p>{$fila[$CAMPO_FECHA_AUSE]}</p></div>
-                <div class='detalle'><strong>Evidencia:</strong>
-                    <a href='../Alumno/evidencias/{$fila[$CAMPO_S_EVIDENCIA]}' target='_blank'>
-                        {$fila[$CAMPO_S_EVIDENCIA]}
-                    </a>
-                </div>
-                <div class='opciones'>
-                    <button class='btn_opciones_solicitudes' data-id='$id' onclick='aceptarSolicitud(this)'>
-                        Aceptar
-                    </button>
-                    <button class='btn_opciones_solicitudes' onclick='rechazarSolicitud(this)'>
-                        Rechazar
-                    </button>
-                    <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
-                        Eliminar
-                    </button>
-                </div>
+    $sql = "SELECT u.*, e.* 
+    FROM $TABLA_USUARIO u 
+    JOIN $TABLA_ESTUDIANTE e 
+    ON u.$CAMPO_ID_USUARIO = e.$CAMPO_ID_USUARIO 
+    WHERE u.$CAMPO_ID_USUARIO = ?";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $fila["id_estudiante"]);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+
+    while ($row = $resultado->fetch_assoc()) {
+
+        $nombre_estado = obtenerNombreEstado($conexion, $fila[$CAMPO_ID_ESTADO]);
+
+        return <<<HTML
+    <details class='detalles_solicitudes' 
+        data-datos='{$fila[$CAMPO_ID_SOLICITUD]}, {$row[$CAMPO_ID_USUARIO]}, {$row[$CAMPO_NOMBRE]}, {$row[$CAMPO_APELLIDOS]}, {$row[$CAMPO_GRUPO]}, {$nombre_estado}, {$fila[$CAMPO_FECHA_AUSE]}, {$clase}, {$fila[$CAMPO_S_EVIDENCIA]}'>
+        <summary>
+            <div class='detalles'>
+                <p>Solicitud: {$fila[$CAMPO_ID_SOLICITUD]}</p>
             </div>
-        </details>
+            <div class='{$clase} estado'></div>
+        </summary>
+        <div class='contenido_solicitudes'>
+            <div class='detalle'><strong>Matrícula:</strong><p>{$row[$CAMPO_ID_USUARIO]}</p></div>
+            <div class='detalle'><strong>Nombre:</strong><p>{$row[$CAMPO_NOMBRE]}</p></div>
+            <div class='detalle'><strong>Apellidos:</strong><p>{$row[$CAMPO_APELLIDOS]}</p></div>
+            <div class='detalle'><strong>Grupo:</strong><p>{$row[$CAMPO_GRUPO]}</p></div>
+            <div class='detalle'><strong>Motivo:</strong><p>{$fila[$CAMPO_MOTIVO]}</p></div>
+            <div class='detalle'><strong>Ausencia:</strong><p>{$fila[$CAMPO_FECHA_AUSE]}</p></div>
+            <div class='detalle'><strong>Evidencia:</strong>
+                <a href='../Alumno/evidencias/{$fila[$CAMPO_S_EVIDENCIA]}' target='_blank'>
+                    {$fila[$CAMPO_S_EVIDENCIA]}
+                </a>
+            </div>
+            <div class='opciones'>
+                <button class='btn_opciones_solicitudes' data-id='$id' onclick='aceptarSolicitud(this)'>
+                    Aceptar
+                </button>
+                <button class='btn_opciones_solicitudes' onclick='rechazarSolicitud(this)'>
+                    Rechazar
+                </button>
+                <button class='btn_opciones_solicitudes' onclick='eliminarFila(this)'>
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </details>
     HTML;
+    }
+
 }
 
 function componenteTemplateUsuarioEstudianteEliminar()

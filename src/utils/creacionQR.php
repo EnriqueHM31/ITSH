@@ -31,15 +31,17 @@ function generarCodigo($conexion, $id, $nombre, $fecha, $valido)
 
         QRcode::png($url_verificacion, $filename, QR_ECLEVEL_L, 4, true);
 
-        // Inserción en la base de datos en la tabla qr  
-        if (insertarCodigoQR($conexion, $id, $qr_text, $valido, $url_verificacion)) {
-            return $id_unico;
+
+        $id_codigo = insertarCodigoQR($conexion, $id, $qr_text, $valido, $url_verificacion);
+
+        if ($id_codigo) {
+            return [$id_unico, $id_codigo];
         } else {
             throw new Exception("Ocurrio un error al insertar los datos en la DB");
 
         }
     } catch (Exception $e) {
-        echo json_encode(["success" => $e->getMessage()]);
+        echo json_encode(["success" => "Error: {$e->getMessage()}"]);
     }
 
 }
