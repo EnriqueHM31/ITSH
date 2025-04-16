@@ -7,15 +7,18 @@ function componenteSinJustificantes()
     HTML;
 }
 
-function componenteJustificanteJefe($fila, $tiempo_fecha)
+function componenteJustificanteJefe($conexion, $fila, $tiempo_fecha)
 {
-    global $CAMPO_J_JUSTIFICANTE, $CAMPO_J_ID_JUSTIFICANTE, $CAMPO_J_MATRICULA, $CAMPO_J_NOMBRE;
+    global $CAMPO_J_JUSTIFICANTE, $CAMPO_J_ID_JUSTIFICANTE, $CAMPO_J_MATRICULA, $CAMPO_NOMBRE, $TABLA_USUARIO, $CAMPO_ID_USUARIO;
+
+    $dataEstudiante = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $fila["id_estudiante"]);
+
     $fecha = "$tiempo_fecha[2] de " . Variables::MESES[$tiempo_fecha[1][1] - 1] . " $tiempo_fecha[0]";
     echo <<<HTML
-    <a href='../Alumno/justificantes/{$fila[$CAMPO_J_JUSTIFICANTE]}' class='archivo' target='_blank'>
-        <h2> Folio {$fila[$CAMPO_J_ID_JUSTIFICANTE]} </h2>
-        <p> {$fila[$CAMPO_J_MATRICULA]} </p>
-        <p> {$fila[$CAMPO_J_NOMBRE]} </p>
+    <a href='../Alumno/justificantes/{$fila["nombre_justificante"]}' class='archivo' target='_blank'>
+        <h2> Folio {$fila["id_justificante"]} </h2>
+        <p> {$fila["id_estudiante"]} </p>
+        <p> {$dataEstudiante[$CAMPO_NOMBRE]} </p>
         <span>{$fecha}</span>
     </a>
     HTML;

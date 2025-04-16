@@ -8,13 +8,20 @@ include "../utils/functionGlobales.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['reiniciar'])) {
     try {
-        if (EliminarDatosTablaJustificante($conexion)) {
-            echo json_encode(["mensaje" => "Se ha reiniciado el folio"]);
-        } else {
-            echo json_encode(["mensaje" => "Ocurrió un error al reiniciar el folio"]);
+
+        $numeroJustificante = obtenerNumeroFolio($conexion);
+
+        if ($numeroJustificante == 0) {
+            echo json_encode(["mensaje" => [false, "No hay justificantes en el sistema"]]);
+            return;
         }
 
-        $stmt->close(); // Cerrar el statement
+        if (EliminarDatosTablaJustificante($conexion)) {
+            echo json_encode(["mensaje" => [true, "Se ha reiniciado el folio"]]);
+        } else {
+            echo json_encode(["mensaje" => [false, "Ocurrió un error al reiniciar el folio"]]);
+        }
+
     } catch (Exception $e) {
         echo json_encode(["mensaje" => "Error: " . $e->getMessage()]);
     }

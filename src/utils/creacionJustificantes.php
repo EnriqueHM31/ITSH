@@ -36,6 +36,8 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         $fecha_actual = obtenerFechaActual();
 
+        $src = obtenerIMGLogos();
+
         $src_qr = obtenerCodigoQR($id_unico, $id_justificante, $nombre, $fecha);
 
         $fecha_ausencia_pdf = estructurarFechaAusencia($fecha);
@@ -301,7 +303,7 @@ try {
 
     ModificarEstadoSolicitud($conexion, $id_solicitud);
 
-    if (InsertarTablaJustificante($conexion, $id_justificante, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)) {
+    if (InsertarTablaJustificante($conexion, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)) {
         echo json_encode(["success" => True]);
     }
 

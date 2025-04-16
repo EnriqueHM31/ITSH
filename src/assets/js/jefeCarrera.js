@@ -256,13 +256,25 @@ function reiniciarFolio() {
 		},
 		dataType: 'json',
 		success: function (data) {
-			mostrarTemplate(
-				data.mensaje,
-				'../../assets/iconos/ic_correcto.webp',
-				'var(--verde)',
-				'miTemplate_cargar',
-				'miTemplate_cargar',
-			);
+
+			if (data.mensaje[0] === true) {
+				mostrarTemplate(
+					data.mensaje[1],
+					'../../assets/iconos/ic_correcto.webp',
+					'var(--verde)',
+					'miTemplate_cargar',
+					'miTemplate_cargar',
+				);
+			}
+			if (data.mensaje[0] === false) {
+				mostrarTemplate(
+					data.mensaje[1],
+					'../../assets/iconos/ic_error.webp',
+					'var(--rojo)',
+					'miTemplate_cargar',
+					'miTemplate_cargar',
+				);
+			}
 		},
 		error: function (xhr) {
 			mostrarErrorAjax(xhr);

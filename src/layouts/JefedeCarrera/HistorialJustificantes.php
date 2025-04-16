@@ -16,8 +16,8 @@ $jefe = new Jefe();
 
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
-$id_carrera = getResultDataTabla($conexion, Variables::TABLA_BD_JEFE, Variables::CAMPO_CLAVE_EMPLEADO_JEFE, $id);
-$carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
+$dataJefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id);
+$carrera = getResultCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA])
     ?>
 
 <!DOCTYPE html>
@@ -65,7 +65,7 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
 
             <div class="contenido_historial" id="historial">
                 <?php
-                $jefe->HistorialJustificantes($conexion, $carrera);
+                $jefe->HistorialJustificantes($conexion, $id);
                 ?>
             </div>
 
@@ -79,6 +79,7 @@ $carrera = getResultCarrera($conexion, $id_carrera[Variables::CAMPO_ID_CARRERA])
 
 
     <?php
+    componenteTemplateModalNormal();
     componenteModalSeguridadFolio();
     componenteTemplateModalCargar();
     ?>

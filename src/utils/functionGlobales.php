@@ -398,21 +398,21 @@ function obtenerNumeroFolio($conexion)
     return $row["total"];
 }
 
-function InsertarTablaJustificante($conexion, $id_justificante, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)
+function InsertarTablaJustificante($conexion, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)
 {
     global $TABLA_JUSTIFICANTES;
 
     $sql = "INSERT INTO $TABLA_JUSTIFICANTES 
-            (id_justificante, id_estudiante, id_jefe, id_codigo, nombre_justificante)
-            VALUES (?, ?, ?, ?, ?)";
+            (id_estudiante, id_jefe, id_codigo, nombre_justificante)
+            VALUES (?, ?, ?, ?)";
 
     $smtm = $conexion->prepare($sql);
-    $smtm->bind_param('issss', $id_justificante, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante);
+    $smtm->bind_param('ssss', $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante);
 
     return $smtm->execute();
 }
 
-function insertarCodigoQR($conexion, $id, $qr_text, $valido, $url_verificacion)
+function insertarCodigoQR($conexion, $qr_text, $valido, $url_verificacion)
 {
 
     global $TABLA_CODIGOQR;
@@ -420,11 +420,11 @@ function insertarCodigoQR($conexion, $id, $qr_text, $valido, $url_verificacion)
     global $CAMPO_TEXTO_QR;
     global $CAMPO_VALIDO_QR;
     global $CAMPO_URL_QR;
-    $sql = "INSERT INTO $TABLA_CODIGOQR (id_codigo, datos_codigo, url, id_estado) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO $TABLA_CODIGOQR (datos_codigo, url, id_estado) VALUES (?, ?, ?)";
 
     $smtm = $conexion->prepare($sql);
     $valido = 1;
-    $smtm->bind_param("isss", $id, $qr_text, $url_verificacion, $valido);
+    $smtm->bind_param("sss", $qr_text, $url_verificacion, $valido);
     $smtm->execute();
     $ultimo_id = $conexion->insert_id;
     return $ultimo_id;
@@ -579,18 +579,21 @@ function buscarEstudianteBD($conexion, $query, $id_carrera)
 
 function buscarJustificantes($conexion, $query)
 {
-    global $TABLA_JUSTIFICANTES;
-    global $CAMPO_J_MATRICULA;
-    global $CAMPO_J_NOMBRE;
+    global $TABLA_JUSTIFICANTES, $TABLA_USUARIO;
+    global $CAMPO_ID_USUARIO;
+    global $CAMPO_NOMBRE;
     if (strlen($query) > 0) {
-        $sql = "SELECT * FROM $TABLA_JUSTIFICANTES WHERE $CAMPO_J_MATRICULA LIKE ? OR $CAMPO_J_NOMBRE LIKE ? ";
-        ;
+        $sql = "SELECT j.*, u.$CAMPO_NOMBRE
+                    FROM $TABLA_JUSTIFICANTES AS j
+                    JOIN $TABLA_USUARIO AS u ON j.id_estudiante = u.$CAMPO_ID_USUARIO
+                    WHERE j.id_estudiante LIKE ? OR u.$CAMPO_NOMBRE LIKE ?";
+
         $stmt = $conexion->prepare($sql);
         $param = "%$query%";
         $stmt->bind_param('ss', $param, $param);
 
     } else {
-        $sql = "SELECT * FROM $TABLA_JUSTIFICANTES";
+        $sql = "SELECT j.*, u.$CAMPO_NOMBRE FROM $TABLA_JUSTIFICANTES j JOIN $TABLA_USUARIO u ON j.id_estudiante = u.$CAMPO_ID_USUARIO";
         $stmt = $conexion->prepare($sql);
     }
 
@@ -704,12 +707,12 @@ function obtenerSolicitudesJefeCarrera($conexion, $id_jefe)
     return $resultado->get_result();
 }
 
-function obtenerJustificantesJefeCarrera($conexion, $carrera)
+function obtenerJustificantesJefeCarrera($conexion, $id_jefe)
 {
-    global $TABLA_JUSTIFICANTES, $CAMPO_J_CARRERA;
-    $sql = "SELECT * FROM $TABLA_JUSTIFICANTES WHERE $CAMPO_J_CARRERA = ?";
+    global $TABLA_JUSTIFICANTES, $CAMPO_ID_JEFE;
+    $sql = "SELECT * FROM $TABLA_JUSTIFICANTES WHERE $CAMPO_ID_JEFE = ?";
     $resultado = $conexion->prepare($sql);
-    $resultado->bind_param("s", $carrera);
+    $resultado->bind_param("s", $id_jefe);
     $resultado->execute();
     return $resultado->get_result();
 }
