@@ -39,7 +39,8 @@
 }
 
 .input_pagina:focus:placeholder-shown ~ .nombre_input,
-.input_pagina:not(:placeholder-shown) ~ .nombre_input {
+.input_pagina:not(:placeholder-shown) ~ .nombre_input,
+.clave {
     top: -2.5rem;
     scale: .8;
     opacity: .7;

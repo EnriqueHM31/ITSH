@@ -323,15 +323,13 @@ function insertarJefedeCarrera($conexion, $identificador, $carrera)
 function insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)
 {
     global $TABLA_ESTUDIANTE;
-    global $CAMPO_MATRICULA;
-    global $CAMPO_NOMBRE;
-    global $CAMPO_APELLIDOS;
+    global $CAMPO_ID_USUARIO;
     global $CAMPO_GRUPO;
     global $CAMPO_ID_CARRERA;
     global $CAMPO_ID_MODALIDAD;
 
-    $sql = $conexion->prepare("INSERT INTO $TABLA_ESTUDIANTE ($CAMPO_MATRICULA, $CAMPO_NOMBRE , $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_CARRERA, $CAMPO_ID_MODALIDAD) VALUES (?, ?, ?, ?, ?, ?)");
-    $sql->bind_param("ssssii", $matricula, $nombre, $apellidos, $grupo, $id_carrera, $id_modalidad);
+    $sql = $conexion->prepare("INSERT INTO $TABLA_ESTUDIANTE ($CAMPO_ID_USUARIO, $CAMPO_ID_CARRERA,$CAMPO_ID_MODALIDAD, $CAMPO_GRUPO) VALUES (?, ?, ?, ?)");
+    $sql->bind_param("siis", $matricula, $id_carrera, $id_modalidad, $grupo);
     return $sql->execute();
 
 }
@@ -677,18 +675,18 @@ function modificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $a
 {
     global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $CAMPO_MATRICULA, $CAMPO_CORREO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_MODALIDAD;
 
-    $sql = " UPDATE $TABLA_USUARIO SET $CAMPO_ID_USUARIO = ?, $CAMPO_CORREO = ? WHERE $CAMPO_ID_USUARIO = ?";
+    $sql = " UPDATE $TABLA_USUARIO SET $CAMPO_NOMBRE = ?, $CAMPO_APELLIDOS = ?, $CAMPO_CORREO = ? WHERE $CAMPO_ID_USUARIO = ?";
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("sss", $id_usuario, $correo, $matricula);
+    $stmt->bind_param("ssss", $nombre, $apellidos, $correo, $matricula);
 
     if (!$stmt->execute()) {
         return false;
     }
 
-    $sql = " UPDATE $TABLA_ESTUDIANTE SET $CAMPO_NOMBRE = ?, $CAMPO_APELLIDOS = ?, $CAMPO_GRUPO = ?, $CAMPO_ID_MODALIDAD = ? WHERE $CAMPO_MATRICULA = ?";
+    $sql = " UPDATE $TABLA_ESTUDIANTE SET  $CAMPO_GRUPO = ?, $CAMPO_ID_MODALIDAD = ? WHERE $CAMPO_ID_USUARIO = ?";
 
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("sssis", $nombre, $apellidos, $grupo, $id_modalidad, $id_usuario);
+    $stmt->bind_param("sis", $grupo, $id_modalidad, $id_usuario);
 
     if (!$stmt->execute()) {
         return false;

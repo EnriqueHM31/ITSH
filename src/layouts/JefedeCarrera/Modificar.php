@@ -83,8 +83,9 @@ $Numero_grupos = $grupos["numero_grupos"];
 
                     <input type="hidden" name="clave_anterior" id="clave_anterior">
                     <label for="clave" class="contenedor_input">
-                        <input class="input_pagina" type="text" name="clave" id="clave" placeholder=" ">
-                        <span class="nombre_input">Clave</span>
+                        <input class="input_pagina select_info" type="text" name="clave" id="clave"
+                            style="background-color: var(--vino);" readonly>
+                        <span class="nombre_input">Matricula</span>
                     </label>
 
                     <label for="nombre" class="contenedor_input">
