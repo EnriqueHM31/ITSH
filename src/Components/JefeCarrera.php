@@ -7,7 +7,7 @@ function componenteSinJustificantes()
     HTML;
 }
 
-function componenteJustificanteJefe($conexion, $fila, $tiempo_fecha)
+function componenteJustificanteJefe($conexion, $index, $fila, $tiempo_fecha)
 {
     global $CAMPO_NOMBRE, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $MESES;
 
@@ -17,7 +17,7 @@ function componenteJustificanteJefe($conexion, $fila, $tiempo_fecha)
     $fecha = "$tiempo_fecha[2] de $mes_nombre $tiempo_fecha[0]";
     echo <<<HTML
     <a href='../Alumno/justificantes/{$fila["nombre_justificante"]}' class='archivo' target='_blank'>
-        <h2> Folio {$fila["id_justificante"]} </h2>
+        <h2> Folio $index </h2>
         <p> {$fila["id_estudiante"]} </p>
         <p> {$dataEstudiante[$CAMPO_NOMBRE]} </p>
         <span>{$fecha}</span>
@@ -45,7 +45,7 @@ function componenteCabeceraTablaSolicitudes()
 
 function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fecha)
 {
-    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_S_EVIDENCIA, $CAMPO_MOTIVO;
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA, $CAMPO_MOTIVO;
 
     $sql = "SELECT u.*, e.* 
         FROM $TABLA_USUARIO u 
@@ -72,8 +72,8 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
             <td> {$fila[$CAMPO_MOTIVO]}</td>
             <td> {$fecha[2]}-{$fecha[1]}-{$fecha[0]}</td>
             <td>
-                <a href='../Alumno/evidencias/{$fila[$CAMPO_S_EVIDENCIA]}' target='_blank' class='link_evidencia'>
-                    {$fila[$CAMPO_S_EVIDENCIA]}
+                <a href='../Alumno/evidencias/{$fila[$CAMPO_EVIDENCIA]}' target='_blank' class='link_evidencia'>
+                    {$fila[$CAMPO_EVIDENCIA]}
                 </a> 
             </td>
             <td class='{$clase}'></td>
@@ -101,7 +101,7 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
 
 function componenteDetailSolicitud($conexion, $fila, $clase, $id)
 {
-    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_S_EVIDENCIA, $CAMPO_FECHA_AUSE, $CAMPO_MOTIVO;
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA, $CAMPO_FECHA_AUSE, $CAMPO_MOTIVO;
 
     $sql = "SELECT u.*, e.* 
     FROM $TABLA_USUARIO u 
@@ -121,7 +121,7 @@ function componenteDetailSolicitud($conexion, $fila, $clase, $id)
 
         return <<<HTML
     <details class='detalles_solicitudes' 
-        data-datos='{$fila[$CAMPO_ID_SOLICITUD]}, {$row[$CAMPO_ID_USUARIO]}, {$row[$CAMPO_NOMBRE]}, {$row[$CAMPO_APELLIDOS]}, {$row[$CAMPO_GRUPO]}, {$nombre_estado}, {$fila[$CAMPO_FECHA_AUSE]}, {$clase}, {$fila[$CAMPO_S_EVIDENCIA]}'>
+        data-datos='{$fila[$CAMPO_ID_SOLICITUD]}, {$row[$CAMPO_ID_USUARIO]}, {$row[$CAMPO_NOMBRE]}, {$row[$CAMPO_APELLIDOS]}, {$row[$CAMPO_GRUPO]}, {$nombre_estado}, {$fila[$CAMPO_FECHA_AUSE]}, {$clase}, {$fila[$CAMPO_EVIDENCIA]}'>
         <summary>
             <div class='detalles'>
                 <p>Solicitud: {$fila[$CAMPO_ID_SOLICITUD]}</p>
@@ -136,8 +136,8 @@ function componenteDetailSolicitud($conexion, $fila, $clase, $id)
             <div class='detalle'><strong>Motivo:</strong><p>{$fila[$CAMPO_MOTIVO]}</p></div>
             <div class='detalle'><strong>Ausencia:</strong><p>{$fila[$CAMPO_FECHA_AUSE]}</p></div>
             <div class='detalle'><strong>Evidencia:</strong>
-                <a href='../Alumno/evidencias/{$fila[$CAMPO_S_EVIDENCIA]}' target='_blank'>
-                    {$fila[$CAMPO_S_EVIDENCIA]}
+                <a href='../Alumno/evidencias/{$fila[$CAMPO_EVIDENCIA]}' target='_blank'>
+                    {$fila[$CAMPO_EVIDENCIA]}
                 </a>
             </div>
             <div class='opciones'>
@@ -214,7 +214,7 @@ function componenteTemplateUsuarioEstudianteSeleccionado()
     HTML;
 }
 
-function componenteModalSeguridadFolio()
+function componenteModalSeguridadFolio($id_jefe)
 {
     echo
         <<<HTML
@@ -226,7 +226,7 @@ function componenteModalSeguridadFolio()
                     <p>Se borraran todos los justificantes creados hasta el momento</p>
 
                     <div class="opciones_decision">
-                        <button class="btn_opcion" onclick="reiniciarFolio()">Si</button>
+                        <button class="btn_opcion" onclick="reiniciarFolio('{$id_jefe}')">Si</button>
                         <button class="btn_opcion" onclick="cerrarTemplate()">No</button>
                     </div>
 

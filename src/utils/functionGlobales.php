@@ -265,17 +265,6 @@ function ModificarEstadoSolicitud($conexion, $id_solicitud)
     $smtm->execute();
 }
 
-function obtenerNumeroFolio($conexion)
-{
-    global $TABLA_JUSTIFICANTES;
-    $sql = "SELECT COUNT(*) AS total FROM $TABLA_JUSTIFICANTES";
-    $stmt = $conexion->prepare($sql);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    return $row["total"];
-}
-
 function InsertarTablaJustificante($conexion, $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)
 {
     global $TABLA_JUSTIFICANTES, $CAMPO_ID_SOLICITUD, $CAMPO_ID_ESTUDIANTE, $CAMPO_ID_JEFE, $CAMPO_ID_CODIGO, $CAMPO_NOMBRE_JUSTIFICANTE;
@@ -369,11 +358,12 @@ function obtenerAllCarreras($conexion)
     return $stmt->get_result();
 }
 
-function EliminarDatosTablaJustificante($conexion)
+function EliminarDatosTablaJustificante($conexion, $id_jefe)
 {
-    global $TABLA_JUSTIFICANTES;
-    $sql = "TRUNCATE TABLE $TABLA_JUSTIFICANTES";
+    global $TABLA_JUSTIFICANTES, $CAMPO_ID_JEFE;
+    $sql = "DELETE FROM $TABLA_JUSTIFICANTES WHERE $CAMPO_ID_JEFE = ?";
     $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $id_jefe);
     return $stmt->execute();
 }
 
@@ -449,8 +439,8 @@ function insertarSolicitudBD($conexion, $matricula, $id_jefe, $motivo, $fecha, $
 
 function buscarHistorialJustificantesAlumno($conexion, $id)
 {
-    global $TABLA_SOLICITUDES, $CAMPO_ID_ALUMNO;
-    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_ALUMNO = ?";
+    global $TABLA_SOLICITUDES, $CAMPO_ID_ESTUDIANTE;
+    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_ESTUDIANTE = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $id);
     $stmt->execute();
@@ -598,15 +588,15 @@ function obtenerModalidadesCarrera($conexion, $id_carrera)
 
 function obtenerNombreEstado($conexion, $id_estado)
 {
-    global $CAMPO_ID_ESTADO, $TABLA_ESTADO, $CAMPO_NOMBRE_ESTADO;
+    global $CAMPO_ID_ESTADO, $TABLA_ESTADO, $CAMPO_ESTADO;
 
-    $sql = "SELECT $CAMPO_NOMBRE_ESTADO FROM $TABLA_ESTADO WHERE $CAMPO_ID_ESTADO = ?";
+    $sql = "SELECT nombre_estado FROM $TABLA_ESTADO WHERE $CAMPO_ID_ESTADO = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("i", $id_estado);
     $stmt->execute();
     $result = $stmt->get_result();
     $response = $result->fetch_assoc();
-    return $response[$CAMPO_NOMBRE_ESTADO];
+    return $response[$CAMPO_ESTADO];
 }
 
 function eliminarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)
@@ -616,4 +606,18 @@ function eliminarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("ii", $id_carrera, $id_modalidad);
     return $stmt->execute();
+}
+
+function obtenerNumeroJustificantesJefe($conexion, $id_jefe)
+{
+    global $TABLA_JUSTIFICANTES, $CAMPO_ID_JEFE;
+    $sql = "SELECT COUNT(*) AS total FROM $TABLA_JUSTIFICANTES WHERE $CAMPO_ID_JEFE = ?";
+    $stmt = $conexion->prepare($sql);
+
+    $stmt->bind_param("s", $id_jefe);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $data = $resultado->fetch_assoc();
+
+    return $data['total'];
 }

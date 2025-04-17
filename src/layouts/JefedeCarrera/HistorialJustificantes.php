@@ -80,7 +80,7 @@ $carrera = getResultCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA])
 
     <?php
     componenteTemplateModalNormal();
-    componenteModalSeguridadFolio();
+    componenteModalSeguridadFolio($id);
     componenteTemplateModalCargar();
     ?>
 </body>

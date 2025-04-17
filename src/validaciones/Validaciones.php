@@ -25,6 +25,7 @@ function restriccionAdministrador($carrera, $cargo)
 
 function restriccionJefedeCarrera($carrera, $cargo, $conexion)
 {
+    global $TABLA_JEFE;
 
     if ($cargo == "Administrador") {
         return false;
@@ -36,9 +37,6 @@ function restriccionJefedeCarrera($carrera, $cargo, $conexion)
     while ($row = $resultado->fetch_assoc()) {
         $data[] = $row["nombre_carrera"];
     }
-
-    var_dump($data);
-
 
     if ($cargo === "Jefe de Carrera" && !in_array($carrera, $data, false)) {
         estructuraMensaje("Un jefe de carrera debe tener una carrera vinculada: $carrera", "../../assets/iconos/ic_error.webp", "--rojo");
@@ -56,7 +54,7 @@ function restriccionJefedeCarrera($carrera, $cargo, $conexion)
 
     if ($cargo === "Jefe de Carrera") {
 
-        $resultadoDuplicado = getResultCarreraDuplicada(Variables::TABLA_BD_JEFE, $conexion, $resultadoIdCarrera);
+        $resultadoDuplicado = getResultCarreraDuplicada($TABLA_JEFE, $conexion, $resultadoIdCarrera);
 
         if ($resultadoDuplicado->num_rows > 0) {
             estructuraMensaje("Esa carrera ya tiene un jefe de carrera", "../../assets/iconos/ic_error.webp", "--rojo");

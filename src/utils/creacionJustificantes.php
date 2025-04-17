@@ -6,14 +6,12 @@ include "../utils/functionGlobales.php";
 include "./creacionQR.php";
 include "./FuncionesJustificante.php";
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
     try {
         mysqli_begin_transaction($conexion);
 
-        $id_justificante = obtenerNumeroFolio($conexion);
+        $id_justificante = obtenerNumeroJustificantesJefe($conexion, $_POST['id_jefe']);
         $id_solicitud = $_POST["id_solicitud"];
         $nombre = $_POST['nombre'];
         $fecha = $_POST['fecha'];

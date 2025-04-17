@@ -131,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $apellidos = trim($_POST["apellidos"]);
     $id_modalidad = trim(obtenerIdModalidad($conexion, $_POST["modalidad"]));
     $correo = trim($_POST["correo"]);
-    $rol = Variables::MENU_DE_ROLES[2];
+    $rol = $ESTUDIANTE;
     $id_carrera = obtenerIDCarrera($conexion, $carreraJefe);
     $grupo = trim($_POST["grupo"]);
     $contraseña = 'Aa12345%';

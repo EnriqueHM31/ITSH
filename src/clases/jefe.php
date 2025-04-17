@@ -235,17 +235,19 @@ class Jefe
 
     public function HistorialJustificantes($conexion, $id_jefe)
     {
-        global $CAMPO_J_FECHA_CREACION;
+        global $CAMPO_FECHA_CREACION;
         $resultado = obtenerJustificantesJefeCarrera($conexion, $id_jefe);
 
         if ($resultado->num_rows == 0) {
             componenteSinJustificantes();
         } else {
+            $i = 1;
             while ($fila = $resultado->fetch_array()) {
-                $tiempo = explode(" ", $fila[$CAMPO_J_FECHA_CREACION]);
+                $index = $i++;
+                $tiempo = explode(" ", $fila[$CAMPO_FECHA_CREACION]);
                 $tiempo_fecha = explode("-", $tiempo[0]);
 
-                componenteJustificanteJefe($conexion, $fila, $tiempo_fecha);
+                componenteJustificanteJefe($conexion, $index, $fila, $tiempo_fecha);
             }
         }
     }

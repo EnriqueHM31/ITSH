@@ -247,12 +247,12 @@ $(document).ready(function () {
 	});
 });
 
-function reiniciarFolio() {
+function reiniciarFolio(id_jefe) {
 	$.ajax({
 		url: '../../query/justificantes.php',
 		method: 'POST',
 		data: {
-			reiniciar: 'Si',
+			id_jefe: id_jefe,
 		},
 		dataType: 'json',
 		success: function (data) {

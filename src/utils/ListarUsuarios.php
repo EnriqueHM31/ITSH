@@ -5,6 +5,9 @@ include "../utils/constantes.php";
 include "../utils/functionGlobales.php";
 require_once "./dompdf/autoload.inc.php";
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 function obtenerIMGLogos()
 {
     // LOGOS DE LA ESCUELA
@@ -54,6 +57,8 @@ ORDER BY
 $stmt = $conexion->prepare($query);
 $stmt->execute();
 $resultado = $stmt->get_result();
+
+var_dump($resultado);
 
 
 $src = obtenerIMGLogos();
@@ -153,11 +158,10 @@ $conexion->close();
 
 function ponerDatosTabla($conexion, $resultado)
 {
-    global $ADMINISTRADOR, $JEFE_CARRERA, $ESTUDIANTE, $CAMPO_ID_ROL, $html, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_ID_CARRERA;
+    global $ADMINISTRADOR, $JEFE_CARRERA, $ESTUDIANTE, $CAMPO_ROL, $html, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_ID_CARRERA;
     while ($row = $resultado->fetch_assoc()) {
         // Asegurar que solo se muestre un rol por usuario
-        $rol = obtenerRol($conexion, $row[$CAMPO_ID_ROL]);
-        $carrera = getResultCarrera($conexion, $row[$CAMPO_ID_CARRERA]);
+        $rol = $row[$CAMPO_ROL];
 
         // Verificar el rol del usuario y asignar los valores correspondientes
         if ($rol == $ESTUDIANTE) {

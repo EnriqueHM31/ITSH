@@ -1,9 +1,10 @@
 <?php
 function obtenerFechaActual()
 {
+    global $MESES;
     $date = new DateTime(); // Obtiene la fecha actual
     $dia = $date->format('d'); // Día en dos dígitos
-    $mes = Variables::MESES[$date->format('n') - 1]; // Obtiene el nombre del mes
+    $mes = $MESES[intval($date->format('n')) - 1];
     $año = $date->format('Y'); // Año en cuatro dígitos
     return "$dia de $mes de $año";
 }
@@ -60,8 +61,10 @@ function guardarArchivoPDF($data, $id_justificante, $id_estudiante)
 
 function estructurarFechaAusencia($fecha)
 {
+    global $MESES;
     $array = explode("-", $fecha);
-    return $array[0] . " de " . ucfirst(Variables::MESES[$array[1][1]]) . " de " . $array[2];
+    $mes = $MESES[intval($array[1][1])];
+    return $array[0] . " de " . ucfirst($mes) . " de " . $array[2];
 }
 
 
