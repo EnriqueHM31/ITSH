@@ -1,145 +1,110 @@
 <?php
+// ROLES DENTRO DEL SISTEMA
+$ADMIN = "Administrador";
+$JEFE = "Jefe de Carrera";
+$ESTUDIANTE = "Estudiante";
 
-class Variables
-{
-    // VARIABLES PARA LA CONEXION
-    public const HOST = "localhost";
-    public const USERNAME = "root";
-    public const CONTRASEÑA = "1234";
-    public const DATABASE = "itsh";
+// NOMBRES DE LAS MODALIDADES
+$ESCOLARIZADO = "Escolarizado";
+$FLEXIBLE = "Flexible";
 
-    // TABLAS DE LAS BASES DE DATOS
-    public const TABLA_BD_USUARIO = "Usuario";
-    public const TABLA_BD_ROL = "Rol";
-    public const TABLA_BD_CARRERA = "Carrera";
-    public const TABLA_BD_GRUPO = "Grupo";
-    public const TABLA_BD_AdMINISTRADOR = "Administrador";
-    public const TABLA_BD_JEFE = "JefeCarrera";
-    public const TABLA_BD_ESTUDIANTE = "Estudiante";
-    public const tABLA_BD_MODALIDAD = "Modalidad";
-    public const TABLA_BD_SOLICITUDES = "Solicitud";
-    public const TABLA_BD_JUSTIFICANTES = "Justificante";
-    public const TABLA_BD_CODIGOS_QR = "Codigoqr";
-    public const TABLA_BD_CARRERA_MODALIDAD = "CarreraModalidad";
-    public const TABLA_BD_TIPO_CARRERA = "TipoCarrera";
-    public const TABLA_BD_ESTADO = "Estado";
+//MODALIDAD TIPO LETRA
+$LETRA_ESCOLARIZADO = "A";
+$LETRA_FLEXIBLE = "B";
 
 
+$TABLA_CARRERA_MODALIDAD = "CarreraModalidad";
+$TABLA_CARRERAS = "Carrera";
+$TABLA_CODIGOQR = "CodigoQR";
+$TABLA_ESTADO = "Estado";
+$TABLA_ESTUDIANTE = "Estudiante";
+$TABLA_GRUPO = "Grupo";
+$TABLA_JEFE = "JefeCarrera";
+$TABLA_JUSTIFICANTES = "Justificante";
+$TABLA_MODALIDADES = "Modalidad";
+$TABLA_ROL = "Rol";
+$TABLA_SOLICITUDES = "Solicitud";
+$TABLA_TIPO_CARRERA = "TipoCarrera";
+$TABLA_USUARIO = "Usuario";
+
+//CAMPOS DE LA TABLA ROL
+$CAMPO_ID_ROL = "id_rol";
+$CAMPO_ROL = "nombre_rol";
 
 
-    // CAMPOS DE LA TABLA USUARIO
-    public const CAMPO_ID_USUARIO = "id_usuario";
-    public const CAMPO_ID_ALUMNO = "id_estudiante";
-    public const CAMPO_ID_JEFE = "id_jefe";
-    public const CAMPO_ID_ESTADO = "id_estado";
+// CAMPOS DE LA TABLA USUARIO
+$CAMPO_ID_USUARIO = "id_usuario";
+$CAMPO_NOMBRE = "nombre";
+$CAMPO_APELLIDOS = "apellidos";
+$CAMPO_CONTRASEÑA = "contraseña";
+$CAMPO_CORREO = "correo";
 
-    public const CAMPO_ESTADO = "nombre_estado";
+// CAMPOS DE LA TABLA TIPOCARRERA
+$CAMPO_ID_TIPO_CARRERA = "id_tipo_carrera";
+$CAMPO_TIPO_CARRERA = "nombre_tipo_carrera";
 
-    public const CAMPO_CONTRASEÑA = "contraseña";
-    public const CAMPO_ID_ROL = "id_rol";
+// CAMPOS DE LA TABLA CARRERA
+$CAMPO_ID_CARRERA = "id_carrera";
+$CAMPO_CARRERA = "nombre_carrera";
 
-    // CAMPOS DE LA TABLA ROL
-    public const CAMPO_ROL = "nombre_rol";
-    public const MENU_DE_ROLES = [
-        "Administrador",
-        "Jefe de Carrera",
-        "Estudiante",
-    ];
+// CAMPOS DE LA TABLA GRUPO
+$CAMPO_ID_GRUPO = "id_grupo";
+$CAMPO_NUMERO_GRUPOS = "numero_grupos";
+$CAMPO_CLAVE_GRUPO = "clave_grupo";
 
-    // CAMPOS DE LA TABLA ADMINISTRADOR
-    public const CAMPO_CLAVE_EMPLEADO_ADMIN = "clave_empleado";
+// CAMPOS DE LA TABLA MODALIDAD
+$CAMPO_ID_MODALIDAD = "id_modalidad";
+$CAMPO_MODALIDAD = "nombre_modalidad";
 
-    // CAMPOS DE LA TABLA JEFE
-    public const CAMPO_CLAVE_EMPLEADO_JEFE = "clave_empleado";
-    public const CAMPO_CARRERA = "nombre_carrera";
-    public const CAMPO_ID_CARRERA = "id_carrera";
-    public const CAMPO_ID_TIPO_CARRERA = "id_tipo_carrera";
+//CAMPOS DE LA TABLA CARRERAMODALIDAD
+//Foreign key id_carrera y id_modalidad
 
-    public const CAMPO_ID_CARRERA_MODALIDAD = "id_carrera_modalidad";
-    public const CAMPO_TIPO_CARRERA = "nombre_tipo_carrera";
+// CAMPOS DE LA TABLA JEFECARRERA
+// Foreign key id_carrera y id_usuario
 
-    // CAMPOS DE LA TABLA ESTUDIANTE
-    public const CAMPO_MATRICULA = "matricula";
-    public const CAMPO_GRUPO = "grupo";
-    public const CAMPO_ID_MODALIDAD = "id_modalidad";
-    public const CAMPO_MODALIDAD = "nombre_modalidad";
+// CAMPOS DE LA TABLA ESTUDIANTE
+//foreign key de id_usuario, $id_carrera y $id_modalidad
+$CAMPO_GRUPO = "grupo";
 
-    public const CAMPO_NOMBRE = "nombre";
-    public const CAMPO_APELLIDOS = "apellidos";
-    public const CAMPO_CORREO = "correo";
+// CAMPOS DE LA TABLA ESTADO
+$CAMPO_ID_ESTADO = "id_estado";
+$CAMPO_ESTADO = "nombre_estado";
 
+// CAMPOS DE LA TABLA SOLICITUD
+$CAMPO_ID_SOLICITUD = "id_solicitud";
+$CAMPO_ID_ESTUDIANTE = "id_estudiante";
+$CAMPO_ID_JEFE = "id_jefe";
+$CAMPO_MOTIVO = "motivo";
+$CAMPO_EVIDENCIA = "evidencia";
+$CAMPO_FECHA_AUSE = "fecha_ausencia";
 
-    public const CAMPO_G_CARRERA = "id_carrera";
-    public const CAMPO_G_NUMERO_GRUPOS = "numero_grupos";
-    public const CAMPO_G_ID_GRUPO = "clave_grupo";
+// CAMPOS DE LA TABLA CODIGOQR
+$CAMPO_ID_CODIGO = "id_codigo";
+$CAMPO_DATOS_CODIGO = "datos_codigo";
+$CAMPO_URL = "url";
 
-    public const GRUPOS_DISPONIBLES = [
-        'Industrial' => ["numero" => 1, "cantidad" => 8],
-        "Insdustrias Alimentarias" => ["numero" => 2, "cantidad" => 7],
-        "Electromecanica" => ["numero" => 3, "cantidad" => 9],
-        "Sistemas Computacionales" => ["numero" => 4, "cantidad" => 9],
-        "Gestion Empresarial" => ["numero" => 5, "cantidad" => 9],
-        "Contador Publico" => ["numero" => 6, "cantidad" => 9],
-        "Quimica" => ["numero" => 7, "cantidad" => 8],
-        "Ambiental" => ["numero" => 1, "cantidad" => 7],
-    ];
+// CAMPOS DE LA TABLA JUSTIFICANTE
+$CAMPO_ID_JUSTIFICANTE = "id_justificante";
+$CAMPO_FECHA_CREACION = "fecha_creacion";
+$CAMPO_NOMBRE_JUSTIFICANTE = "nombre_justificante";
 
-    public const CAMPO_S_ID_SOLICITUD = "id_solicitud";
-    public const CAMPO_S_MATRICULA = "matricula";
-    public const CAMPO_S_NOMBRE = "nombre";
-    public const CAMPO_S_APELLIDOS = "apellidos";
-    public const CAMPO_S_GRUPO = "grupo";
-    public const CAMPO_S_CARRERA = "carrera";
-    public const CAMPO_S_MOTIVO = "motivo";
-    public const CAMPO_S_FECHA_AUSENCIA = "fecha_ausencia";
-    public const CAMPO_S_EVIDENCIA = "evidencia";
-    public const CAMPO_S_ESTADO = "estado";
-
-
-    public const CAMPO_J_ID = "id";
-    public const CAMPO_J_ID_SOLICITUD = "id_solicitud";
-    public const CAMPO_J_MATRICULA = "matricula_alumno";
-    public const CAMPO_J_NOMBRE = "nombre_alumno";
-    public const CAMPO_J_APELLIDOS = "apellidos_alumno";
-    public const CAMPO_J_MOTIVO = "motivo";
-    public const CAMPO_J_GRUPO = "grupo";
-    public const CAMPO_J_CARRERA = "carrera";
-    public const CAMPO_J_NOMBRE_JEFE = "nombre_jefe";
-    public const CAMPO_J_FECHA = "fecha_creacion";
-    public const CAMPO_J_JUSTIFICANTE = "justificante_pdf";
+$MESES = [
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre"
+];
 
 
-    public const CAMPO_Q_FOLIO_JUSTIFICANTE = "folio_justificante";
-    public const CAMPO_Q_TEXTO = "texto";
-    public const CAMPO_Q_VALIDO = "valido";
-    public const CAMPO_Q_URL_VERIFICACION = "url_verificacion";
-
-    public const MESES = [
-        "enero",
-        "febrero",
-        "marzo",
-        "abril",
-        "mayo",
-        "junio",
-        "julio",
-        "agosto",
-        "septiembre",
-        "octubre",
-        "noviembre",
-        "diciembre"
-    ];
-
-    public const TIPO_CARRERA = [
-        "Industrial" => "Ingenieria",
-        "Insdustrias Alimentarias" => "Ingenieria",
-        "Electromecanica" => "Ingenieria",
-        "Sistemas Computacionales" => "Ingenieria",
-        "Gestion Empresarial" => "Ingenieria",
-        "Contador Publico" => "Liceciatura",
-        "Quimica" => "Ingenieria",
-        "Ambiental" => "Ingenieria",
-    ];
 
 
-}
+
 

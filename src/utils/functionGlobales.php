@@ -1,95 +1,5 @@
 <?php
 
-$ADMIN = "Administrador";
-$JEFE = "Jefe de Carrera";
-$ESTUDIANTE = "Estudiante";
-$ESCOLARIZADO = "Escolarizado";
-$FLEXIBLE = "Flexible";
-$LETRA_ESCOLARIZADO = "A";
-$LETRA_FLEXIBLE = "B";
-$TABLA_USUARIO = Variables::TABLA_BD_USUARIO;
-$TABLA_ADMIN = Variables::TABLA_BD_AdMINISTRADOR;
-$TABLA_JEFE = Variables::TABLA_BD_JEFE;
-$TABLA_ESTUDIANTE = Variables::TABLA_BD_ESTUDIANTE;
-$TABLA_CARRERAS = Variables::TABLA_BD_CARRERA;
-$TABLA_ROL = Variables::TABLA_BD_ROL;
-$TABLA_MODALIDADES = Variables::tABLA_BD_MODALIDAD;
-$TABLA_GRUPO = Variables::TABLA_BD_GRUPO;
-$TABLA_SOLICITUDES = Variables::TABLA_BD_SOLICITUDES;
-$TABLA_JUSTIFICANTES = Variables::TABLA_BD_JUSTIFICANTES;
-$TABLA_CODIGOQR = Variables::TABLA_BD_CODIGOS_QR;
-$TABLA_CARRERA_MODALIDAD = Variables::TABLA_BD_CARRERA_MODALIDAD;
-$TABLA_TIPO_CARRERA = Variables::TABLA_BD_TIPO_CARRERA;
-$TABLA_ESTADO = Variables::TABLA_BD_ESTADO;
-
-
-$CAMPO_ID_USUARIO = Variables::CAMPO_ID_USUARIO;
-$CAMPO_ID_ALUMNO = Variables::CAMPO_ID_ALUMNO;
-$CAMPO_ID_JEFE = Variables::CAMPO_ID_JEFE;
-$CAMPO_ID_ESTADO = Variables::CAMPO_ID_ESTADO;
-
-$CAMPO_NOMBRE_ESTADO = Variables::CAMPO_ESTADO;
-
-
-$CAMPO_CONTRASEÑA = Variables::CAMPO_CONTRASEÑA;
-$CAMPO_CORREO = Variables::CAMPO_CORREO;
-
-$CAMPO_CLAVE_EMPLEADO_ADMIN = Variables::CAMPO_CLAVE_EMPLEADO_ADMIN;
-$CAMPO_CLAVE_EMPLEADO_JEFE = Variables::CAMPO_CLAVE_EMPLEADO_JEFE;
-$CAMPO_MATRICULA = VARIABLES::CAMPO_MATRICULA;
-
-$CAMPO_NOMBRE = Variables::CAMPO_NOMBRE;
-$CAMPO_APELLIDOS = Variables::CAMPO_APELLIDOS;
-
-$CAMPO_ID_CARRERA = Variables::CAMPO_ID_CARRERA;
-$CAMPO_CARRERA = Variables::CAMPO_CARRERA;
-$CAMPO_ID_TIPO_CARRERA = Variables::CAMPO_ID_TIPO_CARRERA;
-$CAMPO_ID_CARRERA_MODALIDAD = Variables::CAMPO_ID_CARRERA_MODALIDAD;
-$CAMPO_TIPO_CARRERA = Variables::CAMPO_TIPO_CARRERA;
-$CAMPO_CORREO = Variables::CAMPO_CORREO;
-
-$CAMPO_ID_ROL = Variables::CAMPO_ID_ROL;
-$CAMPO_ROL = Variables::CAMPO_ROL;
-
-$CAMPO_ID_MODALIDAD = Variables::CAMPO_ID_MODALIDAD;
-$CAMPO_MODALIDAD = Variables::CAMPO_MODALIDAD;
-$CAMPO_GRUPO = Variables::CAMPO_GRUPO;
-
-$CAMPO_G_ID_CARRERA = Variables::CAMPO_G_CARRERA;
-$CAMPO_ID_GRUPOS = Variables::CAMPO_G_ID_GRUPO;
-$CAMPO_NUMERO_GRUPOS = Variables::CAMPO_G_NUMERO_GRUPOS;
-
-$CAMPO_ESTADO = Variables::CAMPO_S_ESTADO;
-$CAMPO_ID_SOLICITUD = Variables::CAMPO_S_ID_SOLICITUD;
-$CAMPO_S_MATRICULA = Variables::CAMPO_S_MATRICULA;
-$CAMPO_S_NOMBRE = Variables::CAMPO_S_NOMBRE;
-$CAMPO_S_APELLIDOS = Variables::CAMPO_S_APELLIDOS;
-$CAMPO_S_GRUPO = Variables::CAMPO_S_GRUPO;
-$CAMPO_S_CARRERA = Variables::CAMPO_S_CARRERA;
-$CAMPO_MOTIVO = Variables::CAMPO_S_MOTIVO;
-$CAMPO_S_EVIDENCIA = Variables::CAMPO_S_EVIDENCIA;
-$CAMPO_FECHA_AUSE = Variables::CAMPO_S_FECHA_AUSENCIA;
-
-$CAMPO_J_ID_JUSTIFICANTE = Variables::CAMPO_J_ID;
-$CAMPO_J_ID_SOLICITUD = Variables::CAMPO_J_ID_SOLICITUD;
-$CAMPO_J_MATRICULA = Variables::CAMPO_J_MATRICULA;
-$CAMPO_J_NOMBRE = Variables::CAMPO_J_NOMBRE;
-$CAMPO_J_APELLIDOS = Variables::CAMPO_J_APELLIDOS;
-$CAMPO_J_MOTIVO = Variables::CAMPO_J_MOTIVO;
-$CAMPO_J_GRUPO = Variables::CAMPO_J_GRUPO;
-$CAMPO_J_CARRERA = Variables::CAMPO_J_CARRERA;
-$CAMPO_J_NOMBRE_JEFE = Variables::CAMPO_J_NOMBRE_JEFE;
-$CAMPO_J_JUSTIFICANTE = Variables::CAMPO_J_JUSTIFICANTE;
-$CAMPO_J_FECHA_CREACION = Variables::CAMPO_J_FECHA;
-
-
-$CAMPO_FOLIO_QR = Variables::CAMPO_Q_FOLIO_JUSTIFICANTE;
-$CAMPO_TEXTO_QR = Variables::CAMPO_Q_TEXTO;
-$CAMPO_VALIDO_QR = Variables::CAMPO_Q_VALIDO;
-$CAMPO_URL_QR = Variables::CAMPO_Q_URL_VERIFICACION;
-
-
-
 function estructuraMensaje($mensaje, $icono, $color)
 {
     $_SESSION["mensaje"] = $mensaje;
@@ -140,7 +50,7 @@ function obtenerDatosColumnaTabla($conexion, $columna, $tabla)
 // CONSULTA PARA OBTENER LA FILA COMPLETA UN ARRAY CLAVE VALOR*/
 function getResultDataTabla($conexion, $tabla, $columna, $campo)
 {
-    $sql = $conexion->prepare("SELECT * FROM " . $tabla . " WHERE " . $columna . " = ?");
+    $sql = $conexion->prepare("SELECT * FROM $tabla WHERE $columna = ?");
     $sql->bind_param("s", $campo);
     $sql->execute();
     $result = $sql->get_result();
@@ -162,8 +72,7 @@ function getResultIDUsuarioDuplicado($conexion, $id)
 // CONSULTA PARA OBTENER EL RESULTADO DE LA CONSULTA CORREO DUPLICADO   
 function getResultCorreoDuplicado($conexion, $correo)
 {
-    global $TABLA_USUARIO;
-    global $CAMPO_CORREO;
+    global $TABLA_USUARIO, $CAMPO_CORREO;
 
     $sql = $conexion->prepare("SELECT * FROM $TABLA_USUARIO WHERE $CAMPO_CORREO = ?");
     $sql->bind_param("s", $correo);
@@ -171,12 +80,10 @@ function getResultCorreoDuplicado($conexion, $correo)
     return $sql->get_result();
 }
 
-// CONSULTA PARA OBTENER EL NOMBRE DE ÑA CARRERA DE LA TABLA CARRERA
+// CONSULTA PARA OBTENER EL NOMBRE DE LA CARRERA DE LA TABLA CARRERA
 function getResultCarrera($conexion, $id_carrera)
 {
-    global $TABLA_CARRERAS;
-    global $CAMPO_ID_CARRERA;
-    global $CAMPO_CARRERA;
+    global $TABLA_CARRERAS, $CAMPO_ID_CARRERA, $CAMPO_CARRERA;
 
     $sqlIdCarrera = $conexion->prepare("SELECT $CAMPO_CARRERA FROM $TABLA_CARRERAS WHERE $CAMPO_ID_CARRERA = ?");
     $sqlIdCarrera->bind_param("s", $id_carrera);
@@ -190,7 +97,8 @@ function getResultCarrera($conexion, $id_carrera)
 // CONSULTA PARA OBTENER EL RESULTADO SI HAY UNA CARRERA DUPLICADA
 function getResultCarreraDuplicada($tabla, $conexion, $id_carrera)
 {
-    $sqlCarreraDuplicada = $conexion->prepare("SELECT * FROM " . $tabla . " WHERE " . Variables::CAMPO_ID_CARRERA . " = ?");
+    global $CAMPO_ID_CARRERA;
+    $sqlCarreraDuplicada = $conexion->prepare("SELECT * FROM $tabla WHERE $CAMPO_ID_CARRERA = ?");
     $sqlCarreraDuplicada->bind_param("i", $id_carrera);
     $sqlCarreraDuplicada->execute();
     return $sqlCarreraDuplicada->get_result();
@@ -199,9 +107,7 @@ function getResultCarreraDuplicada($tabla, $conexion, $id_carrera)
 // CONSULTA PARA OBTENER EL ID DE ROL
 function obtenerIDRol($conexion, $rol)
 {
-    global $TABLA_ROL;
-    global $CAMPO_ID_ROL;
-    global $CAMPO_ROL;
+    global $TABLA_ROL, $CAMPO_ID_ROL, $CAMPO_ROL;
 
     $sql = $conexion->prepare("SELECT $CAMPO_ID_ROL FROM $TABLA_ROL WHERE $CAMPO_ROL = ?");
     $sql->bind_param("s", $rol);
@@ -215,9 +121,7 @@ function obtenerIDRol($conexion, $rol)
 // CONSULTA PARA OBTENER EL ROL
 function obtenerRol($conexion, $id_rol)
 {
-    global $TABLA_ROL;
-    global $CAMPO_ID_ROL;
-    global $CAMPO_ROL;
+    global $TABLA_ROL, $CAMPO_ID_ROL, $CAMPO_ROL;
 
     $sql = $conexion->prepare("SELECT $CAMPO_ROL FROM $TABLA_ROL WHERE $CAMPO_ID_ROL = ?");
     $sql->bind_param("s", $id_rol);
@@ -231,9 +135,7 @@ function obtenerRol($conexion, $id_rol)
 // CONSULTA PARA OBTENER EL ID DE CARRERA
 function obtenerIDCarrera($conexion, $carrera)
 {
-    global $TABLA_CARRERAS;
-    global $CAMPO_ID_CARRERA;
-    global $CAMPO_CARRERA;
+    global $TABLA_CARRERAS, $CAMPO_ID_CARRERA, $CAMPO_CARRERA;
 
     $sql = $conexion->prepare("SELECT $CAMPO_ID_CARRERA FROM $TABLA_CARRERAS WHERE $CAMPO_CARRERA = ?");
     $sql->bind_param("s", $carrera);
@@ -247,9 +149,7 @@ function obtenerIDCarrera($conexion, $carrera)
 //CONSULTA PARA OBTENER LA ID DE LA MODALIDAD 
 function obtenerIdModalidad($conexion, $modalidad)
 {
-    global $TABLA_MODALIDADES;
-    global $CAMPO_ID_MODALIDAD;
-    global $CAMPO_MODALIDAD;
+    global $TABLA_MODALIDADES, $CAMPO_ID_MODALIDAD, $CAMPO_MODALIDAD;
 
     $sql = $conexion->prepare("SELECT $CAMPO_ID_MODALIDAD FROM $TABLA_MODALIDADES WHERE $CAMPO_MODALIDAD = ?");
     $sql->bind_param("s", $modalidad);
@@ -262,9 +162,7 @@ function obtenerIdModalidad($conexion, $modalidad)
 //CONSULTA PARA OBTENER LA MODALIDAD
 function obtenerModalidad($conexion, $id_modalidad)
 {
-    global $TABLA_MODALIDADES;
-    global $CAMPO_ID_MODALIDAD;
-    global $CAMPO_MODALIDAD;
+    global $TABLA_MODALIDADES, $CAMPO_ID_MODALIDAD, $CAMPO_MODALIDAD;
 
     $sql = $conexion->prepare("SELECT $CAMPO_MODALIDAD FROM $TABLA_MODALIDADES WHERE $CAMPO_ID_MODALIDAD = ?");
     $sql->bind_param("s", $id_modalidad);
@@ -278,9 +176,7 @@ function obtenerModalidad($conexion, $id_modalidad)
 // CONSULTA PARA OBTENER LA CONTRASEÑA ACTUAL DESDE LA BD A PARTIR DE UNA ID
 function obtenerContraseñaActualBD($conexion, $id)
 {
-    global $TABLA_USUARIO;
-    global $CAMPO_CONTRASEÑA;
-    global $CAMPO_ID_USUARIO;
+    global $TABLA_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_ID_USUARIO;
 
     $sqlComprobacionContraseña = "SELECT $CAMPO_CONTRASEÑA FROM $TABLA_USUARIO WHERE $CAMPO_ID_USUARIO= ?";
     $stmt = $conexion->prepare($sqlComprobacionContraseña);
@@ -297,7 +193,6 @@ function insertarUsuario($conexion, $id_usuario, $nombre, $apellidos, $correo, $
 
     $rol = obtenerIDRol($conexion, $cargo);
     $consulta = "INSERT INTO $TABLA_USUARIO ($CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_CORREO, $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL) VALUES (?, ?, ?, ?, ?, ?)";
-
     $usuario = $conexion->prepare($consulta);
     $usuario->bind_param("sssssi", $id_usuario, $nombre, $apellidos, $contraseña, $correo, $rol);
     return $usuario->execute();
@@ -310,9 +205,7 @@ function insertarJefedeCarrera($conexion, $identificador, $carrera)
 {
     global $TABLA_JEFE, $CAMPO_ID_CARRERA, $CAMPO_ID_USUARIO;
 
-
     $IDCarrera = obtenerIDCarrera($conexion, $carrera);
-
     $jefe = $conexion->prepare("INSERT INTO $TABLA_JEFE ($CAMPO_ID_USUARIO, $CAMPO_ID_CARRERA) VALUES (?, ?)");
     $jefe->bind_param("si", $identificador, $IDCarrera);
 
@@ -322,11 +215,7 @@ function insertarJefedeCarrera($conexion, $identificador, $carrera)
 //CONSULTA PARA INSERTAR DATOS EN LA TABLA ESTUDIANTE
 function insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)
 {
-    global $TABLA_ESTUDIANTE;
-    global $CAMPO_ID_USUARIO;
-    global $CAMPO_GRUPO;
-    global $CAMPO_ID_CARRERA;
-    global $CAMPO_ID_MODALIDAD;
+    global $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $CAMPO_GRUPO, $CAMPO_ID_CARRERA, $CAMPO_ID_MODALIDAD;
 
     $sql = $conexion->prepare("INSERT INTO $TABLA_ESTUDIANTE ($CAMPO_ID_USUARIO, $CAMPO_ID_CARRERA,$CAMPO_ID_MODALIDAD, $CAMPO_GRUPO) VALUES (?, ?, ?, ?)");
     $sql->bind_param("siis", $matricula, $id_carrera, $id_modalidad, $grupo);
@@ -337,9 +226,7 @@ function insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carr
 // CONSULTA OARA MODIFICAR LA CONTRASEÑA ACTUAL DESDE LA PAGINA INICIO (DENTRO DEL SISTEMA)
 function modificarLaContraseñaActualPaginaInicio($conexion, $id, $contraseña_nueva)
 {
-    global $TABLA_USUARIO;
-    global $CAMPO_CONTRASEÑA;
-    global $CAMPO_ID_USUARIO;
+    global $TABLA_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_ID_USUARIO;
 
     $sql = "UPDATE $TABLA_USUARIO SET $CAMPO_CONTRASEÑA = ? WHERE $CAMPO_ID_USUARIO = ?";
     $stmt = $conexion->prepare($sql);
@@ -350,23 +237,17 @@ function modificarLaContraseñaActualPaginaInicio($conexion, $id, $contraseña_n
 // CONSULTA PARA ELIMINAR DATOS DE LA TABLA USUARIO
 function EliminarUsuario($conexion, $id)
 {
-    global $TABLA_USUARIO;
-    global $CAMPO_ID_USUARIO;
-    if ($id) {
-        $sql = "DELETE FROM $TABLA_USUARIO WHERE $CAMPO_ID_USUARIO = ?";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("s", $id);
-        return $stmt->execute();
-    } else {
-        return false;
-    }
+    global $TABLA_USUARIO, $CAMPO_ID_USUARIO;
+    $sql = "DELETE FROM $TABLA_USUARIO WHERE $CAMPO_ID_USUARIO = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $id);
+    return $stmt->execute();
 
 }
 
 function EliminarCarrera($conexion, $carreraNueva)
 {
-    global $TABLA_CARRERAS;
-    global $CAMPO_CARRERA;
+    global $TABLA_CARRERAS, $CAMPO_CARRERA;
 
     $consulta = "DELETE FROM $TABLA_CARRERAS WHERE $CAMPO_CARRERA = ?";
     $sql = $conexion->prepare($consulta);
@@ -376,11 +257,8 @@ function EliminarCarrera($conexion, $carreraNueva)
 
 function ModificarEstadoSolicitud($conexion, $id_solicitud)
 {
-    global $TABLA_SOLICITUDES;
-    global $CAMPO_ID_ESTADO;
-    global $CAMPO_ID_SOLICITUD;
+    global $TABLA_SOLICITUDES, $CAMPO_ID_ESTADO, $CAMPO_ID_SOLICITUD;
     $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ID_ESTADO = ? WHERE $CAMPO_ID_SOLICITUD = ?";
-
     $id_estado = 1;
     $smtm = $conexion->prepare($sql);
     $smtm->bind_param("ii", $id_estado, $id_solicitud);
@@ -400,12 +278,9 @@ function obtenerNumeroFolio($conexion)
 
 function InsertarTablaJustificante($conexion, $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)
 {
-    global $TABLA_JUSTIFICANTES;
+    global $TABLA_JUSTIFICANTES, $CAMPO_ID_SOLICITUD, $CAMPO_ID_ESTUDIANTE, $CAMPO_ID_JEFE, $CAMPO_ID_CODIGO, $CAMPO_NOMBRE_JUSTIFICANTE;
 
-    $sql = "INSERT INTO $TABLA_JUSTIFICANTES 
-            (id_solicitud, id_estudiante, id_jefe, id_codigo, nombre_justificante)
-            VALUES (?, ?, ?, ?, ?)";
-
+    $sql = "INSERT INTO $TABLA_JUSTIFICANTES ( $CAMPO_ID_SOLICITUD, $CAMPO_ID_ESTUDIANTE, $CAMPO_ID_JEFE, $CAMPO_ID_CODIGO, $CAMPO_NOMBRE_JUSTIFICANTE) VALUES (?, ?, ?, ?, ?)";
     $smtm = $conexion->prepare($sql);
     $smtm->bind_param('issss', $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante);
 
@@ -415,12 +290,8 @@ function InsertarTablaJustificante($conexion, $id_solicitud, $id_estudiante, $id
 function insertarCodigoQR($conexion, $qr_text, $valido, $url_verificacion)
 {
 
-    global $TABLA_CODIGOQR;
-    global $CAMPO_FOLIO_QR;
-    global $CAMPO_TEXTO_QR;
-    global $CAMPO_VALIDO_QR;
-    global $CAMPO_URL_QR;
-    $sql = "INSERT INTO $TABLA_CODIGOQR (datos_codigo, url, id_estado) VALUES (?, ?, ?)";
+    global $TABLA_CODIGOQR, $CAMPO_DATOS_CODIGO, $CAMPO_URL, $CAMPO_ID_ESTADO;
+    $sql = "INSERT INTO $TABLA_CODIGOQR ($CAMPO_DATOS_CODIGO, $CAMPO_URL, $CAMPO_ID_ESTADO) VALUES (?, ?, ?)";
 
     $smtm = $conexion->prepare($sql);
     $valido = 1;
@@ -434,10 +305,9 @@ function insertarCodigoQR($conexion, $qr_text, $valido, $url_verificacion)
 
 function obtenerCodigoQVerificacion($conexion, $qr_text)
 {
-    global $TABLA_CODIGOQR;
-    global $CAMPO_ID_ESTADO;
+    global $TABLA_CODIGOQR, $CAMPO_ID_ESTADO, $CAMPO_DATOS_CODIGO;
 
-    $sql = "SELECT $CAMPO_ID_ESTADO FROM $TABLA_CODIGOQR WHERE datos_codigo = ?";
+    $sql = "SELECT $CAMPO_ID_ESTADO FROM $TABLA_CODIGOQR WHERE $CAMPO_DATOS_CODIGO = ?";
 
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $qr_text);
@@ -447,9 +317,8 @@ function obtenerCodigoQVerificacion($conexion, $qr_text)
 
 function actualizarValidacionCodigoQR($conexion, $qr_text)
 {
-    global $CAMPO_ID_ESTADO;
-    // Actualizar a 2 para marcarlo como ya escaneado
-    $update = "UPDATE codigoqr SET $CAMPO_ID_ESTADO = 3 WHERE datos_codigo = ?";
+    global $TABLA_CODIGOQR, $CAMPO_ID_ESTADO, $CAMPO_DATOS_CODIGO;
+    $update = "UPDATE $TABLA_CODIGOQR SET $CAMPO_ID_ESTADO = 3 WHERE $CAMPO_DATOS_CODIGO = ?";
 
     $stmt_update = $conexion->prepare($update);
     $stmt_update->bind_param("s", $qr_text);
@@ -458,12 +327,8 @@ function actualizarValidacionCodigoQR($conexion, $qr_text)
 
 function modificarSolicitudRechazado($conexion, $id_solicitud)
 {
-    global $TABLA_SOLICITUDES;
-    global $CAMPO_ID_ESTADO;
-    global $CAMPO_ID_SOLICITUD;
+    global $TABLA_SOLICITUDES, $CAMPO_ID_ESTADO, $CAMPO_ID_SOLICITUD;
     $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ID_ESTADO = ? WHERE $CAMPO_ID_SOLICITUD = ?";
-
-
     $smtm = $conexion->prepare($sql);
     $rechazada = 3;
     $smtm->bind_param("is", $rechazada, $id_solicitud);
@@ -472,15 +337,10 @@ function modificarSolicitudRechazado($conexion, $id_solicitud)
 
 function obtenerIDAndNumerosGrupos($conexion, $id_carrera)
 {
-    global $CAMPO_CARRERA;
-    global $CAMPO_ID_GRUPOS;
-    global $CAMPO_NUMERO_GRUPOS;
-    global $TABLA_GRUPO;
-    global $TABLA_CARRERAS;
-    global $CAMPO_ID_CARRERA;
+    global $CAMPO_CARRERA, $CAMPO_CLAVE_GRUPO, $CAMPO_NUMERO_GRUPOS, $TABLA_GRUPO, $TABLA_CARRERAS, $CAMPO_ID_CARRERA;
 
 
-    $sql = "SELECT  c.$CAMPO_CARRERA, g.$CAMPO_ID_GRUPOS, g.$CAMPO_NUMERO_GRUPOS FROM $TABLA_GRUPO g JOIN $TABLA_CARRERAS c ON g.$CAMPO_ID_CARRERA = c.$CAMPO_ID_CARRERA WHERE g.$CAMPO_ID_CARRERA = ? ";
+    $sql = "SELECT  c.$CAMPO_CARRERA, g.$CAMPO_CLAVE_GRUPO, g.$CAMPO_NUMERO_GRUPOS FROM $TABLA_GRUPO g JOIN $TABLA_CARRERAS c ON g.$CAMPO_ID_CARRERA = c.$CAMPO_ID_CARRERA WHERE g.$CAMPO_ID_CARRERA = ? ";
     $stmt = $conexion->prepare($sql);
 
     $stmt->bind_param("i", $id_carrera);
@@ -490,8 +350,7 @@ function obtenerIDAndNumerosGrupos($conexion, $id_carrera)
 
 function obtenerModalidades($conexion, $id_carrera)
 {
-    global $TABLA_CARRERA_MODALIDAD;
-    global $CAMPO_ID_CARRERA;
+    global $TABLA_CARRERA_MODALIDAD, $CAMPO_ID_CARRERA;
 
     $sql = "SELECT COUNT(*) as Modalidades FROM $TABLA_CARRERA_MODALIDAD WHERE $CAMPO_ID_CARRERA = ? GROUP BY $CAMPO_ID_CARRERA";
 
@@ -503,8 +362,7 @@ function obtenerModalidades($conexion, $id_carrera)
 
 function obtenerAllCarreras($conexion)
 {
-    global $TABLA_CARRERAS;
-    global $CAMPO_CARRERA;
+    global $TABLA_CARRERAS, $CAMPO_CARRERA;
     $sql = "SELECT $CAMPO_CARRERA FROM $TABLA_CARRERAS ORDER BY $CAMPO_CARRERA";
     $stmt = $conexion->prepare($sql);
     $stmt->execute();
@@ -521,10 +379,8 @@ function EliminarDatosTablaJustificante($conexion)
 
 function EliminarSolicitudID($conexion, $id)
 {
-    global $TABLA_SOLICITUDES;
-    global $CAMPO_ID_SOLICITUD;
+    global $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD;
     $consulta = "DELETE FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_SOLICITUD = ?";
-
     $sql = $conexion->prepare($consulta);
     $sql->bind_param("s", $id);
     return $sql->execute();
@@ -532,15 +388,9 @@ function EliminarSolicitudID($conexion, $id)
 
 function buscarPersonalBD($conexion, $query)
 {
-    global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_ID_ROL;
-    global $CAMPO_NOMBRE;
+    global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_ID_ROL, $CAMPO_NOMBRE;
 
-    $sql = "SELECT $CAMPO_ID_USUARIO, $CAMPO_NOMBRE 
-        FROM $TABLA_USUARIO 
-        WHERE 
-            ($CAMPO_ID_USUARIO LIKE ? OR $CAMPO_NOMBRE LIKE ?) 
-            AND 
-            ($CAMPO_ID_ROL = ? OR $CAMPO_ID_ROL = ?)";
+    $sql = "SELECT $CAMPO_ID_USUARIO, $CAMPO_NOMBRE FROM $TABLA_USUARIO WHERE ($CAMPO_ID_USUARIO LIKE ? OR $CAMPO_NOMBRE LIKE ?) AND ($CAMPO_ID_ROL = ? OR $CAMPO_ID_ROL = ?)";
 
     $stmt = $conexion->prepare($sql);
     $param = "%$query%";
@@ -554,61 +404,46 @@ function buscarPersonalBD($conexion, $query)
 
 function buscarEstudianteBD($conexion, $query, $id_carrera)
 {
-    global $TABLA_USUARIO, $TABLA_ESTUDIANTE;
-    global $CAMPO_NOMBRE;
-    global $CAMPO_ID_CARRERA;
-    global $CAMPO_ID_USUARIO, $CAMPO_ID_ROL;
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_NOMBRE, $CAMPO_ID_CARRERA, $CAMPO_ID_USUARIO, $CAMPO_ID_ROL;
 
-    $sql = "SELECT u.$CAMPO_ID_USUARIO, u.$CAMPO_NOMBRE 
-        FROM $TABLA_USUARIO u
-        JOIN $TABLA_ESTUDIANTE e ON u.$CAMPO_ID_USUARIO = e.$CAMPO_ID_USUARIO
-        WHERE 
-            (u.$CAMPO_ID_USUARIO LIKE ? OR u.$CAMPO_NOMBRE LIKE ?) 
-            AND e.$CAMPO_ID_CARRERA = ? 
-            AND u.$CAMPO_ID_ROL = ?";
-
+    $sql = "SELECT u.$CAMPO_ID_USUARIO, u.$CAMPO_NOMBRE FROM $TABLA_USUARIO u JOIN $TABLA_ESTUDIANTE e ON u.$CAMPO_ID_USUARIO = e.$CAMPO_ID_USUARIO WHERE (u.$CAMPO_ID_USUARIO LIKE ? OR u.$CAMPO_NOMBRE LIKE ?) AND e.$CAMPO_ID_CARRERA = ? AND u.$CAMPO_ID_ROL = ?";
     $stmt = $conexion->prepare($sql);
     $param = "%$query%";
-    $id_estudiante = 3; // o puedes pasarlo como argumento si quieres más dinamismo
-
+    $id_estudiante = 3;
     $stmt->bind_param('ssii', $param, $param, $id_carrera, $id_estudiante);
-
     $stmt->execute();
     return $stmt->get_result();
 }
 
 function buscarJustificantes($conexion, $query)
 {
-    global $TABLA_JUSTIFICANTES, $TABLA_USUARIO;
-    global $CAMPO_ID_USUARIO;
-    global $CAMPO_NOMBRE;
+    global $TABLA_JUSTIFICANTES, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_ID_ESTUDIANTE;
     if (strlen($query) > 0) {
         $sql = "SELECT j.*, u.$CAMPO_NOMBRE
                     FROM $TABLA_JUSTIFICANTES AS j
-                    JOIN $TABLA_USUARIO AS u ON j.id_estudiante = u.$CAMPO_ID_USUARIO
-                    WHERE j.id_estudiante LIKE ? OR u.$CAMPO_NOMBRE LIKE ?";
+                    JOIN $TABLA_USUARIO AS u ON j.$CAMPO_ID_ESTUDIANTE = u.$CAMPO_ID_USUARIO
+                    WHERE j.$CAMPO_ID_ESTUDIANTE LIKE ? OR u.$CAMPO_NOMBRE LIKE ?";
 
         $stmt = $conexion->prepare($sql);
         $param = "%$query%";
         $stmt->bind_param('ss', $param, $param);
 
     } else {
-        $sql = "SELECT j.*, u.$CAMPO_NOMBRE FROM $TABLA_JUSTIFICANTES j JOIN $TABLA_USUARIO u ON j.id_estudiante = u.$CAMPO_ID_USUARIO";
+        $sql = "SELECT j.*, u.$CAMPO_NOMBRE FROM $TABLA_JUSTIFICANTES j JOIN $TABLA_USUARIO u ON j.$CAMPO_ID_ESTUDIANTE = u.$CAMPO_ID_USUARIO";
         $stmt = $conexion->prepare($sql);
     }
 
     $stmt->execute();
     return $stmt->get_result();
 }
-function insertarSolicitudBD($conexion, $identificador, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)
+function insertarSolicitudBD($conexion, $matricula, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)
 {
-    global $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD, $CAMPO_S_MATRICULA, $CAMPO_S_NOMBRE, $CAMPO_ID_JEFE,
-    $CAMPO_S_GRUPO, $CAMPO_S_CARRERA, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE, $CAMPO_S_EVIDENCIA, $CAMPO_ID_ESTADO;
+    global $TABLA_SOLICITUDES, $CAMPO_ID_ESTUDIANTE, $CAMPO_ID_JEFE, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE, $CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA;
 
-    $sql = "INSERT INTO $TABLA_SOLICITUDES (id_estudiante, $CAMPO_ID_JEFE, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE,$CAMPO_ID_ESTADO, evidencia ) 
+    $sql = "INSERT INTO $TABLA_SOLICITUDES ($CAMPO_ID_ESTUDIANTE, $CAMPO_ID_JEFE, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE,$CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA ) 
     VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("ssssss", $identificador, $id_jefe, $motivo, $fecha, $id_estado, $identificador_archivo);
+    $stmt->bind_param("ssssss", $matricula, $id_jefe, $motivo, $fecha, $id_estado, $identificador_archivo);
     return $stmt->execute();
 }
 
@@ -643,10 +478,9 @@ function insertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)
 
 function insertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)
 {
-    global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
+    global $TABLA_GRUPO, $CAMPO_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_CLAVE_GRUPO;
 
-    $sql = "INSERT INTO $TABLA_GRUPO ($CAMPO_G_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS) VALUES (?, ?, ?)";
-
+    $sql = "INSERT INTO $TABLA_GRUPO ($CAMPO_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_CLAVE_GRUPO) VALUES (?, ?, ?)";
     $sql = $conexion->prepare($sql);
     $sql->bind_param("sss", $id_carrera, $numeros_grupos, $id_carrera_nueva);
     return $sql->execute();
@@ -664,10 +498,9 @@ function modificarNombreTipoCarreraDB($conexion, $nombreNuevo, $id_tipo_carrera_
 
 function modificarNumeroGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)
 {
-    global $TABLA_GRUPO, $CAMPO_G_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_ID_GRUPOS;
+    global $TABLA_GRUPO, $CAMPO_ID_CARRERA, $CAMPO_NUMERO_GRUPOS, $CAMPO_CLAVE_GRUPO;
 
-    $sql = "UPDATE $TABLA_GRUPO SET $CAMPO_NUMERO_GRUPOS = ?, $CAMPO_ID_GRUPOS = ? WHERE $CAMPO_G_ID_CARRERA = ?";
-
+    $sql = "UPDATE $TABLA_GRUPO SET $CAMPO_NUMERO_GRUPOS = ?, $CAMPO_CLAVE_GRUPO = ? WHERE $CAMPO_ID_CARRERA = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("sss", $numeros_grupos, $id_carrera_nueva, $id_carrera);
     return $stmt->execute();
@@ -680,13 +513,11 @@ function modificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $a
     $sql = " UPDATE $TABLA_USUARIO SET $CAMPO_NOMBRE = ?, $CAMPO_APELLIDOS = ?, $CAMPO_CORREO = ? WHERE $CAMPO_ID_USUARIO = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("ssss", $nombre, $apellidos, $correo, $matricula);
-
     if (!$stmt->execute()) {
         return false;
     }
 
     $sql = " UPDATE $TABLA_ESTUDIANTE SET  $CAMPO_GRUPO = ?, $CAMPO_ID_MODALIDAD = ? WHERE $CAMPO_ID_USUARIO = ?";
-
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("sis", $grupo, $id_modalidad, $id_usuario);
 
@@ -714,17 +545,6 @@ function obtenerJustificantesJefeCarrera($conexion, $id_jefe)
     $resultado->bind_param("s", $id_jefe);
     $resultado->execute();
     return $resultado->get_result();
-}
-
-function obtenerDataUsuarioPorIDBD($conexion, $id)
-{
-    global $TABLA_USUARIO, $CAMPO_ID_USUARIO;
-    $sqlUsuario = "SELECT * FROM $TABLA_USUARIO WHERE $CAMPO_ID_USUARIO = ?";
-
-    $prepareUsuario = $conexion->prepare($sqlUsuario);
-    $prepareUsuario->bind_param("s", $id);
-    $prepareUsuario->execute();
-    return $prepareUsuario->get_result();
 }
 
 
@@ -771,7 +591,6 @@ function obtenerModalidadesCarrera($conexion, $id_carrera)
         while ($row = $resultado->fetch_assoc()) {
             $data[] = obtenerModalidad($conexion, $row[$CAMPO_ID_MODALIDAD]);
         }
-
         return $data;
 
     }
@@ -779,20 +598,7 @@ function obtenerModalidadesCarrera($conexion, $id_carrera)
 
 function obtenerNombreEstado($conexion, $id_estado)
 {
-    global $CAMPO_ID_SOLICITUD, $CAMPO_ID_ALUMNO, $CAMPO_ID_ESTADO, $TABLA_ESTADO, $CAMPO_NOMBRE_ESTADO;
-
-    $sql = "SELECT $CAMPO_NOMBRE_ESTADO FROM $TABLA_ESTADO WHERE $CAMPO_ID_ESTADO = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("i", $id_estado);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $response = $result->fetch_assoc();
-    return $response[$CAMPO_NOMBRE_ESTADO];
-}
-
-function obtenerNombreMotivo($conexion, $id_estado)
-{
-    global $CAMPO_ID_SOLICITUD, $CAMPO_ID_ALUMNO, $CAMPO_ID_ESTADO, $TABLA_ESTADO, $CAMPO_NOMBRE_ESTADO;
+    global $CAMPO_ID_ESTADO, $TABLA_ESTADO, $CAMPO_NOMBRE_ESTADO;
 
     $sql = "SELECT $CAMPO_NOMBRE_ESTADO FROM $TABLA_ESTADO WHERE $CAMPO_ID_ESTADO = ?";
     $stmt = $conexion->prepare($sql);

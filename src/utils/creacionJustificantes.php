@@ -32,7 +32,11 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         $nombre_jefe = $datos_jefeUser[$CAMPO_NOMBRE];
         $apellidos_jefe = $datos_jefeUser[$CAMPO_APELLIDOS];
-        $carrera = getResultCarrera($conexion, $datos_jefe[$CAMPO_ID_CARRERA]);
+
+        $dataCarrera = getResultDataTabla($conexion, $TABLA_CARRERAS, $CAMPO_ID_CARRERA, $datos_jefe[$CAMPO_ID_CARRERA]);
+
+        $carrera = $dataCarrera[$CAMPO_CARRERA];
+        $tipoCarrera = obtenerTipoCarrera($conexion, $dataCarrera[$CAMPO_ID_TIPO_CARRERA]);
 
         $fecha_actual = obtenerFechaActual();
 
@@ -189,7 +193,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         <div class="escuela_detalle">
             <p class="escuela">Instituto Tecnologico Superior de Huatusco</p>
-            <p class="carrera"> <?php echo Variables::TIPO_CARRERA[$carrera] . " " . $carrera ?></p>
+            <p class="carrera"> <?php echo "$tipoCarrera en $carrera" ?></p>
         </div>
 
 
@@ -264,7 +268,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
             <p>MRT(A). <?php echo "$nombre_jefe $apellidos_jefe" ?></p>
 
-            <p>JEFE(A) DE LA DIVISION DE <?php echo Variables::TIPO_CARRERA[$carrera] . " en " . $carrera ?></p>
+            <p>JEFE(A) DE LA DIVISION DE <?php echo "$tipoCarrera en $carrera" ?></p>
 
         </div>
 

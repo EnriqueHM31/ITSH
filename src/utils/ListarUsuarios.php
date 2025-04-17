@@ -28,34 +28,29 @@ $ESTUDIANTE = "Estudiante";
 // Consulta para obtener todos los usuarios de las tablas
 $query = "
     SELECT 
-    u.$CAMPO_ID_USUARIO, 
-    u.$CAMPO_CORREO, 
-    r.$CAMPO_ROL,  
-    e.$CAMPO_NOMBRE AS nombre_estudiante, 
-    e.$CAMPO_APELLIDOS AS apellidos_estudiante, 
-    j.$CAMPO_NOMBRE AS nombre_jefe, 
-    j.$CAMPO_APELLIDOS AS apellidos_jefe, 
-    a.$CAMPO_NOMBRE AS nombre_administrador, 
-    a.$CAMPO_APELLIDOS AS apellidos_administrador,
-    COALESCE(c.$CAMPO_CARRERA, 'No aplica') AS carrera
-    FROM $TABLA_USUARIO u
-    LEFT JOIN $TABLA_ESTUDIANTE e ON u.$CAMPO_ID_USUARIO = e.$CAMPO_MATRICULA
-    LEFT JOIN $TABLA_JEFE j ON u.$CAMPO_ID_USUARIO  = j.$CAMPO_CLAVE_EMPLEADO_JEFE
-    LEFT JOIN $TABLA_ADMIN a ON u.$CAMPO_ID_USUARIO  = a.$CAMPO_CLAVE_EMPLEADO_ADMIN
-    LEFT JOIN $TABLA_ROL r ON u.$CAMPO_ID_ROL = r.$CAMPO_ID_ROL
-    LEFT JOIN $TABLA_CARRERAS c ON c.$CAMPO_ID_CARRERA = COALESCE(e.$CAMPO_ID_CARRERA, j.$CAMPO_ID_CARRERA)
-    ORDER BY 
+    u.*, 
+    r.$CAMPO_ROL,
+    e.id_carrera AS carrera_estudiante,
+    j.id_carrera AS carrera_jefe
+FROM 
+    Usuario u
+JOIN 
+    Rol r ON u.id_rol = r.id_rol
+LEFT JOIN 
+    Estudiante e ON u.id_usuario = e.id_usuario
+LEFT JOIN 
+    JefeCarrera j ON u.id_usuario = j.id_usuario
+ORDER BY 
     CASE 
         WHEN r.$CAMPO_ROL = '$ADMINISTRADOR' THEN 1
         WHEN r.$CAMPO_ROL = '$JEFE_CARRERA' THEN 2
         WHEN r.$CAMPO_ROL = '$ESTUDIANTE' THEN 3
         ELSE 4 
     END;
+
 ";
 
-$query = "
-    SELECT $CAMPO_ID_USUARIO FROM $TABLA_USUARIO
-";
+
 $stmt = $conexion->prepare($query);
 $stmt->execute();
 $resultado = $stmt->get_result();
@@ -69,6 +64,8 @@ if ($resultado->num_rows > 0) {
     $html = '
     <html>
     <head>
+        <meta charset="UTF-8">
+        <title>Lista de Usuarios</title>
         <style>
             *{
                 font-family: Arial, Helvetica, sans-serif;
@@ -118,7 +115,7 @@ if ($resultado->num_rows > 0) {
             </thead>
             <tbody>';
 
-    ponerDatosTabla($resultado);
+    ponerDatosTabla($conexion, $resultado);
 
     $html .= '
             </tbody>
@@ -154,34 +151,24 @@ $conexion->close();
 
 
 
-function ponerDatosTabla($resultado)
+function ponerDatosTabla($conexion, $resultado)
 {
-    global $ADMINISTRADOR, $JEFE_CARRERA, $ESTUDIANTE, $CAMPO_ID_ROL, $html, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
+    global $ADMINISTRADOR, $JEFE_CARRERA, $ESTUDIANTE, $CAMPO_ID_ROL, $html, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_ID_CARRERA;
     while ($row = $resultado->fetch_assoc()) {
         // Asegurar que solo se muestre un rol por usuario
-        $rol = $row[$CAMPO_ID_ROL]; // El nombre del rol viene de la tabla rol
-
-        // Variables para almacenar datos dinámicos
-        $nombre = '';
-        $apellidos = '';
-        $carrera = 'No aplica'; // Valor predeterminado para administradores
+        $rol = obtenerRol($conexion, $row[$CAMPO_ID_ROL]);
+        $carrera = getResultCarrera($conexion, $row[$CAMPO_ID_CARRERA]);
 
         // Verificar el rol del usuario y asignar los valores correspondientes
         if ($rol == $ESTUDIANTE) {
-            $nombre = $row['nombre_estudiante'];
-            $apellidos = $row['apellidos_estudiante'];
-            $carrera = $row['carrera']; // Asigna la carrera del estudiante
+            $carrera = getResultCarrera($conexion, $row['carrera_estudiante']);
         } elseif ($rol == $JEFE_CARRERA) {
-            $nombre = $row['nombre_jefe'];
-            $apellidos = $row['apellidos_jefe'];
-            $carrera = $row['carrera']; // Asigna la carrera del jefe
+            $carrera = getResultCarrera($conexion, $row['carrera_jefe']);
         } elseif ($rol == $ADMINISTRADOR) {
-            $nombre = $row['nombre_administrador'];
-            $apellidos = $row['apellidos_administrador'];
             $carrera = 'No aplica'; // Los administradores no tienen carrera
         }
 
-        $nombre_completo = "$nombre $apellidos";
+        $nombre_completo = "$row[$CAMPO_NOMBRE] $row[$CAMPO_APELLIDOS]";
 
         // Construcción del HTML con la columna de carrera
         $html .= '

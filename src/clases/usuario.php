@@ -9,22 +9,22 @@ class Usuario
 
     public function Verificacion($conexion, $id, $contraseña)
     {
-        global $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $ADMIN, $JEFE, $ESTUDIANTE;
+        global $TABLA_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $ADMIN, $JEFE, $ESTUDIANTE;
         if (empty($id) || empty($contraseña)) {
             estructuraMensaje("Llena todos los campos", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $resultUsuario = obtenerDataUsuarioPorIDBD($conexion, $id);
+        $resultUsuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
 
-        if ($resultUsuario->num_rows < 1) {
+
+        if (!$resultUsuario) {
             estructuraMensaje("Usuario Invalido", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $usuario = $resultUsuario->fetch_assoc();
-        $contraseñaBD = $usuario[$CAMPO_CONTRASEÑA];
-        $rolBD = $usuario[$CAMPO_ID_ROL];
+        $contraseñaBD = $resultUsuario[$CAMPO_CONTRASEÑA];
+        $rolBD = $resultUsuario[$CAMPO_ID_ROL];
 
         if ($contraseñaBD !== $contraseña) {
             estructuraMensaje("Contraseña Incorrecta", "./src/assets/iconos/ic_error.webp", "--rojo");
@@ -35,13 +35,13 @@ class Usuario
         $rol = obtenerRol($conexion, $rolBD);
 
         if ($rol === $ADMIN) {
-            $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Admin/Admin.php");
+            $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Admin/Admin.php");
         }
         if ($rol === $JEFE) {
-            $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "JefedeCarrera/JefeCarrera.php");
+            $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "JefedeCarrera/JefeCarrera.php");
         }
         if ($rol === $ESTUDIANTE) {
-            $this->asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Alumno/alumno.php");
+            $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Alumno/alumno.php");
         } else {
             estructuraMensaje("Ocurrio un error con la pagina", "./src/assets/iconos/ic_error.webp", "--rojo");
         }

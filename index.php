@@ -3,8 +3,8 @@
 session_start();
 include "src/utils/constantes.php";
 include "src/conexion/conexion.php";
-include "src/clases/usuario.php";
 include "src/utils/functionGlobales.php";
+include "src/clases/usuario.php";
 $usuario = new usuario();
 ?>
 

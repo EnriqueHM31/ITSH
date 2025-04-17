@@ -3,9 +3,6 @@
 
 class administrador
 {
-    public const ADMIN = Variables::MENU_DE_ROLES[0];
-    public const JEFE_DE_CARRERA = Variables::MENU_DE_ROLES[1];
-    public const ESTUDIANTE = Variables::MENU_DE_ROLES[2];
 
     public function __administrador()
     {
@@ -215,7 +212,7 @@ class administrador
 
     public function AgregarCarrera($conexion, $carrera, $numeros_grupos, $id_carrera_nueva, $id_tipo_carrera, $modalidadEscolarizada, $modalidadFlexible)
     {
-        global $TABLA_GRUPO, $CAMPO_ID_GRUPOS;
+        global $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO;
         mysqli_begin_transaction($conexion);
 
 
@@ -236,7 +233,7 @@ class administrador
 
         $id_carrera = obtenerIDCarrera($conexion, $carrera);
 
-        $existeClaveGrupo = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_ID_GRUPOS, $id_carrera_nueva);
+        $existeClaveGrupo = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $id_carrera_nueva);
 
         if ($existeClaveGrupo) {
             estructuraMensaje("Esa clave de grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
@@ -272,7 +269,7 @@ class administrador
 
     public function ModificarCarrera($conexion, $carreraAntigua, $claveGrupoAntigua, $carreraNueva, $id_tipo_carrera_nueva, $numeros_grupos, $id_carrera_nueva, $modalidadEscolarizada, $modalidadFlexible)
     {
-        global $TABLA_GRUPO, $CAMPO_ID_GRUPOS, $TABLA_CARRERAS, $CAMPO_CARRERA;
+        global $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $TABLA_CARRERAS, $CAMPO_CARRERA;
 
         mysqli_begin_transaction($conexion);
 
@@ -302,7 +299,7 @@ class administrador
         }
 
         if ($claveGrupoAntigua != $id_carrera_nueva) {
-            $existeClave = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_ID_GRUPOS, $id_carrera_nueva);
+            $existeClave = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $id_carrera_nueva);
             if ($existeClave) {
                 estructuraMensaje("Esa clave grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
                 return;

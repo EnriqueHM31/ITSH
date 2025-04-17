@@ -4,12 +4,12 @@ include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 include "../../clases/administrador.php";
-include "../../utils/functionGlobales.php";
 include "../../conexion/verificar acceso.php";
 include "../../conexion/verificar_rol_admin.php";
 include "../../Components/Usuario.php";
 include "../../Components/Admin.php";
 include "../../Components/Layout.php";
+include "../../utils/functionGlobales.php";
 
 $usuario = new usuario();
 $administrador = new administrador();
