@@ -303,7 +303,7 @@ try {
 
     ModificarEstadoSolicitud($conexion, $id_solicitud);
 
-    if (InsertarTablaJustificante($conexion, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)) {
+    if (InsertarTablaJustificante($conexion, $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)) {
         echo json_encode(["success" => True]);
     }
 

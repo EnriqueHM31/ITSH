@@ -132,7 +132,7 @@ function ObtenerDatosDetails(objeto) {
 
 function obtenerDatosTable(objeto) {
 	fila = objeto.closest('tr');
-	id_solicitud = fila.querySelectorAll('td')[0].innerText;
+	id_solicitud = fila.querySelectorAll('td')[0].dataset.id;
 	matricula = fila.querySelectorAll('td')[1].innerText;
 	nombre = fila.querySelectorAll('td')[2].innerText;
 	apellidos = fila.querySelectorAll('td')[3].innerText;

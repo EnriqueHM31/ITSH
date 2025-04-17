@@ -17,7 +17,7 @@ class alumno
         return $fecha <= $fecha_actual;
     }
 
-    public function enviarSolicitud($conexion)
+    public function enviarSolicitud($conexion, $id_jefe)
     {
         mysqli_begin_transaction($conexion);
 
@@ -32,7 +32,7 @@ class alumno
         $carrera = $_POST['carrera'];
         $motivo = $_POST['motivo'];
         $fecha = $_POST['fecha_ausencia'];
-        $estado = 2;
+        $id_estado = 2;
         try {
             if (!$this->esFechaValida($fecha)) {
                 estructuraMensaje("La fecha no puede ser posterior al día actual", "../../assets/iconos/ic_error.webp", "--rojo");
@@ -52,16 +52,21 @@ class alumno
                 return;
             }
 
-            $fecha_nombre = str_replace("-", "", $fecha);
-            $identificador_archivo = $fecha_nombre . ".pdf";
+            $sql = "SELECT COUNT(*) as total FROM solicitud";
+            $smtm = $conexion->prepare($sql);
+            $smtm->execute();
+            $result = $smtm->get_result();
+            $totalEvidencia = $result->fetch_assoc();
+            $NumeroEvidencia = $totalEvidencia['total'] + 1;
+
+            $identificador_archivo = "evidencia$NumeroEvidencia.pdf";
             $archivo_destino = 'evidencias/' . $identificador_archivo;
 
             if (!move_uploaded_file($archivo_tmp, $archivo_destino)) {
                 estructuraMensaje("Ocurrió un error con el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
                 return;
             }
-
-            if (!insertarSolicitudBD($conexion, $identificador, $nombre, $apellidos, $grupo, $carrera, $motivo, $fecha, $identificador_archivo, $estado)) {
+            if (!insertarSolicitudBD($conexion, $identificador, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)) {
                 estructuraMensaje("Ocurrió un error con el envío de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
                 return;
             }
@@ -69,6 +74,11 @@ class alumno
             mysqli_commit($conexion);
             estructuraMensaje("Se ha enviado la solicitud a tu jefe de carrera", "../../assets/iconos/ic_correcto.webp", "--verde");
         } catch (Exception $e) {
+
+            if (file_exists($archivo_destino)) {
+                unlink($archivo_destino);
+            }
+
             estructuraMensaje("Ocurrió un error con el envío de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
@@ -80,12 +90,12 @@ class alumno
         if ($_FILES["archivo_evidencia"]["size"] > 0) {
             foreach ( $_POST as $value ) {
                 if (empty($value)) {
-                    estructuraMensaje("Rellene todos los campos para registrar", "../../assets/iconos/ic_error.webp", "--rojo");
+                    estructuraMensaje("Rellene todos los campos para registrar $value", "../../assets/iconos/ic_error.webp", "--rojo");
                     return true;
                 }
             }
         } else {
-            estructuraMensaje("Rellene todos los campos para registrar", "../../assets/iconos/ic_error.webp", "--rojo");
+            estructuraMensaje("Rellene todos los campos para registrar {$_FILES['archivo_evidencia']['tmp_name']}", "../../assets/iconos/ic_error.webp", "--rojo");
             return true;
         }
     }

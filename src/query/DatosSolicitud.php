@@ -11,19 +11,17 @@ $data = getResultDataTabla($conexion, $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD, $
 
 $motivo = $data[$CAMPO_MOTIVO];
 $fecha_ausencia = $data[$CAMPO_FECHA_AUSE];
-$estado = $data[$CAMPO_ESTADO];
+$id_estado = $data[$CAMPO_ID_ESTADO];
+$estado = obtenerNombreEstado($conexion, $id_estado);
 
-if ($estado == "Aceptada") {
-    $dataJustificante = getResultDataTabla($conexion, $TABLA_JUSTIFICANTES, $CAMPO_J_ID_SOLICITUD, $id);
-    $id_justificante = $dataJustificante[$CAMPO_J_ID_JUSTIFICANTE];
-    $justificante = $dataJustificante[$CAMPO_J_JUSTIFICANTE];
+if ($estado == "Aceptado") {
+    $dataJustificante = getResultDataTabla($conexion, $TABLA_JUSTIFICANTES, $CAMPO_ID_SOLICITUD, $id);
+    $id_justificante = $dataJustificante["id_justificante"];
+    $justificante = $dataJustificante["nombre_justificante"];
 } else {
     $id_justificante = "";
     $justificante = "";
 }
-
-
-
 
 echo json_encode(crearDataInformacionSolicitud($motivo, $fecha_ausencia, $estado, $id_justificante, $justificante));
 

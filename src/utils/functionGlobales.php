@@ -398,16 +398,16 @@ function obtenerNumeroFolio($conexion)
     return $row["total"];
 }
 
-function InsertarTablaJustificante($conexion, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)
+function InsertarTablaJustificante($conexion, $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)
 {
     global $TABLA_JUSTIFICANTES;
 
     $sql = "INSERT INTO $TABLA_JUSTIFICANTES 
-            (id_estudiante, id_jefe, id_codigo, nombre_justificante)
-            VALUES (?, ?, ?, ?)";
+            (id_solicitud, id_estudiante, id_jefe, id_codigo, nombre_justificante)
+            VALUES (?, ?, ?, ?, ?)";
 
     $smtm = $conexion->prepare($sql);
-    $smtm->bind_param('ssss', $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante);
+    $smtm->bind_param('issss', $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante);
 
     return $smtm->execute();
 }
@@ -435,10 +435,9 @@ function insertarCodigoQR($conexion, $qr_text, $valido, $url_verificacion)
 function obtenerCodigoQVerificacion($conexion, $qr_text)
 {
     global $TABLA_CODIGOQR;
-    global $CAMPO_VALIDO_QR;
-    global $CAMPO_TEXTO_QR;
+    global $CAMPO_ID_ESTADO;
 
-    $sql = "SELECT $CAMPO_VALIDO_QR FROM $TABLA_CODIGOQR WHERE $CAMPO_TEXTO_QR = ?";
+    $sql = "SELECT $CAMPO_ID_ESTADO FROM $TABLA_CODIGOQR WHERE datos_codigo = ?";
 
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $qr_text);
@@ -448,8 +447,9 @@ function obtenerCodigoQVerificacion($conexion, $qr_text)
 
 function actualizarValidacionCodigoQR($conexion, $qr_text)
 {
+    global $CAMPO_ID_ESTADO;
     // Actualizar a 2 para marcarlo como ya escaneado
-    $update = "UPDATE " . Variables::TABLA_BD_CODIGOS_QR . " SET " . Variables::CAMPO_Q_VALIDO . " = 2 WHERE " . Variables::CAMPO_Q_TEXTO . " = ?";
+    $update = "UPDATE codigoqr SET $CAMPO_ID_ESTADO = 3 WHERE datos_codigo = ?";
 
     $stmt_update = $conexion->prepare($update);
     $stmt_update->bind_param("s", $qr_text);
@@ -600,16 +600,15 @@ function buscarJustificantes($conexion, $query)
     $stmt->execute();
     return $stmt->get_result();
 }
-function insertarSolicitudBD($conexion, $identificador, $nombre, $apellidos, $grupo, $carrera, $motivo, $fecha, $identificador_archivo, $estado)
+function insertarSolicitudBD($conexion, $identificador, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)
 {
-    global $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD, $CAMPO_S_MATRICULA, $CAMPO_S_NOMBRE, $CAMPO_S_APELLIDOS,
-    $CAMPO_S_GRUPO, $CAMPO_S_CARRERA, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE, $CAMPO_S_EVIDENCIA, $CAMPO_ESTADO;
+    global $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD, $CAMPO_S_MATRICULA, $CAMPO_S_NOMBRE, $CAMPO_ID_JEFE,
+    $CAMPO_S_GRUPO, $CAMPO_S_CARRERA, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE, $CAMPO_S_EVIDENCIA, $CAMPO_ID_ESTADO;
 
-    $sql = "INSERT INTO $TABLA_SOLICITUDES ($CAMPO_ID_SOLICITUD, $CAMPO_S_MATRICULA, $CAMPO_S_NOMBRE, $CAMPO_S_APELLIDOS, $CAMPO_S_GRUPO, $CAMPO_S_CARRERA, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE, $CAMPO_S_EVIDENCIA, $CAMPO_ESTADO) 
-    VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO $TABLA_SOLICITUDES (id_estudiante, $CAMPO_ID_JEFE, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE,$CAMPO_ID_ESTADO, evidencia ) 
+    VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("sssssssss", $identificador, $nombre, $apellidos, $grupo, $carrera, $motivo, $fecha, $identificador_archivo, $estado);
-    echo json_encode($identificador);
+    $stmt->bind_param("ssssss", $identificador, $id_jefe, $motivo, $fecha, $id_estado, $identificador_archivo);
     return $stmt->execute();
 }
 

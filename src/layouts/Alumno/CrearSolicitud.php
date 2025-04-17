@@ -15,6 +15,8 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $row = $alumno->ponerDatosFormulario($conexion, $id);
 $estudianteData = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
+
+$dataJefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $estudianteData[$CAMPO_ID_CARRERA]);
 ?>
 
 <!DOCTYPE html>
@@ -123,7 +125,7 @@ $estudianteData = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USU
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $alumno->enviarSolicitud($conexion);
+    $alumno->enviarSolicitud($conexion, $dataJefe[$CAMPO_ID_USUARIO]);
     notificaciones($_SESSION["mensaje"]);
 }
 ?>

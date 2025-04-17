@@ -203,7 +203,10 @@ class Jefe
 
         $tablaHead = componenteCabeceraTablaSolicitudes();
 
+        $i = 1;
         while ($fila = $resultado->fetch_assoc()) {
+            $indexFila = $i++;
+
             if ($fila[$CAMPO_ID_ESTADO] == "1") {
                 $clase = "aceptada";
             } else if ($fila[$CAMPO_ID_ESTADO] == "2") {
@@ -216,7 +219,7 @@ class Jefe
 
             $tabla = "";
 
-            $tabla .= componenteFilaSolicitud($conexion, $fila, $id, $clase, $fecha);
+            $tabla .= componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fecha);
 
             $detalles = componenteDetailSolicitud($conexion, $fila, $clase, $id);
             array_push($tablaArray, $tabla);

@@ -11,10 +11,10 @@ $qr_text = $_GET['qr_text'];
 $resultado_consulta = obtenerCodigoQVerificacion($conexion, $qr_text);
 
 // Verificar si se encontró el código
-if ($resultado->num_rows > 0) {
-    $row = $resultado->fetch_assoc();
+if ($resultado_consulta->num_rows > 0) {
+    $row = $resultado_consulta->fetch_assoc();
 
-    if ($row[$CAMPO_VALIDO_QR] == 1) {
+    if ($row[$CAMPO_ID_ESTADO] == 1) {
 
         if (actualizarValidacionCodigoQR($conexion, $qr_text)) {
             $src = "../assets/iconos/ic_correcto.webp";
@@ -23,7 +23,6 @@ if ($resultado->num_rows > 0) {
             $src = "../assets/iconos/ic_error.webp";
             $mensaje_validacion = "El codigo es invalido";
         }
-        $stmt_update->close();
     } else {
         $src = "../assets/iconos/ic_error.webp";
         $mensaje_validacion = "Código inválido: ya fue escaneado previamente";
@@ -32,8 +31,6 @@ if ($resultado->num_rows > 0) {
     $src = "../assets/iconos/ic_error.webp";
     $mensaje_validacion = "Código no encontrado";
 }
-$stmt->close();
-$conexion->close();
 ?>
 
 
