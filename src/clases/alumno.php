@@ -26,10 +26,6 @@ class alumno
         }
 
         $identificador = $_POST['identificador'];
-        $nombre = $_POST['nombre'];
-        $apellidos = $_POST['apellidos'];
-        $grupo = $_POST['grupo'];
-        $carrera = $_POST['carrera'];
         $motivo = $_POST['motivo'];
         $fecha = $_POST['fecha_ausencia'];
         $id_estado = 2;

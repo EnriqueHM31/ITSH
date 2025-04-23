@@ -439,8 +439,8 @@ function insertarSolicitudBD($conexion, $matricula, $id_jefe, $motivo, $fecha, $
 
 function buscarHistorialJustificantesAlumno($conexion, $id)
 {
-    global $TABLA_SOLICITUDES, $CAMPO_ID_ESTUDIANTE;
-    $sql = "SELECT * FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_ESTUDIANTE = ?";
+    global $TABLA_TRIGGER_SOLICITUD, $CAMPO_ID_ESTUDIANTE;
+    $sql = "SELECT * FROM $TABLA_TRIGGER_SOLICITUD WHERE $CAMPO_ID_ESTUDIANTE = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $id);
     $stmt->execute();
@@ -516,6 +516,67 @@ function modificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $a
     }
     return true;
 }
+
+
+function modificarDatosPersonal($conexion, $clave_empleado, $nombre, $apellidos, $carrera, $carreraAntigua, $rol, $rolAntiguo, $correo)
+{
+    $id_rol = obtenerIDRol($conexion, $rol);
+
+    if (!actualizarUsuario($conexion, $clave_empleado, $nombre, $apellidos, $correo, $id_rol)) {
+        return "Error: Ocurrió un error al actualizar datos del usuario";
+    }
+
+    if (!manejarCambioDeRol($conexion, $clave_empleado, $rol, $rolAntiguo, $carrera, $carreraAntigua)) {
+        return "Error: Ocurrió un error al modificar el rol del usuario";
+    }
+
+    return true;
+}
+
+function actualizarUsuario($conexion, $clave_empleado, $nombre, $apellidos, $correo, $id_rol)
+{
+    global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_ID_ROL, $CAMPO_CORREO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS;
+
+    $sql = "UPDATE $TABLA_USUARIO SET $CAMPO_NOMBRE = ?, $CAMPO_APELLIDOS = ?, $CAMPO_CORREO = ?, $CAMPO_ID_ROL = ? WHERE $CAMPO_ID_USUARIO = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("sssis", $nombre, $apellidos, $correo, $id_rol, $clave_empleado);
+
+    return $stmt->execute();
+}
+
+function manejarCambioDeRol($conexion, $clave_empleado, $rol, $rolAntiguo, $carrera, $carreraAntigua)
+{
+    global $TABLA_JEFE, $CAMPO_ID_USUARIO, $CAMPO_ID_CARRERA;
+
+    if ($rol == "Administrador" && $rolAntiguo == "Jefe de Carrera") {
+        $sql = "DELETE FROM $TABLA_JEFE WHERE $CAMPO_ID_USUARIO = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("s", $clave_empleado);
+        return $stmt->execute();
+
+    } elseif ($rol == "Jefe de Carrera") {
+        if ($rolAntiguo == "Administrador") {
+            if (restriccionModificarAJefedeCarrera($carrera, $rol, $conexion) > 0) {
+                return false;
+            }
+            return insertarJefedeCarrera($conexion, $clave_empleado, $carrera);
+
+        } elseif ($rolAntiguo == "Jefe de Carrera" && $carreraAntigua != $carrera) {
+            if (restriccionModificarAJefedeCarrera($carrera, $rol, $conexion) > 0) {
+                return false;
+            }
+            $idCarreraNueva = obtenerIDCarrera($conexion, $carrera);
+            $sql = "UPDATE $TABLA_JEFE SET $CAMPO_ID_CARRERA = ? WHERE $CAMPO_ID_USUARIO = ?";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bind_param("is", $idCarreraNueva, $clave_empleado);
+            return $stmt->execute();
+        }
+    }
+
+    return true;
+}
+
+
 
 function obtenerSolicitudesJefeCarrera($conexion, $id_jefe)
 {

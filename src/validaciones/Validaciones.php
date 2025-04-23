@@ -61,6 +61,25 @@ function restriccionJefedeCarrera($carrera, $cargo, $conexion)
             return true;
         }
     }
+}
+
+
+function restriccionModificarAJefedeCarrera($carrera, $cargo, $conexion)
+{
+    global $TABLA_JEFE, $CAMPO_ID_CARRERA;
+
+
+    $resultadoIdCarrera = obtenerIDCarrera($conexion, $carrera);
+
+
+    $sql = "SELECT * FROM $TABLA_JEFE WHERE $CAMPO_ID_CARRERA = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("i", $resultadoIdCarrera);
+    $stmt->execute();
+    $resultadoDuplicado = $stmt->get_result();
+
+    return $resultadoDuplicado->num_rows;
+
 
 
 }
@@ -114,25 +133,7 @@ function restriccionKey($identificador, $conexion)
     $sql->close();
 }
 
-function revisionDeCarreras($carrera)
-{
-    $diccionario = [
-        "sistemas computacionales",
-        "gestion empresarial",
-        "ambiental",
-        "quimica",
-        "industrial",
-        "alimentarias",
-        "contaduria",
-        "electromecanica",
-        "null"
-    ];
 
-    if (!(in_array(strtolower(trim($carrera)), $diccionario))) {
-        estructuraMensaje("Esta carrera no es valida <p style='color:var(--rojo)'>" . $carrera . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
-        return true;
-    }
-}
 
 function revisionIdentificadorPersonal($identificador)
 {
@@ -214,7 +215,39 @@ function revisarModificacionCorreoEstudiante($conexion, $correoNuevo, $correoAnt
     return FALSE;
 }
 
+function revisarModificacionCorreoEmpleado($conexion, $correoNuevo, $correoAntiguo, $clave_empleado)
+{
+
+    global $CAMPO_ID_USUARIO, $TABLA_USUARIO, $CAMPO_CORREO;
+
+    if (isset($correoNuevo) && $correoNuevo !== $correoAntiguo) {
+        $sql = "SELECT $CAMPO_ID_USUARIO FROM $TABLA_USUARIO WHERE $CAMPO_CORREO = ? AND $CAMPO_ID_USUARIO != ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("ss", $correoNuevo, $clave_empleado);
+        $stmt->execute();
+        $stmt->store_result();
+        return $stmt;
+    }
+    return FALSE;
+}
+
 function revisarModificacionMatriculaEstudiante($conexion, $stmt, $matriculaNueva, $matriculaAntigua)
+{
+    global $CAMPO_ID_USUARIO, $TABLA_USUARIO;
+    if (isset($matriculaNueva) && $matriculaNueva !== $matriculaAntigua) {
+
+        $sql = "SELECT $CAMPO_ID_USUARIO FROM $TABLA_USUARIO WHERE $CAMPO_ID_USUARIO = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("s", $matriculaNueva); // Nueva matrícula = futuro ID
+        $stmt->execute();
+        $stmt->store_result();
+
+        return $stmt;
+    }
+    return FALSE;
+}
+
+function revisarModificacionClaveEmpleado($conexion, $stmt, $matriculaNueva, $matriculaAntigua)
 {
     global $CAMPO_ID_USUARIO, $TABLA_USUARIO;
     if (isset($matriculaNueva) && $matriculaNueva !== $matriculaAntigua) {

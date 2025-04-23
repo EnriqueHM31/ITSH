@@ -137,6 +137,7 @@ class Jefe
             estructuraMensaje("Usuario no está en el sistema", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
+
         $correoAntiguo = $usuarioActual[$CAMPO_CORREO];
         $correoNuevo = $nuevosDatos['correo'];
 
@@ -144,16 +145,6 @@ class Jefe
 
         if ($stmt && $stmt->num_rows > 0) {
             estructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
-            return;
-        }
-
-        $matriculaAntigua = $usuarioActual[$CAMPO_ID_USUARIO];
-        $matriculaNueva = $nuevosDatos["clave"];
-
-        $stmt = revisarModificacionMatriculaEstudiante($conexion, $stmt, $matriculaNueva, $matriculaAntigua);
-
-        if ($stmt && $stmt->num_rows > 0) {
-            estructuraMensaje("Esta matrícula ya está registrada", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 

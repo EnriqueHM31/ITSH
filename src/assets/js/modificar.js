@@ -27,6 +27,9 @@ async function cargarUsuarioModificar(id, nombre) {
 
             clave = document.getElementById('clave');
             claveAnterior = document.getElementById('clave_anterior');
+            rolAntiguo = document.getElementById('rol_antiguo');
+            carreraAntigua = document.getElementById('carrera_antigua');
+
 
             modalidad = document.getElementById('modalidad')
             grupo = document.getElementById('grupo');
@@ -42,6 +45,7 @@ async function cargarUsuarioModificar(id, nombre) {
                 clave.value = data.clave_empleado;
                 claveAnterior.value = data.clave_empleado;
                 rol.value = data.rol;
+                rolAntiguo.value = data.rol;
 
 
                 if (data.rol === 'Administrador') {
@@ -53,6 +57,7 @@ async function cargarUsuarioModificar(id, nombre) {
                     setTimeout(() => {
                         const carreras = document.getElementById('carrera');
                         carreras.value = data.carrera;
+                        carreraAntigua.value = data.carrera;
 
                         if (!carreras.value) {
                             for (let i = 0; i < carreras.options.length; i++) {

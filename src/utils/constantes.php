@@ -26,6 +26,8 @@ $TABLA_ROL = "Rol";
 $TABLA_SOLICITUDES = "Solicitud";
 $TABLA_TIPO_CARRERA = "TipoCarrera";
 $TABLA_USUARIO = "Usuario";
+$TABLA_TRIGGER_SOLICITUD = "AlumnoSolicitud";
+$TABLA_TRIGGER_JUSTIFICANTE = "AlumnoJustificante";
 
 //CAMPOS DE LA TABLA ROL
 $CAMPO_ID_ROL = "id_rol";

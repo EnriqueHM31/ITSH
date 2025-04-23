@@ -82,6 +82,7 @@ $Numero_grupos = $grupos["numero_grupos"];
                 <form class="formulario" method="post">
 
                     <input type="hidden" name="clave_anterior" id="clave_anterior">
+
                     <label for="clave" class="contenedor_input">
                         <input class="input_pagina select_info" type="text" name="clave" id="clave"
                             style="background-color: var(--vino);" readonly>

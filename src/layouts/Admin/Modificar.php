@@ -70,16 +70,18 @@ $rol = $_SESSION["rol"];
                     <div id="resultados" class="result_usuarios"></div>
                 </div>
 
-
-
                 <form class="formulario" method="post" id="form-modificar">
 
                     <input type="text" hidden id="clave_anterior" name="clave_anterior">
+                    <input type="text" hidden name="rol_antiguo" id="rol_antiguo">
+                    <input type="text" hidden name="carrera_antigua" id="carrera_antigua">
+
+
 
                     <label for="clave" class="contenedor_input">
-                        <input readonly pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave"
-                            placeholder=" ">
-                        <span class="nombre_input input_bloqueado">Clave<span />
+                        <input readonly pattern="^ITSH_\d{4}$" class="input_pagina select_info" type="text" name="clave"
+                            id="clave">
+                        <span class="nombre_input">Clave<span />
                     </label>
 
                     <label for="nombre" class="contenedor_input">
@@ -134,7 +136,7 @@ $rol = $_SESSION["rol"];
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $administrador->modificarJefedeCarrera($conexion, $_POST['clave'], $_POST['nombre'], $_POST['apellidos'], $_POST['carrera'], $_POST['rol'], $_POST['correo']);
+    $administrador->actualizarUsuario($conexion, $_POST["clave_anterior"], $_POST);
 
     notificaciones($_SESSION["mensaje"]);
 }

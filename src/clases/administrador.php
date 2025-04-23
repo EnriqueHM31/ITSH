@@ -167,7 +167,7 @@ class administrador
                 if ($cargo === $ADMIN) {
                     continue;
                 } else if ($cargo === $JEFE) {
-                    if (revisionDeCarreras($carrera) || RestriccionJefedeCarrera($carrera, $cargo, $conexion)) {
+                    if (RestriccionJefedeCarrera($carrera, $cargo, $conexion)) {
                         return;
                     }
                     insertarJefedeCarrera($conexion, $clave_empleado, $carrera);
@@ -267,72 +267,50 @@ class administrador
 
     }
 
-    public function ModificarCarrera($conexion, $carreraAntigua, $claveGrupoAntigua, $carreraNueva, $id_tipo_carrera_nueva, $numeros_grupos, $id_carrera_nueva, $modalidadEscolarizada, $modalidadFlexible)
+    public function actualizarUsuario($conexion, $clave_empleado, $nuevosDatos)
     {
-        global $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $TABLA_CARRERAS, $CAMPO_CARRERA;
+        global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
 
         mysqli_begin_transaction($conexion);
 
-        if (empty($carreraNueva) || empty($numeros_grupos) || empty($id_carrera_nueva)) {
-            estructuraMensaje("Faltan datos para su modificación", "../../assets/iconos/ic_error.webp", "--rojo");
+        if (empty($clave_empleado)) {
+            estructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if ($modalidadEscolarizada == "" && $modalidadFlexible == "") {
-            estructuraMensaje("Debes seleccionar la modalidad escolarizada o flexible", "../../assets/iconos/ic_error.webp", "--rojo");
+        $usuarioActual = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $clave_empleado);
+
+        if (!$usuarioActual) {
+            estructuraMensaje("Usuario no está en el sistema", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if ($carreraNueva != $carreraAntigua) {
-            $existeCarrera = getResultDataTabla($conexion, $TABLA_CARRERAS, $CAMPO_CARRERA, $carreraNueva);
-            if ($existeCarrera) {
-                estructuraMensaje("Esa carrera ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
-                return;
-            }
-        }
+        $correoAntiguo = $usuarioActual[$CAMPO_CORREO];
+        $correoNuevo = $nuevosDatos['correo'];
 
-        $idCarreraAntigua = obtenerIDCarrera($conexion, $carreraAntigua);
+        $stmt = revisarModificacionCorreoEmpleado($conexion, $correoNuevo, $correoAntiguo, $clave_empleado);
 
-        if (!modificarNombreTipoCarreraDB($conexion, $carreraNueva, $id_tipo_carrera_nueva, $idCarreraAntigua)) {
-            estructuraMensaje("Error al modificar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        if ($stmt && $stmt->num_rows > 0) {
+            estructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if ($claveGrupoAntigua != $id_carrera_nueva) {
-            $existeClave = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $id_carrera_nueva);
-            if ($existeClave) {
-                estructuraMensaje("Esa clave grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
-                return;
-            }
-        }
+        $nombre = $nuevosDatos['nombre'];
+        $apellidos = $nuevosDatos['apellidos'];
+        $correo = $nuevosDatos['correo'];
+        $carrera = $nuevosDatos['carrera'];
+        $rol = $nuevosDatos['rol'];
+        $rolAntiguo = $nuevosDatos['rol_antiguo'];
+        $carreraAntigua = $nuevosDatos['carrera_antigua'];
 
-        if (!modificarNumeroGruposDB($conexion, $idCarreraAntigua, $numeros_grupos, $id_carrera_nueva)) {
-            estructuraMensaje("Error al modificar los grupos de la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+
+        $mensaje = modificarDatosPersonal($conexion, $clave_empleado, $nombre, $apellidos, $carrera, $carreraAntigua, $rol, $rolAntiguo, $correo);
+        if ($mensaje != 1) {
+            estructuraMensaje($mensaje, '../../assets/iconos/ic_error.webp', '--rojo');
             return;
-        }
-
-        $modalidades = obtenerModalidadesCarrera($conexion, $idCarreraAntigua);
-
-        $modalidadInputs = [
-            "Escolarizado" => $modalidadEscolarizada,
-            "Flexible" => $modalidadFlexible
-        ];
-
-        foreach ( $modalidadInputs as $tipo => $valor ) {
-            $id_modalidad = obtenerIdModalidad($conexion, $tipo);
-
-            if (empty($valor)) {
-                if (in_array($tipo, $modalidades)) {
-                    eliminarCarreraModalidadDB($conexion, $idCarreraAntigua, $id_modalidad);
-                }
-            } else {
-                if (!in_array($tipo, $modalidades)) {
-                    insertarCarreraModalidadDB($conexion, $idCarreraAntigua, $id_modalidad);
-                }
-            }
         }
 
         mysqli_commit($conexion);
-        estructuraMensaje("Se modificó la carrera en el sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
+        estructuraMensaje("Se ha modificado los datos en la base de datos", "../../assets/iconos/ic_correcto.webp", "--verde");
     }
 }
