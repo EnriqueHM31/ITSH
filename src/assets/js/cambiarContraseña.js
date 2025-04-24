@@ -1,91 +1,66 @@
 const btn = document.getElementById('button');
 const formulario = document.getElementById('form');
-var emailjs;
 
-formulario.addEventListener('submit', function (event) {
-	event.preventDefault();
-	const Matricula = document.getElementById('Matricula').value.trim();
-	const user_email = document.getElementById('user_email').value.trim();
 
-	// Verificar si algún campo está vacío
-	if (Matricula === '' || user_email === '') {
-		mostrarTemplate(
-			'Llena los datos del formulario',
-			'../../assets/iconos/ic_error.webp',
-			'var(--rojo)',
-			'miTemplate',
-		);
-		return;
-	}
+$(document).ready(function () {
+	$('#form').on('submit', function (e) {
+		e.preventDefault();
+		console.log('entro');
+		const correo = $('#correo').val();
+		const id_usuario = $('#id_usuario').val();
+		const contraseñaNueva = generarContraseña();
 
-	btn.value = 'Enviando...';
-
-	let password;
-	password = contraseñaCreada();
-	const Inputcontraseña = crearContraseñaInput(password);
-
-	this.appendChild(Inputcontraseña);
-
-	$.ajax({
-		url: '../../utils/CambioContraseña.php',
-		method: 'POST',
-		data: {
-			Matricula: Matricula,
-			user_email: user_email,
-			password: password,
-		},
-		dataType: 'json',
-		success: function (data) {
-			if (data['success'] === true) {
-				const serviceID = 'default_service';
-				const templateID = 'template_d151xen';
-
-				emailjs.sendForm(serviceID, templateID, formulario).then(
-					() => {
-						btn.value = 'Enviar';
-						mostrarTemplate(
-							'Tu contraseña fue enviada a tu correo',
-							'../../assets/iconos/ic_correcto.webp',
-							'var(--verde)',
-							'miTemplate',
-						);
-						formulario.querySelector('.password').remove();
-						formulario.reset();
-					},
-					() => {
-						btn.value = 'Enviar';
-						mostrarTemplate(
-							'Ocurrio un error al enviarte tu contraseña',
-							'../../assets/iconos/ic_error.webp',
-							'var(--rojo)',
-							'miTemplate',
-						);
-						formulario.querySelector('.password').remove();
-						formulario.reset();
-					},
-				);
-			} else {
-				mostrarTemplate(
-					'Error: '.data['success'],
-					'../../assets/iconos/ic_error.webp',
-					'var(--rojo)',
-					'miTemplate',
-				);
-			}
-		},
-		error: function () {
-			btn.value = 'Enviar';
+		if (correo === '' || id_usuario === '') {
 			mostrarTemplate(
-				'Ocurrio un error con el servicio',
+				'Ingresa todos los campos',
 				'../../assets/iconos/ic_error.webp',
 				'var(--rojo)',
-				'miTemplate',
-			);
-			formulario.querySelector('.password').remove();
-			formulario.reset();
-		},
+				'miTemplate'
+			)
+			return false; // Detiene la ejecución
+		}
+
+		$.ajax({
+			url: '../../utils/envioCorreo.php',
+			method: 'POST',
+			data: {
+				id_usuario: id_usuario,
+				correo: correo,
+				contraseñaNueva: contraseñaNueva
+			},
+			dataType: 'json',
+			success: function (response) {
+				const { success, message } = response;
+				if (success === true) {
+					mostrarTemplate(
+						message || 'Correo enviado con éxito.',
+						'../../assets/iconos/ic_correcto.webp',
+						'var(--verde)',
+						'miTemplate'
+					)
+				} else {
+					mostrarTemplate(
+						message || 'Hubo un error al enviar el correo.',
+						'../../assets/iconos/ic_error.webp',
+						'var(--rojo)',
+						'miTemplate'
+					)
+				}
+			},
+			error: function (xhr, status, error) {
+				mostrarTemplate(
+					error || 'Hubo un error al enviar el correo.',
+					'../../assets/iconos/ic_error.webp',
+					'var(--rojo)',
+					'miTemplate'
+				)
+			}
+		});
+
 	});
 });
+
+
 
 function generarContraseña() {
 	const caracteres =

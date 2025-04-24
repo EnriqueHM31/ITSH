@@ -4,6 +4,7 @@ include "../../utils/functionGlobales.php";
 include "../../conexion/conexion.php";
 include "../../clases/usuario.php";
 include "../../Components/Usuario.php";
+session_start();
 
 $usuario = new usuario();
 ?>
@@ -26,10 +27,6 @@ $usuario = new usuario();
     <link rel="stylesheet" rel="preload" href="../../assets/styles/notificacion.css">
     <script src="../../assets/js/index.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script type="text/javascript">
-        emailjs.init('h-GFfAEPfkpyGuQjm')
-    </script>
     <script src="../../assets/js/cambiarContraseña.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
 </head>
@@ -45,24 +42,24 @@ $usuario = new usuario();
             alt="Icono para regresar a la ventana de login">
     </a>
 
-    <form class="formulario" method="post" id="form">
-
+    <form class="formulario" id="form">
         <h2 class="titulo">Recupera tu contraseña</h2>
 
-        <label for="Matricula" class="contenedor_input">
+        <label for="id_usuario" class="contenedor_input">
             <input pattern="^ITSH_\d{4}$|^\d{3}[a-z]\d{4}$|^\d{3}[a-z]\d{3}$" class="input_login" type="text"
-                name="Matricula" id="Matricula" placeholder=" ">
+                name="id_usuario" id="id_usuario" placeholder=" " required>
             <span class="nombre_input">Identificador</span>
         </label>
 
-        <label for="user_email" class="contenedor_input">
+        <label for="correo" class="contenedor_input">
             <input pattern="^(?:[a-z]+|[0-9]{3}[a-z][0-9]{3,4})@(alum\.)?huatusco\.tecnm\.mx$" class="input_login"
-                type="email" name="user_email" id="user_email" placeholder=" ">
+                type="email" name="correo" id="correo" placeholder=" " required>
             <span class="nombre_input">Correo Institucional</span>
         </label>
 
         <input type="submit" value="Enviar" class="btn_login" id="button">
     </form>
+
 
     <?php
     componenteTemplateModalNormal();

@@ -86,16 +86,6 @@ class Usuario
         $conexion->close();
     }
 
-    public function verificarIdentidadCorreoIdentificador($id_usuario, $correoDB, $conexion)
-    {
-        global $TABLA_USUARIO, $CAMPO_CORREO, $CAMPO_ID_USUARIO;
-        $sql = "SELECT * FROM $TABLA_USUARIO WHERE $CAMPO_CORREO = ? AND $CAMPO_ID_USUARIO = ?";
-
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param('ss', $correoDB, $id_usuario);
-
-        return $stmt->execute();
-    }
 
     public function cambiarContraseñaEnBD($conexion, $id_usuario, $nuevaContraseña)
     {
