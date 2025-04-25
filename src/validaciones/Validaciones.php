@@ -57,7 +57,7 @@ function restriccionJefedeCarrera($carrera, $cargo, $conexion)
         $resultadoDuplicado = getResultCarreraDuplicada($TABLA_JEFE, $conexion, $resultadoIdCarrera);
 
         if ($resultadoDuplicado->num_rows > 0) {
-            estructuraMensaje("Esa carrera ya tiene un jefe de carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            estructuraMensaje("La carrera $carrera ya tiene un jefe de carrera ", "../../assets/iconos/ic_error.webp", "--rojo");
             return true;
         }
     }

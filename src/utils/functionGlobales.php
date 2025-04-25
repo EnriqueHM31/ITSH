@@ -526,8 +526,9 @@ function modificarDatosPersonal($conexion, $clave_empleado, $nombre, $apellidos,
         return "Error: Ocurrió un error al actualizar datos del usuario";
     }
 
-    if (!manejarCambioDeRol($conexion, $clave_empleado, $rol, $rolAntiguo, $carrera, $carreraAntigua)) {
-        return "Error: Ocurrió un error al modificar el rol del usuario";
+    $mensaje = manejarCambioDeRol($conexion, $clave_empleado, $rol, $rolAntiguo, $carrera, $carreraAntigua);
+    if ($mensaje !== true) {
+        return $mensaje;
     }
 
     return true;
@@ -557,13 +558,13 @@ function manejarCambioDeRol($conexion, $clave_empleado, $rol, $rolAntiguo, $carr
     } elseif ($rol == "Jefe de Carrera") {
         if ($rolAntiguo == "Administrador") {
             if (restriccionModificarAJefedeCarrera($carrera, $rol, $conexion) > 0) {
-                return false;
+                return "Esa carrera ya tiene un jefe de carrera vinculado";
             }
             return insertarJefedeCarrera($conexion, $clave_empleado, $carrera);
 
         } elseif ($rolAntiguo == "Jefe de Carrera" && $carreraAntigua != $carrera) {
             if (restriccionModificarAJefedeCarrera($carrera, $rol, $conexion) > 0) {
-                return false;
+                return "Esa carrera ya tiene un jefe de carrera vinculado";
             }
             $idCarreraNueva = obtenerIDCarrera($conexion, $carrera);
             $sql = "UPDATE $TABLA_JEFE SET $CAMPO_ID_CARRERA = ? WHERE $CAMPO_ID_USUARIO = ?";
