@@ -17,7 +17,7 @@ if (isset($_POST['id'])) {
     $rol = ObtenerRolUsuario($conexion, $dataUser[$CAMPO_ID_ROL]);
 
     $estudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
-    $modalidad = ObtenerIdModalidad($conexion, $estudiante[$CAMPO_ID_MODALIDAD]);
+    $modalidad = ObtenerModalidad($conexion, $estudiante[$CAMPO_ID_MODALIDAD]);
     $grupo = $estudiante[$CAMPO_GRUPO];
     $carrera = ObtenerNombreCarrera($conexion, $estudiante[$CAMPO_ID_CARRERA]);
 

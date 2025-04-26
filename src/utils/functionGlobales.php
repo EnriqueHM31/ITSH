@@ -465,7 +465,7 @@ function ObtenerIDYNumerosGrupos($conexion, $id_carrera)
     return $stmt->get_result();
 }
 
-function ObtenerModalidades($conexion, $id_carrera)
+function ObtenerModalidadesDeUnaCarrera($conexion, $id_carrera)
 {
     global $TABLA_CARRERA_MODALIDAD, $CAMPO_ID_CARRERA;
 
@@ -532,7 +532,7 @@ function ObtenerNombreTipoCarrera($conexion, $id_tipo_carrera)
     return $response[$CAMPO_TIPO_CARRERA];
 }
 
-function ObtenerModalidadesCarrera($conexion, $id_carrera)
+function ObtenerIdModalidadesCarrera($conexion, $id_carrera)
 {
     global $TABLA_CARRERA_MODALIDAD, $CAMPO_ID_CARRERA, $CAMPO_ID_MODALIDAD;
 
