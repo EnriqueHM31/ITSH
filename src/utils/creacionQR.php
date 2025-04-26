@@ -31,7 +31,7 @@ function generarCodigo($conexion, $id, $nombre, $fecha, $valido)
 
         QRcode::png($url_verificacion, $filename, QR_ECLEVEL_L, 4, true);
 
-        $id_codigo = insertarCodigoQR($conexion, $qr_text, $valido, $url_verificacion);
+        $id_codigo = InsertarCodigoQRDB($conexion, $qr_text, $valido, $url_verificacion);
 
         if ($id_codigo) {
             return [$id_unico, $id_codigo];

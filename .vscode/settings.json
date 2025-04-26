@@ -1,3 +1,9 @@
 {
-	"conventionalCommits.scopes": ["Hola"]
+	"auto-run-command.commands": [
+		{
+			"match": ".*", // se ejecuta en cualquier carpeta
+			"command": "npm run php",
+			"isShellCommand": true
+		}
+	]
 }

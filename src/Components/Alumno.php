@@ -11,7 +11,7 @@ function componenteJustificanteHistorial($conexion, $fila, $i, $tiempo_fecha)
 {
     global $CAMPO_ID_SOLICITUD, $CAMPO_ID_ESTADO, $CAMPO_ID_ESTADO, $CAMPO_MOTIVO;
 
-    $estado = obtenerNombreEstado($conexion, $fila[$CAMPO_ID_ESTADO]);
+    $estado = ObtenerNombreEstado($conexion, $fila[$CAMPO_ID_ESTADO]);
 
     echo <<<HTML
         <div class='archivo' data-id='{$fila[$CAMPO_ID_SOLICITUD]}'data-id_justificante = {$i}>

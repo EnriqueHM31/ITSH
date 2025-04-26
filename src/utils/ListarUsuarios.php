@@ -165,9 +165,9 @@ function ponerDatosTabla($conexion, $resultado)
 
         // Verificar el rol del usuario y asignar los valores correspondientes
         if ($rol == $ESTUDIANTE) {
-            $carrera = getResultCarrera($conexion, $row['carrera_estudiante']);
+            $carrera = ObtenerNombreCarrera($conexion, $row['carrera_estudiante']);
         } elseif ($rol == $JEFE_CARRERA) {
-            $carrera = getResultCarrera($conexion, $row['carrera_jefe']);
+            $carrera = ObtenerNombreCarrera($conexion, $row['carrera_jefe']);
         } elseif ($rol == $ADMINISTRADOR) {
             $carrera = 'No aplica'; // Los administradores no tienen carrera
         }

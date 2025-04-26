@@ -7,7 +7,7 @@ include "../utils/functionGlobales.php";
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
 if (!empty($query)) {
-    $resultadoBusquedaPersonal = buscarPersonalBD($conexion, $query);
+    $resultadoBusquedaPersonal = BuscarPersonalBD($conexion, $query);
 
     if ($resultadoBusquedaPersonal->num_rows > 0) {
         while ($row = $resultadoBusquedaPersonal->fetch_assoc()) {

@@ -13,9 +13,9 @@ include "../../Components/Layout.php";
 
 $jefe = new jefe();
 $rol = $_SESSION["rol"];
-$dataJefeCarrera = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
+$dataJefeCarrera = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
 $id_carrera = $dataJefeCarrera[$CAMPO_ID_CARRERA];
-$carreraJefe = getResultCarrera($conexion, $id_carrera);
+$carreraJefe = ObtenerNombreCarrera($conexion, $id_carrera);
 [$id_grupos, $Numero_grupos, $modalidades] = $jefe->ObtenerGruposDeLaCarrera($conexion, $id_carrera);
 ?>
 
@@ -129,14 +129,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $matricula = trim($_POST["clave"]);
     $nombre = trim($_POST["nombre"]);
     $apellidos = trim($_POST["apellidos"]);
-    $id_modalidad = trim(obtenerIdModalidad($conexion, $_POST["modalidad"]));
+    $id_modalidad = trim(ObtenerIdModalidad($conexion, $_POST["modalidad"]));
     $correo = trim($_POST["correo"]);
     $rol = $ESTUDIANTE;
-    $id_carrera = obtenerIDCarrera($conexion, $carreraJefe);
+    $id_carrera = ObtenerIDCarrera($conexion, $carreraJefe);
     $grupo = trim($_POST["grupo"]);
     $contraseña = 'Aa12345%';
     $jefe->realizarOperacionFormAñadirEstudiantes($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo);
-    notificaciones($_SESSION["mensaje"]);
+    MostrarNotificacion($_SESSION["mensaje"]);
 
     $conexion->close();
 }

@@ -11,15 +11,15 @@ class Usuario
     {
         global $TABLA_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $ADMIN, $JEFE, $ESTUDIANTE;
         if (empty($id) || empty($contraseña)) {
-            estructuraMensaje("Llena todos los campos", "./src/assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Llena todos los campos", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $resultUsuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
+        $resultUsuario = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
 
 
         if (!$resultUsuario) {
-            estructuraMensaje("Usuario Invalido", "./src/assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Usuario Invalido", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
@@ -27,12 +27,12 @@ class Usuario
         $rolBD = $resultUsuario[$CAMPO_ID_ROL];
 
         if ($contraseñaBD !== $contraseña) {
-            estructuraMensaje("Contraseña Incorrecta", "./src/assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Contraseña Incorrecta", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
 
-        $rol = obtenerRol($conexion, $rolBD);
+        $rol = ObtenerRolUsuario($conexion, $rolBD);
 
         if ($rol === $ADMIN) {
             $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Admin/Admin.php");
@@ -43,7 +43,7 @@ class Usuario
         if ($rol === $ESTUDIANTE) {
             $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Alumno/alumno.php");
         } else {
-            estructuraMensaje("Ocurrio un error con la pagina", "./src/assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Ocurrio un error con la pagina", "./src/assets/iconos/ic_error.webp", "--rojo");
         }
     }
 
@@ -61,26 +61,26 @@ class Usuario
     {
 
         if (empty($contraseña_nueva) || empty($contraseña_actual)) {
-            estructuraMensaje("Llena todos los campos", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Llena todos los campos", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
         if (strlen($contraseña_nueva) < 8) {
-            estructuraMensaje("Contraseña debe ser 8 caracteres", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Contraseña debe ser 8 caracteres", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $contraseña = obtenerContraseñaActualBD($conexion, $id);
+        $contraseña = ObtenerContraseñaActualdb($conexion, $id);
 
         if ($contraseña_actual !== $contraseña) {
-            estructuraMensaje("La contraseña actual no es la correcta", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("La contraseña actual no es la correcta", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if (modificarLaContraseñaActualPaginaInicio($conexion, $id, $contraseña_nueva)) {
-            estructuraMensaje("Se cambio la contraseña", "../../assets/iconos/ic_correcto.webp", "--verde");
+        if (ModificarLaContraseñaActualPaginaInicioDB($conexion, $id, $contraseña_nueva)) {
+            EstructuraMensaje("Se cambio la contraseña", "../../assets/iconos/ic_correcto.webp", "--verde");
         } else {
-            estructuraMensaje("Error al actualizar la contraseña", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Error al actualizar la contraseña", "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
         $conexion->close();
@@ -104,7 +104,7 @@ class Usuario
         global $ADMIN, $JEFE, $ESTUDIANTE, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $TABLA_ESTUDIANTE, $CAMPO_GRUPO, $CAMPO_ID_CARRERA;
 
         if ($rol === $ADMIN) {
-            $usuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
+            $usuario = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
             componenteDatosUsuarioInicioAdministrador($usuario, $correo);
 
             return;
@@ -112,19 +112,19 @@ class Usuario
 
         if ($rol === $JEFE) {
 
-            $usuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
-            $jefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id);
-            $carrera = getResultCarrera($conexion, $jefe[$CAMPO_ID_CARRERA]);
+            $usuario = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
+            $jefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id);
+            $carrera = ObtenerNombreCarrera($conexion, $jefe[$CAMPO_ID_CARRERA]);
             componenteDatosUsuarioInicioJefeCarrera($usuario, $carrera, $correo);
 
             return;
         }
 
         if ($rol === $ESTUDIANTE) {
-            $usuario = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
-            $estudiante = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
+            $usuario = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
+            $estudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
 
-            $carrera = getResultCarrera($conexion, $estudiante[$CAMPO_ID_CARRERA]);
+            $carrera = ObtenerNombreCarrera($conexion, $estudiante[$CAMPO_ID_CARRERA]);
             $grupo = $estudiante[$CAMPO_GRUPO];
             componenteDatosUsuarioInicioAlumno($usuario, $carrera, $correo, $grupo);
         }

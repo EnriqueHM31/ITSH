@@ -4,7 +4,7 @@ include "../conexion/conexion.php";
 include "../utils/constantes.php";
 include "../utils/functionGlobales.php";
 
-$resultadoAllCarreras = obtenerAllCarreras($conexion);
+$resultadoAllCarreras = ObtenerTodasLasCarreras($conexion);
 
 // Creamos un array para almacenar los resultados
 $data = [];

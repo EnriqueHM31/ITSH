@@ -14,9 +14,9 @@ $alumno = new alumno();
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $row = $alumno->ponerDatosFormulario($conexion, $id);
-$estudianteData = getResultDataTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
+$estudianteData = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
 
-$dataJefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $estudianteData[$CAMPO_ID_CARRERA]);
+$dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $estudianteData[$CAMPO_ID_CARRERA]);
 ?>
 
 <!DOCTYPE html>
@@ -80,7 +80,8 @@ $dataJefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $estud
                 <div class="contenedor_info-solicitud">
                     <p for="email">Carrera:</p>
                     <input type="text" id="carrera" name="carrera"
-                        value="<?php echo getResultCarrera($conexion, $estudianteData[$CAMPO_ID_CARRERA]); ?>" readonly>
+                        value="<?php echo ObtenerNombreCarrera($conexion, $estudianteData[$CAMPO_ID_CARRERA]); ?>"
+                        readonly>
                 </div>
 
                 <div class="contenedor_info-solicitud">
@@ -126,6 +127,6 @@ $dataJefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $estud
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $alumno->enviarSolicitud($conexion, $dataJefe[$CAMPO_ID_USUARIO]);
-    notificaciones($_SESSION["mensaje"]);
+    MostrarNotificacion($_SESSION["mensaje"]);
 }
 ?>

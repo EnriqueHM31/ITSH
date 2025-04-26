@@ -5,8 +5,8 @@
 function obtenerGrupos($conexion, $id_carrera)
 {
     $dataGrupos = [];
-    $resultGrupos = obtenerIDAndNumerosGrupos($conexion, $id_carrera);
-    $resultModalidades = obtenerModalidades($conexion, $id_carrera);
+    $resultGrupos = ObtenerIDYNumerosGrupos($conexion, $id_carrera);
+    $resultModalidades = ObtenerIdModalidades($conexion, $id_carrera);
 
     while ($row = $resultGrupos->fetch_assoc()) {
         $dataGrupos[] = $row;

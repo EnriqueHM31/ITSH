@@ -18,11 +18,11 @@ $usuario = new usuario();
 $jefeCarrera = new Jefe();
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
-$data = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
+$data = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
 $id_carrera = $data[$CAMPO_ID_CARRERA];
-$carreraJefe = getResultCarrera($conexion, $id_carrera);
+$carreraJefe = ObtenerNombreCarrera($conexion, $id_carrera);
 
-$dataSolicitudes = obtenerSolicitudesJefeCarrera($conexion, $_SESSION["id"]);
+$dataSolicitudes = ObtenerSolicitudesDelJefeCarrera($conexion, $_SESSION["id"]);
 $sin_resultados = "";
 if ($dataSolicitudes) {
     $arraysDatos = $jefeCarrera->MostrarSolicitudes($conexion, $dataSolicitudes, $id);

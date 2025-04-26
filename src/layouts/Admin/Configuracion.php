@@ -16,7 +16,7 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
-$carreras = obtenerAllCarreras($conexion);
+$carreras = ObtenerTodasLasCarreras($conexion);
 
 ?>
 
@@ -107,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $modalidadEscolarizada = isset($_POST['escolarizado']) ? "Escolarizado" : '';
             $modalidadFlexible = isset($_POST['flexible']) ? "Flexible" : '';
 
-            $id_tipo_carrera = obtenerIDTipoCarrera($conexion, trim($_POST["tipo_carrera"]));
+            $id_tipo_carrera = ObtenerIDTipoCarrera($conexion, trim($_POST["tipo_carrera"]));
             $administrador->AgregarCarrera($conexion, $carreraNueva, $Numero_grupos, $id_carrera, $id_tipo_carrera, $modalidadEscolarizada, $modalidadFlexible);
         }
         if ($_POST['formulario'] === 'Modificar Carrera') {
@@ -120,10 +120,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $modalidadEscolarizada = isset($_POST['escolarizado']) ? "Escolarizado" : '';
 
             $modalidadFlexible = isset($_POST['flexible']) ? "Flexible" : '';
-            $id_tipo_carrera_nueva = obtenerIDTipoCarrera($conexion, trim($_POST["tipo_carrera"]));
+            $id_tipo_carrera_nueva = ObtenerIDTipoCarrera($conexion, trim($_POST["tipo_carrera"]));
 
             $administrador->modificarCarrera($conexion, $carreraAntigua, $claveGrupoAAntigua, $carreraNueva, $id_tipo_carrera_nueva, $Numero_grupos, $id_carrera, $modalidadEscolarizada, $modalidadFlexible);
         }
     }
-    notificaciones($_SESSION["mensaje"]);
+    MostrarNotificacion($_SESSION["mensaje"]);
 }

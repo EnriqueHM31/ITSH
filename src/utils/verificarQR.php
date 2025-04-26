@@ -8,7 +8,7 @@ include "../utils/functionGlobales.php";
 // Verificar que se haya enviado el parámetro con el texto del QR
 $qr_text = $_GET['qr_text'];
 
-$resultado_consulta = obtenerCodigoQVerificacion($conexion, $qr_text);
+$resultado_consulta = ObtenerCodigoQRVerificacion($conexion, $qr_text);
 
 // Verificar si se encontró el código
 if ($resultado_consulta->num_rows > 0) {
@@ -16,7 +16,7 @@ if ($resultado_consulta->num_rows > 0) {
 
     if ($row[$CAMPO_ID_ESTADO] == 1) {
 
-        if (actualizarValidacionCodigoQR($conexion, $qr_text)) {
+        if (ModificarLaValidacionCodigoQRDB($conexion, $qr_text)) {
             $src = "../assets/iconos/ic_correcto.webp";
             $mensaje_validacion = "El codigo es valido";
         } else {

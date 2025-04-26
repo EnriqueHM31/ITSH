@@ -17,9 +17,9 @@ include "../../Components/Layout.php";
 $usuario = new usuario();
 $jefe = new jefe();
 $rol = $_SESSION["rol"];
-$data = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
+$data = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
 $id_carrera = $data[$CAMPO_ID_CARRERA];
-$carreraJefe = getResultCarrera($conexion, $id_carrera);
+$carreraJefe = ObtenerNombreCarrera($conexion, $id_carrera);
 $seccion = "Modificar";
 $GruposCarrera = obtenerGrupos($conexion, $id_carrera);
 $grupos = $GruposCarrera[0][0];
@@ -147,6 +147,6 @@ $Numero_grupos = $grupos["numero_grupos"];
 <?php
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $jefe->actualizarUsuario($conexion, $_POST["clave_anterior"], $_POST);
-    notificaciones($_SESSION["mensaje"]);
+    $jefe->ModificarUsuarioDB($conexion, $_POST["clave_anterior"], $_POST);
+    MostrarNotificacion($_SESSION["mensaje"]);
 }

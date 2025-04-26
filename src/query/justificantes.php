@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_jefe'])) {
             return;
         }
 
-        $numeroJustificantes = obtenerNumeroJustificantesJefe($conexion, $id_jefe);
+        $numeroJustificantes = ObtenerNumeroJustificantesJefeCarrera($conexion, $id_jefe);
 
 
         if ($numeroJustificantes == 0) {
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_jefe'])) {
         }
 
         // Eliminar si existen justificantes
-        if (EliminarDatosTablaJustificante($conexion, $id_jefe)) {
+        if (EliminarDatosTablaJustificanteDB($conexion, $id_jefe)) {
             echo json_encode(["mensaje" => [true, "Se ha reiniciado el folio"]]);
         } else {
             echo json_encode(["mensaje" => [false, "Ocurrió un error al reiniciar el folio"]]);

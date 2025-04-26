@@ -9,16 +9,16 @@ function validacionCamposYArchivoCSV($campos_completos, $archivo_tiene_contenido
 
         return 'Archivo';
     } elseif ($campos_completos && $archivo_tiene_contenido) {
-        return estructuraMensaje("No puedes poner un archivo si hay campos llenos", "../../assets/iconos/ic_error.webp", "--rojo");
+        return EstructuraMensaje("No puedes poner un archivo si hay campos llenos", "../../assets/iconos/ic_error.webp", "--rojo");
     } elseif (!$campos_completos && !$archivo_tiene_contenido) {
-        return estructuraMensaje("Llena los campos o carga un archivo", "../../assets/iconos/ic_error.webp", "--rojo");
+        return EstructuraMensaje("Llena los campos o carga un archivo", "../../assets/iconos/ic_error.webp", "--rojo");
     }
 }
 
 function restriccionAdministrador($carrera, $cargo)
 {
     if ($carrera !== 'Null' && $cargo === "Administrador") {
-        estructuraMensaje("Un administrador no puede tener una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Un administrador no puede tener una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
@@ -32,32 +32,32 @@ function restriccionJefedeCarrera($carrera, $cargo, $conexion)
     }
 
     // Obtiene todas las carreras válidas
-    $resultado = obtenerAllCarreras($conexion);
+    $resultado = ObtenerTodasLasCarreras($conexion);
     $data = [];
     while ($row = $resultado->fetch_assoc()) {
         $data[] = $row["nombre_carrera"];
     }
 
     if ($cargo === "Jefe de Carrera" && !in_array($carrera, $data, false)) {
-        estructuraMensaje("Un jefe de carrera debe tener una carrera vinculada: $carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Un jefe de carrera debe tener una carrera vinculada: $carrera", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 
 
-    $resultadoIdCarrera = obtenerIDCarrera($conexion, $carrera);
+    $resultadoIdCarrera = ObtenerIDCarrera($conexion, $carrera);
 
     if ($resultadoIdCarrera < 0) {
-        estructuraMensaje("Error: Esa carrera no existe", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Error: Esa carrera no existe", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 
 
     if ($cargo === "Jefe de Carrera") {
 
-        $resultadoDuplicado = getResultCarreraDuplicada($TABLA_JEFE, $conexion, $resultadoIdCarrera);
+        $resultadoDuplicado = ExisteCarreraDuplicada($TABLA_JEFE, $conexion, $resultadoIdCarrera);
 
         if ($resultadoDuplicado->num_rows > 0) {
-            estructuraMensaje("La carrera $carrera ya tiene un jefe de carrera ", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("La carrera $carrera ya tiene un jefe de carrera ", "../../assets/iconos/ic_error.webp", "--rojo");
             return true;
         }
     }
@@ -69,7 +69,7 @@ function restriccionModificarAJefedeCarrera($carrera, $cargo, $conexion)
     global $TABLA_JEFE, $CAMPO_ID_CARRERA;
 
 
-    $resultadoIdCarrera = obtenerIDCarrera($conexion, $carrera);
+    $resultadoIdCarrera = ObtenerIDCarrera($conexion, $carrera);
 
 
     $sql = "SELECT * FROM $TABLA_JEFE WHERE $CAMPO_ID_CARRERA = ?";
@@ -86,34 +86,34 @@ function restriccionModificarAJefedeCarrera($carrera, $cargo, $conexion)
 
 function restriccionKeyDuplicada($identificador, $correo, $conexion)
 {
-    $resultado = getResultIDUsuarioDuplicado($conexion, $identificador);
+    $resultado = ExisteIdUsuarioDuplicado($conexion, $identificador);
 
     if ($resultado->num_rows > 0) {
-        estructuraMensaje("La clave ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("La clave ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 
-    $resultado = getResultCorreoDuplicado($conexion, $correo);
+    $resultado = ExisteCorreoDuplicado($conexion, $correo);
 
     if ($resultado->num_rows > 0) {
-        estructuraMensaje("Ese correo ya esta vinculado a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Ese correo ya esta vinculado a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
 
 function restriccionKeyDuplicadaEstudiante($matricula, $correo, $conexion)
 {
-    $resultado = getResultIDUsuarioDuplicado($conexion, $matricula);
+    $resultado = ExisteIdUsuarioDuplicado($conexion, $matricula);
 
     if ($resultado->num_rows > 0) {
-        estructuraMensaje("La matricula ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("La matricula ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 
-    $resultado = getResultCorreoDuplicado($conexion, $correo);
+    $resultado = ExisteCorreoDuplicado($conexion, $correo);
 
     if ($resultado->num_rows > 0) {
-        estructuraMensaje("Ese correo ya esta vinculado a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Ese correo ya esta vinculado a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
@@ -126,7 +126,7 @@ function restriccionKey($identificador, $conexion)
     $resultado = $sql->get_result();
 
     if ($resultado->num_rows > 0) {
-        estructuraMensaje("Esa clave ya esta ocupada por un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Esa clave ya esta ocupada por un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 
@@ -140,7 +140,7 @@ function revisionIdentificadorPersonal($identificador)
     $patron = '/^ITSH_\d{4}$/';
 
     if (!(preg_match($patron, $identificador))) {
-        estructuraMensaje("El identificador no es valido <p style='color:var(--rojo)'>" . $identificador . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("El identificador no es valido <p style='color:var(--rojo)'>" . $identificador . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
@@ -150,7 +150,7 @@ function revisionIdentificadorEstudiante($identificador)
     $patron = '/^\d{3}Z\d{4}$/';
 
     if (!(preg_match($patron, $identificador))) {
-        estructuraMensaje("El identificador no es valido <p style='color:var(--rojo)'>" . $identificador . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("El identificador no es valido <p style='color:var(--rojo)'>" . $identificador . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
@@ -161,7 +161,7 @@ function revisionNombreCompleto($nombre, $apellidos)
     $patron = '/^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$/';
 
     if (!(preg_match($patron, $nombreCompleto))) {
-        estructuraMensaje("El nombre no es valido <p style='color:var(--rojo)'>" . $nombreCompleto . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("El nombre no es valido <p style='color:var(--rojo)'>" . $nombreCompleto . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
@@ -174,7 +174,7 @@ function revisionCargo($cargo)
     ];
 
     if (!(in_array(strtolower(trim($cargo)), $diccionario))) {
-        estructuraMensaje("Este cargo no es valido <p style='color:var(--rojo)'>" . $cargo . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Este cargo no es valido <p style='color:var(--rojo)'>" . $cargo . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
@@ -184,7 +184,7 @@ function revisionCorreo($correo)
     $patron = '/^[a-zA-Z]+@huatusco\.tecnm\.mx$/';
 
     if (!(preg_match($patron, $correo))) {
-        estructuraMensaje("Este correo no es valido <p style='color:var(--rojo)'>" . $correo . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Este correo no es valido <p style='color:var(--rojo)'>" . $correo . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
@@ -194,7 +194,7 @@ function revisionCorreoEstudiante($correo)
     $patron = '/^\d{3}z\d{4}+@alum.huatusco\.tecnm\.mx$/';
 
     if (!(preg_match($patron, $correo))) {
-        estructuraMensaje("Este correo no es valido <p style='color:var(--rojo)'>" . $correo . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
+        EstructuraMensaje("Este correo no es valido <p style='color:var(--rojo)'>" . $correo . "</p>", "../../assets/iconos/ic_error.webp", "--rojo");
         return true;
     }
 }
@@ -265,7 +265,7 @@ function revisarModificacionClaveEmpleado($conexion, $stmt, $matriculaNueva, $ma
 
 function revisarGrupoModalidadCSV($conexion, $id_modalidad, $grupo)
 {
-    $modalidad = obtenerModalidad($conexion, $id_modalidad);
+    $modalidad = ObtenerIdModalidad($conexion, $id_modalidad);
     global $ESCOLARIZADO, $LETRA_ESCOLARIZADO, $FLEXIBLE, $LETRA_FLEXIBLE;
     if ($modalidad === $ESCOLARIZADO) {
         if ($grupo[3] != $LETRA_ESCOLARIZADO) {

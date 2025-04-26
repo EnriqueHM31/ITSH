@@ -8,7 +8,7 @@ include "../Components/JefeCarrera.php";
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
 
-$grupoJustificantes = buscarJustificantes($conexion, $query);
+$grupoJustificantes = BuscarJustificantes($conexion, $query);
 $salida = ""; // Inicializar variable para almacenar el HTML
 
 if ($grupoJustificantes->num_rows == 0) {

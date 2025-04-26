@@ -9,9 +9,9 @@ $carrera = isset($_GET['carrera']) ? $_GET['carrera'] : '';
 
 if (!empty($query) && !empty($carrera)) {
 
-    $id_carrera = obtenerIDCarrera($conexion, $carrera);
+    $id_carrera = ObtenerIDCarrera($conexion, $carrera);
 
-    $resultadoEstudiantes = buscarEstudianteBD($conexion, $query, $id_carrera);
+    $resultadoEstudiantes = BuscarEstudianteBD($conexion, $query, $id_carrera);
 
     if ($resultadoEstudiantes->num_rows > 0) {
         while ($row = $resultadoEstudiantes->fetch_assoc()) {

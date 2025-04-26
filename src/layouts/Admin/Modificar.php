@@ -136,8 +136,8 @@ $rol = $_SESSION["rol"];
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $administrador->actualizarUsuario($conexion, $_POST["clave_anterior"], $_POST);
+    $administrador->ModificarUsuarioDB($conexion, $_POST["clave_anterior"], $_POST);
 
-    notificaciones($_SESSION["mensaje"]);
+    MostrarNotificacion($_SESSION["mensaje"]);
 }
 ?>

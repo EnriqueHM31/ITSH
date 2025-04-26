@@ -131,7 +131,7 @@ $rol = $_SESSION["rol"];
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $administrador->realizarOperacionFormAñadir($conexion);
-    notificaciones($_SESSION["mensaje"]);
+    MostrarNotificacion($_SESSION["mensaje"]);
 }
 
 $conexion->close();

@@ -18,11 +18,11 @@ class Jefe
 
         $opcion = validacionCamposYArchivoCSV($campos_completos, $archivo_tiene_contenido);
 
-        $opcion === 'Campos' ? $this->operacionInsertarEstudiante($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo) : '';
+        $opcion === 'Campos' ? $this->operacionInsertarEstudianteDB($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo) : '';
         $opcion === "Archivo" ? $this->añadirPorCSVEstudiantes($conexion, $rol, $id_carrera) : '';
     }
 
-    public function operacionInsertarEstudiante($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo)
+    public function operacionInsertarEstudianteDB($conexion, $matricula, $contraseña, $rol, $nombre, $apellidos, $correo, $id_modalidad, $id_carrera, $grupo)
     {
         if (restriccionKeyDuplicadaEstudiante($matricula, $correo, $conexion)) {
             return;
@@ -31,21 +31,21 @@ class Jefe
         mysqli_begin_transaction($conexion);
 
         try {
-            if (!insertarUsuario($conexion, $matricula, $nombre, $apellidos, $contraseña, $correo, $rol)) {
+            if (!InsertarUsuarioDB($conexion, $matricula, $nombre, $apellidos, $contraseña, $correo, $rol)) {
                 throw new Exception("Error al insertar el usuario");
             }
 
-            if (!insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)) {
+            if (!InsertarEstudianteDB($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)) {
                 throw new Exception("Ocurrió un problema con la BD al insertar estudiante");
             }
 
             mysqli_commit($conexion);
-            estructuraMensaje("Registro del estudiante exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
+            EstructuraMensaje("Registro del estudiante exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
             return;
 
         } catch (Exception $e) {
             mysqli_rollback($conexion);
-            estructuraMensaje($e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje($e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
         }
     }
 
@@ -56,7 +56,7 @@ class Jefe
         $archivo = $_FILES["archivo_csv"]["tmp_name"];
 
         if (($handle = fopen($archivo, "r")) === false) {
-            estructuraMensaje("Error al abrir el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Error al abrir el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
@@ -68,7 +68,7 @@ class Jefe
                 $nombre = trim($datos[1]);
                 $apellidos = trim($datos[2]);
                 $grupo = trim($datos[3]);
-                $id_modalidad = obtenerIdModalidad($conexion, trim($datos[4]));
+                $id_modalidad = ObtenerIdModalidad($conexion, trim($datos[4]));
                 $correo = trim($datos[5]);
                 $contraseña = "Aa12345%";
 
@@ -78,20 +78,20 @@ class Jefe
                     throw new Exception("Error: $salidaValidacion ($matricula)");
                 }
 
-                if (!insertarUsuario($conexion, $matricula, $nombre, $apellidos, $contraseña, $correo, $rol)) {
+                if (!InsertarUsuarioDB($conexion, $matricula, $nombre, $apellidos, $contraseña, $correo, $rol)) {
                     throw new Exception("Error al insertar usuario: $matricula");
                 }
 
-                if (!insertarEstudiante($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)) {
+                if (!InsertarEstudianteDB($conexion, $matricula, $nombre, $apellidos, $id_carrera, $id_modalidad, $grupo)) {
                     throw new Exception("Error al insertar estudiante: $matricula");
                 }
             }
 
             mysqli_commit($conexion);
-            estructuraMensaje("Datos insertados correctamente", "../../assets/iconos/ic_correcto.webp", "--verde");
+            EstructuraMensaje("Datos insertados correctamente", "../../assets/iconos/ic_correcto.webp", "--verde");
         } catch (Exception $e) {
             mysqli_rollback($conexion);
-            estructuraMensaje($e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje($e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
     }
@@ -119,22 +119,22 @@ class Jefe
         return "true";
     }
 
-    function actualizarUsuario($conexion, $matricula, $nuevosDatos)
+    function ModificarUsuarioDB($conexion, $matricula, $nuevosDatos)
     {
         global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
 
         mysqli_begin_transaction($conexion);
 
         if (empty($matricula)) {
-            estructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
         // Obtener datos actuales del usuario (incluyendo 'matricula')
-        $usuarioActual = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $matricula);
+        $usuarioActual = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $matricula);
 
         if (!$usuarioActual) {
-            estructuraMensaje("Usuario no está en el sistema", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Usuario no está en el sistema", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
@@ -144,7 +144,7 @@ class Jefe
         $stmt = revisarModificacionCorreoEstudiante($conexion, $correoNuevo, $correoAntiguo, $matricula);
 
         if ($stmt && $stmt->num_rows > 0) {
-            estructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
@@ -157,14 +157,14 @@ class Jefe
 
 
 
-        if (!modificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $apellidos, $grupo, $id_modalidad, $matricula)) {
-            estructuraMensaje("Ocurrio un problema con los datos personales", "../../assets/iconos/ic_error.webp", "--rojo");
+        if (!ModificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $apellidos, $grupo, $id_modalidad, $matricula)) {
+            EstructuraMensaje("Ocurrio un problema con los datos personales", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
 
         mysqli_commit($conexion);
-        estructuraMensaje("Se ha modificado los datos en la base de datos", "../../assets/iconos/ic_correcto.webp", "--verde");
+        EstructuraMensaje("Se ha modificado los datos en la base de datos", "../../assets/iconos/ic_correcto.webp", "--verde");
 
     }
 
@@ -172,14 +172,14 @@ class Jefe
     {
         $id = trim($id);
         if (!isset($_POST['identificador'])) {
-            estructuraMensaje("Busque y seleccione a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Busque y seleccione a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if (EliminarUsuario($conexion, $id)) {
-            estructuraMensaje("El registro fue eliminado de forma exitosa", "../../assets/iconos/ic_correcto.webp", "--verde");
+        if (EliminarUsuarioDB($conexion, $id)) {
+            EstructuraMensaje("El registro fue eliminado de forma exitosa", "../../assets/iconos/ic_correcto.webp", "--verde");
         } else {
-            estructuraMensaje("Ocurrio un error al eliminarlo", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Ocurrio un error al eliminarlo", "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
     }
@@ -227,7 +227,7 @@ class Jefe
     public function HistorialJustificantes($conexion, $id_jefe)
     {
         global $CAMPO_FECHA_CREACION;
-        $resultado = obtenerJustificantesJefeCarrera($conexion, $id_jefe);
+        $resultado = ObtenerJustificantesJefeCarrera($conexion, $id_jefe);
 
         if ($resultado->num_rows == 0) {
             componenteSinJustificantes();

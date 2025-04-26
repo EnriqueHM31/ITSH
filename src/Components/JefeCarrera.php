@@ -11,7 +11,7 @@ function componenteJustificanteJefe($conexion, $index, $fila, $tiempo_fecha)
 {
     global $CAMPO_NOMBRE, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $MESES;
 
-    $dataEstudiante = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $fila["id_estudiante"]);
+    $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $fila["id_estudiante"]);
     $mes_nombre = $MESES[intval($tiempo_fecha[1]) - 1];
 
     $fecha = "$tiempo_fecha[2] de $mes_nombre $tiempo_fecha[0]";
@@ -117,7 +117,7 @@ function componenteDetailSolicitud($conexion, $fila, $clase, $id)
 
     while ($row = $resultado->fetch_assoc()) {
 
-        $nombre_estado = obtenerNombreEstado($conexion, $fila[$CAMPO_ID_ESTADO]);
+        $nombre_estado = ObtenerNombreEstado($conexion, $fila[$CAMPO_ID_ESTADO]);
 
         return <<<HTML
     <details class='detalles_solicitudes' 

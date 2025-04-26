@@ -19,9 +19,9 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
-$data = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
+$data = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $_SESSION["id"]);
 $id_carrera = $data[$CAMPO_ID_CARRERA];
-$carreraJefe = getResultCarrera($conexion, $id_carrera);
+$carreraJefe = ObtenerNombreCarrera($conexion, $id_carrera);
 $seccion = "Eliminar";
 
 $mostrar_modal = isset($_GET['mostrar_modal']) && $_GET['mostrar_modal'] === 'true';
@@ -111,6 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = $_POST['identificador'];
             $jefe->eliminarRegistroEstudiante($conexion, $id);
         }
-        notificaciones($_SESSION["mensaje"]);
+        MostrarNotificacion($_SESSION["mensaje"]);
     }
 }

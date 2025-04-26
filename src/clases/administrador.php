@@ -51,27 +51,27 @@ class administrador
 
         try {
 
-            if (insertarUsuario($conexion, $clave_empleado, $nombre, $apellidos, $contraseña, $correo, $cargo)) {
+            if (InsertarUsuarioDB($conexion, $clave_empleado, $nombre, $apellidos, $contraseña, $correo, $cargo)) {
 
                 if ($cargo === $ADMIN) {
 
                     if ($cargo === $ADMIN) {
-                        estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
+                        EstructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
 
                     mysqli_commit($conexion);
-                    estructuraMensaje("Registro de administrador exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
+                    EstructuraMensaje("Registro de administrador exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
                     return;
                 }
 
                 if ($cargo === $JEFE) {
 
-                    if (!insertarJefedeCarrera($conexion, $clave_empleado, $carrera)) {
-                        estructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
+                    if (!InsertarJefeDeCarreraDB($conexion, $clave_empleado, $carrera)) {
+                        EstructuraMensaje("Ocurrio un problema con la BD", "../../assets/iconos/ic_error.webp", "--rojo");
                     }
 
                     mysqli_commit($conexion);
-                    estructuraMensaje("Registro Jefe de carrera exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
+                    EstructuraMensaje("Registro Jefe de carrera exitoso", "../../assets/iconos/ic_correcto.webp", "--verde");
                     return;
                 }
 
@@ -80,7 +80,7 @@ class administrador
             }
 
         } catch (Exception $e) {
-            estructuraMensaje("Error al añadir el registro" . $e, "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Error al añadir el registro" . $e, "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
 
@@ -90,7 +90,7 @@ class administrador
     {
 
         if (empty($id)) {
-            estructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
@@ -111,15 +111,15 @@ class administrador
 
         $id = trim($id) == null ? "" : $id;
         if ($id == "") {
-            estructuraMensaje("Busque y seleccione a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Busque y seleccione a un usuario", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if (EliminarUsuario($conexion, $id)) {
+        if (EliminarUsuarioDB($conexion, $id)) {
             mysqli_commit($conexion);
-            estructuraMensaje("El registro fue eliminado de forma exitosa", "../../assets/iconos/ic_correcto.webp", "--verde");
+            EstructuraMensaje("El registro fue eliminado de forma exitosa", "../../assets/iconos/ic_correcto.webp", "--verde");
         } else {
-            estructuraMensaje("Ocurrio un error al eliminarlo", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Ocurrio un error al eliminarlo", "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
     }
@@ -162,7 +162,7 @@ class administrador
                     return;
                 }
 
-                insertarUsuario($conexion, $clave_empleado, $nombre, $apellidos, $contraseña, $correo, $cargo);
+                InsertarUsuarioDB($conexion, $clave_empleado, $nombre, $apellidos, $contraseña, $correo, $cargo);
 
                 if ($cargo === $ADMIN) {
                     continue;
@@ -170,23 +170,23 @@ class administrador
                     if (RestriccionJefedeCarrera($carrera, $cargo, $conexion)) {
                         return;
                     }
-                    insertarJefedeCarrera($conexion, $clave_empleado, $carrera);
+                    InsertarJefeDeCarreraDB($conexion, $clave_empleado, $carrera);
                 }
             }
 
             fclose($handle);
             mysqli_commit($conexion);
-            estructuraMensaje("Datos insertados correctamente", "../../assets/iconos/ic_correcto.webp", "--verde");
+            EstructuraMensaje("Datos insertados correctamente", "../../assets/iconos/ic_correcto.webp", "--verde");
             return;
         } else {
-            estructuraMensaje("Error al abrir el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Error al abrir el archivo", "../../assets/iconos/ic_error.webp", "--rojo");
         }
     }
 
     public function validarRowsCSV($conexion, $clave_empleado, $nombre, $apellidos, $correo, $carrera, $cargo)
     {
         if (empty($clave_empleado) || empty($nombre) || empty($apellidos) || empty($correo) || empty($carrera) || empty($cargo)) {
-            estructuraMensaje("Faltan datos obligatorios en la fila del CSV", "../../assets/iconos/ic_error.webp", "var(--rojo)");
+            EstructuraMensaje("Faltan datos obligatorios en la fila del CSV", "../../assets/iconos/ic_error.webp", "var(--rojo)");
             return true;
         }
         if (revisionCorreo($correo)) {
@@ -217,53 +217,53 @@ class administrador
 
 
         if (empty($carrera)) {
-            estructuraMensaje("Debes ingresar una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Debes ingresar una carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
         if ($modalidadEscolarizada == "" && $modalidadFlexible == "") {
-            estructuraMensaje("Debes seleccionar la modalidad escolarizada o flexible", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Debes seleccionar la modalidad escolarizada o flexible", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if (!insertarCarrerasDB($conexion, $carrera, $id_tipo_carrera)) {
-            estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        if (!InsertarCarreraDB($conexion, $carrera, $id_tipo_carrera)) {
+            EstructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $id_carrera = obtenerIDCarrera($conexion, $carrera);
+        $id_carrera = ObtenerIDCarrera($conexion, $carrera);
 
-        $existeClaveGrupo = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $id_carrera_nueva);
+        $existeClaveGrupo = ObtenerDatosDeUnaTabla($conexion, $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $id_carrera_nueva);
 
         if ($existeClaveGrupo) {
-            estructuraMensaje("Esa clave de grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Esa clave de grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        if (!insertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)) {
-            estructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        if (!InsertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)) {
+            EstructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
         if ($modalidadEscolarizada != '') {
 
-            $id_modalidad = obtenerIdModalidad($conexion, $modalidadEscolarizada);
-            if (!insertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)) {
-                estructuraMensaje("Error al agregar la carrera con la modalidad escolarizado", "../../assets/iconos/ic_error.webp", "--rojo");
+            $id_modalidad = ObtenerIdModalidad($conexion, $modalidadEscolarizada);
+            if (!InsertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)) {
+                EstructuraMensaje("Error al agregar la carrera con la modalidad escolarizado", "../../assets/iconos/ic_error.webp", "--rojo");
                 return;
             }
         }
 
         if ($modalidadFlexible != '') {
-            $id_modalidad = obtenerIdModalidad($conexion, $modalidadFlexible);
-            if (!insertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)) {
-                estructuraMensaje("Error al agregar la carrera con la modalidad flexible", "../../assets/iconos/ic_error.webp", "--rojo");
+            $id_modalidad = ObtenerIdModalidad($conexion, $modalidadFlexible);
+            if (!InsertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)) {
+                EstructuraMensaje("Error al agregar la carrera con la modalidad flexible", "../../assets/iconos/ic_error.webp", "--rojo");
                 return;
             }
         }
 
         mysqli_commit($conexion);
-        estructuraMensaje("Se agregó otra carrera al sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
+        EstructuraMensaje("Se agregó otra carrera al sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
 
     }
 
@@ -276,45 +276,45 @@ class administrador
         mysqli_begin_transaction($conexion);
 
         if (empty($carreraNueva) || empty($numeros_grupos) || empty($id_carrera_nueva)) {
-            estructuraMensaje("Faltan datos para su modificación", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Faltan datos para su modificación", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
         if ($modalidadEscolarizada == "" && $modalidadFlexible == "") {
-            estructuraMensaje("Debes seleccionar la modalidad escolarizada o flexible", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Debes seleccionar la modalidad escolarizada o flexible", "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
 
         if ($carreraNueva != $carreraAntigua) {
-            $existeCarrera = getResultDataTabla($conexion, $TABLA_CARRERAS, $CAMPO_CARRERA, $carreraNueva);
+            $existeCarrera = ObtenerDatosDeUnaTabla($conexion, $TABLA_CARRERAS, $CAMPO_CARRERA, $carreraNueva);
             if ($existeCarrera) {
-                estructuraMensaje("Esa carrera ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+                EstructuraMensaje("Esa carrera ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
                 return;
             }
         }
 
-        $idCarreraAntigua = obtenerIDCarrera($conexion, $carreraAntigua);
+        $idCarreraAntigua = ObtenerIDCarrera($conexion, $carreraAntigua);
 
 
-        if (!modificarNombreTipoCarreraDB($conexion, $carreraNueva, $id_tipo_carrera_nueva, $idCarreraAntigua)) {
-            estructuraMensaje("Error al modificar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        if (!ModificarNombreTipoCarreraDB($conexion, $carreraNueva, $id_tipo_carrera_nueva, $idCarreraAntigua)) {
+            EstructuraMensaje("Error al modificar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
 
         if ($claveGrupoAntigua != $id_carrera_nueva) {
-            $existeClave = getResultDataTabla($conexion, $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $id_carrera_nueva);
+            $existeClave = ObtenerDatosDeUnaTabla($conexion, $TABLA_GRUPO, $CAMPO_CLAVE_GRUPO, $id_carrera_nueva);
             if ($existeClave) {
-                estructuraMensaje("Esa clave grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
+                EstructuraMensaje("Esa clave grupo ya existe", "../../assets/iconos/ic_error.webp", "--rojo");
                 return;
             }
         }
 
-        if (!modificarNumeroGruposDB($conexion, $idCarreraAntigua, $numeros_grupos, $id_carrera_nueva)) {
-            estructuraMensaje("Error al modificar los grupos de la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+        if (!ModificarNumeroGruposDB($conexion, $idCarreraAntigua, $numeros_grupos, $id_carrera_nueva)) {
+            EstructuraMensaje("Error al modificar los grupos de la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
         }
 
 
-        $modalidades = obtenerModalidadesCarrera($conexion, $idCarreraAntigua);
+        $modalidades = ObtenerIdModalidadesCarrera($conexion, $idCarreraAntigua);
 
         $modalidadInputs = [
             "Escolarizado" => $modalidadEscolarizada,
@@ -323,39 +323,39 @@ class administrador
 
 
         foreach ( $modalidadInputs as $tipo => $valor ) {
-            $id_modalidad = obtenerIdModalidad($conexion, $tipo);
+            $id_modalidad = ObtenerIdModalidad($conexion, $tipo);
 
             if (empty($valor)) {
                 if (in_array($tipo, $modalidades)) {
-                    eliminarCarreraModalidadDB($conexion, $idCarreraAntigua, $id_modalidad);
+                    EliminarCarreraModalidadDB($conexion, $idCarreraAntigua, $id_modalidad);
                 }
             } else {
                 if (!in_array($tipo, $modalidades)) {
-                    insertarCarreraModalidadDB($conexion, $idCarreraAntigua, $id_modalidad);
+                    InsertarCarreraModalidadDB($conexion, $idCarreraAntigua, $id_modalidad);
                 }
             }
 
             mysqli_commit($conexion);
-            estructuraMensaje("Se modificó la carrera en el sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
+            EstructuraMensaje("Se modificó la carrera en el sistema", "../../assets/iconos/ic_correcto.webp", "--verde");
         }
     }
 
 
-    public function actualizarUsuario($conexion, $clave_empleado, $nuevosDatos)
+    public function ModificarUsuarioDB($conexion, $clave_empleado, $nuevosDatos)
     {
         global $TABLA_USUARIO, $CAMPO_ID_USUARIO, $CAMPO_CORREO;
 
         mysqli_begin_transaction($conexion);
 
         if (empty($clave_empleado)) {
-            estructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Tienes que elegir a un usuario para modificar su informacion", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
-        $usuarioActual = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $clave_empleado);
+        $usuarioActual = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $clave_empleado);
 
         if (!$usuarioActual) {
-            estructuraMensaje("Usuario no está en el sistema", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Usuario no está en el sistema", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
@@ -365,7 +365,7 @@ class administrador
         $stmt = revisarModificacionCorreoEmpleado($conexion, $correoNuevo, $correoAntiguo, $clave_empleado);
 
         if ($stmt && $stmt->num_rows > 0) {
-            estructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("El correo ya está asociado con otro usuario", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
@@ -378,13 +378,13 @@ class administrador
         $carreraAntigua = $nuevosDatos['carrera_antigua'];
 
 
-        $mensaje = modificarDatosPersonal($conexion, $clave_empleado, $nombre, $apellidos, $carrera, $carreraAntigua, $rol, $rolAntiguo, $correo);
+        $mensaje = ModificarDatosPersonalDB($conexion, $clave_empleado, $nombre, $apellidos, $carrera, $carreraAntigua, $rol, $rolAntiguo, $correo);
         if ($mensaje != 1) {
-            estructuraMensaje($mensaje, '../../assets/iconos/ic_error.webp', '--rojo');
+            EstructuraMensaje($mensaje, '../../assets/iconos/ic_error.webp', '--rojo');
             return;
         }
 
         mysqli_commit($conexion);
-        estructuraMensaje("Se ha modificado los datos en la base de datos", "../../assets/iconos/ic_correcto.webp", "--verde");
+        EstructuraMensaje("Se ha modificado los datos en la base de datos", "../../assets/iconos/ic_correcto.webp", "--verde");
     }
 }

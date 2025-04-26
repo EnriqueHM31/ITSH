@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $contraseña_nueva = trim($_POST['contraseña_nueva']);
 
             $usuario->cambiarContraseña($conexion, $contraseña_actual, $contraseña_nueva, $id);
-            notificaciones($_SESSION["mensaje"]);
+            MostrarNotificacion($_SESSION["mensaje"]);
         }
     }
 }

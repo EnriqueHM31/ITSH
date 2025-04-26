@@ -38,6 +38,7 @@ $(document).ready(function () {
 						'var(--verde)',
 						'miTemplate'
 					)
+					formulario.reset();
 				} else {
 					mostrarTemplate(
 						message || 'Hubo un error al enviar el correo.',

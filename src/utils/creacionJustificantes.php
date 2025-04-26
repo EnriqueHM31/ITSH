@@ -11,7 +11,7 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
     try {
         mysqli_begin_transaction($conexion);
 
-        $id_justificante = obtenerNumeroJustificantesJefe($conexion, $_POST['id_jefe']);
+        $id_justificante = ObtenerNumeroJustificantesJefeCarrera($conexion, $_POST['id_jefe']);
         $id_solicitud = $_POST["id_solicitud"];
         $nombre = $_POST['nombre'];
         $fecha = $_POST['fecha'];
@@ -24,17 +24,17 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         [$id_unico, $id_codigo] = generarCodigo($conexion, $id_justificante, $nombre, $fecha, true);
 
-        $datos_jefeUser = getResultDataTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id_jefe);
+        $datos_jefeUser = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id_jefe);
 
-        $datos_jefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id_jefe);
+        $datos_jefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id_jefe);
 
         $nombre_jefe = $datos_jefeUser[$CAMPO_NOMBRE];
         $apellidos_jefe = $datos_jefeUser[$CAMPO_APELLIDOS];
 
-        $dataCarrera = getResultDataTabla($conexion, $TABLA_CARRERAS, $CAMPO_ID_CARRERA, $datos_jefe[$CAMPO_ID_CARRERA]);
+        $dataCarrera = ObtenerDatosDeUnaTabla($conexion, $TABLA_CARRERAS, $CAMPO_ID_CARRERA, $datos_jefe[$CAMPO_ID_CARRERA]);
 
         $carrera = $dataCarrera[$CAMPO_CARRERA];
-        $tipoCarrera = obtenerTipoCarrera($conexion, $dataCarrera[$CAMPO_ID_TIPO_CARRERA]);
+        $tipoCarrera = ObtenerNombreTipoCarrera($conexion, $dataCarrera[$CAMPO_ID_TIPO_CARRERA]);
 
         $fecha_actual = obtenerFechaActual();
 
@@ -303,9 +303,9 @@ try {
 
     $nombre_justificante = guardarArchivoPDF($data, $id_justificante, $id_estudiante);
 
-    ModificarEstadoSolicitud($conexion, $id_solicitud);
+    ModificarEstadoSolicitudDB($conexion, $id_solicitud);
 
-    if (InsertarTablaJustificante($conexion, $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)) {
+    if (InsertarTablaJustificanteDB($conexion, $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)) {
         echo json_encode(["success" => True]);
     }
 

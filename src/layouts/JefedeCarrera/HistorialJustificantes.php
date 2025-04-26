@@ -16,8 +16,8 @@ $jefe = new Jefe();
 
 $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
-$dataJefe = getResultDataTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id);
-$carrera = getResultCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA])
+$dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id);
+$carrera = ObtenerNombreCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA])
     ?>
 
 <!DOCTYPE html>

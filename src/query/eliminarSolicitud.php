@@ -33,7 +33,7 @@ try {
         throw new Exception("Error al mover el archivo");
     }
 
-    if (!EliminarSolicitudID($conexion, $id_solicitud)) {
+    if (!EliminarSolicitudPorIDDB($conexion, $id_solicitud)) {
         // Volver a poner el archivo en su lugar original
         rename($ruta_destino, $ruta_origen);
         throw new Exception("Error al eliminar la solicitud en la BD");
