@@ -3,3 +3,11 @@
 /src/layouts/Alumno/evidencias/
 
 /src/layouts/Alumno/papelera/
+
+/.prettierrc
+
+/estudiantes.csv
+
+/package.json
+
+/usuarios.csv
