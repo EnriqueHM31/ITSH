@@ -4,10 +4,6 @@
 
 /src/layouts/Alumno/papelera/
 
-/.prettierrc
+estudiantes.csv
 
-/estudiantes.csv
-
-/package.json
-
-/usuarios.csv
+usuarios.csv
