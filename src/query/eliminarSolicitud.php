@@ -25,23 +25,27 @@ try {
     $carrera = str_replace(" ", "", $carrera);
 
     $carpeta_origen = "../layouts/Alumno/evidencias/$carrera/";
-    $carpeta_destino = "../layouts/Alumno/papelera/";
+    $carpeta_destino = "../layouts/Alumno/papelera/$carrera/";
 
     $ruta_origen = $carpeta_origen . $nombreArchivo;
     $ruta_destino = $carpeta_destino . $nombreArchivo;
+
+    if (!file_exists($carpeta_destino)) {
+        mkdir($carpeta_destino, 0777, true);
+    }
 
     if (!@file_exists($ruta_origen)) {
         throw new Exception("La evidencia no existe $ruta_origen");
     }
 
     if (!@rename($ruta_origen, $ruta_destino)) {
-        throw new Exception("Error al mover el archivo");
+        throw new Exception("Error al mover el archivo aa $ruta_destino");
     }
 
     if (!EliminarSolicitudPorIDDB($conexion, $id_solicitud)) {
         // Volver a poner el archivo en su lugar original
         rename($ruta_destino, $ruta_origen);
-        throw new Exception("Error al eliminar la solicitud en la BD");
+        throw new Exception("Error al eliminar la solicitud $id_solicitud");
     }
 
     echo json_encode(["success" => true]);

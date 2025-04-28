@@ -310,6 +310,7 @@ function EliminarDatosTablaJustificanteDB($conexion, $id_jefe, $carrera)
 {
     $rutaEvidencia = "../layouts/Alumno/evidencias/$carrera";
     $rutaJustificantes = "../layouts/Alumno/justificantes/$carrera";
+    $rutaPapelera = "../layouts/Alumno/papelera/$carrera";
 
     $mensajeEvidencia = EliminarArchivosConRuta($rutaEvidencia);
     if ($mensajeEvidencia != 1) {
@@ -319,6 +320,11 @@ function EliminarDatosTablaJustificanteDB($conexion, $id_jefe, $carrera)
     $mensajeJustificantes = EliminarArchivosConRuta($rutaJustificantes);
     if ($mensajeJustificantes != 1) {
         return $mensajeJustificantes;
+    }
+
+    $mensajePapelera = EliminarArchivosConRuta($rutaPapelera);
+    if ($mensajePapelera != 1) {
+        return $mensajePapelera;
     }
 
     global $TABLA_SOLICITUDES, $TABLA_TRIGGER_SOLICITUD, $CAMPO_ID_JEFE;

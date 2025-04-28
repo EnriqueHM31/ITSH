@@ -23,11 +23,12 @@ $id_carrera = $data[$CAMPO_ID_CARRERA];
 $carreraJefe = ObtenerNombreCarrera($conexion, $id_carrera);
 
 $dataSolicitudes = ObtenerSolicitudesDelJefeCarrera($conexion, $_SESSION["id"]);
+
 $sin_resultados = "";
-if ($dataSolicitudes) {
+if ($dataSolicitudes && $dataSolicitudes->num_rows > 0) {
     $arraysDatos = $jefeCarrera->MostrarSolicitudes($conexion, $dataSolicitudes, $id);
 } else {
-    $sin_resultados = "<p class='sin_solicitudes'>No hay solicitudes</p>";
+    $sin_resultados = "<p class='sin_solicitudes'>No hay solicitudes por el momento</p>";
 }
 
 ?>
@@ -86,7 +87,7 @@ if ($dataSolicitudes) {
                 </div>
 
                 <?php
-                if (strlen($sin_resultados) != 0) {
+                if (strlen($sin_resultados) != null) {
                     echo $sin_resultados;
                 }
                 ?>
@@ -111,6 +112,7 @@ if ($dataSolicitudes) {
 <script defer>
 
     function ajustarContenido(array) {
+        console.log(array)
         const screenWidth = window.innerWidth;
 
         const tabla = document.getElementById("table");
