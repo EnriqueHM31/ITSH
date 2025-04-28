@@ -36,16 +36,17 @@ function mostrarDatosResize(array) {
 
 function eliminarFila(objeto) {
 	const datosSolicitud = obtenerDatosSolicitud(objeto);
-	({ id_solicitud, evidencia, elemento } = datosSolicitud);
-	eliminarSolicitud(id_solicitud, evidencia, elemento);
+	({ id_solicitud, matricula, evidencia, elemento } = datosSolicitud);
+	eliminarSolicitud(id_solicitud, matricula, evidencia, elemento);
 }
 
-async function eliminarSolicitud(id, nombreArchivo, elemento) {
+async function eliminarSolicitud(id, matricula, nombreArchivo, elemento) {
 	$.ajax({
 		url: '../../query/eliminarSolicitud.php',
 		method: 'POST',
 		data: {
 			id: id,
+			matricula: matricula,
 			nombreArchivo: nombreArchivo,
 		},
 		dataType: 'json',

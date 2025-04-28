@@ -3,12 +3,13 @@ include('phpqrcode/qrlib.php');
 include "../conexion/verificar acceso.php";
 
 
-function generarCodigo($conexion, $id, $nombre, $fecha, $valido)
+function generarCodigo($conexion, $id, $id_estudiante, $fecha)
 {
     // Parámetros para generar el string QR (puedes obtener estos valores dinámicamente, por ejemplo, de un formulario)
     try {
         // Generar el texto para el QR combinando ID, nombre (sin espacios) y fecha
-        $qr_text = $id . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha);
+        $fecha_nombre = str_replace('-', '_', $fecha);
+        $qr_text = $id . "_" . $id_estudiante . "_" . $fecha_nombre;
 
         // Directorio para guardar la imagen del QR (se crea si no existe)
         $dir = '../layouts/Alumno/justificantes/codigos_qr/';
@@ -31,7 +32,7 @@ function generarCodigo($conexion, $id, $nombre, $fecha, $valido)
 
         QRcode::png($url_verificacion, $filename, QR_ECLEVEL_L, 4, true);
 
-        $id_codigo = InsertarCodigoQRDB($conexion, $qr_text, $valido, $url_verificacion);
+        $id_codigo = InsertarCodigoQRDB($conexion, $qr_text, $url_verificacion);
 
         if ($id_codigo) {
             return [$id_unico, $id_codigo];

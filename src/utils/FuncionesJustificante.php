@@ -21,10 +21,10 @@ function obtenerIMGLogos()
     return 'data:image/jpeg;base64,' . $imagen_base64;
 }
 
-function obtenerCodigoQR($id_unico, $id_justificante, $nombre, $fecha)
+function obtenerCodigoQR($id_unico, $id_justificante, $id_estudiante, $fecha)
 {
     // IMAGEN DEL QR
-    $qr_text = $id_justificante . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha);
+    $qr_text = $id_justificante . '_' . $id_estudiante . '_' . str_replace('-', '_', $fecha);
     $filename = $id_unico . "_" . $qr_text . '.png';
     $ruta_imagen = $_SERVER['DOCUMENT_ROOT'] . "/src/layouts/Alumno/justificantes/codigos_qr/$filename";
 
@@ -42,10 +42,16 @@ function obtenerCodigoQR($id_unico, $id_justificante, $nombre, $fecha)
     return "data:image/png;base64,$imagen_base64";
 }
 
-function guardarArchivoPDF($data, $id_justificante, $id_estudiante)
+function guardarArchivoPDF($conexion, $data, $id_justificante, $id_estudiante)
 {
+    global $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $CAMPO_ID_CARRERA;
     // Ruta donde se guardará el archivo
-    $rutaGuardado = "../layouts/Alumno/justificantes/";
+    $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id_estudiante);
+    $carrera = ObtenerNombreCarrera($conexion, $dataEstudiante[$CAMPO_ID_CARRERA]);
+    $carrera = str_replace(" ", "", $carrera);
+
+
+    $rutaGuardado = "../layouts/Alumno/justificantes/$carrera/";
     if (!file_exists($rutaGuardado)) {
         mkdir($rutaGuardado, 0777, true);
     }
@@ -68,9 +74,9 @@ function estructurarFechaAusencia($fecha)
 }
 
 
-function EliminarCodigoQR($id_solicitud, $nombre, $fecha_codigo, $id_unico)
+function EliminarCodigoQR($id_solicitud, $id_estudiante, $fecha_codigo, $id_unico)
 {
-    $qr_text = $id_solicitud - 1 . '_' . str_replace(' ', '_', $nombre) . '_' . str_replace('-', '_', $fecha_codigo);
+    $qr_text = $id_solicitud - 1 . '_' . $id_estudiante . '_' . str_replace('-', '_', $fecha_codigo);
 
     // Directorio para guardar la imagen del QR (se crea si no existe)
     $dir = '../layouts/Alumno/justificantes/codigos_qr/';
@@ -83,3 +89,28 @@ function EliminarCodigoQR($id_solicitud, $nombre, $fecha_codigo, $id_unico)
         unlink($filename);
     }
 }
+
+function obtenerIniciales($texto)
+{
+    // Dividir el texto en palabras
+    $palabras = explode(' ', $texto);
+    $iniciales = '';
+
+    foreach ( $palabras as $palabra ) {
+        if (!empty($palabra)) {
+            // Tomar la primera letra y convertirla en mayúscula
+            $iniciales .= strtoupper($palabra[0]);
+        }
+    }
+
+    return $iniciales;
+}
+
+function obtenerAñoActual()
+{
+    return date('Y');
+}
+
+
+
+?>

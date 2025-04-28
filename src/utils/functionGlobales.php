@@ -86,7 +86,7 @@ function InsertarTablaJustificanteDB($conexion, $id_solicitud, $id_estudiante, $
     return $smtm->execute();
 }
 
-function InsertarCodigoQRDB($conexion, $qr_text, $valido, $url_verificacion)
+function InsertarCodigoQRDB($conexion, $qr_text, $url_verificacion)
 {
 
     global $TABLA_CODIGOQR, $CAMPO_DATOS_CODIGO, $CAMPO_URL, $CAMPO_ID_ESTADO;
@@ -306,14 +306,83 @@ function EliminarCarreraDB($conexion, $carrera)
     return $sql->execute();
 }
 
-function EliminarDatosTablaJustificanteDB($conexion, $id_jefe)
+function EliminarDatosTablaJustificanteDB($conexion, $id_jefe, $carrera)
 {
-    global $TABLA_JUSTIFICANTES, $CAMPO_ID_JEFE;
-    $sql = "DELETE FROM $TABLA_JUSTIFICANTES WHERE $CAMPO_ID_JEFE = ?";
+    $rutaEvidencia = "../layouts/Alumno/evidencias/$carrera";
+    $rutaJustificantes = "../layouts/Alumno/justificantes/$carrera";
+
+    $mensajeEvidencia = EliminarArchivosConRuta($rutaEvidencia);
+    if ($mensajeEvidencia != 1) {
+        return $mensajeEvidencia;
+    }
+
+    $mensajeJustificantes = EliminarArchivosConRuta($rutaJustificantes);
+    if ($mensajeJustificantes != 1) {
+        return $mensajeJustificantes;
+    }
+
+    global $TABLA_SOLICITUDES, $TABLA_TRIGGER_SOLICITUD, $CAMPO_ID_JEFE;
+    $sql = "DELETE FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_JEFE = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $id_jefe);
-    return $stmt->execute();
+    if (!$stmt->execute()) {
+        return "Ocurrio un error al eliminar los justificantes de la BD";
+
+    }
+
+    $sql = "DELETE FROM $TABLA_TRIGGER_SOLICITUD WHERE $CAMPO_ID_JEFE = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $id_jefe);
+    if (!$stmt->execute()) {
+        return "Ocurrio un error al eliminar los justificantes de la BD";
+
+    }
+
+
+
+
+    return true;
 }
+
+function EliminarArchivosConRuta($ruta)
+{
+
+    // Verificar si la ruta existe y es válida
+    if (!file_exists($ruta)) {
+        return "La ruta no existe.";
+    }
+    if (!is_dir($ruta)) {
+        return "No es una ruta válida.";
+    }
+    if (!is_writable($ruta)) {
+        return "La ruta no tiene permisos de escritura.";
+    }
+
+    // Abrir el directorio
+    $archivos = scandir($ruta);
+
+    foreach ( $archivos as $archivo ) {
+        // Omitir los directorios . y ..
+        if ($archivo === '.' || $archivo === '..') {
+            continue;
+        }
+
+        $rutaCompleta = $ruta . DIRECTORY_SEPARATOR . $archivo;
+
+        // Eliminar si es un archivo
+        if (is_file($rutaCompleta)) {
+            if (!unlink($rutaCompleta)) {
+                return "Error al eliminar: $rutaCompleta";
+            }
+        }
+
+    }
+    return true;
+
+}
+
+
+
 
 function EliminarSolicitudPorIDDB($conexion, $id)
 {

@@ -12,21 +12,26 @@ include "../conexion/verificar acceso.php";
 header('Content-Type: application/json');
 
 try {
-    if (!isset($_POST['id']) || !isset($_POST['nombreArchivo'])) {
+    if (!isset($_POST['id']) || !isset($_POST['nombreArchivo']) || !isset($_POST['matricula'])) {
         throw new Exception("Datos incompletos");
     }
 
     $id_solicitud = $_POST['id'];
     $nombreArchivo = $_POST['nombreArchivo'];
+    $matricula = $_POST['matricula'];
 
-    $carpeta_origen = "../layouts/Alumno/evidencias/";
+    $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $matricula);
+    $carrera = ObtenerNombreCarrera($conexion, $dataEstudiante[$CAMPO_ID_CARRERA]);
+    $carrera = str_replace(" ", "", $carrera);
+
+    $carpeta_origen = "../layouts/Alumno/evidencias/$carrera/";
     $carpeta_destino = "../layouts/Alumno/papelera/";
 
     $ruta_origen = $carpeta_origen . $nombreArchivo;
     $ruta_destino = $carpeta_destino . $nombreArchivo;
 
     if (!@file_exists($ruta_origen)) {
-        throw new Exception("La evidencia no existe");
+        throw new Exception("La evidencia no existe $ruta_origen");
     }
 
     if (!@rename($ruta_origen, $ruta_destino)) {

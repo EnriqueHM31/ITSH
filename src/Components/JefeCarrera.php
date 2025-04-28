@@ -9,14 +9,19 @@ function componenteSinJustificantes()
 
 function componenteJustificanteJefe($conexion, $index, $fila, $tiempo_fecha)
 {
-    global $CAMPO_NOMBRE, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $MESES;
+    global $CAMPO_NOMBRE, $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $MESES, $CAMPO_ID_CARRERA;
 
     $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $fila["id_estudiante"]);
     $mes_nombre = $MESES[intval($tiempo_fecha[1]) - 1];
 
+    $dataTablaEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $fila["id_estudiante"]);
+
+    $carrera = ObtenerNombreCarrera($conexion, $dataTablaEstudiante[$CAMPO_ID_CARRERA]);
+    $carrera = str_replace(" ", "", $carrera);
+
     $fecha = "$tiempo_fecha[2] de $mes_nombre $tiempo_fecha[0]";
     echo <<<HTML
-    <a href='../Alumno/justificantes/{$fila["nombre_justificante"]}' class='archivo' target='_blank'>
+    <a href='../Alumno/justificantes/{$carrera}/{$fila["nombre_justificante"]}' class='archivo' target='_blank'>
         <h2> Folio $index </h2>
         <p> {$fila["id_estudiante"]} </p>
         <p> {$dataEstudiante[$CAMPO_NOMBRE]} </p>
@@ -45,7 +50,7 @@ function componenteCabeceraTablaSolicitudes()
 
 function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fecha)
 {
-    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA, $CAMPO_MOTIVO;
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA, $CAMPO_MOTIVO, $CAMPO_ID_CARRERA;
 
     $sql = "SELECT u.*, e.* 
         FROM $TABLA_USUARIO u 
@@ -61,7 +66,8 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
     $html = "";
     while ($row = $resultado->fetch_assoc()) {
 
-
+        $carrera = ObtenerNombreCarrera($conexion, $row[$CAMPO_ID_CARRERA]);
+        $carrera = str_replace(" ", "", $carrera);
         $html .= <<<HTML
         <tr>
             <td data-id={$fila[$CAMPO_ID_SOLICITUD]}> $indexFila </td>
@@ -72,7 +78,7 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
             <td> {$fila[$CAMPO_MOTIVO]}</td>
             <td> {$fecha[2]}-{$fecha[1]}-{$fecha[0]}</td>
             <td>
-                <a href='../Alumno/evidencias/{$fila[$CAMPO_EVIDENCIA]}' target='_blank' class='link_evidencia'>
+                <a href="../Alumno/evidencias/{$carrera}/{$fila[$CAMPO_EVIDENCIA]}" target='_blank' class='link_evidencia'>
                     {$fila[$CAMPO_EVIDENCIA]}
                 </a> 
             </td>
@@ -101,7 +107,7 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
 
 function componenteDetailSolicitud($conexion, $fila, $clase, $id)
 {
-    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA, $CAMPO_FECHA_AUSE, $CAMPO_MOTIVO;
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_SOLICITUD, $CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA, $CAMPO_FECHA_AUSE, $CAMPO_MOTIVO, $CAMPO_ID_CARRERA;
 
     $sql = "SELECT u.*, e.* 
     FROM $TABLA_USUARIO u 
@@ -118,6 +124,8 @@ function componenteDetailSolicitud($conexion, $fila, $clase, $id)
     while ($row = $resultado->fetch_assoc()) {
 
         $nombre_estado = ObtenerNombreEstado($conexion, $fila[$CAMPO_ID_ESTADO]);
+        $carrera = ObtenerNombreCarrera($conexion, $row[$CAMPO_ID_CARRERA]);
+        $carrera = str_replace(" ", "", $carrera);
 
         return <<<HTML
     <details class='detalles_solicitudes' 
@@ -136,7 +144,7 @@ function componenteDetailSolicitud($conexion, $fila, $clase, $id)
             <div class='detalle'><strong>Motivo:</strong><p>{$fila[$CAMPO_MOTIVO]}</p></div>
             <div class='detalle'><strong>Ausencia:</strong><p>{$fila[$CAMPO_FECHA_AUSE]}</p></div>
             <div class='detalle'><strong>Evidencia:</strong>
-                <a href='../Alumno/evidencias/{$fila[$CAMPO_EVIDENCIA]}' target='_blank'>
+                <a href='../Alumno/evidencias/{$carrera}/{$fila[$CAMPO_EVIDENCIA]}' target='_blank'>
                     {$fila[$CAMPO_EVIDENCIA]}
                 </a>
             </div>
@@ -229,11 +237,6 @@ function componenteModalSeguridadFolio($id_jefe)
                         <button class="btn_opcion" onclick="reiniciarFolio('{$id_jefe}')">Si</button>
                         <button class="btn_opcion" onclick="cerrarTemplate()">No</button>
                     </div>
-
-                    <span>
-                        Se aguardan en el respaldo por si se requieren<br>
-                        Se recomienda hacerlo cada inicio de semestre
-                    </span>
                 </div>
 
             </div>

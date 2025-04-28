@@ -22,7 +22,9 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
         $id_jefe = $_POST['id_jefe'];
         $fecha_codigo = $fecha;
 
-        [$id_unico, $id_codigo] = generarCodigo($conexion, $id_justificante, $nombre, $fecha, true);
+        $fechaCreacion = date('Y-m-d');
+
+        [$id_unico, $id_codigo] = generarCodigo($conexion, $id_justificante, $id_estudiante, $fechaCreacion);
 
         $datos_jefeUser = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id_jefe);
 
@@ -40,10 +42,15 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         $src = obtenerIMGLogos();
 
-        $src_qr = obtenerCodigoQR($id_unico, $id_justificante, $nombre, $fecha);
+        $src_qr = obtenerCodigoQR($id_unico, $id_justificante, $id_estudiante, $fechaCreacion);
 
         $fecha_ausencia_pdf = estructurarFechaAusencia($fecha);
 
+        $IdCarreraTipo = obtenerIniciales("$tipoCarrera $carrera");
+
+        $id_justificante++;
+        $Nojustificante = (strlen($id_justificante) == 1) ? "0$id_justificante" : $id_justificante;
+        $añoActual = obtenerAñoActual();
 
     } catch (Exception $e) {
 
@@ -200,11 +207,10 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         <p class="folio"><strong>Folio: </strong>
             <span>
-                ISC/
                 <?php
-                $id_justificante = $id_justificante + 1;
-                echo (strlen($id_justificante) == 1) ? "0" . $id_justificante : $id_justificante; ?>
-                /2025
+
+                echo "$IdCarreraTipo/$Nojustificante/$añoActual";
+                ?>
             </span>
         </p>
 
@@ -301,7 +307,7 @@ try {
 
     $data = $pdf->output();
 
-    $nombre_justificante = guardarArchivoPDF($data, $id_justificante, $id_estudiante);
+    $nombre_justificante = guardarArchivoPDF($conexion, $data, $id_justificante, $id_estudiante);
 
     ModificarEstadoSolicitudDB($conexion, $id_solicitud);
 
@@ -309,7 +315,7 @@ try {
         echo json_encode(["success" => True]);
     }
 
-    EliminarCodigoQR($id_justificante, $nombre, $fecha_codigo, $id_unico);
+    EliminarCodigoQR($id_justificante, $id_estudiante, $fechaCreacion, $id_unico);
 
     mysqli_commit($conexion);
 

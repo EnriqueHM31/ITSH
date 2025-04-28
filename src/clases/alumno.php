@@ -19,6 +19,7 @@ class alumno
 
     public function enviarSolicitud($conexion, $id_jefe)
     {
+        global $TABLA_SOLICITUDES, $CAMPO_ID_JEFE;
         mysqli_begin_transaction($conexion);
 
         if ($this->verificarPOST()) {
@@ -28,6 +29,8 @@ class alumno
         $identificador = $_POST['identificador'];
         $motivo = $_POST['motivo'];
         $fecha = $_POST['fecha_ausencia'];
+        $carrera = str_replace(' ', '', $_POST['carrera']);
+
         $id_estado = 2;
         try {
             if (!$this->esFechaValida($fecha)) {
@@ -48,15 +51,26 @@ class alumno
                 return;
             }
 
-            $sql = "SELECT COUNT(*) as total FROM solicitud";
+            $sql = "SELECT COUNT(*) as total FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_JEFE = ?";
             $smtm = $conexion->prepare($sql);
+            $smtm->bind_param("s", $id_jefe);
             $smtm->execute();
             $result = $smtm->get_result();
             $totalEvidencia = $result->fetch_assoc();
             $NumeroEvidencia = $totalEvidencia['total'] + 1;
 
+            $nombre_carpeta = "evidencias/$carrera"; // Nombre de la carpeta que quieres crear
+
+            // Verificar si la carpeta ya existe
+            if (!is_dir($nombre_carpeta)) {
+                // Crear la carpeta con permisos 0777 (lectura, escritura y ejecución para todos)
+                mkdir($nombre_carpeta, 0777, true);
+            } else {
+            }
+
+
             $identificador_archivo = "evidencia$NumeroEvidencia.pdf";
-            $archivo_destino = 'evidencias/' . $identificador_archivo;
+            $archivo_destino = "$nombre_carpeta/$identificador_archivo";
 
             if (!move_uploaded_file($archivo_tmp, $archivo_destino)) {
                 EstructuraMensaje("Ocurrió un error con el archivo", "../../assets/iconos/ic_error.webp", "--rojo");

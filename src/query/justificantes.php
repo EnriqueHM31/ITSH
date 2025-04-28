@@ -10,7 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_jefe'])) {
     try {
 
         $id_jefe = trim($_POST['id_jefe']);
+        $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id_jefe);
 
+        $carrera = ObtenerNombreCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA]);
+        $carrera = str_replace(" ", "", $carrera);
 
         if (empty($id_jefe)) {
             echo json_encode(["mensaje" => [false, "El ID del jefe está vacío."]]);
@@ -25,11 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_jefe'])) {
             return;
         }
 
+        $mensaje = EliminarDatosTablaJustificanteDB($conexion, $id_jefe, $carrera);
         // Eliminar si existen justificantes
-        if (EliminarDatosTablaJustificanteDB($conexion, $id_jefe)) {
+        if ($mensaje == 1) {
             echo json_encode(["mensaje" => [true, "Se ha reiniciado el folio"]]);
         } else {
-            echo json_encode(["mensaje" => [false, "Ocurrió un error al reiniciar el folio"]]);
+            echo json_encode(["mensaje" => [false, $mensaje]]);
         }
 
     } catch (Exception $e) {
@@ -40,3 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_jefe'])) {
     header("Location: ../layouts/Errores/404.php");
     exit;
 }
+
+
+
