@@ -12,7 +12,7 @@ header('Content-Type: application/json');
 $correo = trim($_POST['user_email']);
 $id_usuario = trim($_POST['Matricula']);
 $nuevaContraseña = trim($_POST['password']);
-$result = $usuario->verificarIdentidadCorreoIdentificador($id_usuario, $correo, $conexion);
+$result = verificarIdentidadCorreoIdentificador($id_usuario, $correo, $conexion);
 
 if (mysqli_num_rows($result) > 0) {
 

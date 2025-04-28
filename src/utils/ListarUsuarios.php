@@ -33,16 +33,16 @@ $query = "
     SELECT 
     u.*, 
     r.$CAMPO_ROL,
-    e.id_carrera AS carrera_estudiante,
-    j.id_carrera AS carrera_jefe
+    e.$CAMPO_ID_CARRERA AS carrera_estudiante,
+    j.$CAMPO_ID_CARRERA AS carrera_jefe
 FROM 
-    Usuario u
+    $TABLA_USUARIO u
 JOIN 
-    Rol r ON u.id_rol = r.id_rol
+    $TABLA_ROL r ON u.$CAMPO_ID_ROL = r.$CAMPO_ID_ROL
 LEFT JOIN 
-    Estudiante e ON u.id_usuario = e.id_usuario
+    $TABLA_ESTUDIANTE e ON u.$CAMPO_ID_USUARIO = e.$CAMPO_ID_USUARIO
 LEFT JOIN 
-    JefeCarrera j ON u.id_usuario = j.id_usuario
+    $TABLA_JEFE j ON u.$CAMPO_ID_USUARIO = j.$CAMPO_ID_USUARIO
 ORDER BY 
     CASE 
         WHEN r.$CAMPO_ROL = '$ADMINISTRADOR' THEN 1
@@ -147,8 +147,6 @@ if ($resultado->num_rows > 0) {
     header("Content-Disposition: attachment; filename=usuarios_en_sistema.pdf");
     echo $dompdf->output(); // Genera y manda el PDF al navegador
 
-} else {
-    echo "No se encontraron usuarios en el sistema.";
 }
 
 // Cerrar la conexión

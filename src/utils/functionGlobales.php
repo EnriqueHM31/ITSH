@@ -387,9 +387,6 @@ function EliminarArchivosConRuta($ruta)
 
 }
 
-
-
-
 function EliminarSolicitudPorIDDB($conexion, $id)
 {
     global $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD;
@@ -750,4 +747,30 @@ function ExisteCarreraDuplicada($tabla, $conexion, $id_carrera)
     $sqlCarreraDuplicada->bind_param("i", $id_carrera);
     $sqlCarreraDuplicada->execute();
     return $sqlCarreraDuplicada->get_result();
+}
+
+// CAMBIAR CONTRASEÑA
+function verificarIdentidadCorreoIdentificador($id_usuario, $correoDB, $conexion)
+{
+    global $TABLA_USUARIO, $CAMPO_CORREO, $CAMPO_ID_USUARIO;
+    $sql = "SELECT * FROM $TABLA_USUARIO WHERE $CAMPO_CORREO = ? AND $CAMPO_ID_USUARIO = ?";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param('ss', $correoDB, $id_usuario);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    return $resultado;
+}
+
+function cambiarContraseñaEnBD($conexion, $id_usuario, $nuevaContraseña)
+{
+    global $TABLA_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_ID_USUARIO;
+    $sql = "UPDATE $TABLA_USUARIO SET $CAMPO_CONTRASEÑA = ? WHERE $CAMPO_ID_USUARIO= ?";
+
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param('ss', $nuevaContraseña, $id_usuario);
+
+    return $stmt->execute();
+
 }
