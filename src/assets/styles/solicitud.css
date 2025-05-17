@@ -7,10 +7,6 @@
     margin: 0 auto;
 }
 
-.formulario_solicitud {
-    margin-bottom: 4rem;
-    position: relative;
-}
 
 .contenedor_ITSH {
     position: absolute;
@@ -39,6 +35,12 @@
     display: flex;
     align-items: center;
     max-width: 100%;
+    gap: 1rem;
+}
+
+.contenedor_info-solicitud div {
+    flex: 1;
+    display: flex;
     gap: 1rem;
 }
 
@@ -118,4 +120,26 @@ select,
         margin-bottom: 3rem;
     }
 
+    .formulario_solicitud {
+        padding: 0;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .formulario_solicitud {
+        margin-bottom: 4rem;
+    }
+
+    .contenedor_info-solicitud:first-child {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+
+    .contenedor_info-solicitud div {
+        width: 100%;
+        gap: 1rem;
+    }
 }

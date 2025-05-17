@@ -189,7 +189,7 @@
     justify-content: center;
     flex-direction: column;
     padding: 2rem;
-    width: clamp(200px, 30%, 300px);
+    width: clamp(300px, 30%, 300px);
     border-radius: 1.5rem;
     height: max(50%, 300px);
     position: relative;
@@ -203,7 +203,7 @@
 
 .datos_solicitud p {
     font-size: clamp(1rem, 4vw, 1.6rem);
-    margin-bottom: .8rem;
+    margin-bottom: 1.2rem;
 }
 
 .datos_solicitud a {
@@ -228,6 +228,75 @@
     right: 2rem;
     max-width: 4rem;
 }
+
+.datos_justificante {
+    background: var(--vino);
+    color: var(--blanco);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 4rem 2rem;
+    gap: 2rem;
+    width: clamp(700px, 4vw, 300px);
+    border-radius: 1.5rem;
+    position: relative;
+}
+
+.titulo_justificante {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: clamp(1.5rem, 5vw, 2.3rem);
+}
+
+
+.datos_justificante p {
+    margin-bottom: 1.2rem;
+    font-size: clamp(1rem, 4vw, 2.2rem);
+    display: flex;
+}
+
+.datos_justificante p span {
+    flex: 2;
+}
+
+.datos_justificante p strong {
+    flex: 1;
+    text-align: start;
+}
+
+.datos_justificante a {
+    color: var(--blanco);
+    font-size: clamp(1rem, 4vw, 1.7rem);
+    margin-top: 1rem;
+    text-decoration: underline;
+    padding: 1rem 2rem;
+    background-color: var(--vino);
+    transition: background-color .5s, color .5s;
+    border-radius: 1.5rem;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.datos_justificante a:hover {
+    background-color: var(--blanco);
+    color: var(--vino);
+}
+
+.datos_justificante .close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    max-width: 4rem;
+}
+
+.datos_justificante img {
+    width: clamp(20rem, 40vw, 50rem);
+}
+
+
 
 @media screen and (max-width: 1000px) {
     .contenedor_ITSH {

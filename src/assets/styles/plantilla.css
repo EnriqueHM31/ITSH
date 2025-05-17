@@ -144,15 +144,15 @@ main {
 .contenedor_main {
     background: var(--blanco);
     width: 80%;
-    min-height: 105dvh;
-    margin-top: 6rem;
+    min-height: 110dvh;
+    margin-top: 3rem;
 }
 
 .contenedor_main h2 {
     font-size: clamp(3rem, 4vw, 4.5rem);
     font-weight: 900;
     text-align: center;
-    padding-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .contenedor_main img {
