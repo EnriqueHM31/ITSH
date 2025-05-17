@@ -59,9 +59,11 @@ $carreraJefe = ObtenerNombreCarrera($conexion, $id_carrera);
 
             <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
 
+            <h2>Registrar Usuario</h2>
+
             <form class="formulario" method="post" enctype="multipart/form-data">
                 <label for="clave" class="contenedor_input">
-                    <input /*pattern="^ITSH_\d{4}$" */ class="input_pagina" type="text" name="clave" id="clave"
+                    <input pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave"
                         placeholder=" ">
                     <span class="nombre_input">Matricula</span>
                 </label>
