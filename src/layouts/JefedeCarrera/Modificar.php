@@ -70,12 +70,15 @@ $Numero_grupos = $grupos["numero_grupos"];
             <div class="contenedor">
                 <img class="encabezado" src="../../assets/extra/encabezado.webp" alt="los encabezados de la pagina">
 
+                <h2>Modificar Usuario</h2>
+
                 <div class="contenedor_buscar">
                     <label class="contenedor_buscar">
                         <input type="search" name="buscar" id="buscar" class="buscar" placeholder="Buscar">
                     </label>
                     <div id="resultados" class="result_usuarios"></div>
                 </div>
+
 
 
 
@@ -124,7 +127,7 @@ $Numero_grupos = $grupos["numero_grupos"];
                         <span class="nombre_input">Correo</span>
                     </label>
 
-                    <input class="btn_pagina" type="submit" value="Modificar">
+                    <input class="btn_pagina" style="margin-bottom: 20px;" type="submit" value="Modificar">
 
                 </form>
             </div>
