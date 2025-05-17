@@ -50,7 +50,7 @@ function componenteTemplateUsuarioAdminSeleccionado()
     echo
         <<<HTML
         <template id="plantilla_usuario-seleccionado-administrador">
-            <div class=" overlay">
+            <div class=" overlay overlay_eliminar overlay_ventana">
                 <form id="formulario_eliminar" class="formulario form_eliminar form_verificar_eliminar" method="post">
 
                     <div class="informacion-usuario-eliminar">
@@ -79,7 +79,7 @@ function componenteTemplateUsuarioJefeSeleccionado()
     echo
         <<<HTML
         <template id="plantilla_usuario-seleccionado-jefe">
-            <div class=" overlay">
+            <div class=" overlay overlay_eliminar overlay_ventana">
                 <form id="formulario_eliminar" class="formulario form_eliminar form_verificar_eliminar" method="post">
                     <div class="informacion-usuario-eliminar">
                         <h2 class="titulo_eliminar-modal">Estas seguro de eliminar a: </h2>
