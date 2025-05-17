@@ -81,17 +81,16 @@ if ($fecha_actual <= $fecha_limite) {
 
         body {
             width: 100%;
-            height: 100dvh;
             background: rgb(97, 18, 50);
             display: flex;
             align-items: center;
             flex-direction: column;
-            gap: 8rem;
-            margin-top: 4rem;
+            height: 100dvh;
+            gap: 2rem;
         }
 
         .logo img {
-            max-width: 100%;
+            width: 20rem;
         }
 
         .mensaje {
@@ -99,24 +98,48 @@ if ($fecha_actual <= $fecha_limite) {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: min(50rem, 90%);
-            height: 60dvh;
+            width: 100%;
+            max-width: 40%;
             border-radius: 2rem;
             padding: 2.5rem;
             flex-direction: column;
         }
 
         .mensaje img {
-            width: 100%;
-            max-width: 60%;
-            ;
+            width: 10rem;
         }
 
         p {
-            font-size: clamp(5rem, 5vw, 9rem);
+            font-size: clamp(2rem, 5vw, 2.2rem);
             font-weight: bold;
             text-align: center;
             padding: 1rem 2rem;
+        }
+
+        @media screen and (max-width: 1000px) {
+            body {
+                gap: 4rem;
+            }
+
+            .logo img {
+                height: 30rem;
+                width: 30rem;
+            }
+
+            .mensaje {
+                min-height: 50dvh;
+                max-width: 90%;
+            }
+
+
+            .mensaje img {
+                height: 20rem;
+                width: 20rem;
+            }
+
+            p {
+                font-size: 5rem;
+            }
         }
     </style>
 </head>

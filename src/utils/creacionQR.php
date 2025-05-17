@@ -5,6 +5,7 @@ include "../conexion/verificar acceso.php";
 
 function generarCodigo($conexion, $id, $id_estudiante, $fecha)
 {
+    global $URL_VERIFICAR_CODIGO_QR;
     // Parámetros para generar el string QR (puedes obtener estos valores dinámicamente, por ejemplo, de un formulario)
     try {
         // Generar el texto para el QR combinando ID, nombre (sin espacios) y fecha
@@ -24,7 +25,8 @@ function generarCodigo($conexion, $id, $id_estudiante, $fecha)
         // Generar el código QR y guardarlo en el archivo indicado
 
         // URL de verificación (esto será el enlace a la página de verificación)
-        $url_verificacion = "http://192.168.1.104:8000/src/utils/verificarQR.php?qr_text=" . urlencode($qr_text);
+        $data = urlencode($qr_text);
+        $url_verificacion = "$URL_VERIFICAR_CODIGO_QR/src/utils/verificarQR.php?qr_text='$data'";
 
         if (!class_exists('QRcode')) {
             throw new Exception("Faltan librerias para la creacion de codigos QR.");
