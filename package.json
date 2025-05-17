@@ -1,7 +1,0 @@
-{
-	"scripts": {
-		"build": "vite build",
-		"preview": "vite preview",
-		"php": "php -S 192.168.1.104:8000"
-	}
-}

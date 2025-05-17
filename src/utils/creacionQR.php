@@ -26,7 +26,7 @@ function generarCodigo($conexion, $id, $id_estudiante, $fecha)
 
         // URL de verificación (esto será el enlace a la página de verificación)
         $data = urlencode($qr_text);
-        $url_verificacion = "$URL_VERIFICAR_CODIGO_QR/src/utils/verificarQR.php?qr_text='$data'";
+        $url_verificacion = "$URL_VERIFICAR_CODIGO_QR/src/utils/verificarQR.php?qr_text=$data";
 
         if (!class_exists('QRcode')) {
             throw new Exception("Faltan librerias para la creacion de codigos QR.");
