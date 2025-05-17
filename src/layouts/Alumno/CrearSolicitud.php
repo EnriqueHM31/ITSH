@@ -55,15 +55,19 @@ $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $e
             <h2>Crear Solicitud</h2>
 
             <form class="formulario_solicitud" method="POST" enctype="multipart/form-data">
-
                 <div class="contenedor_info-solicitud">
-                    <p>Matricula:</p>
-                    <input type="text" id="id" name="identificador" value="<?php echo $row[$CAMPO_ID_USUARIO]; ?>"
-                        readonly>
+                    <div>
+                        <p>Matricula:</p>
+                        <input type="text" id="id" name="identificador" value="<?php echo $row[$CAMPO_ID_USUARIO]; ?>"
+                            readonly>
+                    </div>
 
-                    <p>Grupo:</p>
-                    <input type="text" id="grupo" name="grupo" value="<?php echo $estudianteData[$CAMPO_GRUPO]; ?>"
-                        readonly>
+                    <div>
+                        <p>Grupo:</p>
+                        <input type="text" id="grupo" name="grupo" value="<?php echo $estudianteData[$CAMPO_GRUPO]; ?>"
+                            readonly>
+                    </div>
+
                 </div>
 
                 <div class="contenedor_info-solicitud">
@@ -105,9 +109,6 @@ $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $e
                 </label>
 
                 <input type="submit" value="Enviar Solicitud" class="btn_enviar-solicitud">
-                <div class="contenedor_ITSH">
-                    <img src="../../assets/extra//logo.svg" alt="Logo del ITSH">
-                </div>
             </form>
 
         </div>
