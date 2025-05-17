@@ -43,6 +43,7 @@ $carrera = ObtenerNombreCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA])
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/jefeCarrera.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
+    <script src="../../assets/js/historial_jefe.js" defer></script>
 </head>
 
 <body>
