@@ -9,7 +9,7 @@ function componenteSinJustificantes()
 
 function componenteJustificanteJefe($conexion, $index, $fila, $tiempo_fecha)
 {
-    global $CAMPO_NOMBRE, $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $MESES, $CAMPO_ID_CARRERA;
+    global $CAMPO_NOMBRE, $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $MESES, $CAMPO_ID_CARRERA, $CAMPO_ID_SOLICITUD, $CAMPO_APELLIDOS;
 
     $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $fila["id_estudiante"]);
     $mes_nombre = $MESES[intval($tiempo_fecha[1]) - 1];
@@ -21,12 +21,12 @@ function componenteJustificanteJefe($conexion, $index, $fila, $tiempo_fecha)
 
     $fecha = "$tiempo_fecha[2] de $mes_nombre $tiempo_fecha[0]";
     echo <<<HTML
-    <a href='../Alumno/justificantes/{$carrera}/{$fila["nombre_justificante"]}' class='archivo' target='_blank'>
+    <div class='archivo' data-id='{$fila[$CAMPO_ID_SOLICITUD]}'data-id_justificante = {$index}>
         <h2> Folio $index </h2>
         <p> {$fila["id_estudiante"]} </p>
-        <p> {$dataEstudiante[$CAMPO_NOMBRE]} </p>
+        <p> {$dataEstudiante[$CAMPO_NOMBRE]}  </p>
         <span>{$fecha}</span>
-    </a>
+    </div>
     HTML;
 }
 
