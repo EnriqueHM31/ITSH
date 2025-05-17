@@ -1,0 +1,14 @@
+# Usa una imagen oficial de PHP con Apache
+FROM php:8.2-apache
+
+# Copia tu código fuente al servidor web
+COPY . /var/www/html/
+
+# (Opcional) Habilita extensiones PHP si usas base de datos u otras funciones
+RUN docker-php-ext-install mysqli
+
+# Render expone automáticamente el puerto 10000
+EXPOSE 10000
+
+# Inicia Apache escuchando en el puerto correcto
+CMD ["apache2-foreground"]
