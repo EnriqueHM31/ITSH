@@ -44,6 +44,7 @@ $rol = $_SESSION["rol"];
     <script src="../../assets/js/modificar.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
     <script src="../../assets/js/opcionesSelect.js" defer></script>
+    <script src="../../assets/js/admin.js" defer></script>
 
 </head>
 

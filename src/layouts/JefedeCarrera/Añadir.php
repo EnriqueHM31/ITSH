@@ -42,6 +42,7 @@ $carreraJefe = ObtenerNombreCarrera($conexion, $id_carrera);
     <script src="../../assets/js/index.js" defer></script>
     <script src="../../assets/js/opcionesSelect.js" defer></script>
     <script src="../../assets/js/mostrarTemplate.js" defer></script>
+    <script src="../../assets/js/jefeCarrera.js" defer></script>
 </head>
 
 <body data-rol="<?php echo $rol ?>">
@@ -63,8 +64,8 @@ $carreraJefe = ObtenerNombreCarrera($conexion, $id_carrera);
 
             <form class="formulario" method="post" enctype="multipart/form-data">
                 <label for="clave" class="contenedor_input">
-                    <input pattern="^ITSH_\d{4}$" class="input_pagina" type="text" name="clave" id="clave"
-                        placeholder=" ">
+                    <input pattern="^[1-9][0-9]{2}z[0-9]{4}[a-zA-Z]?$" class="input_pagina" type="text" name="clave"
+                        id="clave" placeholder=" ">
                     <span class="nombre_input">Matricula</span>
                 </label>
 

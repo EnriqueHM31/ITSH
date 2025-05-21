@@ -1,3 +1,27 @@
+const clave = document.getElementById('clave');
+const correo = document.getElementById('correo');
+
+// Función para actualizar el correo automáticamente
+function actualizarCorreo() {
+	const matricula = clave.value.trim().toLowerCase();
+
+	if (matricula) {
+		correo.value = `${matricula}@alum.huatusco.tecnm.mx`;
+	} else {
+		correo.value = "@alum.huatusco.tecnm.mx";
+	}
+}
+
+// Escuchar cuando el usuario escribe
+clave.addEventListener('input', actualizarCorreo);
+
+// Al cargar la página puedes poner un valor base
+window.addEventListener('DOMContentLoaded', () => {
+	correo.value = "@alum.huatusco.tecnm.mx";
+});
+
+
+
 function ajustarContenido(array) {
 	const screenWidth = window.innerWidth;
 
