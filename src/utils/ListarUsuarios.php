@@ -58,9 +58,6 @@ $stmt = $conexion->prepare($query);
 $stmt->execute();
 $resultado = $stmt->get_result();
 
-var_dump($resultado);
-
-
 $src = obtenerIMGLogos();
 
 // Verificar si se obtuvieron resultados
