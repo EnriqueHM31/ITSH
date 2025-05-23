@@ -3,7 +3,7 @@
 class Usuario
 {
 
-    public function __usuario()
+    public function __Usuario()
     {
     }
 
