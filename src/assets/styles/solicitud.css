@@ -115,13 +115,18 @@ select,
     color: var(--blanco);
     border-radius: 50%;
     padding: 1rem;
-    width: clamp(1.5rem, 3vw, 4rem);
-    height: clamp(1.5rem, 3vw, 4rem);
+    width: clamp(3rem, 3vw, 4rem);
+    height: clamp(3rem, 3vw, 4rem);
     border: none;
     font-weight: 900;
     border: .1rem solid var(--vino);
     transition: color .2s, background-color .2s;
     position: relative;
+}
+
+#rangoFechas {
+    background-color: var(--blanco);
+    color: var(--vino);
 }
 
 
@@ -243,5 +248,25 @@ select,
     .contenedor_info-solicitud div {
         width: 100%;
         gap: 1rem;
+    }
+
+    .fecha_ausencia_container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .fecha_ausencia_container input {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .plazo {
+        border-radius: .5rem;
+        width: 100%;
+
+        padding: 0;
     }
 }

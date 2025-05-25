@@ -117,7 +117,7 @@ if (template) {
 		const fin = document.getElementById('fechaFin').value;
 
 		if (!inicio || !fin) {
-			alert("Por favor selecciona ambas fechas.");
+			mostrarTemplate("Por favor selecciona ambas fechas.", "../../assets/iconos/ic_error.webp", "--rojo", "miTemplate");
 			return;
 		}
 

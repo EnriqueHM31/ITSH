@@ -103,7 +103,7 @@ $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $e
                 <div class="contenedor_info-solicitud">
                     <p>Ausente el: </p>
                     <div class="fecha_ausencia_container">
-                        <input type="text" id="rangoFechas" hidden name="rango_fechas" id="fecha_de_ausencia" />
+                        <input class="fecha_ausencia" type="text" id="rangoFechas" hidden name="rango_fechas" />
                         <input class="fecha_ausencia" type="date" name="fecha_ausencia" id="fecha_de_ausencia">
                         <button type="button" class="plazo" onclick="openModal()">...</button>
                     </div>
