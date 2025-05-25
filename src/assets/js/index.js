@@ -71,3 +71,94 @@ function mostrarErrorAjax(xhr) {
 		'miTemplate',
 	);
 }
+
+
+const button = document.querySelector('.plazo');
+const container = document.querySelector('.fecha_ausencia_container');
+
+if (button) {
+
+	button.addEventListener('mouseenter', () => {
+		container.classList.add('show-tooltip');
+	});
+
+	button.addEventListener('mouseleave', () => {
+		container.classList.remove('show-tooltip');
+	});
+
+}
+
+
+const template = document.getElementById('modal-template');
+const dateActual = document.getElementById('fecha_de_ausencia');
+
+if (template) {
+	const clone = template.content.cloneNode(true);
+	document.body.appendChild(clone);
+
+	function openModal() {
+		document.getElementById('modalOverlay').classList.add('active');
+		document.getElementById('fecha_de_ausencia').hidden = true;
+		document.getElementById('rangoFechas').hidden = false;
+	}
+
+	function closeModal() {
+		const rango = document.getElementById('rangoFechas').value;
+
+		if (rango === "") {
+			document.getElementById('fecha_de_ausencia').hidden = false;
+			document.getElementById('rangoFechas').hidden = true;
+		}
+		document.getElementById('modalOverlay').classList.remove('active');
+	}
+
+	function guardarFechas() {
+		const inicio = document.getElementById('fechaInicio').value;
+		const fin = document.getElementById('fechaFin').value;
+
+		if (!inicio || !fin) {
+			alert("Por favor selecciona ambas fechas.");
+			return;
+		}
+
+		const fechaInicio = new Date(inicio);
+		const fechaFin = new Date(fin);
+		const hoy = new Date();
+		hoy.setHours(0, 0, 0, 0); // Elimina horas para comparación exacta
+
+		if (fechaInicio > fechaFin) {
+			mostrarTemplate(
+				"La fecha de inicio no puede ser posterior a la fecha de fin.",
+				"../../assets/iconos/ic_error.webp",
+				"var(--rojo)",
+				"miTemplate",
+			);
+			return;
+		}
+
+		if (fechaFin > hoy) {
+			mostrarTemplate(
+				"La fecha de fin no puede ser posterior a la fecha actual.",
+				"../../assets/iconos/ic_error.webp",
+				"var(--rojo)",
+				"miTemplate",
+			);
+			return;
+		}
+
+		const formatear = fecha => {
+			const d = new Date(fecha);
+			const dia = String(d.getDate()).padStart(2, '0');
+			const mes = String(d.getMonth() + 1).padStart(2, '0');
+			const año = d.getFullYear();
+			return `${dia}-${mes}-${año}`;
+		};
+
+		const resultado = `${formatear(fechaInicio)} al ${formatear(fechaFin)}`;
+		document.getElementById('rangoFechas').value = resultado;
+
+		console.log("Guardado:", resultado);
+		closeModal();
+	}
+}
+

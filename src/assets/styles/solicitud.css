@@ -110,6 +110,108 @@ select,
     z-index: 10;
 }
 
+.plazo {
+    background-color: var(--vino);
+    color: var(--blanco);
+    border-radius: 50%;
+    padding: 1rem;
+    width: clamp(1.5rem, 3vw, 4rem);
+    height: clamp(1.5rem, 3vw, 4rem);
+    border: none;
+    font-weight: 900;
+    border: .1rem solid var(--vino);
+    transition: color .2s, background-color .2s;
+    position: relative;
+}
+
+
+.fecha_ausencia_container {
+    display: flex;
+    position: relative;
+    align-items: center;
+    gap: 1rem;
+}
+
+.fecha_ausencia_container::after {
+    content: 'Asignar un rango';
+    position: absolute;
+    width: clamp(1.5rem, 6vw, 10rem);
+    height: clamp(1.5rem, 4vw, 4rem);
+    background-color: var(--vino);
+    z-index: 30;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--blanco);
+    padding: .5rem 1rem;
+    left: 100%;
+    top: -50%;
+    scale: 0;
+    transition: scale .2s;
+}
+
+
+.fecha_ausencia_container.show-tooltip::after {
+    scale: 1;
+}
+
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background-color: var(--vino);
+    color: var(--blanco);
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal input[type="date"] {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    margin: 0.5rem 0;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #ccc;
+    color: #000;
+}
+
+.save-btn {
+    background-color: var(--blanco);
+    color: var(--vino);
+}
 
 @media (max-width: 1000px) {
     .contenedor_ITSH {

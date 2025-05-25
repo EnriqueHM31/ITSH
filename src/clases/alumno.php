@@ -22,21 +22,26 @@ class alumno
         global $TABLA_SOLICITUDES, $CAMPO_ID_JEFE;
         mysqli_begin_transaction($conexion);
 
-        if ($this->verificarPOST()) {
-            return;
-        }
-
         $identificador = $_POST['identificador'];
         $motivo = $_POST['motivo'];
-        $fecha = $_POST['fecha_ausencia'];
-        $carrera = str_replace(' ', '', $_POST['carrera']);
+        if ($_POST['fecha_ausencia'] != null) {
+            $fecha = $_POST['fecha_ausencia'];
 
-        $id_estado = 2;
-        try {
             if (!$this->esFechaValida($fecha)) {
                 EstructuraMensaje("La fecha no puede ser posterior al día actual", "../../assets/iconos/ic_error.webp", "--rojo");
                 return;
             }
+        } else if ($_POST['rango_fechas']) {
+            $fecha = $_POST['rango_fechas'];
+        } else {
+            EstructuraMensaje("La fecha que ingresaste esta mal, vuelve a intentarlo?", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+        $carrera = str_replace(' ', '', $_POST['carrera']);
+
+        $id_estado = 2;
+        try {
 
             if (!isset($_FILES['archivo_evidencia']) || $_FILES['archivo_evidencia']['error'] !== 0) {
                 EstructuraMensaje("Sube tu evidencia", "../../assets/iconos/ic_error.webp", "--rojo");

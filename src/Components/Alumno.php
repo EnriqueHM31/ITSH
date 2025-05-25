@@ -22,4 +22,24 @@ function componenteJustificanteHistorial($conexion, $fila, $i, $tiempo_fecha)
         </div>
     HTML;
 }
-?>
+
+function componenteRangoFechas()
+{
+    echo <<<HTML
+    <template id="modal-template">
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+        <h2>Asignar Rango de Fechas</h2>
+        <input type="date" id="fechaInicio" />
+        <input type="date" id="fechaFin" />
+        <div class="actions">
+            <button class="cancel-btn" onclick="closeModal()">Cancelar</button>
+            <button class="save-btn" onclick="guardarFechas()">Guardar</button>
+        </div>
+        </div>
+    </div>
+    </template>
+    HTML;
+}
+
+

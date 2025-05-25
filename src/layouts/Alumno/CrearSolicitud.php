@@ -8,6 +8,9 @@ include "../../validaciones/Validaciones.php";
 include "../../utils/functionGlobales.php";
 include "../../conexion/verificar acceso.php";
 include "../../Components/Layout.php";
+include "../../Components/Alumno.php";
+include "../../Components/Usuario.php";
+
 
 $usuario = new usuario();
 $alumno = new alumno();
@@ -99,7 +102,12 @@ $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $e
 
                 <div class="contenedor_info-solicitud">
                     <p>Ausente el: </p>
-                    <input class="fecha_ausencia" type="date" name="fecha_ausencia" id="fecha_de_ausencia">
+                    <div class="fecha_ausencia_container">
+                        <input type="text" id="rangoFechas" hidden name="rango_fechas" id="fecha_de_ausencia" />
+                        <input class="fecha_ausencia" type="date" name="fecha_ausencia" id="fecha_de_ausencia">
+                        <button type="button" class="plazo" onclick="openModal()">...</button>
+                    </div>
+
                 </div>
 
                 <label for="archivo" class="btn_archivo">
@@ -118,7 +126,9 @@ $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $e
 
     <?php
     componenteFooter();
-    ?>
+    componenteRangoFechas();
+    componenteTemplateModalNormal()
+        ?>
 
 </body>
 
