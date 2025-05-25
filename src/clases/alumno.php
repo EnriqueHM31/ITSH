@@ -127,8 +127,33 @@ class alumno
             $i = 0;
             while ($fila = $dataJustificantesAlumno->fetch_assoc()) {
                 $i++;
-                $tiempo_fecha = explode("-", $fila[$CAMPO_FECHA_AUSE]);
-                componenteJustificanteHistorial($conexion, $fila, $i, $tiempo_fecha);
+                $valorFecha = $fila[$CAMPO_FECHA_AUSE];
+
+                if (strpos($valorFecha, '/') !== false) {
+                    // Ya es un rango con "/"
+                    $fechaFormateada = $valorFecha;
+
+                } elseif (strpos($valorFecha, ' al ') !== false) {
+                    // Es un rango con formato "DD-MM-YYYY al DD-MM-YYYY"
+                    $fechas = explode(' al ', $valorFecha);
+
+                    // Reemplazar guiones por barras en ambas fechas
+                    $inicio = str_replace('-', '/', trim($fechas[0]));
+                    $fin = str_replace('-', '/', trim($fechas[1]));
+
+                    $fechaFormateada = $inicio . ' al ' . $fin;
+
+                } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $valorFecha)) {
+                    // Fecha tipo YYYY-MM-DD
+                    $fecha = DateTime::createFromFormat('Y-m-d', $valorFecha);
+                    $fechaFormateada = $fecha ? $fecha->format('d/m/Y') : $valorFecha;
+
+                } else {
+                    // Otro formato, solo reemplazar guiones por barras si los hay
+                    $fechaFormateada = str_replace('-', '/', $valorFecha);
+                }
+
+                componenteJustificanteHistorial($conexion, $fila, $i, $fechaFormateada);
             }
         }
 

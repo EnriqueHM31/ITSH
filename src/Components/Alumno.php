@@ -18,7 +18,7 @@ function componenteJustificanteHistorial($conexion, $fila, $i, $tiempo_fecha)
             <h2> Solicitud {$i} </h2>
             <p> {$estado} </p>
             <p> {$fila[$CAMPO_MOTIVO]} </p>
-            <span> {$tiempo_fecha[2]} / {$tiempo_fecha[1]} / {$tiempo_fecha[0]} </span>
+            <span> {$tiempo_fecha}</span>
         </div>
     HTML;
 }

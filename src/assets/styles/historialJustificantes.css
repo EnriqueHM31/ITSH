@@ -189,7 +189,7 @@
     justify-content: center;
     flex-direction: column;
     padding: 2rem;
-    width: clamp(300px, 30%, 300px);
+    width: clamp(300px, 30vw, 400px);
     border-radius: 1.5rem;
     height: max(50%, 300px);
     position: relative;
