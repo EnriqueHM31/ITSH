@@ -7,7 +7,7 @@ include "../conexion/verificar acceso.php";
 header('Content-Type: application/json');
 
 $id = $_POST['id'];
-$data = ObtenerDatosDeUnaTabla($conexion, $TABLA_SOLICITUDES, $CAMPO_ID_SOLICITUD, $id);
+$data = ObtenerDatosDeUnaTabla($conexion, $TABLA_TRIGGER_SOLICITUD, $CAMPO_ID_SOLICITUD, $id);
 
 $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $data[$CAMPO_ID_ESTUDIANTE]);
 

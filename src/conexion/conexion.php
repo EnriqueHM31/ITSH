@@ -11,6 +11,11 @@ $pass = '1234';
 $dbname = 'Sistema';
 
 
+// $host = 'sql310.infinityfree.com';
+// $user = 'if0_38627817';
+// $pass = 'KIKE2004';
+// $dbname = 'if0_38627817_ITSH';
+
 // Crear la conexión con MySQL
 $conexion = mysqli_connect($host, $user, $pass, $dbname);
 // Verificar si la conexión fue exitosa

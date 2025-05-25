@@ -226,10 +226,6 @@ class administrador
             return;
         }
 
-        if (!InsertarCarreraDB($conexion, $carrera, $id_tipo_carrera)) {
-            EstructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
-            return;
-        }
 
         $id_carrera = ObtenerIDCarrera($conexion, $carrera);
 
@@ -240,7 +236,13 @@ class administrador
             return;
         }
 
-        if (!InsertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)) {
+        if (!InsertarCarreraDB($conexion, $carrera, $id_tipo_carrera)) {
+            EstructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
+
+        if (!InsertarNumeroIdGruposDB($conexion, $id_carrera_nueva, $numeros_grupos, $id_carrera_nueva)) {
             EstructuraMensaje("Error al agregar la carrera", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }

@@ -67,7 +67,7 @@ async function cargarUsuarioModificar(id, nombre) {
                                 }
                             }
                         }
-                    }, 100);
+                    }, 500);
                 }
             }
 

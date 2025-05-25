@@ -1,6 +1,8 @@
 <?php
 // ROLES DENTRO DEL SISTEMA
-$URL_VERIFICAR_CODIGO_QR = "http://172.16.75.19:8000";
+//$URL_VERIFICAR_CODIGO_QR = "http://172.16.75.19:8000";
+//$URL_VERIFICAR_CODIGO_QR = "https://enriquehm.infinityfreeapp.com";
+$URL_VERIFICAR_CODIGO_QR = "http://localhost:8000";
 $ADMIN = "Administrador";
 $JEFE = "Jefe de Carrera";
 $ESTUDIANTE = "Estudiante";
