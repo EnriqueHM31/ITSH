@@ -44,7 +44,8 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 
         $src_qr = obtenerCodigoQR($id_unico, $id_justificante, $id_estudiante, $fechaCreacion);
 
-        $fecha_ausencia_pdf = estructurarFechaAusencia($fecha);
+
+        $fecha_ausencia_pdf = $fecha;
 
         $IdCarreraTipo = obtenerIniciales("$tipoCarrera $carrera");
 

@@ -185,7 +185,6 @@ class Jefe
     }
 
 
-
     public function MostrarSolicitudes($conexion, $resultado, $id)
     {
         global $CAMPO_ID_ESTADO, $CAMPO_FECHA_AUSE;
@@ -206,7 +205,32 @@ class Jefe
                 $clase = "rechazada";
             }
 
-            $fecha = explode("-", $fila[$CAMPO_FECHA_AUSE]);
+            $valorFecha = $fila[$CAMPO_FECHA_AUSE];
+
+            if (strpos($valorFecha, '/') !== false) {
+                // Ya es un rango con "/"
+                $fecha = $valorFecha;
+
+            } elseif (strpos($valorFecha, ' al ') !== false) {
+                // Es un rango con formato "DD-MM-YYYY al DD-MM-YYYY"
+                $fechas = explode(' al ', $valorFecha);
+
+                // Reemplazar guiones por barras en ambas fechas
+                $inicio = str_replace('-', '/', trim($fechas[0]));
+                $fin = str_replace('-', '/', trim($fechas[1]));
+
+                $fecha = $inicio . ' al ' . $fin;
+
+            } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $valorFecha)) {
+                // Fecha tipo YYYY-MM-DD
+                $fecha = DateTime::createFromFormat('Y-m-d', $valorFecha);
+                $fecha = $fecha ? $fecha->format('d/m/Y') : $valorFecha;
+
+            } else {
+                // Otro formato, solo reemplazar guiones por barras si los hay
+                $fecha = str_replace('-', '/', $valorFecha);
+            }
+
 
             $tabla = "";
 

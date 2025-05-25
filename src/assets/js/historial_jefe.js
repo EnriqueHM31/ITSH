@@ -27,9 +27,15 @@ function mostrarDatosSolicitud(id, index_justificante) {
 }
 
 function mostrarDatos(data, index_justificante) {
-    console.log(data);
 
-    const fecha = data.fecha_creacion
+    let fecha = data.fecha_creacion;
+
+    const [fechaDateRaw, fechaTime] = fecha.split(" ");
+    const [year, month, day] = fechaDateRaw.split("-");
+    const fechaDate = `${day}/${month}/${year}`;
+
+    fecha = `${fechaDate} ${fechaTime}`;
+
 
     console.log(data)
     if (data.justificante !== "") {

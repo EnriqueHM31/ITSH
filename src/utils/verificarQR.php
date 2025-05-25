@@ -11,10 +11,12 @@ date_default_timezone_set('America/Mexico_City');
 
 $arrayDatos = explode("_", $qr_text);
 
+
 $id_estudiante = $arrayDatos[1];
 $fecha_data = "$arrayDatos[2]-$arrayDatos[3]-$arrayDatos[4]";
 
 $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id_estudiante);
+$dataUsuario = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id_estudiante);
 $tipo_usuario = ObtenerModalidad($conexion, $dataEstudiante[$CAMPO_ID_MODALIDAD]);
 
 
@@ -53,7 +55,6 @@ $fecha_limite_date = date('Y-m-d H:i:s', $fecha_limite);
 if ($fecha_actual <= $fecha_limite) {
     if (ModificarLaValidacionCodigoQRDB($conexion, $qr_text)) {
         $src = "../assets/iconos/ic_correcto.webp";
-        $mensaje_validacion = "El codigo es valido";
     } else {
         $src = "../assets/iconos/ic_error.webp";
         $mensaje_validacion = "El codigo es invalido";
@@ -113,7 +114,7 @@ if ($fecha_actual <= $fecha_limite) {
             font-size: clamp(2rem, 5vw, 2.2rem);
             font-weight: bold;
             text-align: center;
-            padding: 1rem 2rem;
+            padding: 1rem;
         }
 
         @media screen and (max-width: 1000px) {
@@ -127,7 +128,6 @@ if ($fecha_actual <= $fecha_limite) {
             }
 
             .mensaje {
-                min-height: 50dvh;
                 max-width: 90%;
             }
 
@@ -138,7 +138,7 @@ if ($fecha_actual <= $fecha_limite) {
             }
 
             p {
-                font-size: 5rem;
+                font-size: 3.5rem;
             }
         }
     </style>
@@ -151,7 +151,8 @@ if ($fecha_actual <= $fecha_limite) {
     <div class="mensaje">
         <img style="aspect-ratio: 16 / 9 ; object-fit: contain;" src=<?php echo $src ?>
             alt="Logo que representa el error o correcto del codigo">
-        <p><?php echo $mensaje_validacion ?></p>
+        <p>Estudiante: <?php echo $id_estudiante ?></p>
+        <p>Nombre: <?php echo "$dataUsuario[$CAMPO_NOMBRE] $dataUsuario[$CAMPO_APELLIDOS]" ?></p>
         <p>Tiempo de validez</p>
         <p id="reloj">00:00:00:00</p>
     </div>

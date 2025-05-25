@@ -76,7 +76,7 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
             <td> {$row[$CAMPO_APELLIDOS]}</td>
             <td> {$row[$CAMPO_GRUPO]}</td>
             <td> {$fila[$CAMPO_MOTIVO]}</td>
-            <td> {$fecha[2]}-{$fecha[1]}-{$fecha[0]}</td>
+            <td> {$fecha}</td>
             <td>
                 <a href="../Alumno/evidencias/{$carrera}/{$fila[$CAMPO_EVIDENCIA]}" target='_blank' class='link_evidencia'>
                     {$fila[$CAMPO_EVIDENCIA]}

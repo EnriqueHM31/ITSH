@@ -11,13 +11,16 @@ function actualizarCorreo() {
 		correo.value = "@alum.huatusco.tecnm.mx";
 	}
 }
-
-// Escuchar cuando el usuario escribe
-clave.addEventListener('input', actualizarCorreo);
+if (clave) {
+	// Escuchar cuando el usuario escribe
+	clave.addEventListener('input', actualizarCorreo);
+}
 
 // Al cargar la página puedes poner un valor base
 window.addEventListener('DOMContentLoaded', () => {
-	correo.value = "@alum.huatusco.tecnm.mx";
+	if (correo) {
+		correo.value = "@alum.huatusco.tecnm.mx";
+	}
 });
 
 
