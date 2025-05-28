@@ -6,3 +6,7 @@
 
 /estudiantes.csv
 /usuarios.csv
+
+/vendor
+/composer.lock
+/composer.json

@@ -99,7 +99,7 @@ class Jefe
     public function validarRowsCSV($conexion, $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera)
     {
         if (empty($matricula) || empty($nombre) || empty($apellidos) || empty($grupo) || empty($id_modalidad) || empty($rol) || empty($correo) || empty($id_carrera)) {
-            return "Faltan datos obligatorios en la fila del CSV";
+            return "Faltan datos obligatorios en la fila del CSV $matricula, $nombre, $apellidos, $grupo, $id_modalidad, $rol, $correo, $id_carrera ";
         }
         if (revisionCorreoEstudiante($correo)) {
             return "El correo ya existe";

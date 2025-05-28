@@ -37,7 +37,7 @@ $carreras = ObtenerTodasLasCarreras($conexion);
     <link rel="stylesheet" href="../../assets/styles/plantilla.css">
     <link rel="stylesheet" href="../../assets/styles/notificacion.css">
     <link rel="stylesheet" href="../../assets/styles/templates.css">
-    <link rel="stylesheet" href="../../assets/styles/Configuracion.css">
+    <link rel="stylesheet" href="../../assets/styles/configuracion.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../../assets/js/index.js" defer></script>
