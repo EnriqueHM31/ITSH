@@ -104,6 +104,15 @@ function InsertarCodigoQRDB($conexion, $qr_text, $url_verificacion)
 function InsertarSolicitudDB($conexion, $matricula, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)
 {
     global $TABLA_SOLICITUDES, $CAMPO_ID_ESTUDIANTE, $CAMPO_ID_JEFE, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE, $CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA;
+    $TABLA_SOLICITUDES = 'solicitud';
+    $CAMPO_ID_ESTUDIANTE = 'id_estudiante';
+    $CAMPO_ID_JEFE = 'id_jefe';
+    $CAMPO_MOTIVO = 'motivo';
+    $CAMPO_FECHA_AUSE = 'fecha_ausencia';
+    $CAMPO_ID_ESTADO = 'id_estado';
+    $CAMPO_EVIDENCIA = 'evidencia';
+
+
 
     $sql = "INSERT INTO $TABLA_SOLICITUDES ($CAMPO_ID_ESTUDIANTE, $CAMPO_ID_JEFE, $CAMPO_MOTIVO, $CAMPO_FECHA_AUSE,$CAMPO_ID_ESTADO, $CAMPO_EVIDENCIA ) 
     VALUES (?, ?, ?, ?, ?, ?)";
@@ -439,6 +448,9 @@ function ObtenerIDRolUsuario($conexion, $rol)
 function ObtenerRolUsuario($conexion, $id_rol)
 {
     global $TABLA_ROL, $CAMPO_ID_ROL, $CAMPO_ROL;
+    $TABLA_ROL = 'rol';
+    $CAMPO_ID_ROL = 'id_rol';
+    $CAMPO_ROL = 'nombre_rol';
 
     $sql = $conexion->prepare("SELECT $CAMPO_ROL FROM $TABLA_ROL WHERE $CAMPO_ID_ROL = ?");
     $sql->bind_param("s", $id_rol);

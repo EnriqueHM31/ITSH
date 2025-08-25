@@ -116,7 +116,7 @@ class Jefe
         if (revisarGrupoModalidadCSV($conexion, $id_modalidad, $grupo)) {
             return "El grupo no pertenece a la modalidad esperada";
         }
-        return "true";
+        return true;
     }
 
     function ModificarUsuarioDB($conexion, $matricula, $nuevosDatos)

@@ -10,6 +10,16 @@ class Usuario
     public function Verificacion($conexion, $id, $contraseña)
     {
         global $TABLA_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $ADMIN, $JEFE, $ESTUDIANTE;
+
+        $TABLA_USUARIO = "usuario";
+        $CAMPO_CONTRASEÑA = 'contraseña';
+        $CAMPO_ID_ROL = 'id_rol';
+        $CAMPO_ID_USUARIO = 'id_usuario';
+        $CAMPO_CORREO = 'correo';
+        $ADMIN = "Administrador";
+        $JEFE = "Jefe de Carrera";
+        $ESTUDIANTE = "Estudiante";
+
         if (empty($id) || empty($contraseña)) {
             EstructuraMensaje("Llena todos los campos", "./src/assets/iconos/ic_error.webp", "--rojo");
             return;
@@ -20,7 +30,7 @@ class Usuario
 
         if (!$resultUsuario) {
             EstructuraMensaje("Usuario Invalido", "./src/assets/iconos/ic_error.webp", "--rojo");
-            return;
+            return "Usuario invalido";
         }
 
         $contraseñaBD = $resultUsuario[$CAMPO_CONTRASEÑA];
@@ -36,14 +46,18 @@ class Usuario
 
         if ($rol === $ADMIN) {
             $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Admin/Admin.php");
+            return "Admin/Admin.php";
         }
         if ($rol === $JEFE) {
             $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "JefedeCarrera/JefeCarrera.php");
+            return "Jefe/JefeCarrera.php";
         }
         if ($rol === $ESTUDIANTE) {
             $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Alumno/alumno.php");
+            return "Alumno/alumno.php";
         } else {
             EstructuraMensaje("Ocurrio un error con la pagina", "./src/assets/iconos/ic_error.webp", "--rojo");
+            return "No hay ningun usuario con esas credenciales";
         }
     }
 
