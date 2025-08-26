@@ -80,7 +80,9 @@ if ($fecha_actual <= $fecha_limite) {
     <meta name="description" content="Página de verificación del código QR">
     <meta name="keywords" content="código QR, verificación, estudiante, carrera, modalidad, grupo">
     <meta name="author" content="Enrique H. Méndez Pérez">
+
     <title>Verificación del código QR</title>
+    <link rel="shortcut icon" href="../assets/extra/logo.svg" type="image/x-icon">
     <link rel="stylesheet" href="../assets/fonts/fonts.css">
     <style>
         * {
@@ -101,7 +103,7 @@ if ($fecha_actual <= $fecha_limite) {
         }
 
         .logo img {
-            width: 5rem;
+            width: 15rem;
         }
 
         .mensaje {
@@ -116,7 +118,7 @@ if ($fecha_actual <= $fecha_limite) {
         }
 
         .mensaje img {
-            width: 5rem;
+            width: 15rem;
             margin: 0 auto;
         }
 
@@ -170,7 +172,7 @@ if ($fecha_actual <= $fecha_limite) {
         <p><strong>Modalidad: </strong> <?php echo $modalidad ?></p>
         <p><strong>Carrera: </strong> <?php echo $carreraEstudiante ?></p>
 
-        <p>Tiempo de validez<br><p id="reloj">00:00:00:00</p></p>
+        <span><strong>Tiempo de validez: </strong><br><p id="reloj">00:00:00:00</p></span>
         
     </div>
 </body>

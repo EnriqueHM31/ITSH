@@ -317,6 +317,21 @@ function EliminarCarreraDB($conexion, $carrera)
 
 function EliminarDatosTablaJustificanteDB($conexion, $id_jefe, $carrera)
 {
+    global $TABLA_SOLICITUDES, $TABLA_TRIGGER_SOLICITUD, $CAMPO_ID_JEFE;
+    $sql = "DELETE FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_JEFE = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $id_jefe);
+    if (!$stmt->execute()) {
+        return "Ocurrio un error al eliminar los justificantes de la BD";
+
+    }
+
+    $sql = "DELETE FROM $TABLA_TRIGGER_SOLICITUD WHERE $CAMPO_ID_JEFE = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param("s", $id_jefe);
+    if (!$stmt->execute()) {
+        return "Ocurrio un error al eliminar los justificantes de la BD";
+    }
     $rutaEvidencia = "../layouts/Alumno/evidencias/$carrera";
     $rutaJustificantes = "../layouts/Alumno/justificantes/$carrera";
     $rutaPapelera = "../layouts/Alumno/papelera/$carrera";
@@ -336,22 +351,6 @@ function EliminarDatosTablaJustificanteDB($conexion, $id_jefe, $carrera)
         return $mensajePapelera;
     }
 
-    global $TABLA_SOLICITUDES, $TABLA_TRIGGER_SOLICITUD, $CAMPO_ID_JEFE;
-    $sql = "DELETE FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_JEFE = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("s", $id_jefe);
-    if (!$stmt->execute()) {
-        return "Ocurrio un error al eliminar los justificantes de la BD";
-
-    }
-
-    $sql = "DELETE FROM $TABLA_TRIGGER_SOLICITUD WHERE $CAMPO_ID_JEFE = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("s", $id_jefe);
-    if (!$stmt->execute()) {
-        return "Ocurrio un error al eliminar los justificantes de la BD";
-
-    }
 
 
 

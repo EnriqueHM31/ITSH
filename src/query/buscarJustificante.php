@@ -20,6 +20,7 @@ if ($grupoJustificantes->num_rows == 0) {
 while ($fila = $grupoJustificantes->fetch_assoc()) {
     $tiempo = explode(" ", $fila[$CAMPO_FECHA_CREACION]);
     $tiempo_fecha = explode("-", $tiempo[0]);
+    $index = $fila[$CAMPO_ID_JUSTIFICANTE];
     componenteJustificanteJefe($conexion, $index, $fila, $tiempo_fecha);
 }
 echo $salida;

@@ -21,5 +21,5 @@
     <p>No tienes autorizacion</p>
     <a href="javascript:history.back()">Regresar</a>
 </body>
-
+|                       
 </html>
