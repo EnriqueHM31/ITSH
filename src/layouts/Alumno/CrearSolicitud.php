@@ -128,7 +128,7 @@ $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $e
     componenteFooter();
     componenteRangoFechas();
     componenteTemplateModalNormal()
-        ?>
+    ?>
 
 </body>
 
@@ -137,7 +137,20 @@ $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $e
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $alumno->enviarSolicitud($conexion, $dataJefe[$CAMPO_ID_USUARIO]);
+
+    $matricula = $_POST['identificador'];
+    $grupo = $_POST['grupo'];
+    $nombre = $_POST['nombre'];
+    $apellidos = $_POST['apellidos'];
+    $carrera = $_POST['carrera'];
+    $motivo = $_POST['motivo'];
+    $fecha = $_POST['fecha_ausencia'];
+    $archivo = $_FILES['archivo_evidencia'];
+
+    if ($alumno->verificarPOST()) {
+        $alumno->enviarSolicitud($conexion, $dataJefe[$CAMPO_ID_USUARIO], $matricula, $grupo, $nombre, $apellidos, $carrera, $motivo, $fecha, $archivo);
+        MostrarNotificacion($_SESSION["mensaje"]);
+    }
     MostrarNotificacion($_SESSION["mensaje"]);
 }
 ?>
