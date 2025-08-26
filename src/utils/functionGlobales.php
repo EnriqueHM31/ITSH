@@ -72,7 +72,6 @@ function InsertarEstudianteDB($conexion, $matricula, $nombre, $apellidos, $id_ca
     $sql = $conexion->prepare("INSERT INTO $TABLA_ESTUDIANTE ($CAMPO_ID_USUARIO, $CAMPO_ID_CARRERA,$CAMPO_ID_MODALIDAD, $CAMPO_GRUPO) VALUES (?, ?, ?, ?)");
     $sql->bind_param("siis", $matricula, $id_carrera, $id_modalidad, $grupo);
     return $sql->execute();
-
 }
 
 function InsertarTablaJustificanteDB($conexion, $id_solicitud, $id_estudiante, $id_jefe, $id_codigo, $nombre_justificante)
@@ -98,7 +97,6 @@ function InsertarCodigoQRDB($conexion, $qr_text, $url_verificacion)
     $smtm->execute();
     $ultimo_id = $conexion->insert_id;
     return $ultimo_id;
-
 }
 
 function InsertarSolicitudDB($conexion, $matricula, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)
@@ -129,7 +127,6 @@ function InsertarCarreraModalidadDB($conexion, $id_carrera, $id_modalidad)
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("si", $id_carrera, $id_modalidad);
     return $stmt->execute();
-
 }
 
 function InsertarNumeroIdGruposDB($conexion, $id_carrera, $numeros_grupos, $id_carrera_nueva)
@@ -261,14 +258,12 @@ function ManejoDeModificacionCambioDeRol($conexion, $clave_empleado, $rol, $rolA
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("s", $clave_empleado);
         return $stmt->execute();
-
     } elseif ($rol == "Jefe de Carrera") {
         if ($rolAntiguo == "Administrador") {
             if (restriccionModificarAJefedeCarrera($carrera, $rol, $conexion) > 0) {
                 return "Esa carrera ya tiene un jefe de carrera vinculado";
             }
             return InsertarJefeDeCarreraDB($conexion, $clave_empleado, $carrera);
-
         } elseif ($rolAntiguo == "Jefe de Carrera" && $carreraAntigua != $carrera) {
             if (restriccionModificarAJefedeCarrera($carrera, $rol, $conexion) > 0) {
                 return "Esa carrera ya tiene un jefe de carrera vinculado";
@@ -293,7 +288,6 @@ function EliminarUsuarioDB($conexion, $id)
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $id);
     return $stmt->execute();
-
 }
 
 function EliminarCarreraDB($conexion, $carrera)
@@ -315,7 +309,6 @@ function EliminarDatosTablaJustificanteDB($conexion, $id_jefe, $carrera)
     $stmt->bind_param("s", $id_jefe);
     if (!$stmt->execute()) {
         return "Ocurrio un error al eliminar los justificantes de la BD";
-
     }
 
     $sql = "DELETE FROM $TABLA_TRIGGER_SOLICITUD WHERE $CAMPO_ID_JEFE = ?";
@@ -367,7 +360,7 @@ function EliminarArchivosConRuta($ruta)
     // Abrir el directorio
     $archivos = scandir($ruta);
 
-    foreach ( $archivos as $archivo ) {
+    foreach ($archivos as $archivo) {
         // Omitir los directorios . y ..
         if ($archivo === '.' || $archivo === '..') {
             continue;
@@ -381,10 +374,8 @@ function EliminarArchivosConRuta($ruta)
                 return "Error al eliminar: $rutaCompleta";
             }
         }
-
     }
     return true;
-
 }
 
 function EliminarSolicitudPorIDDB($conexion, $id)
@@ -625,7 +616,6 @@ function ObtenerIdModalidadesCarrera($conexion, $id_carrera)
             $data[] = ObtenerModalidad($conexion, $row[$CAMPO_ID_MODALIDAD]);
         }
         return $data;
-
     }
 }
 
@@ -700,7 +690,6 @@ function BuscarJustificantes($conexion, $query)
         $stmt = $conexion->prepare($sql);
         $param = "%$query%";
         $stmt->bind_param('ss', $param, $param);
-
     } else {
         $sql = "SELECT j.*, u.$CAMPO_NOMBRE FROM $TABLA_JUSTIFICANTES j JOIN $TABLA_USUARIO u ON j.$CAMPO_ID_ESTUDIANTE = u.$CAMPO_ID_USUARIO";
         $stmt = $conexion->prepare($sql);
@@ -775,5 +764,41 @@ function cambiarContraseñaEnBD($conexion, $id_usuario, $nuevaContraseña)
     $stmt->bind_param('ss', $nuevaContraseña, $id_usuario);
 
     return $stmt->execute();
+}
 
+
+function guardarEvidencia($file, $rutaGuardado, $nombreArchivo)
+{
+    try {
+        // Validar que realmente se subió un archivo
+        if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception("No se recibió ningún archivo válido.");
+        }
+
+        // Verificar que sea PDF
+        $archivo_tmp = $file['tmp_name'];
+        $archivo_tipo = mime_content_type($archivo_tmp);
+        if ($archivo_tipo !== 'application/pdf') {
+            throw new Exception("El archivo debe estar en formato PDF.");
+        }
+
+        // Crear carpeta si no existe
+        if (!file_exists($rutaGuardado)) {
+            if (!mkdir($rutaGuardado, 0777, true)) {
+                throw new Exception("No se pudo crear la carpeta de destino.");
+            }
+        }
+
+        // Definir destino final
+        $archivo_destino = rtrim($rutaGuardado, "/") . "/" . $nombreArchivo;
+
+        // Mover archivo
+        if (move_uploaded_file($archivo_tmp, $archivo_destino)) {
+            return true;
+        } else {
+            throw new Exception("Error al guardar el archivo en $archivo_destino");
+        }
+    } catch (Exception $e) {
+        return false;
+    }
 }
