@@ -22,7 +22,6 @@ try {
 
     $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $matricula);
     $carrera = ObtenerNombreCarrera($conexion, $dataEstudiante[$CAMPO_ID_CARRERA]);
-    $carrera = str_replace(" ", "", $carrera);
 
     $carpeta_origen = "../layouts/Alumno/evidencias/$carrera/";
     $carpeta_destino = "../layouts/Alumno/papelera/$carrera/";
@@ -50,7 +49,6 @@ try {
 
     echo json_encode(["success" => true]);
     exit;
-
 } catch (Exception $e) {
     echo json_encode(["error" => $e->getMessage()]);
     exit;
