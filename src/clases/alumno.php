@@ -102,6 +102,12 @@ class alumno
         global $TABLA_SOLICITUDES, $CAMPO_ID_JEFE;
         $id_estado = 2;
 
+
+        if (empty($fecha)) {
+            EstructuraMensaje("Debes rellenar todos los campos", "../../assets/iconos/ic_error.webp", "--rojo");
+            return;
+        }
+
         mysqli_begin_transaction($conexion);
         try {
 
@@ -128,6 +134,8 @@ class alumno
             if (!guardarEvidencia($archivo, $rutaGuardado, $identificador_archivo)) {
                 EstructuraMensaje("Ocurrió un error al guardar el archivo.", "../../assets/iconos/ic_error.webp", "--rojo");
             }
+
+            var_dump($fecha);
 
 
             if (!InsertarSolicitudDB($conexion, $matricula, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)) {
@@ -174,7 +182,6 @@ class alumno
             while ($fila = $dataJustificantesAlumno->fetch_assoc()) {
                 $i++;
                 $valorFecha = $fila[$CAMPO_FECHA_AUSE];
-                var_dump($fila);
 
                 if (strpos($valorFecha, '/') !== false) {
                     // Ya es un rango con "/"

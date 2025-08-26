@@ -164,6 +164,7 @@ if (template) {
 
 		const resultado = `${formatear(fechaInicio)} al ${formatear(fechaFin)}`;
 		document.getElementById('rangoFechas').value = resultado;
+		document.getElementById('fecha_de_ausencia').value = '';
 
 		console.log("Guardado:", resultado);
 		closeModal();

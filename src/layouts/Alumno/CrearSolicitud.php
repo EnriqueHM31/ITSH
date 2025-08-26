@@ -138,19 +138,25 @@ $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_CARRERA, $e
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+
     $matricula = $_POST['identificador'];
     $grupo = $_POST['grupo'];
     $nombre = $_POST['nombre'];
     $apellidos = $_POST['apellidos'];
     $carrera = $_POST['carrera'];
     $motivo = $_POST['motivo'];
-    $fecha = $_POST['fecha_ausencia'];
+    $fecha = "";
+    if ($_POST['fecha_ausencia'] != null) {
+        $fecha = $_POST['fecha_ausencia'];
+    } else {
+        $fecha = $_POST['rango_fechas'];
+    }
     $archivo = $_FILES['archivo_evidencia'];
 
-    if ($alumno->verificarPOST()) {
-        $alumno->enviarSolicitud($conexion, $dataJefe[$CAMPO_ID_USUARIO], $matricula, $grupo, $nombre, $apellidos, $carrera, $motivo, $fecha, $archivo);
-        MostrarNotificacion($_SESSION["mensaje"]);
+    $alumno->enviarSolicitud($conexion, $dataJefe[$CAMPO_ID_USUARIO], $matricula, $grupo, $nombre, $apellidos, $carrera, $motivo, $fecha, $archivo);
+
+    if (isset($_SESSION["mensaje"])) {
+        MostrarNotificacion("Se ha enviado la solicitud");
     }
-    MostrarNotificacion($_SESSION["mensaje"]);
 }
 ?>
