@@ -67,7 +67,6 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
     while ($row = $resultado->fetch_assoc()) {
 
         $carrera = ObtenerNombreCarrera($conexion, $row[$CAMPO_ID_CARRERA]);
-        $carrera = str_replace(" ", "", $carrera);
         $html .= <<<HTML
         <tr>
             <td data-id={$fila[$CAMPO_ID_SOLICITUD]}> $indexFila </td>
@@ -78,7 +77,8 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
             <td> {$fila[$CAMPO_MOTIVO]}</td>
             <td> {$fecha}</td>
             <td>
-                <a href="../Alumno/evidencias/{$carrera}/{$fila[$CAMPO_EVIDENCIA]}" target='_blank' class='link_evidencia'>
+                
+                <a href="../Alumno/evidencias/{$carrera}/{$fila[$CAMPO_EVIDENCIA]}" target="_blank">
                     {$fila[$CAMPO_EVIDENCIA]}
                 </a> 
             </td>
@@ -98,7 +98,6 @@ function componenteFilaSolicitud($conexion, $indexFila, $fila, $id, $clase, $fec
             </td>
         </tr>
         HTML;
-
     }
 
     return $html;
@@ -163,7 +162,6 @@ function componenteDetailSolicitud($conexion, $fila, $clase, $id)
     </details>
     HTML;
     }
-
 }
 
 function componenteTemplateUsuarioEstudianteEliminar()
@@ -225,7 +223,7 @@ function componenteTemplateUsuarioEstudianteSeleccionado()
 function componenteModalSeguridadFolio($id_jefe)
 {
     echo
-        <<<HTML
+    <<<HTML
         <template id="modal_seguridad">
             <div class=" overlay overlay_eliminar overlay_ventana" id="overlay">
 
@@ -243,4 +241,3 @@ function componenteModalSeguridadFolio($id_jefe)
         </template>
     HTML;
 }
-?>
