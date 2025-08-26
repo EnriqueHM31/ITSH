@@ -174,13 +174,14 @@ class alumno
             while ($fila = $dataJustificantesAlumno->fetch_assoc()) {
                 $i++;
                 $valorFecha = $fila[$CAMPO_FECHA_AUSE];
+                var_dump($fila);
 
                 if (strpos($valorFecha, '/') !== false) {
                     // Ya es un rango con "/"
                     $fechaFormateada = $valorFecha;
                 } elseif (strpos($valorFecha, ' al ') !== false) {
                     // Es un rango con formato "DD-MM-YYYY al DD-MM-YYYY"
-                    $fechas = explode(' al ', $valorFecha);
+                    $fechas = explode('al', $valorFecha);
 
                     // Reemplazar guiones por barras en ambas fechas
                     $inicio = str_replace('-', '/', trim($fechas[0]));
