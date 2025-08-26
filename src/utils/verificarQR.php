@@ -19,6 +19,9 @@ $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID
 $dataUsuario = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id_estudiante);
 $tipo_usuario = ObtenerModalidad($conexion, $dataEstudiante[$CAMPO_ID_MODALIDAD]);
 
+$modalidad = ObtenerModalidad($conexion, $dataEstudiante[$CAMPO_ID_MODALIDAD]);
+$carreraEstudiante = ObtenerNombreCarrera($conexion, $dataEstudiante[$CAMPO_ID_CARRERA]);
+
 
 
 $fecha_creacion = strtotime($fecha_data);
@@ -72,12 +75,19 @@ if ($fecha_actual <= $fecha_limite) {
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">  
+    <meta name="description" content="Página de verificación del código QR">
+    <meta name="keywords" content="código QR, verificación, estudiante, carrera, modalidad, grupo">
+    <meta name="author" content="Enrique H. Méndez Pérez">
+    <title>Verificación del código QR</title>
+    <link rel="stylesheet" href="../assets/fonts/fonts.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Manrope', sans-serif;
         }
 
         body {
@@ -91,54 +101,57 @@ if ($fecha_actual <= $fecha_limite) {
         }
 
         .logo img {
-            width: 20rem;
+            width: 5rem;
         }
 
         .mensaje {
             background-color: white;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 1rem;
             width: 100%;
             max-width: 40%;
             border-radius: 2rem;
-            padding: 2.5rem;
+            padding: 1.2rem;
             flex-direction: column;
         }
 
         .mensaje img {
-            width: 10rem;
+            width: 5rem;
+            margin: 0 auto;
+        }
+
+        strong {
+            font-weight: bold;
+            color: rgb(97, 18, 50);
         }
 
         p {
-            font-size: clamp(2rem, 5vw, 2.2rem);
+            font-size: clamp(.7rem, 4vw, 1.1rem);
             font-weight: bold;
-            text-align: center;
-            padding: 1rem;
         }
 
         @media screen and (max-width: 1000px) {
             body {
-                gap: 4rem;
+                gap: 1rem;
             }
 
             .logo img {
-                height: 30rem;
-                width: 30rem;
+                height: 6rem;
+                width: 6rem;
             }
 
             .mensaje {
-                max-width: 90%;
+                max-width: 95%;
             }
 
 
             .mensaje img {
-                height: 20rem;
-                width: 20rem;
+                height:  5rem;
+                width: 5rem;
             }
 
             p {
-                font-size: 3.5rem;
+                font-size: 1.1rem;
             }
         }
     </style>
@@ -151,10 +164,14 @@ if ($fecha_actual <= $fecha_limite) {
     <div class="mensaje">
         <img style="aspect-ratio: 16 / 9 ; object-fit: contain;" src=<?php echo $src ?>
             alt="Logo que representa el error o correcto del codigo">
-        <p>Estudiante: <?php echo $id_estudiante ?></p>
-        <p>Nombre: <?php echo "$dataUsuario[$CAMPO_NOMBRE] $dataUsuario[$CAMPO_APELLIDOS]" ?></p>
-        <p>Tiempo de validez</p>
-        <p id="reloj">00:00:00:00</p>
+        <p><strong>Estudiante: </strong> <?php echo $id_estudiante ?></p>
+        <p><strong>Nombre: </strong> <?php echo "$dataUsuario[$CAMPO_NOMBRE] $dataUsuario[$CAMPO_APELLIDOS]" ?></p>
+        <p><strong>Grupo: </strong> <?php echo "$dataEstudiante[$CAMPO_GRUPO]" ?></p>
+        <p><strong>Modalidad: </strong> <?php echo $modalidad ?></p>
+        <p><strong>Carrera: </strong> <?php echo $carreraEstudiante ?></p>
+
+        <p>Tiempo de validez<br><p id="reloj">00:00:00:00</p></p>
+        
     </div>
 </body>
 

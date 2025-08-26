@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticación Office 365</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-section,
+        .user-info {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .ms-button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+
+        .ms-button:hover {
+            background: #106ebe;
+        }
+
+        .logout-button {
+            background: #d13438;
+        }
+
+        .logout-button:hover {
+            background: #b02a2f;
+        }
+
+        .user-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            color: #d13438;
+            background: #fff5f5;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .loading {
+            color: #0078d4;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🏫 Autenticación Office 365 Educativa</h1>
+
+        <!-- Sección de Login -->
+        <div id="loginSection" class="login-section">
+            <p>Inicia sesión con tu cuenta educativa de Office 365</p>
+            <button id="loginButton" class="ms-button">
+                🔐 Iniciar Sesión con Microsoft
+            </button>
+            <div id="errorMessage" class="error hidden"></div>
+            <div id="loadingMessage" class="loading hidden">Autenticando...</div>
+        </div>
+
+        <!-- Información del Usuario -->
+        <div id="userSection" class="user-info hidden">
+            <h2>¡Bienvenido!</h2>
+            <div class="user-card">
+                <img id="userAvatar" class="user-avatar" alt="Avatar del usuario">
+                <div id="userInfo"></div>
+            </div>
+            <button id="logoutButton" class="ms-button logout-button">
+                🚪 Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+    <!-- MSAL Library -->
+    <script src="https://alcdn.msauth.net/browser/2.32.2/js/msal-browser.min.js"></script>
+
+    <script>
+        // Configuración de MSAL
+        const msalConfig = {
+            auth: {
+                clientId: 'TU_CLIENT_ID_AQUI', // Reemplaza con tu Client ID
+                authority: 'https://login.microsoftonline.com/common', // Para cuentas educativas
+                redirectUri: window.location.origin // URL actual
+            },
+            cache: {
+                cacheLocation: 'localStorage',
+                storeAuthStateInCookie: false
+            }
+        };
+
+        // Permisos que necesitas
+        const loginRequest = {
+            scopes: ['User.Read', 'Mail.Read'] // Ajusta según necesites
+        };
+
+        // Crear instancia de MSAL
+        const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+        // Elementos del DOM
+        const loginSection = document.getElementById('loginSection');
+        const userSection = document.getElementById('userSection');
+        const loginButton = document.getElementById('loginButton');
+        const logoutButton = document.getElementById('logoutButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const userInfo = document.getElementById('userInfo');
+        const userAvatar = document.getElementById('userAvatar');
+
+        // Verificar si ya hay una sesión activa
+        window.addEventListener('load', async () => {
+            await msalInstance.initialize();
+
+            const accounts = msalInstance.getAllAccounts();
+            if (accounts.length > 0) {
+                // Usuario ya autenticado
+                showUserInfo(accounts[0]);
+            }
+        });
+
+        // Función de login
+        loginButton.addEventListener('click', async () => {
+            showLoading(true);
+            hideError();
+
+            try {
+                const response = await msalInstance.loginPopup(loginRequest);
+                console.log('Login exitoso:', response);
+                await getUserInfo(response.account);
+            } catch (error) {
+                console.error('Error en login:', error);
+                showError('Error al iniciar sesión: ' + error.message);
+            }
+
+            showLoading(false);
+        });
+
+        // Función de logout
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await msalInstance.logoutPopup({
+                    postLogoutRedirectUri: window.location.origin
+                });
+                showLoginSection();
+            } catch (error) {
+                console.error('Error en logout:', error);
+                showError('Error al cerrar sesión: ' + error.message);
+            }
+        });
+
+        // Obtener información del usuario
+        async function getUserInfo(account) {
+            try {
+                // Obtener token de acceso
+                const tokenRequest = {
+                    scopes: ['User.Read'],
+                    account: account
+                };
+
+                const response = await msalInstance.acquireTokenSilent(tokenRequest);
+
+                // Llamar a Microsoft Graph API
+                const userProfile = await callGraphAPI(response.accessToken);
+                showUserInfo(account, userProfile);
+
+            } catch (error) {
+                console.error('Error obteniendo información del usuario:', error);
+                showError('Error obteniendo datos del usuario: ' + error.message);
+            }
+        }
+
+        // Llamar a Microsoft Graph API
+        async function callGraphAPI(accessToken) {
+            const response = await fetch('https://graph.microsoft.com/v1.0/me', {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error en Graph API: ' + response.statusText);
+            }
+
+            return await response.json();
+        }
+
+        // Mostrar información del usuario
+        function showUserInfo(account, profile = null) {
+            loginSection.classList.add('hidden');
+            userSection.classList.remove('hidden');
+
+            let infoHTML = `
+                <h3>${account.name || 'Usuario'}</h3>
+                <p><strong>📧 Email:</strong> ${account.username}</p>
+            `;
+
+            if (profile) {
+                infoHTML += `
+                    <p><strong>🏢 Organización:</strong> ${profile.companyName || 'No disponible'}</p>
+                    <p><strong>💼 Trabajo:</strong> ${profile.jobTitle || 'No disponible'}</p>
+                    <p><strong>📍 Ubicación:</strong> ${profile.officeLocation || 'No disponible'}</p>
+                    <p><strong>📱 Teléfono:</strong> ${profile.businessPhones?.[0] || 'No disponible'}</p>
+                `;
+
+                // Mostrar avatar si está disponible
+                if (profile.id) {
+                    userAvatar.src = `https://graph.microsoft.com/v1.0/users/${profile.id}/photo/$value`;
+                    userAvatar.style.display = 'block';
+                } else {
+                    userAvatar.style.display = 'none';
+                }
+            }
+
+            userInfo.innerHTML = infoHTML;
+        }
+
+        // Mostrar sección de login
+        function showLoginSection() {
+            userSection.classList.add('hidden');
+            loginSection.classList.remove('hidden');
+        }
+
+        // Mostrar/ocultar loading
+        function showLoading(show) {
+            if (show) {
+                loadingMessage.classList.remove('hidden');
+                loginButton.disabled = true;
+            } else {
+                loadingMessage.classList.add('hidden');
+                loginButton.disabled = false;
+            }
+        }
+
+        // Mostrar error
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+
+        // Ocultar error
+        function hideError() {
+            errorMessage.classList.add('hidden');
+        }
+
+        // Manejar errores de red
+        window.addEventListener('online', () => {
+            hideError();
+        });
+
+        window.addEventListener('offline', () => {
+            showError('Sin conexión a internet. Verifica tu conexión.');
+        });
+    </script>
+</body>
+
+</html>
