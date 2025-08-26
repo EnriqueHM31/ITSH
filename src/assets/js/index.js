@@ -116,13 +116,21 @@ if (template) {
 		const inicio = document.getElementById('fechaInicio').value;
 		const fin = document.getElementById('fechaFin').value;
 
+
 		if (!inicio || !fin) {
 			mostrarTemplate("Por favor selecciona ambas fechas.", "../../assets/iconos/ic_error.webp", "--rojo", "miTemplate");
 			return;
 		}
 
-		const fechaInicio = new Date(inicio);
-		const fechaFin = new Date(fin);
+		const fechaInicio = parseFechaLocal(inicio);
+		const fechaFin = parseFechaLocal(fin);
+
+		function parseFechaLocal(fechaStr) {
+			const [año, mes, dia] = fechaStr.split("-").map(Number);
+			return new Date(año, mes - 1, dia);
+		}
+
+		console.log(fechaInicio, fechaFin);
 		const hoy = new Date();
 		hoy.setHours(0, 0, 0, 0); // Elimina horas para comparación exacta
 

@@ -149,14 +149,12 @@ class alumno
             $totalEvidencia = $result->fetch_assoc();
             $NumeroEvidencia = $totalEvidencia['total'] + 1;
 
-            $nombre_carpeta = "C:\Users" . DIRECTORY_SEPARATOR . "eh831\Desktop\Proyectos\ITSH\src\layouts\Alumno" . DIRECTORY_SEPARATOR . "evidencias" . DIRECTORY_SEPARATOR . "$carrera"; // Nombre de la carpeta que quieres crear
+            $nombre_carpeta = "..\layouts\Alumno" . DIRECTORY_SEPARATOR . "evidencias" . DIRECTORY_SEPARATOR . "$carrera"; // Nombre de la carpeta que quieres crear
 
             // Verificar si la carpeta ya existe
             if (!is_dir($nombre_carpeta)) {
-                // Crear la carpeta con permisos 0777 (lectura, escritura y ejecución para todos)
                 mkdir($nombre_carpeta, 0777, true);
-            } else {
-            }
+            } 
 
 
             $identificador_archivo = "evidencia$NumeroEvidencia.pdf";
@@ -166,6 +164,7 @@ class alumno
                     return "Ocurrió un error con el archivo $archivo_tmp → $archivo_destino";
                 }
             }
+
             if (!InsertarSolicitudDB($conexion, $identificador, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)) {
                 EstructuraMensaje("Ocurrió un error con el envío de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
                 return "Ocurrió un error con el envío de la solicitud 3";
@@ -176,7 +175,7 @@ class alumno
             return "Se ha enviado la solicitud a tu jefe de carrera";
         } catch (Exception $e) {
 
-            EstructuraMensaje("Ocurrió un error con el envío de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
+            EstructuraMensaje("Ocurrió un error con el envío de la solicitud " . $e->getMessage() . $e->getTraceAsString(), "../../assets/iconos/ic_error.webp", "--rojo");
             return "Ocurrió un error con el envío de la solicitud " . $e->getMessage() . $e->getTraceAsString();
         }
     }
