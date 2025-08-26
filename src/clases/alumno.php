@@ -1,9 +1,7 @@
 <?php
 class alumno
 {
-    public function __alumno()
-    {
-    }
+    public function __alumno() {}
 
     public function ponerDatosFormulario($conexion, $id)
     {
@@ -99,41 +97,15 @@ class alumno
         }
     }*/
 
-    public function enviarSolicitud($conexion, $id_jefe)
+    public function enviarSolicitud($conexion, $id_jefe, $matricula, $grupo, $nombre, $apellidos, $carrera, $motivo, $fecha, $archivo)
     {
         global $TABLA_SOLICITUDES, $CAMPO_ID_JEFE;
-        $TABLA_SOLICITUDES = "solicitud";
-        $CAMPO_ID_JEFE = "id_jefe";
+        $id_estado = 2;
 
         mysqli_begin_transaction($conexion);
-
-        $identificador = $_POST['identificador'];
-        $motivo = $_POST['motivo'];
-        if ($_POST['fecha_ausencia'] != null) {
-            $fecha = $_POST['fecha_ausencia'];
-
-            if (!$this->esFechaValida($fecha)) {
-                EstructuraMensaje("La fecha no puede ser posterior al día actual", "../../assets/iconos/ic_error.webp", "--rojo");
-                return "La fecha no puede ser posterior al día actual";
-            }
-        } else if ($_POST['rango_fechas']) {
-            $fecha = $_POST['rango_fechas'];
-        } else {
-            EstructuraMensaje("La fecha que ingresaste esta mal, vuelve a intentarlo", "../../assets/iconos/ic_error.webp", "--rojo");
-            return "La fecha que ingresaste esta mal, vuelve a intentarlo";
-        }
-
-        $carrera = str_replace(' ', '', $_POST['carrera']);
-
-        $id_estado = 2;
         try {
 
-            if (!isset($_FILES['archivo_evidencia']) || $_FILES['archivo_evidencia']['error'] !== 0) {
-                EstructuraMensaje("Sube tu evidencia", "../../assets/iconos/ic_error.webp", "--rojo");
-                return "Sube tu evidencia";
-            }
-
-            $archivo_tmp = $_FILES['archivo_evidencia']['tmp_name'];
+            $archivo_tmp = $archivo['tmp_name'];
             $archivo_tipo = mime_content_type($archivo_tmp);
 
             if ($archivo_tipo !== 'application/pdf') {
@@ -149,23 +121,16 @@ class alumno
             $totalEvidencia = $result->fetch_assoc();
             $NumeroEvidencia = $totalEvidencia['total'] + 1;
 
-            $nombre_carpeta = "..\layouts\Alumno" . DIRECTORY_SEPARATOR . "evidencias" . DIRECTORY_SEPARATOR . "$carrera"; // Nombre de la carpeta que quieres crear
-
-            // Verificar si la carpeta ya existe
-            if (!is_dir($nombre_carpeta)) {
-                mkdir($nombre_carpeta, 0777, true);
-            } 
-
+            $rutaGuardado = "../../layouts/Alumno/evidencias/$carrera/";
 
             $identificador_archivo = "evidencia$NumeroEvidencia.pdf";
-            $archivo_destino = "$nombre_carpeta" . DIRECTORY_SEPARATOR . "$identificador_archivo";
-            if (php_sapi_name() === 'cli') {
-                if (!copy($archivo_tmp, $archivo_destino)) {
-                    return "Ocurrió un error con el archivo $archivo_tmp → $archivo_destino";
-                }
+
+            if (!guardarEvidencia($archivo, $rutaGuardado, $identificador_archivo)) {
+                EstructuraMensaje("Ocurrió un error al guardar el archivo.", "../../assets/iconos/ic_error.webp", "--rojo");
             }
 
-            if (!InsertarSolicitudDB($conexion, $identificador, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)) {
+
+            if (!InsertarSolicitudDB($conexion, $matricula, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)) {
                 EstructuraMensaje("Ocurrió un error con el envío de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
                 return "Ocurrió un error con el envío de la solicitud 3";
             }
@@ -175,8 +140,7 @@ class alumno
             return "Se ha enviado la solicitud a tu jefe de carrera";
         } catch (Exception $e) {
 
-            EstructuraMensaje("Ocurrió un error con el envío de la solicitud " . $e->getMessage() . $e->getTraceAsString(), "../../assets/iconos/ic_error.webp", "--rojo");
-            return "Ocurrió un error con el envío de la solicitud " . $e->getMessage() . $e->getTraceAsString();
+            EstructuraMensaje($e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
         }
     }
 
@@ -184,7 +148,7 @@ class alumno
     {
 
         if ($_FILES["archivo_evidencia"]["size"] > 0) {
-            foreach ( $_POST as $value ) {
+            foreach ($_POST as $value) {
                 if (empty($value)) {
                     EstructuraMensaje("Rellene todos los campos para registrar $value", "../../assets/iconos/ic_error.webp", "--rojo");
                     return true;
@@ -214,7 +178,6 @@ class alumno
                 if (strpos($valorFecha, '/') !== false) {
                     // Ya es un rango con "/"
                     $fechaFormateada = $valorFecha;
-
                 } elseif (strpos($valorFecha, ' al ') !== false) {
                     // Es un rango con formato "DD-MM-YYYY al DD-MM-YYYY"
                     $fechas = explode(' al ', $valorFecha);
@@ -224,12 +187,10 @@ class alumno
                     $fin = str_replace('-', '/', trim($fechas[1]));
 
                     $fechaFormateada = $inicio . ' al ' . $fin;
-
                 } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $valorFecha)) {
                     // Fecha tipo YYYY-MM-DD
                     $fecha = DateTime::createFromFormat('Y-m-d', $valorFecha);
                     $fechaFormateada = $fecha ? $fecha->format('d/m/Y') : $valorFecha;
-
                 } else {
                     // Otro formato, solo reemplazar guiones por barras si los hay
                     $fechaFormateada = str_replace('-', '/', $valorFecha);
@@ -238,8 +199,5 @@ class alumno
                 componenteJustificanteHistorial($conexion, $fila, $i, $fechaFormateada);
             }
         }
-
-
     }
 }
-
