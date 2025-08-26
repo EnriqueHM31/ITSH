@@ -1,6 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+
 session_start();
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
@@ -110,9 +109,7 @@ if ($dataSolicitudes && $dataSolicitudes->num_rows > 0) {
 </html>
 
 <script defer>
-
     function ajustarContenido(array) {
-        console.log(array)
         const screenWidth = window.innerWidth;
 
         const tabla = document.getElementById("table");
@@ -125,28 +122,28 @@ if ($dataSolicitudes && $dataSolicitudes->num_rows > 0) {
         if (screenWidth > 1000) {
             let contenidoTabla = array[0][array[0].length - 1]; // Primer contenido
             for (let i = 0; i < array[0].length - 1; i++) {
-                contenidoTabla += array[0][i];  // Añadir el resto
+                contenidoTabla += array[0][i]; // Añadir el resto
             }
             tabla.innerHTML = contenidoTabla; // Asignar todo el contenido de una vez
         } else {
             let contenidoDetalles = "";
             for (let i = 0; i < array[1].length; i++) {
-                contenidoDetalles += array[1][i];  // Crear el contenido completo
+                contenidoDetalles += array[1][i]; // Crear el contenido completo
             }
-            detalles.innerHTML = contenidoDetalles;  // Asignar todo el contenido de una vez
+            detalles.innerHTML = contenidoDetalles; // Asignar todo el contenido de una vez
         }
     }
 
     function mostrarDatosResize(array) {
-        document.addEventListener("DOMContentLoaded", function () {
-            ajustarContenido(array);  // Ejecutar directamente cuando la página carga
+        document.addEventListener("DOMContentLoaded", function() {
+            ajustarContenido(array); // Ejecutar directamente cuando la página carga
         });
 
         // Ejecutar al redimensionar la ventana
-        window.addEventListener("resize", function () {
-            ajustarContenido(array);  // Ejecutar nuevamente al redimensionar
+        window.addEventListener("resize", function() {
+            ajustarContenido(array); // Ejecutar nuevamente al redimensionar
         });
     }
 
-    mostrarDatosResize(<?php echo json_encode($arraysDatos) ?>) 
+    mostrarDatosResize(<?php echo json_encode($arraysDatos) ?>)
 </script>
