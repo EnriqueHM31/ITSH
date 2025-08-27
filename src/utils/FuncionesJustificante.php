@@ -48,7 +48,6 @@ function guardarArchivoPDF($conexion, $data, $id_justificante, $id_estudiante)
     // Ruta donde se guardará el archivo
     $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id_estudiante);
     $carrera = ObtenerNombreCarrera($conexion, $dataEstudiante[$CAMPO_ID_CARRERA]);
-    $carrera = str_replace(" ", "", $carrera);
 
 
     $rutaGuardado = "../layouts/Alumno/justificantes/$carrera/";
@@ -96,7 +95,7 @@ function obtenerIniciales($texto)
     $palabras = explode(' ', $texto);
     $iniciales = '';
 
-    foreach ( $palabras as $palabra ) {
+    foreach ($palabras as $palabra) {
         if (!empty($palabra)) {
             // Tomar la primera letra y convertirla en mayúscula
             $iniciales .= strtoupper($palabra[0]);
@@ -110,7 +109,3 @@ function obtenerAñoActual()
 {
     return date('Y');
 }
-
-
-
-?>
