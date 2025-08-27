@@ -8,48 +8,38 @@ include "../validaciones/Validaciones.php";
 include "../utils/functionGlobales.php";
 include "../conexion/verificar acceso.php";
 
-
 header('Content-Type: application/json');
 
 try {
-    if (!isset($_POST['id']) || !isset($_POST['nombreArchivo']) || !isset($_POST['matricula'])) {
+    if (!isset($_POST['nombreArchivo']) || !isset($_POST['matricula'])) {
         throw new Exception("Datos incompletos");
     }
-
     $id_solicitud = $_POST['id'];
     $nombreArchivo = $_POST['nombreArchivo'];
     $matricula = $_POST['matricula'];
 
+    // Obtener datos del estudiante y su carrera
     $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $matricula);
     $carrera = ObtenerNombreCarrera($conexion, $dataEstudiante[$CAMPO_ID_CARRERA]);
 
-    $carpeta_origen = "../layouts/Alumno/evidencias/$carrera/";
-    $carpeta_destino = "../layouts/Alumno/papelera/$carrera/";
+    // Ruta del archivo original
+    $ruta_origen = "../layouts/Alumno/evidencias/$carrera/" . $nombreArchivo;
 
-    $ruta_origen = $carpeta_origen . $nombreArchivo;
-    $ruta_destino = $carpeta_destino . $nombreArchivo;
-
-    if (!file_exists($carpeta_destino)) {
-        mkdir($carpeta_destino, 0777, true);
+    if (!file_exists($ruta_origen)) {
+        throw new Exception("El archivo no existe: $ruta_origen");
     }
 
-    if (!@file_exists($ruta_origen)) {
-        throw new Exception("La evidencia no existe $ruta_origen");
-    }
-
-    if (!@rename($ruta_origen, $ruta_destino)) {
-        throw new Exception("Error al mover el archivo aa $ruta_destino");
+    // Eliminar el archivo
+    if (!unlink($ruta_origen)) {
+        throw new Exception("No se pudo eliminar el archivo: $ruta_origen");
     }
 
     if (!EliminarSolicitudPorIDDB($conexion, $id_solicitud)) {
-        // Volver a poner el archivo en su lugar original
-        rename($ruta_destino, $ruta_origen);
-        throw new Exception("Error al eliminar la solicitud $id_solicitud");
+        throw new Exception("No se pudo eliminar la solicitud: $id_solicitud");
     }
-
     echo json_encode(["success" => true]);
     exit;
 } catch (Exception $e) {
-    echo json_encode(["error" => $e->getMessage()]);
+    echo json_encode(["success" => false, "error" => $e->getMessage()]);
     exit;
 }
