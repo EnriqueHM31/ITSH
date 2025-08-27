@@ -13,7 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_jefe'])) {
         $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id_jefe);
 
         $carrera = ObtenerNombreCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA]);
-        $carrera = str_replace(" ", "", $carrera);
 
         if (empty($id_jefe)) {
             echo json_encode(["mensaje" => [false, "El ID del jefe está vacío."]]);
@@ -35,15 +34,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_jefe'])) {
         } else {
             echo json_encode(["mensaje" => [false, $mensaje]]);
         }
-
     } catch (Exception $e) {
         echo json_encode(["mensaje" => [false, "Error: {$e->getMessage()}"]]);
     }
-
 } else {
     header("Location: ../layouts/Errores/404.php");
     exit;
 }
-
-
-
