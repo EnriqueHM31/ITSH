@@ -1,22 +1,25 @@
 -- =============================================================================
--- ITSH - Esquema MySQL/MariaDB alineado con src/utils/constantes.php y
---        consultas en src/utils/functionGlobales.php
--- Charset: utf8mb4 (compatibilidad con mysqli utf8 del proyecto)
+-- ITSH — Script completo: esquema + datos de prueba
+-- Alineado con:
+--   src/utils/constantes.php (nombres de tablas, roles, modalidades)
+--   src/utils/functionGlobales.php (columnas y FK usadas en INSERT/SELECT)
+--   src/conexion/conexion.php → base de datos: Sistema (utf8)
+--
+-- Nomenclatura de grupo (src/assets/js/opcionesSelect.js):
+--   Escolarizado: i + '0' + clave_grupo + 'A'  → ej. 404A (semestre 4, carrera 4)
+--   Flexible:     i + '0' + clave_grupo + 'B'  → ej. 404B
+-- Grupo.numero_grupos = cantidad de semestres generados (1..N).
+-- Grupo.clave_grupo   = dígito(s) de carrera en el código (ej. '4' para Sistemas).
 -- =============================================================================
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Crear base (ajusta el nombre si usas otro en conexion.php)
 CREATE DATABASE IF NOT EXISTS `Sistema`
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
 USE `Sistema`;
-
--- -----------------------------------------------------------------------------
--- Tablas base (sin dependencias externas al esquema)
--- -----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `Justificante`;
 DROP TABLE IF EXISTS `Solicitud`;
@@ -37,15 +40,13 @@ CREATE TABLE `Rol` (
   `nombre_rol` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id_rol`),
   UNIQUE KEY `uk_rol_nombre` (`nombre_rol`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-COMMENT='Valores usados en código: Administrador, Jefe de Carrera, Estudiante';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `Estado` (
   `id_estado` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre_estado` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id_estado`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-COMMENT='Solicitud: 1=Aprobado, 2=Pendiente (nueva), 3=Rechazado. CodigoQR usa 1=válido, 3=consumido';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `TipoCarrera` (
   `id_tipo_carrera` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -53,13 +54,13 @@ CREATE TABLE `TipoCarrera` (
   PRIMARY KEY (`id_tipo_carrera`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Constantes: $ESCOLARIZADO / $FLEXIBLE en constantes.php (ids usados en código vía nombre)
 CREATE TABLE `Modalidad` (
   `id_modalidad` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre_modalidad` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id_modalidad`),
   UNIQUE KEY `uk_modalidad_nombre` (`nombre_modalidad`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-COMMENT='Escolarizado, Flexible';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `Carrera` (
   `id_carrera` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -142,8 +143,7 @@ CREATE TABLE `JefeCarrera` (
   CONSTRAINT `fk_jefe_carrera`
     FOREIGN KEY (`id_carrera`) REFERENCES `Carrera` (`id_carrera`)
     ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-COMMENT='Un jefe por carrera (uk_jefe_carrera) y un registro por usuario jefe';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `CodigoQR` (
   `id_codigo` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -162,7 +162,7 @@ CREATE TABLE `Solicitud` (
   `id_estudiante` VARCHAR(50) NOT NULL,
   `id_jefe` VARCHAR(50) NOT NULL,
   `motivo` TEXT NOT NULL,
-  `fecha_ausencia` VARCHAR(200) NOT NULL COMMENT 'Fecha o rango según formulario (InsertarSolicitudDB usa string)',
+  `fecha_ausencia` VARCHAR(200) NOT NULL,
   `id_estado` INT UNSIGNED NOT NULL,
   `evidencia` VARCHAR(500) DEFAULT NULL,
   PRIMARY KEY (`id_solicitud`),
@@ -207,11 +207,6 @@ CREATE TABLE `Justificante` (
     ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- -----------------------------------------------------------------------------
--- Vistas usadas en código como TABLA_TRIGGER_* (misma estructura lógica)
--- Eliminar datos en la vista delega en Solicitud / Justificante (MySQL compatible)
--- -----------------------------------------------------------------------------
-
 DROP VIEW IF EXISTS `AlumnoJustificante`;
 DROP VIEW IF EXISTS `AlumnoSolicitud`;
 
@@ -222,9 +217,8 @@ CREATE VIEW `AlumnoJustificante` AS
 SELECT * FROM `Justificante`;
 
 -- -----------------------------------------------------------------------------
--- Datos iniciales (roles, estados, modalidades — coinciden con constantes.php)
+-- Catálogo base (coincide con $ADMIN, $JEFE, $ESTUDIANTE, estados de solicitud/QR)
 -- -----------------------------------------------------------------------------
-
 INSERT INTO `Rol` (`id_rol`, `nombre_rol`) VALUES
   (1, 'Administrador'),
   (2, 'Jefe de Carrera'),
@@ -235,6 +229,7 @@ INSERT INTO `Estado` (`id_estado`, `nombre_estado`) VALUES
   (2, 'Pendiente'),
   (3, 'Rechazado');
 
+-- InsertarCodigoQRDB usa id_estado = 1 para código válido; consumido → id_estado 3
 INSERT INTO `Modalidad` (`id_modalidad`, `nombre_modalidad`) VALUES
   (1, 'Escolarizado'),
   (2, 'Flexible');
@@ -242,14 +237,55 @@ INSERT INTO `Modalidad` (`id_modalidad`, `nombre_modalidad`) VALUES
 INSERT INTO `TipoCarrera` (`id_tipo_carrera`, `nombre_tipo_carrera`) VALUES
   (1, 'Ingeniería');
 
-SET FOREIGN_KEY_CHECKS = 1;
+-- -----------------------------------------------------------------------------
+-- Carreras (nombre exacto para ObtenerIDCarrera / selects)
+-- Clave de grupo '4' → 404A, 404B, 504A… (tercer dígito = carrera Sistemas en tu ejemplo)
+-- Clave '5' → segunda carrera (405A, 505B…)
+-- -----------------------------------------------------------------------------
+INSERT INTO `Carrera` (`id_carrera`, `nombre_carrera`, `id_tipo_carrera`) VALUES
+  (1, 'Ingeniería en Sistemas Computacionales', 1),
+  (2, 'Ingeniería Industrial', 1);
+
+-- Ambas modalidades por carrera (formulario admin / ObtenerIdModalidadesCarrera)
+INSERT INTO `CarreraModalidad` (`id_carrera`, `id_modalidad`) VALUES
+  (1, 1), (1, 2),
+  (2, 1), (2, 2);
+
+-- numero_grupos = 6 → semestres 1..6 → grupos 104x … 604x (A/B según modalidad en JS)
+INSERT INTO `Grupo` (`id_grupo`, `id_carrera`, `numero_grupos`, `clave_grupo`) VALUES
+  (1, 1, '6', '4'),
+  (2, 2, '6', '5');
 
 -- -----------------------------------------------------------------------------
--- Notas
+-- Usuarios de prueba (contraseñas en texto plano como en el proyecto)
+-- Rol: BuscarEstudianteBD usa id_rol = 3; BuscarPersonalBD usa id_rol 1 y 2
 -- -----------------------------------------------------------------------------
--- 1) Añade carreras desde la app (InsertarCarreraDB) o manualmente en Carrera +
---    CarreraModalidad + Grupo.
--- 2) Las contraseñas en el proyecto suelen ir en texto plano; en producción usa
---    password_hash y amplía VARCHAR de contraseña si hace falta.
--- 3) Si id_solicitud en tu BD existente es distinto (p. ej. VARCHAR), ajusta
---    este script antes de importar datos viejos.
+INSERT INTO `Usuario` (`id_usuario`, `nombre`, `apellidos`, `correo`, `contraseña`, `id_rol`) VALUES
+  ('ITSH_0000', 'Admin', 'Sistema', 'admin@huatusco.tecnm.mx', '12345678', 1),
+  ('ITSH_1111', 'Coordinación', 'Jefe de Carrera ISC', '223z0428@alum.huatusco.tecnm.mx', '123456781', 2),
+  ('ITSH_2222', 'Hugo', 'Tono Martínez', 'htono@alum.huatusco.tecnm.mx', '123456782', 2),
+  ('223z0428', 'Luis Enrique', 'Hernandez Marin', 'enrique@alum.huatusco.tecnm.mx', '123456783', 3);
+
+-- Un jefe por carrera (restricción uk_jefe_carrera)
+INSERT INTO `JefeCarrera` (`id_usuario`, `id_carrera`) VALUES
+  ('ITSH_1111', 1),
+  ('ITSH_2222', 2);
+
+-- Estudiante: ISC, Escolarizado (1), grupo 404A (semestre 4 + 0 + carrera 4 + A)
+INSERT INTO `Estudiante` (`id_usuario`, `id_carrera`, `id_modalidad`, `grupo`) VALUES
+  ('223z0428', 1, 1, '404A');
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- =============================================================================
+-- Resumen de accesos (login con id_usuario y contraseña)
+-- =============================================================================
+-- | id_usuario | Rol           | Contraseña |
+-- |------------|---------------|------------|
+-- | ITSH_0000  | Administrador | 12345678   |
+-- | ITSH_1111  | Jefe ISC      | 123456781  |
+-- | ITSH_2222  | Jefe Industrial | 123456782 |
+-- | 223z0428   | Estudiante    | 123456783  |
+--
+-- Ajusta admin@huatusco.tecnm.mx si prefieres otro correo para ITSH_0000.
+-- =============================================================================

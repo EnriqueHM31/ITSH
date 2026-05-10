@@ -102,23 +102,38 @@ class alumno
         global $TABLA_SOLICITUDES, $CAMPO_ID_JEFE;
         $id_estado = 2;
 
-
+        // 1. Validar que la fecha no esté vacía
         if (empty($fecha)) {
             EstructuraMensaje("Debes rellenar todos los campos", "../../assets/iconos/ic_error.webp", "--rojo");
             return;
         }
 
+        // 2. Validar que la fecha no sea futura (Horario México)
+        date_default_timezone_set('America/Mexico_City'); //
+        $fechaActual = date('Y-m-d'); //
+
+        if ($fecha > $fechaActual) {
+            EstructuraMensaje("La fecha seleccionada no puede ser posterior a la fecha actual.", "../../assets/iconos/ic_error.webp", "--rojo");
+            return "Error: Fecha futura";
+        }
+
         mysqli_begin_transaction($conexion);
         try {
+            // Validar que el archivo se haya subido sin errores de PHP
+            if (!isset($archivo['tmp_name']) || empty($archivo['tmp_name']) || $archivo['error'] !== UPLOAD_ERR_OK) { //
+                EstructuraMensaje("No se ha seleccionado un archivo válido o el archivo es muy pesado.", "../../assets/iconos/ic_error.webp", "--rojo");
+                return "Error: Archivo vacío o no recibido";
+            }
 
             $archivo_tmp = $archivo['tmp_name'];
-            $archivo_tipo = mime_content_type($archivo_tmp);
+            $archivo_tipo = mime_content_type($archivo_tmp); //
 
             if ($archivo_tipo !== 'application/pdf') {
                 EstructuraMensaje("Tu evidencia debe estar en formato PDF", "../../assets/iconos/ic_error.webp", "--rojo");
                 return "Tu evidencia debe estar en formato PDF";
             }
 
+            // Conteo de evidencias para el nombre del archivo
             $sql = "SELECT COUNT(*) as total FROM $TABLA_SOLICITUDES WHERE $CAMPO_ID_JEFE = ?";
             $smtm = $conexion->prepare($sql);
             $smtm->bind_param("s", $id_jefe);
@@ -127,27 +142,30 @@ class alumno
             $totalEvidencia = $result->fetch_assoc();
             $NumeroEvidencia = $totalEvidencia['total'] + 1;
 
+            // Manejo de la ruta y guardado (Asegúrate de que $carrera no tenga caracteres extraños)
             $rutaGuardado = "../../layouts/Alumno/evidencias/$carrera/";
+
+            // Crear carpeta si no existe
+            if (!is_dir($rutaGuardado)) {
+                mkdir($rutaGuardado, 0777, true);
+            }
 
             $identificador_archivo = "evidencia$NumeroEvidencia.pdf";
 
             if (!guardarEvidencia($archivo, $rutaGuardado, $identificador_archivo)) {
-                EstructuraMensaje("Ocurrió un error al guardar el archivo.", "../../assets/iconos/ic_error.webp", "--rojo");
+                throw new Exception("Ocurrió un error al guardar el archivo.");
             }
 
-            var_dump($fecha);
-
-
+            // Inserción en DB
             if (!InsertarSolicitudDB($conexion, $matricula, $id_jefe, $motivo, $fecha, $identificador_archivo, $id_estado)) {
-                EstructuraMensaje("Ocurrió un error con el envío de la solicitud", "../../assets/iconos/ic_error.webp", "--rojo");
-                return "Ocurrió un error con el envío de la solicitud 3";
+                throw new Exception("Ocurrió un error con el envío de la solicitud");
             }
 
             mysqli_commit($conexion);
             EstructuraMensaje("Se ha enviado la solicitud a tu jefe de carrera", "../../assets/iconos/ic_correcto.webp", "--verde");
             return "Se ha enviado la solicitud a tu jefe de carrera";
         } catch (Exception $e) {
-
+            mysqli_rollback($conexion);
             EstructuraMensaje($e->getMessage(), "../../assets/iconos/ic_error.webp", "--rojo");
         }
     }

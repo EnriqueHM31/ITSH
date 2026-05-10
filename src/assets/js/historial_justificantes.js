@@ -18,6 +18,7 @@ function mostrarDatosSolicitud(id, index_justificante) {
         },
         dataType: 'json',
         success: function (data) {
+            console.log(data);
             mostrarDatos(data, index_justificante)
         },
         error: function (xhr) {
@@ -71,8 +72,16 @@ function mostrarDatos(data, index_justificante) {
 
     fecha = formatearFecha(data.fecha_ausencia);
 
+    console.log(data);
+    let link = "";
     if (data.justificante !== "") {
-        link = `<a target="_blank" href="../../layouts/Alumno/justificantes/${data.carrera}/${data.justificante}">Justificante${index_justificante}.pdf</a>`
+        // La forma correcta de generar ese link:
+        const carrera = data.carrera; // "Ingeniería en Sistemas Computacionales"
+        const justificante = data.justificante; // "justificante_1_..."
+
+        console.log(encodeURIComponent(carrera), justificante);
+
+        link = `<a target="_blank" href="http://localhost:8080/src/layouts/Alumno/justificantes/${encodeURIComponent(carrera)}/${justificante}">Justificante${index_justificante}.pdf</a>`;
     } else {
         link = ""
     }

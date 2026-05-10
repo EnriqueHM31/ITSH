@@ -15,7 +15,6 @@ $dataEstudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_US
 $dataEstudianteAll = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $data[$CAMPO_ID_ESTUDIANTE]);
 
 $carrera = ObtenerNombreCarrera($conexion, $dataEstudianteAll[$CAMPO_ID_CARRERA]);
-$carrera = str_replace(" ", "", $carrera);
 
 $motivo = $data[$CAMPO_MOTIVO];
 $fecha_creacion = $dataJustificanteAll[$CAMPO_FECHA_CREACION];
