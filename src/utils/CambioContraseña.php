@@ -3,7 +3,7 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 include "../clases/usuario.php";
-
+/** @var mysqli $conexion */
 $usuario = new usuario();
 
 

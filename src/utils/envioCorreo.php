@@ -13,6 +13,7 @@ require "./PHPMailer/Exception.php";
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+/** @var mysqli $conexion */
 $usuario = new usuario();
 
 $host = 'smtp.gmail.com';
@@ -155,7 +156,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['correo']) && isset($_P
         echo json_encode(["success" => false, "message" => "No se proporcionaron los datos requeridos."]);
         exit;
     }
-
 }
-
-

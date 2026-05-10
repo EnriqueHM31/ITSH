@@ -8,7 +8,7 @@
 $host = 'localhost';
 $user = 'root';
 $pass = '1234';
-$dbname = 'Sistema';
+$dbname = 'ITSH';
 
 
 // $host = 'sql310.infinityfree.com';
@@ -24,5 +24,3 @@ if (!$conexion) {
 }
 // Establecer el conjunto de caracteres de la conexión a UTF-8
 $conexion->set_charset("utf8");
-
-?>

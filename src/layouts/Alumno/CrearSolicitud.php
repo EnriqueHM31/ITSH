@@ -10,6 +10,7 @@ include "../../conexion/verificar acceso.php";
 include "../../Components/Layout.php";
 include "../../Components/Alumno.php";
 include "../../Components/Usuario.php";
+/** @var mysqli $conexion */
 
 
 $usuario = new usuario();

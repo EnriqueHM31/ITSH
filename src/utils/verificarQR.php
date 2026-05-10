@@ -4,7 +4,7 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 
-
+/** @var mysqli $conexion */
 // Verificar que se haya enviado el parámetro con el texto del QR
 $qr_text = $_GET['qr_text'];
 date_default_timezone_set('America/Mexico_City');
@@ -76,7 +76,7 @@ if ($fecha_actual <= $fecha_limite) {
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">  
+    <meta charset="UTF-8">
     <meta name="description" content="Página de verificación del código QR">
     <meta name="keywords" content="código QR, verificación, estudiante, carrera, modalidad, grupo">
     <meta name="author" content="Enrique H. Méndez Pérez">
@@ -148,7 +148,7 @@ if ($fecha_actual <= $fecha_limite) {
 
 
             .mensaje img {
-                height:  5rem;
+                height: 5rem;
                 width: 5rem;
             }
 
@@ -172,8 +172,10 @@ if ($fecha_actual <= $fecha_limite) {
         <p><strong>Modalidad: </strong> <?php echo $modalidad ?></p>
         <p><strong>Carrera: </strong> <?php echo $carreraEstudiante ?></p>
 
-        <span><strong>Tiempo de validez: </strong><br><p id="reloj">00:00:00:00</p></span>
-        
+        <span><strong>Tiempo de validez: </strong><br>
+            <p id="reloj">00:00:00:00</p>
+        </span>
+
     </div>
 </body>
 
@@ -192,7 +194,7 @@ if ($fecha_actual <= $fecha_limite) {
         }
 
         // Actualizar el reloj cada segundo
-        var intervalo = setInterval(function () {
+        var intervalo = setInterval(function() {
             // Fecha actual
             var fechaActual = new Date();
 

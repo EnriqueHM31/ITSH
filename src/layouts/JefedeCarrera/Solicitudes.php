@@ -12,6 +12,7 @@ include "../../Components/JefeCarrera.php";
 include "../../Components/Usuario.php";
 include "../../Components/Layout.php";
 
+/** @var mysqli $conexion */
 
 $usuario = new usuario();
 $jefeCarrera = new Jefe();

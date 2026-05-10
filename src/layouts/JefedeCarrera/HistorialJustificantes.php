@@ -11,6 +11,7 @@ include "../../Components/JefeCarrera.php";
 include "../../Components/Usuario.php";
 include "../../Components/Layout.php";
 
+/** @var mysqli $conexion */
 
 $jefe = new Jefe();
 
@@ -18,7 +19,7 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, $id);
 $carrera = ObtenerNombreCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA])
-    ?>
+?>
 
 <!DOCTYPE html>
 <html lang="es">

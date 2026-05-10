@@ -10,6 +10,7 @@ include "../../Components/Admin.php";
 include "../../Components/Usuario.php";
 include "../../Components/Layout.php";
 
+/** @var mysqli $conexion */
 
 $administrador = new administrador();
 $id = $_SESSION["id"];

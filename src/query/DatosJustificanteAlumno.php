@@ -3,6 +3,7 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 include "../conexion/verificar acceso.php";
+/** @var mysqli $conexion */
 
 header('Content-Type: application/json');
 

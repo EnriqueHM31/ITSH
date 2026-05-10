@@ -10,6 +10,7 @@ include "../../Components/Usuario.php";
 include "../../Components/Admin.php";
 include "../../Components/Layout.php";
 include "../../utils/functionGlobales.php";
+/** @var mysqli $conexion */
 
 $usuario = new usuario();
 $administrador = new administrador();

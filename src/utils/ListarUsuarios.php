@@ -4,7 +4,7 @@ include "../conexion/conexion.php";
 include "../utils/constantes.php";
 include "../utils/functionGlobales.php";
 require_once "./dompdf/autoload.inc.php";
-
+/** @var mysqli $conexion */
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 

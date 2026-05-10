@@ -4,7 +4,7 @@ include "../conexion/conexion.php";
 include "../conexion/verificar acceso.php";
 include "../utils/functionGlobales.php";
 include "../Components/JefeCarrera.php";
-
+/** @var mysqli $conexion */
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
 
@@ -24,7 +24,3 @@ while ($fila = $grupoJustificantes->fetch_assoc()) {
     componenteJustificanteJefe($conexion, $index, $fila, $tiempo_fecha);
 }
 echo $salida;
-
-
-
-

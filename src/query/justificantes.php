@@ -4,6 +4,7 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../conexion/verificar acceso.php";
 include "../utils/functionGlobales.php";
+/** @var mysqli $conexion */
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_jefe'])) {
 

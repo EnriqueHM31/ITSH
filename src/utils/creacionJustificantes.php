@@ -5,7 +5,7 @@ include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 include "./creacionQR.php";
 include "./FuncionesJustificante.php";
-
+/** @var mysqli $conexion */
 
 if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre'], $_POST['apellidos'], $_POST['grupo'], $_POST['motivo'], $_POST['fecha'])) {
     try {
@@ -52,7 +52,6 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
         $id_justificante++;
         $Nojustificante = (strlen($id_justificante) == 1) ? "0$id_justificante" : $id_justificante;
         $añoActual = obtenerAñoActual();
-
     } catch (Exception $e) {
 
         return json_encode(["success" => "Error: {$e->getMessage()}"]);
@@ -291,7 +290,9 @@ if (isset($_POST["id_solicitud"]) && isset($_POST['matricula'], $_POST['nombre']
 <?php
 
 require_once "./dompdf/autoload.inc.php";
+
 use Dompdf\Dompdf;
+
 try {
     $html = ob_get_clean(); // Captura el contenido y limpia el buffer
 
@@ -319,7 +320,6 @@ try {
     EliminarCodigoQR($id_justificante, $id_estudiante, $fechaCreacion, $id_unico);
 
     mysqli_commit($conexion);
-
 } catch (Exception $e) {
     // Rollback en caso de error
 
@@ -337,5 +337,3 @@ try {
     ]);
     exit();
 }
-
-

@@ -10,6 +10,7 @@ include "../../conexion/verificar_rol_jefe.php";
 include "../../Components/Usuario.php";
 include "../../Components/JefeCarrera.php";
 include "../../Components/Layout.php";
+/** @var mysqli $conexion */
 
 
 $usuario = new usuario();

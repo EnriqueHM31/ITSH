@@ -11,6 +11,7 @@ include "../../query/obtenerGrupos.php";
 include "../../validaciones/Validaciones.php";
 include "../../Components/Usuario.php";
 include "../../Components/Layout.php";
+/** @var mysqli $conexion */
 
 
 

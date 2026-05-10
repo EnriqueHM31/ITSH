@@ -3,6 +3,7 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 include "../conexion/verificar acceso.php";
+/** @var mysqli $conexion */
 
 header('Content-Type: application/json');
 
@@ -19,12 +20,10 @@ if (isset($_POST['id'])) {
 
     if ($rol === "Administrador") {
         echo json_encode(crearDataInformacionAdministrador($idUser, $nombreUsuario, $apellidosUsuario, $rol, $correo));
-
     } else if ($rol === "Jefe de Carrera") {
         $dataJefe = ObtenerDatosDeUnaTabla($conexion, $TABLA_JEFE, $CAMPO_ID_USUARIO, campo: $id);
         $carrera = ObtenerNombreCarrera($conexion, $dataJefe[$CAMPO_ID_CARRERA]);
         echo json_encode(crearDataInformacionJefe($idUser, $nombreUsuario, $apellidosUsuario, $rol, $carrera, $correo));
-
     } else {
         echo json_encode(["success" => false]);
     }
@@ -57,4 +56,3 @@ function crearDataInformacionJefe($idUser, $nombre, $apellidos, $rol, $carrera, 
 
     return $data;
 }
-

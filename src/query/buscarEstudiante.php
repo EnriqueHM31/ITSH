@@ -3,7 +3,7 @@ include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
 include "../conexion/verificar acceso.php";
-
+/** @var mysqli $conexion */
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 $carrera = isset($_GET['carrera']) ? $_GET['carrera'] : '';
 
@@ -29,4 +29,3 @@ if (!empty($query) && !empty($carrera)) {
 
     $conexion->close();
 }
-

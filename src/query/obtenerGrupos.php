@@ -1,7 +1,6 @@
 <?php
 
-
-
+/** @var mysqli $conexion */
 function obtenerGrupos($conexion, $id_carrera)
 {
     $dataGrupos = [];

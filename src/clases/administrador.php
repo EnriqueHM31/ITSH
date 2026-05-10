@@ -4,7 +4,7 @@
 class administrador
 {
 
-    public function __administrador()
+    public function __construct()
     {
     }
 

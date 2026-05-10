@@ -2,8 +2,7 @@
 include "../utils/constantes.php";
 include "../conexion/conexion.php";
 include "../utils/functionGlobales.php";
-
-
+/** @var mysqli $conexion */
 $query = isset($_GET['q']) ? $_GET['q'] : '';
 
 if (!empty($query)) {

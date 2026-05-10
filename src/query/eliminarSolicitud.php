@@ -7,6 +7,7 @@ include "../clases/alumno.php";
 include "../validaciones/Validaciones.php";
 include "../utils/functionGlobales.php";
 include "../conexion/verificar acceso.php";
+/** @var mysqli $conexion */
 
 header('Content-Type: application/json');
 

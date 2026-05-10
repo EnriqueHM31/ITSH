@@ -55,7 +55,7 @@ if (btnEliminarCarrera !== null) {
 						);
 					} else {
 						mostrarTemplate(
-							data['success'],
+							data['message'] || 'Error al eliminar la carrera',
 							'../../assets/iconos/ic_error.webp',
 							'var(--rojo)',
 							'miTemplate',

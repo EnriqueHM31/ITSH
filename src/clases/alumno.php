@@ -1,7 +1,7 @@
 <?php
 class alumno
 {
-    public function __alumno() {}
+    public function __construct() {}
 
     public function ponerDatosFormulario($conexion, $id)
     {

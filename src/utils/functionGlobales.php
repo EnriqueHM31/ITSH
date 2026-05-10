@@ -9,7 +9,7 @@ function EstructuraMensaje($mensaje, $icono, $color)
 
 function MostrarNotificacion($notificacion)
 {
-    if ($notificacion) {
+    if ($notificacion && isset($_SESSION["mensaje"], $_SESSION["icono"], $_SESSION["color_mensaje"])) {
         $mensaje = $_SESSION["mensaje"];
         $icono = $_SESSION["icono"];
         $color = $_SESSION["color_mensaje"];
@@ -50,7 +50,7 @@ function InsertarUsuarioDB($conexion, $id_usuario, $nombre, $apellidos, $correo,
     $rol = ObtenerIDRolUsuario($conexion, $cargo);
     $consulta = "INSERT INTO $TABLA_USUARIO ($CAMPO_ID_USUARIO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_CORREO, $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL) VALUES (?, ?, ?, ?, ?, ?)";
     $usuario = $conexion->prepare($consulta);
-    $usuario->bind_param("sssssi", $id_usuario, $nombre, $apellidos, $contraseña, $correo, $rol);
+    $usuario->bind_param("sssssi", $id_usuario, $nombre, $apellidos, $correo, $contraseña, $rol);
     return $usuario->execute();
 }
 
@@ -93,7 +93,7 @@ function InsertarCodigoQRDB($conexion, $qr_text, $url_verificacion)
 
     $smtm = $conexion->prepare($sql);
     $valido = 1;
-    $smtm->bind_param("sss", $qr_text, $url_verificacion, $valido);
+    $smtm->bind_param("ssi", $qr_text, $url_verificacion, $valido);
     $smtm->execute();
     $ultimo_id = $conexion->insert_id;
     return $ultimo_id;
@@ -177,7 +177,7 @@ function ModificarLaSolicitudARechazadoDB($conexion, $id_solicitud)
     $sql = "UPDATE $TABLA_SOLICITUDES SET $CAMPO_ID_ESTADO = ? WHERE $CAMPO_ID_SOLICITUD = ?";
     $smtm = $conexion->prepare($sql);
     $rechazada = 3;
-    $smtm->bind_param("is", $rechazada, $id_solicitud);
+    $smtm->bind_param("ii", $rechazada, $id_solicitud);
     return $smtm->execute();
 }
 
@@ -203,7 +203,7 @@ function ModificarNumeroGruposDB($conexion, $id_carrera, $numeros_grupos, $id_ca
 
 function ModificarDatosEstudianteDB($conexion, $id_usuario, $correo, $nombre, $apellidos, $grupo, $id_modalidad, $matricula)
 {
-    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $CAMPO_MATRICULA, $CAMPO_CORREO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_MODALIDAD;
+    global $TABLA_USUARIO, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $CAMPO_NOMBRE, $CAMPO_APELLIDOS, $CAMPO_GRUPO, $CAMPO_ID_MODALIDAD;
 
     $sql = " UPDATE $TABLA_USUARIO SET $CAMPO_NOMBRE = ?, $CAMPO_APELLIDOS = ?, $CAMPO_CORREO = ? WHERE $CAMPO_ID_USUARIO = ?";
     $stmt = $conexion->prepare($sql);
@@ -297,7 +297,7 @@ function EliminarCarreraDB($conexion, $carrera)
     $id_carrera = ObtenerIDCarrera($conexion, $carrera);
     $consulta = "DELETE FROM $TABLA_CARRERAS WHERE $CAMPO_ID_CARRERA = ?";
     $sql = $conexion->prepare($consulta);
-    $sql->bind_param("s", $id_carrera);
+    $sql->bind_param("i", $id_carrera);
     return $sql->execute();
 }
 
@@ -430,9 +430,6 @@ function ObtenerIDRolUsuario($conexion, $rol)
 function ObtenerRolUsuario($conexion, $id_rol)
 {
     global $TABLA_ROL, $CAMPO_ID_ROL, $CAMPO_ROL;
-    $TABLA_ROL = 'rol';
-    $CAMPO_ID_ROL = 'id_rol';
-    $CAMPO_ROL = 'nombre_rol';
 
     $sql = $conexion->prepare("SELECT $CAMPO_ROL FROM $TABLA_ROL WHERE $CAMPO_ID_ROL = ?");
     $sql->bind_param("s", $id_rol);

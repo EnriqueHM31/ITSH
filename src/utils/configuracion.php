@@ -3,7 +3,7 @@
 include "../conexion/conexion.php";
 include "../utils/constantes.php";
 include "../utils/functionGlobales.php";
-
+/** @var mysqli $conexion */
 if (isset($_POST["id_carrera_nueva"])) {
 
     $carreraNueva = $_POST["id_carrera_nueva"];
@@ -11,7 +11,7 @@ if (isset($_POST["id_carrera_nueva"])) {
     if (EliminarCarreraDB($conexion, $carreraNueva)) {
         echo json_encode(["success" => true]);
     } else {
-        echo json_encode(["success" => "Error al eliminar la carrera"]);
+        echo json_encode(["success" => false, "message" => "Error al eliminar la carrera"]);
     }
 }
 
@@ -33,5 +33,4 @@ if (isset($_POST["obtener_datos_carrera"])) {
     $id_grupos = $DataGrupos[$CAMPO_CLAVE_GRUPO];
 
     echo json_encode(["success" => [$Numero_grupos, $id_grupos, $tipo_carrera, $data_modalidades]]);
-
 }

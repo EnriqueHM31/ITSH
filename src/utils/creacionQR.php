@@ -1,7 +1,7 @@
 <?php
 include('phpqrcode/qrlib.php');
 include "../conexion/verificar acceso.php";
-
+/** @var mysqli $conexion */
 
 function generarCodigo($conexion, $id, $id_estudiante, $fecha)
 {
@@ -40,11 +40,8 @@ function generarCodigo($conexion, $id, $id_estudiante, $fecha)
             return [$id_unico, $id_codigo];
         } else {
             throw new Exception("Ocurrio un error al insertar los datos en la DB");
-
         }
     } catch (Exception $e) {
         echo json_encode(["success" => "Error: {$e->getMessage()}"]);
     }
-
 }
-?>

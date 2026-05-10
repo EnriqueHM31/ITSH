@@ -3,22 +3,13 @@
 class Usuario
 {
 
-    public function __Usuario()
+    public function __construct()
     {
     }
 
     public function Verificacion($conexion, $id, $contraseña)
     {
         global $TABLA_USUARIO, $CAMPO_CONTRASEÑA, $CAMPO_ID_ROL, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $ADMIN, $JEFE, $ESTUDIANTE;
-
-        $TABLA_USUARIO = "usuario";
-        $CAMPO_CONTRASEÑA = 'contraseña';
-        $CAMPO_ID_ROL = 'id_rol';
-        $CAMPO_ID_USUARIO = 'id_usuario';
-        $CAMPO_CORREO = 'correo';
-        $ADMIN = "Administrador";
-        $JEFE = "Jefe de Carrera";
-        $ESTUDIANTE = "Estudiante";
 
         if (empty($id) || empty($contraseña)) {
             EstructuraMensaje("Llena todos los campos", "./src/assets/iconos/ic_error.webp", "--rojo");
@@ -50,7 +41,7 @@ class Usuario
         }
         if ($rol === $JEFE) {
             $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "JefedeCarrera/JefeCarrera.php");
-            return "Jefe/JefeCarrera.php";
+            return "JefedeCarrera/JefeCarrera.php";
         }
         if ($rol === $ESTUDIANTE) {
             $this->asignarDatosInicioSesion($resultUsuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, "Alumno/alumno.php");
@@ -63,7 +54,9 @@ class Usuario
 
     public function asignarDatosInicioSesion($usuario, $CAMPO_ID_USUARIO, $CAMPO_CORREO, $rol, $redireccion)
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $_SESSION["id"] = $usuario[$CAMPO_ID_USUARIO];
         $_SESSION["correo"] = $usuario[$CAMPO_CORREO];
         $_SESSION["rol"] = $rol;
@@ -115,7 +108,7 @@ class Usuario
 
     public function escribirDatosDelUsuario($conexion, $id, $rol, $correo)
     {
-        global $ADMIN, $JEFE, $ESTUDIANTE, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $TABLA_JEFE, $CAMPO_CLAVE_EMPLEADO_JEFE, $TABLA_ESTUDIANTE, $CAMPO_GRUPO, $CAMPO_ID_CARRERA;
+        global $ADMIN, $JEFE, $ESTUDIANTE, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $TABLA_JEFE, $TABLA_ESTUDIANTE, $CAMPO_GRUPO, $CAMPO_ID_CARRERA;
 
         if ($rol === $ADMIN) {
             $usuario = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);

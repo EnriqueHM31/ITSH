@@ -7,6 +7,7 @@ include "../../clases/usuario.php";
 include "../../conexion/verificar acceso.php";
 include "../../Components/Usuario.php";
 include "../../Components/Layout.php";
+/** @var mysqli $conexion */
 
 $usuario = new usuario();
 $id = $_SESSION["id"];
@@ -55,7 +56,7 @@ $correo = $_SESSION["correo"];
                 <div class="contenido_informacion">
                     <?php
                     $usuario->escribirDatosDelUsuario($conexion, $id, $rol, $correo)
-                        ?>
+                    ?>
                 </div>
 
                 <div class="contenedor_ITSH">
@@ -74,7 +75,7 @@ $correo = $_SESSION["correo"];
 
     <?php
     componenteTemplateCambiarContraseña()
-        ?>
+    ?>
 
 </body>
 

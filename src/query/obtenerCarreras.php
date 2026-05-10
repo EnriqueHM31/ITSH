@@ -3,6 +3,8 @@
 include "../conexion/conexion.php";
 include "../utils/constantes.php";
 include "../utils/functionGlobales.php";
+/** @var mysqli $conexion */
+
 
 $resultadoAllCarreras = ObtenerTodasLasCarreras($conexion);
 

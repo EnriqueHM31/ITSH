@@ -34,7 +34,7 @@ $TABLA_TRIGGER_JUSTIFICANTE = "AlumnoJustificante";
 
 //CAMPOS DE LA TABLA ROL
 $CAMPO_ID_ROL = "id_rol";
-$CAMPO_ROL = "nombre_rol";
+$CAMPO_ROL = "rol";
 
 
 // CAMPOS DE LA TABLA USUARIO
@@ -107,9 +107,3 @@ $MESES = [
     "noviembre",
     "diciembre"
 ];
-
-
-
-
-
-

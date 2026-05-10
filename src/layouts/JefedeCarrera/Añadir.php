@@ -1,5 +1,6 @@
 <?php
 session_start();
+/** @var mysqli $conexion */
 
 include "../../utils/constantes.php";
 include "../../conexion/conexion.php";
