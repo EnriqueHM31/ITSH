@@ -3,9 +3,7 @@
 class Usuario
 {
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function Verificacion($conexion, $id, $contraseña)
     {
@@ -61,7 +59,6 @@ class Usuario
         $_SESSION["correo"] = $usuario[$CAMPO_CORREO];
         $_SESSION["rol"] = $rol;
         header("location: src/layouts/$redireccion");
-
     }
 
     public function cambiarContraseña($conexion, $contraseña_actual, $contraseña_nueva, $id)
@@ -103,7 +100,6 @@ class Usuario
         $stmt->bind_param('ss', $nuevaContraseña, $id_usuario);
 
         return $stmt->execute();
-
     }
 
     public function escribirDatosDelUsuario($conexion, $id, $rol, $correo)
@@ -129,7 +125,9 @@ class Usuario
 
         if ($rol === $ESTUDIANTE) {
             $usuario = ObtenerDatosDeUnaTabla($conexion, $TABLA_USUARIO, $CAMPO_ID_USUARIO, $id);
-            $estudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $id);
+
+            $estudiante = ObtenerDatosDeUnaTabla($conexion, $TABLA_ESTUDIANTE, $CAMPO_ID_USUARIO, $usuario[$CAMPO_ID_USUARIO]);
+
 
             $carrera = ObtenerNombreCarrera($conexion, $estudiante[$CAMPO_ID_CARRERA]);
             $grupo = $estudiante[$CAMPO_GRUPO];

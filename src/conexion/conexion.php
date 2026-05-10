@@ -8,7 +8,7 @@
 $host = 'localhost';
 $user = 'root';
 $pass = '1234';
-$dbname = 'ITSH';
+$dbname = 'Sistema';
 
 
 // $host = 'sql310.infinityfree.com';

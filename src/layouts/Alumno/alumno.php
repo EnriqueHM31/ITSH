@@ -14,6 +14,8 @@ $id = $_SESSION["id"];
 $rol = $_SESSION["rol"];
 $correo = $_SESSION["correo"];
 
+var_dump($usuario);
+
 ?>
 
 <!DOCTYPE html>

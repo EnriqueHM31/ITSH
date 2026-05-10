@@ -407,11 +407,19 @@ function ObtenerDatosColumnaTabla($conexion, $columna, $tabla)
 
 function ObtenerDatosDeUnaTabla($conexion, $tabla, $columna, $campo)
 {
+    // Preparamos la consulta
     $sql = $conexion->prepare("SELECT * FROM $tabla WHERE $columna = ?");
     $sql->bind_param("s", $campo);
     $sql->execute();
+
     $result = $sql->get_result();
-    return $result->fetch_assoc();
+
+    // Verificamos si hay resultados antes de intentar el fetch
+    if ($result && $result->num_rows > 0) {
+        return $result->fetch_assoc(); // Esto devuelve el array con los datos
+    }
+
+    return null; // Si no hay datos, devolvemos null explícitamente
 }
 
 function ObtenerIDRolUsuario($conexion, $rol)
